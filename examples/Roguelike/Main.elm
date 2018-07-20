@@ -7,7 +7,7 @@ import Css
 import Dict
 import Html.Styled exposing (Html, program)
 import Keyboard
-import PixelEngine as Graphics exposing (tile)
+import PixelEngine.Graphics as Graphics exposing (tile)
 import Random
 import Roguelike.Cell as Cell
     exposing
@@ -23,13 +23,6 @@ import Roguelike.Inventory as Inventory
 import Roguelike.Map as Map exposing (Direction(..), Map)
 import Roguelike.Player as Player exposing (PlayerData)
 import SelectList exposing (SelectList)
-
-
-type alias Config r =
-    { r
-        | worldSeed : Int
-        , worldSize : Int
-    }
 
 
 type alias Model =
@@ -114,12 +107,10 @@ update msg model =
                                 |> Game.applyDirection (model.worldSize - 1) dir
 
                         RotateLeft ->
-                            ( model.player, model.map |> SelectList.selected )
-                                |> Player.rotateLeft
+                            ( model.player |> Player.rotateLeft, model.map |> SelectList.selected )
 
                         RotateRight ->
-                            ( model.player, model.map |> SelectList.selected )
-                                |> Player.rotateRight
+                            ( model.player |> Player.rotateRight, model.map |> SelectList.selected )
             in
             if
                 map

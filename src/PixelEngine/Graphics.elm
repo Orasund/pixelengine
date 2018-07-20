@@ -1,9 +1,34 @@
-module PixelEngine exposing (Background(..), Tile, Tileset, animatedMovableTile, animatedTile, movableTile, render, tile, tiledArea)
+module PixelEngine.Graphics
+    exposing
+        ( Background(..)
+        , Tile
+        , Tileset
+        , animatedMovableTile
+        , animatedTile
+        , movableTile
+        , render
+        , tile
+        , tiledArea
+        )
+
+{-| Module description
+
+
+## Functions
+
+@docs animatedMovableTile,animatedTile,movableTile,render,tile,tiledArea
+
+
+## Definition
+
+@docs Background,Tile,Tileset
+
+-}
 
 import Css exposing (px)
 import Css.Foreign as Foreign
 import Html.Styled exposing (Html, div, img)
-import Html.Styled.Attributes as Attributes exposing (css, src)
+import Html.Styled.Attributes exposing (css, src)
 import Html.Styled.Keyed as Keyed
 import Pair
 

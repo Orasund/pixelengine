@@ -1,4 +1,4 @@
-module Roguelike.Game exposing (Game, applyDirection)
+module Roguelike.Game exposing (applyDirection)
 
 import Dict
 import Pair
@@ -13,11 +13,7 @@ import Roguelike.Cell as Cell
         , SolidType(..)
         )
 import Roguelike.Map as Map exposing (Direction(..), Location, Map)
-import Roguelike.Player as Player exposing (PlayerData)
-
-
-type alias Game =
-    ( PlayerData, Map Cell )
+import Roguelike.Player as Player exposing (Game, PlayerData)
 
 
 applyDirection : Int -> Direction -> Game -> Game
@@ -61,7 +57,7 @@ updateEnemy : Location -> EnemyType -> String -> Game -> Game
 updateEnemy location enemyType id game =
     game
         |> attackPlayer location
-        |> specialBehaviour location enemyType id
+        |> specialBehaviour location enemyType
 
 
 player : Map Cell -> Maybe ( Location, Direction )
@@ -84,8 +80,8 @@ attackPlayer location ( playerData, map ) =
             ( playerData, map )
 
 
-specialBehaviour : Location -> EnemyType -> String -> Game -> Game
-specialBehaviour currentLocation enemyType id game =
+specialBehaviour : Location -> EnemyType -> Game -> Game
+specialBehaviour currentLocation enemyType game =
     let
         map : Map Cell
         map =

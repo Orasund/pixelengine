@@ -1,14 +1,29 @@
-module Roguelike.Cell exposing (Cell(..), ConsumableType(..), EffectType(..), EnemyType(..), Item(..), MaterialType(..), MiscellaneousType(..), SolidType, composing, decomposing, getImage, mapGenerator, resistancy)
+module Roguelike.Cell
+    exposing
+        ( Cell(..)
+        , ConsumableType(..)
+        , EffectType(..)
+        , EnemyType(..)
+        , Item(..)
+        , MaterialType(..)
+        , MiscellaneousType(..)
+        , SolidType
+        , composing
+        , decomposing
+        , getImage
+        , mapGenerator
+        , resistancy
+        )
 
 import Dict
-import PixelEngine exposing (Tile, animatedMovableTile, animatedTile, movableTile, tile)
+import PixelEngine.Graphics exposing (Tile, animatedMovableTile, animatedTile, tile)
 import Random
 import Roguelike.Map as Map exposing (Direction(..), Location, Map)
 
 
 type ConsumableType
     = Bombe
-    | Cheese
+    | HealthPotion
     | Material MaterialType
 
 
@@ -88,7 +103,7 @@ composing tuple =
         ( Nothing, material ) ->
             Just (Placed material)
 
-        ( Just solidType, _ ) ->
+        ( Just _, _ ) ->
             Nothing
 
 
@@ -127,7 +142,7 @@ getImage cell =
         Item (Consumable Bombe) ->
             tile ( 6, 6 )
 
-        Item (Consumable Cheese) ->
+        Item (Consumable HealthPotion) ->
             tile ( 5, 7 )
 
         Item (Consumable (Material Dirt)) ->
@@ -215,7 +230,7 @@ mapGenerator pos ( map, seed ) =
         , new_seed
         )
     else if r < 230 then
-        ( map |> Dict.insert pos (Item (Consumable Cheese))
+        ( map |> Dict.insert pos (Item (Consumable HealthPotion))
         , new_seed
         )
     else if r < 235 then
@@ -226,7 +241,7 @@ mapGenerator pos ( map, seed ) =
         ( map |> Dict.insert pos (Enemy Rat ("Rat" ++ toString id))
         , new_seed
         )
-    else if r < 245 then
+    else if r < 238 then
         let
             ( id, _ ) =
                 Random.step (Random.float 0 1) new_seed
@@ -234,7 +249,7 @@ mapGenerator pos ( map, seed ) =
         ( map |> Dict.insert pos (Enemy Goblin ("Goblin" ++ toString id))
         , new_seed
         )
-    else if r < 250 then
+    else if r < 239 then
         let
             ( id, _ ) =
                 Random.step (Random.float 0 1) new_seed
