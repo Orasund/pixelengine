@@ -1,0 +1,88 @@
+[
+  {
+    "name": "PixelEngine.Graphics",
+    "comment": " Module description\n\n\n## Definition\n\n@docs Tileset,Background,Config\n\n\n## Basic Functions\n\n@docs render\n\n\n## Tile\n\n@docs Tile,animatedMovableTile,animatedTile,movableTile,tile\n\n\n## Area\n\n@docs Area,tiledArea\n\n",
+    "aliases": [
+      {
+        "name": "Config",
+        "comment": " configurations of the engine.\n..* scale - upscales all images (use scale = 1 for no scaleing)\n..* width - width of the window. Use elm-css lengths.\n\n    {scale = 1,width = px 800}\n\n",
+        "args": [
+          "compatible"
+        ],
+        "type": "{ scale : Int, width : Css.LengthOrAuto compatible }"
+      },
+      {
+        "name": "Tileset",
+        "comment": " a tileset. It contains the link to the image as well as the size of a tile.\n\n    {source: \"tileset.png\",width: 16, height 16}\n\n",
+        "args": [],
+        "type": "{ source : String, width : Int, height : Int }"
+      }
+    ],
+    "types": [
+      {
+        "name": "Area",
+        "comment": " an area of the window.\nElements in the area must be of the same type.\nSo for a tiled area contains only tiles of the same tileset\n",
+        "args": [],
+        "cases": []
+      },
+      {
+        "name": "Background",
+        "comment": " possible backgrounds for an area.\n\n..* Color - a single color, use the elm-css colors\n... Color (Css.rgb 20 12 28)\n\n..* Image - a image that gets tiled.\n... Image \"groundTile.png\"\n\n",
+        "args": [],
+        "cases": [
+          [
+            "Color",
+            [
+              "Css.Color"
+            ]
+          ],
+          [
+            "Image",
+            [
+              "String"
+            ]
+          ]
+        ]
+      },
+      {
+        "name": "Tile",
+        "comment": " a single tile of a tileset\n",
+        "args": [],
+        "cases": []
+      }
+    ],
+    "values": [
+      {
+        "name": "animatedMovableTile",
+        "comment": " a animated movable tile\nthis means it will transition if the location gets chanced.\n\nNote: the id should be unique, if not the transition might fail every now and then.\n",
+        "type": "PixelEngine.Graphics.Location -> Int -> String -> PixelEngine.Graphics.Tile"
+      },
+      {
+        "name": "animatedTile",
+        "comment": " an animated tile\nthe sprites of the animation must be arranged horizontally in the tileset\n..* steps - steps of the animation (one less then the number of sprites.) \n    animatedTile (0,0) 0 == tile (0,0)\n",
+        "type": "PixelEngine.Graphics.Location -> Int -> PixelEngine.Graphics.Tile"
+      },
+      {
+        "name": "movableTile",
+        "comment": " a movable tile\nthis means it will transition if the location gets chanced.\n\nNote: the id should be unique, if not the transition might fail every now and then.\n",
+        "type": "PixelEngine.Graphics.Location -> String -> PixelEngine.Graphics.Tile"
+      },
+      {
+        "name": "render",
+        "comment": " renders the content. Use the elm-css Html in combination with this function.\n",
+        "type": "PixelEngine.Graphics.Config compatible -> List PixelEngine.Graphics.Area -> Html.Styled.Html msg"
+      },
+      {
+        "name": "tile",
+        "comment": " a basic tile\nthe first tile in a tileset is obtailed by\n    tile (0,0)\n",
+        "type": "PixelEngine.Graphics.Location -> PixelEngine.Graphics.Tile"
+      },
+      {
+        "name": "tiledArea",
+        "comment": " creates a tiled area. Elements in this area are positioned on a grid.\nThe content consists of\n..* (Int,Int) - position (x,y) in the area\n..* Tile - a tile in the tileset\n",
+        "type": "{ height : Int , tileset : PixelEngine.Graphics.Tileset , background : PixelEngine.Graphics.Background } -> List ( ( Int, Int ), PixelEngine.Graphics.Tile ) -> PixelEngine.Graphics.Area"
+      }
+    ],
+    "generated-with-elm-version": "0.18.0"
+  }
+]

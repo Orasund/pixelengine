@@ -3,7 +3,7 @@ module Roguelike.Main exposing (main)
 --import Roguelike.Inventory as Inventory exposing (Inventory)
 
 import Char
-import Css
+import Css exposing (px)
 import Dict
 import Html.Styled exposing (Html, program)
 import Keyboard
@@ -180,12 +180,18 @@ view model =
     let
         tileset : Graphics.Tileset
         tileset =
-            { source = "test.png", height = 16, width = 16 }
+            { source = "tileset.png", height = 16, width = 16 }
+        
+        scale : Int
+        scale = 2
+
+        width : Int
+        width = 16
     in
-    Graphics.render { scale = 2, width = 16 }
+    Graphics.render { scale = scale, width = px <| toFloat <| scale * tileset.width * width }
         [ Graphics.tiledArea
             { height = 16
-            , background = Graphics.Image "background.png"
+            , background = Graphics.Image "groundTile.png"
             , tileset = tileset
             }
             (model.map

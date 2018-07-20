@@ -1,6 +1,8 @@
 module PixelEngine.Graphics
     exposing
-        ( Background(..)
+        ( Area
+        , Background(..)
+        , Config
         , Tile
         , Tileset
         , animatedMovableTile
@@ -11,17 +13,27 @@ module PixelEngine.Graphics
         , tiledArea
         )
 
-{-| Module description
-
-
-## Functions
-
-@docs animatedMovableTile,animatedTile,movableTile,render,tile,tiledArea
+{-| A graphic engine for turn-based pixel games.
 
 
 ## Definition
 
-@docs Background,Tile,Tileset
+@docs Tileset,Background,Config
+
+
+## Basic Functions
+
+@docs render
+
+
+## Tile
+
+@docs Tile,animatedMovableTile,animatedTile,movableTile,tile
+
+
+## Area
+
+@docs Area,tiledArea
 
 -}
 
@@ -37,6 +49,8 @@ type alias Location =
     ( Int, Int )
 
 
+{-| a single tile of a tileset
+-}
 type Tile
     = Tile
         { top : Int
@@ -46,6 +60,11 @@ type Tile
         }
 
 
+{-| a tileset. It contains the link to the image as well as the size of a tile.
+
+    {source: "tileset.png",width: 16, height 16}
+
+-}
 type alias Tileset =
     { source : String
     , width : Int
@@ -53,6 +72,15 @@ type alias Tileset =
     }
 
 
+{-| possible backgrounds for an area.
+
+..* Color - a single color, use the elm-css colors
+... Color (Css.rgb 20 12 28)
+
+..* Image - a image that gets tiled.
+... Image "groundTile.png"
+
+-}
 type Background
     = Color Css.Color
     | Image String
@@ -66,17 +94,33 @@ type alias TiledArea =
     }
 
 
+{-| an area of the window.
+Elements in the area must be of the same type.
+So for a tiled area contains only tiles of the same tileset
+-}
 type Area
     = Tiled TiledArea
 
 
-type alias Config =
+{-| configurations of the engine.
+..* scale - upscales all images (use scale = 1 for no scaleing)
+..* width - width of the window. Use elm-css lengths.
+
+    {scale = 1,width = px 800}
+
+-}
+type alias Config compatible =
     { scale : Int
-    , width : Int
+    , width : Css.LengthOrAuto compatible
     }
 
 
-tiledArea : { height : Int, tileset : Tileset, background : Background } -> List ( Location, Tile ) -> Area
+{-| creates a tiled area. Elements in this area are positioned on a grid.
+The content consists of
+..* (Int,Int) - position (x,y) in the area
+..* Tile - a tile in the tileset
+-}
+tiledArea : { height : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile ) -> Area
 tiledArea { height, tileset, background } content =
     Tiled
         { height = height
@@ -86,12 +130,21 @@ tiledArea { height, tileset, background } content =
         }
 
 
-tile : Location -> Tile
+{-| a basic tile
+the first tile in a tileset is obtailed by
+tile (0,0)
+-}
+tile : ( Int, Int ) -> Tile
 tile ( left, top ) =
     Tile { top = top, left = left, steps = 0, transitionId = Nothing }
 
 
-animatedTile : Location -> Int -> Tile
+{-| an animated tile
+the sprites of the animation must be arranged horizontally in the tileset
+..* steps - steps of the animation (one less then the number of sprites.)
+animatedTile (0,0) 0 == tile (0,0)
+-}
+animatedTile : ( Int, Int ) -> Int -> Tile
 animatedTile ( left, top ) steps =
     Tile
         { top = top
@@ -105,16 +158,24 @@ animatedTile ( left, top ) steps =
         }
 
 
-{-| Note: transitionId should be unique, if not the transition might fail every now and then.
+{-| a movable tile
+this means it will transition if the location gets chanced.
+
+Note: the id should be unique, if not the transition might fail every now and then.
+
 -}
-movableTile : Location -> String -> Tile
+movableTile : ( Int, Int ) -> String -> Tile
 movableTile ( left, top ) id =
     Tile { top = top, left = left, steps = 0, transitionId = Just id }
 
 
-{-| Note: transitionId should be unique, if not the transition might fail every now and then.
+{-| a animated movable tile
+this means it will transition if the location gets chanced.
+
+Note: the id should be unique, if not the transition might fail every now and then.
+
 -}
-animatedMovableTile : Location -> Int -> String -> Tile
+animatedMovableTile : ( Int, Int ) -> Int -> String -> Tile
 animatedMovableTile ( left, top ) steps id =
     Tile
         { top = top
@@ -128,7 +189,9 @@ animatedMovableTile ( left, top ) steps id =
         }
 
 
-render : Config -> List Area -> Html msg
+{-| renders the content. Use the elm-css Html in combination with this function.
+-}
+render : Config compatible -> List Area -> Html msg
 render config listOfArea =
     div [ css [ Css.backgroundColor (Css.rgb 0 0 0) ] ]
         (listOfArea
@@ -148,13 +211,13 @@ render config listOfArea =
         )
 
 
-renderTiledArea : Config -> TiledArea -> Html msg
+renderTiledArea : Config compatible -> TiledArea -> Html msg
 renderTiledArea { scale, width } { height, background, content, tileset } =
     div
         [ css
             (let
                 style =
-                    [ Css.width <| px <| toFloat <| scale * tileset.width * width
+                    [ Css.width width
                     , Css.height <| px <| toFloat <| scale * tileset.height * height
                     , Css.margin Css.auto
                     , Css.position Css.relative

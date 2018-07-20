@@ -18,7 +18,7 @@ module Roguelike.Cell
 import Dict
 import PixelEngine.Graphics exposing (Tile, animatedMovableTile, animatedTile, tile)
 import Random
-import Roguelike.Map as Map exposing (Direction(..), Location, Map)
+import Roguelike.Map exposing (Direction(..), Location, Map)
 
 
 type ConsumableType
@@ -125,10 +125,10 @@ getImage cell =
                     animatedMovableTile ( 12, 15 ) 1 "player"
 
         Solid (Placed Stone) ->
-            tile ( 0, 3 )
+            tile ( 1, 1 )
 
         Solid (Placed Dirt) ->
-            tile ( 1, 1 )
+            tile ( 0, 3 )
 
         Solid StoneWall ->
             tile ( 1, 0 )

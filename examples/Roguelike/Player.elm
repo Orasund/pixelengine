@@ -261,7 +261,7 @@ healthPotionAction { lifes } =
 
 
 bombeAction : Map Cell -> Maybe (Game -> Game)
-bombeAction map =
+bombeAction currentMap =
     let
         specialCase : SolidType -> Maybe (Game -> Game)
         specialCase solidType =
@@ -272,7 +272,7 @@ bombeAction map =
             maybeSolid
                 |> Maybe.map
                     (\solid ->
-                        \(( playerData, map ) as game) ->
+                        \( playerData, map ) ->
                             ( playerData
                                 |> addToInventory (Consumable (Material material))
                             , map
@@ -282,7 +282,7 @@ bombeAction map =
 
         --|> Maybe.withDefault game
     in
-    placingItem map
+    placingItem currentMap
         (Enemy PlacedBombe "")
         specialCase
 
@@ -301,15 +301,14 @@ materialAction map material =
                         Tuple.mapFirst (addToInventory (Consumable (Material material)))
                 )
     in
-    case Cell.composing ( Nothing, material ) of
-        Just solid ->
-            placingItem
-                map
-                (Solid solid)
-                specialCase
-
-        Nothing ->
-            Nothing
+    Cell.composing ( Nothing, material )
+        |> Maybe.andThen
+            (\solid ->
+                placingItem
+                    map
+                    (Solid solid)
+                    specialCase
+            )
 
 
 placingItem : Map Cell -> Cell -> (SolidType -> Maybe (Game -> Game)) -> Maybe (Game -> Game)

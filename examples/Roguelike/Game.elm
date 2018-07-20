@@ -13,7 +13,7 @@ import Roguelike.Cell as Cell
         , SolidType(..)
         )
 import Roguelike.Map as Map exposing (Direction(..), Location, Map)
-import Roguelike.Player as Player exposing (Game, PlayerData)
+import Roguelike.Player as Player exposing (Game)
 
 
 applyDirection : Int -> Direction -> Game -> Game
@@ -42,8 +42,8 @@ applyDirection size dir ( playerData, map ) =
 updateCell : Location -> Cell -> Game -> Game
 updateCell location cell game =
     case cell of
-        Enemy enemy id ->
-            game |> updateEnemy location enemy id
+        Enemy enemy _ ->
+            game |> updateEnemy location enemy
 
         Effect _ ->
             game
@@ -53,8 +53,8 @@ updateCell location cell game =
             game
 
 
-updateEnemy : Location -> EnemyType -> String -> Game -> Game
-updateEnemy location enemyType id game =
+updateEnemy : Location -> EnemyType -> Game -> Game
+updateEnemy location enemyType game =
     game
         |> attackPlayer location
         |> specialBehaviour location enemyType

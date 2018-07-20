@@ -9,6 +9,7 @@
         "examples/Roguelike"
     ],
     "exposed-modules": [
+        "PixelEngine.Graphics"
     ],
     "dependencies": {
         "Orasund/elm-pair": "1.0.1 <= v < 2.0.0",
