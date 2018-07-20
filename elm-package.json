@@ -1,12 +1,11 @@
 {
     "version": "1.0.0",
-    "summary": "Graphic Engine for turn based pixel games.",
+    "summary": "Graphic engine for turn based pixel games.",
     "repository": "https://github.com/orasund/pixelengine.git",
     "license": "BSD3",
     "source-directories": [
         "src",
-        "examples",
-        "examples/Roguelike"
+        "examples"
     ],
     "exposed-modules": [
         "PixelEngine.Graphics"

@@ -17,6 +17,7 @@ module PixelEngine.Graphics
 
 to get started, copy the following:
 
+    view model =
     let
         tileSize : Int
         tileSize =
@@ -34,7 +35,7 @@ to get started, copy the following:
         width =
             px <| toFloat <| (windowSize * tileSize * scale)
 
-        tileset : Tileset
+        tileset : Graphics.Tileset
         tileset =
             { source = "tileset.png", width = 16, height = 16 }
 
@@ -52,14 +53,14 @@ to get started, copy the following:
     in
     Graphics.render
         { scale = scale, width = width }
-        [ Graphics.tiledArea { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
+        [ Graphics.tiledArea
+            { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
             [ ( ( 6, 7 ), goblin )
             , ( ( 7, 7 ), letter_h )
             , ( ( 8, 7 ), letter_i )
             , ( ( 9, 7 ), heart )
             ]
         ]
-        |> toUnstyled
 
 
 ## Definition
