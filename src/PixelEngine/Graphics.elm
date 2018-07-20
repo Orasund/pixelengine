@@ -15,6 +15,52 @@ module PixelEngine.Graphics
 
 {-| A graphic engine for turn-based pixel games.
 
+to get started, copy the following:
+
+    let
+        tileSize : Int
+        tileSize =
+            16
+
+        windowSize : Int
+        windowSize =
+            16
+
+        scale : Int
+        scale =
+            2
+
+        width : Css.Px
+        width =
+            px <| toFloat <| (windowSize * tileSize * scale)
+
+        tileset : Tileset
+        tileset =
+            { source = "tileset.png", width = 16, height = 16 }
+
+        goblin =
+            Graphics.animatedTile ( 2, 8 ) 1
+
+        letter_h =
+            Graphics.tile ( 1, 15 )
+
+        letter_i =
+            Graphics.tile ( 2, 12 )
+
+        heart =
+            Graphics.tile ( 4, 8 )
+    in
+    Graphics.render
+        { scale = scale, width = width }
+        [ Graphics.tiledArea { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
+            [ ( ( 6, 7 ), goblin )
+            , ( ( 7, 7 ), letter_h )
+            , ( ( 8, 7 ), letter_i )
+            , ( ( 9, 7 ), heart )
+            ]
+        ]
+        |> toUnstyled
+
 
 ## Definition
 
@@ -42,7 +88,6 @@ import Css.Foreign as Foreign
 import Html.Styled exposing (Html, div, img)
 import Html.Styled.Attributes exposing (css, src)
 import Html.Styled.Keyed as Keyed
-import Pair
 
 
 type alias Location =
@@ -74,11 +119,11 @@ type alias Tileset =
 
 {-| possible backgrounds for an area.
 
-..* Color - a single color, use the elm-css colors
-... Color (Css.rgb 20 12 28)
+  - Color - a single color, use the elm-css colors
+    Color (Css.rgb 20 12 28)
 
-..* Image - a image that gets tiled.
-... Image "groundTile.png"
+  - Image - a image that gets tiled.
+    Image "groundTile.png"
 
 -}
 type Background
@@ -103,10 +148,13 @@ type Area
 
 
 {-| configurations of the engine.
-..* scale - upscales all images (use scale = 1 for no scaleing)
-..* width - width of the window. Use elm-css lengths.
 
-    {scale = 1,width = px 800}
+  - scale - upscales all images (use scale = 1 for no scaleing)
+  - width - width of the window. Use elm-css lengths.
+
+```
+{scale = 1,width = px 800}
+```
 
 -}
 type alias Config compatible =
@@ -117,8 +165,10 @@ type alias Config compatible =
 
 {-| creates a tiled area. Elements in this area are positioned on a grid.
 The content consists of
-..* (Int,Int) - position (x,y) in the area
-..* Tile - a tile in the tileset
+
+  - (Int,Int) - position (x,y) in the area
+  - Tile - a tile in the tileset
+
 -}
 tiledArea : { height : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile ) -> Area
 tiledArea { height, tileset, background } content =
@@ -141,8 +191,13 @@ tile ( left, top ) =
 
 {-| an animated tile
 the sprites of the animation must be arranged horizontally in the tileset
-..* steps - steps of the animation (one less then the number of sprites.)
-animatedTile (0,0) 0 == tile (0,0)
+
+  - steps - steps of the animation (one less then the number of sprites.)
+
+```
+danimatedTile (0,0) 0 == tile (0,0)
+```
+
 -}
 animatedTile : ( Int, Int ) -> Int -> Tile
 animatedTile ( left, top ) steps =
@@ -240,7 +295,7 @@ renderTiledArea { scale, width } { height, background, content, tileset } =
         (content
             |> List.partition (\( _, Tile { transitionId } ) -> transitionId == Nothing)
             |> Tuple.mapSecond (List.sortBy (\( _, Tile { transitionId } ) -> transitionId |> Maybe.withDefault ""))
-            |> Pair.map (List.map (displayTile tileset scale))
+            |> pairMap (List.map (displayTile tileset scale))
             |> (\( noTransition, transition ) ->
                     [ div [] (noTransition |> List.map Tuple.second)
                     , Keyed.node "div" [] transition
@@ -319,3 +374,8 @@ displayTile { width, height, source } scale ( pos, Tile { left, top, steps, tran
                 []
             ]
         )
+
+
+pairMap : (a -> b) -> ( a, a ) -> ( b, b )
+pairMap fun ( a, b ) =
+    ( fun a, fun b )
