@@ -17,50 +17,54 @@ module PixelEngine.Graphics
 
 to get started, copy the following:
 
-    view model =
-    let
-        tileSize : Int
-        tileSize =
-            16
+    import Css exposing (px)
+    import Html.Styled exposing (toUnstyled)
+    import PixelEngine.Graphics as Graphics exposing (Background(..), Tileset)
 
-        windowSize : Int
-        windowSize =
-            16
+    main =
+        let
+            tileSize : Int
+            tileSize =
+                16
 
-        scale : Int
-        scale =
-            2
+            windowSize : Int
+            windowSize =
+                16
 
-        width : Css.Px
-        width =
-            px <| toFloat <| (windowSize * tileSize * scale)
+            scale : Int
+            scale =
+                2
 
-        tileset : Graphics.Tileset
-        tileset =
-            { source = "tileset.png", width = 16, height = 16 }
+            width : Css.Px
+            width =
+                px <| toFloat <| (windowSize * tileSize * scale)
 
-        goblin =
-            Graphics.animatedTile ( 2, 8 ) 1
+            tileset : Tileset
+            tileset =
+                { source = "tileset.png", width = 16, height = 16 }
 
-        letter_h =
-            Graphics.tile ( 1, 15 )
+            goblin =
+                Graphics.animatedTile ( 2, 8 ) 1
 
-        letter_i =
-            Graphics.tile ( 2, 12 )
+            letter_h =
+                Graphics.tile ( 1, 15 )
 
-        heart =
-            Graphics.tile ( 4, 8 )
-    in
-    Graphics.render
-        { scale = scale, width = width }
-        [ Graphics.tiledArea
-            { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
-            [ ( ( 6, 7 ), goblin )
-            , ( ( 7, 7 ), letter_h )
-            , ( ( 8, 7 ), letter_i )
-            , ( ( 9, 7 ), heart )
+            letter_i =
+                Graphics.tile ( 2, 12 )
+
+            heart =
+                Graphics.tile ( 4, 8 )
+        in
+        Graphics.render
+            { scale = scale, width = width }
+            [ Graphics.tiledArea { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
+                [ ( ( 6, 7 ), goblin )
+                , ( ( 7, 7 ), letter_h )
+                , ( ( 8, 7 ), letter_i )
+                , ( ( 9, 7 ), heart )
+                ]
             ]
-        ]
+            |> toUnstyled
 
 
 ## Definition
