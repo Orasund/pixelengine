@@ -1,7 +1,7 @@
 {
-    "version": "1.0.3",
-    "summary": "[DEPRECIATED] use Orasund/pixelengine instead.",
-    "repository": "https://github.com/orasund/pixelengine.git",
+    "version": "1.0.4",
+    "summary": "Graphic engine for turn based pixel games.",
+    "repository": "https://github.com/Orasund/pixelengine.git",
     "license": "BSD3",
     "source-directories": [
         "src",
