@@ -113,7 +113,9 @@ type Tile
 
 {-| A tileset. It contains the link to the image as well as the size of a tile.
 
-    {source: "tileset.png",width: 16, height 16}
+```
+{source: "tileset.png",width: 16, height 16}
+```
 
 -}
 type alias Tileset =
@@ -164,7 +166,9 @@ type Area
   - scale - Upscales all images (use scale = 1 for no scaleing).
   - width - Width of the window. Use [elm-css lengths](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#Length).
 
-    {scale = 1,width = px 800}
+```
+{scale = 1,width = px 800}
+```
 
 -}
 type alias Config compatible =
@@ -193,7 +197,9 @@ tiledArea { height, tileset, background } content =
 {-| A basic tile.
 The first tile in a tileset is obtailed by
 
-    tile (0,0)
+```
+tile (0,0)
+```
 
 -}
 tile : ( Int, Int ) -> Tile
@@ -206,7 +212,9 @@ The sprites of the animation must be arranged horizontally in the tileset.
 
   - steps - Steps of the animation (one less then the number of sprites.)
 
-    animatedTile (0,0) 0 == tile (0,0)
+```
+animatedTile (0,0) 0 == tile (0,0)
+```
 
 -}
 animatedTile : ( Int, Int ) -> Int -> Tile
