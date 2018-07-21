@@ -15,7 +15,7 @@ module PixelEngine.Graphics
 
 {-| A graphic engine for turn-based pixel games.
 
-to get started, copy the following:
+To get started, copy the following project
 
     import Css exposing (px)
     import Html.Styled exposing (toUnstyled)
@@ -57,7 +57,8 @@ to get started, copy the following:
         in
         Graphics.render
             { scale = scale, width = width }
-            [ Graphics.tiledArea { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
+            [ Graphics.tiledArea
+                { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
                 [ ( ( 6, 7 ), goblin )
                 , ( ( 7, 7 ), letter_h )
                 , ( ( 8, 7 ), letter_i )
@@ -99,7 +100,7 @@ type alias Location =
     ( Int, Int )
 
 
-{-| a single tile of a tileset
+{-| A single tile of a tileset
 -}
 type Tile
     = Tile
@@ -110,7 +111,7 @@ type Tile
         }
 
 
-{-| a tileset. It contains the link to the image as well as the size of a tile.
+{-| A tileset. It contains the link to the image as well as the size of a tile.
 
     {source: "tileset.png",width: 16, height 16}
 
@@ -122,13 +123,19 @@ type alias Tileset =
     }
 
 
-{-| possible backgrounds for an area.
+{-| Possible backgrounds for an area.
 
   - Color - a single color, use the elm-css colors
-    Color (Css.rgb 20 12 28)
+
+```
+Color (Css.rgb 20 12 28)
+```
 
   - Image - a image that gets tiled.
-    Image "groundTile.png"
+
+```
+Image "groundTile.png"
+```
 
 -}
 type Background
@@ -144,22 +151,20 @@ type alias TiledArea =
     }
 
 
-{-| an area of the window.
+{-| An area of the window.
 Elements in the area must be of the same type.
-So for a tiled area contains only tiles of the same tileset
+So for a tiled area contains only tiles of the same tileset.
 -}
 type Area
     = Tiled TiledArea
 
 
-{-| configurations of the engine.
+{-| Configurations of the engine.
 
-  - scale - upscales all images (use scale = 1 for no scaleing)
-  - width - width of the window. Use elm-css lengths.
+  - scale - Upscales all images (use scale = 1 for no scaleing).
+  - width - Width of the window. Use [elm-css lengths](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#Length).
 
-```
-{scale = 1,width = px 800}
-```
+    {scale = 1,width = px 800}
 
 -}
 type alias Config compatible =
@@ -168,7 +173,7 @@ type alias Config compatible =
     }
 
 
-{-| creates a tiled area. Elements in this area are positioned on a grid.
+{-| Creates a tiled area. Elements in this area are positioned on a grid.
 The content consists of
 
   - (Int,Int) - position (x,y) in the area
@@ -185,23 +190,23 @@ tiledArea { height, tileset, background } content =
         }
 
 
-{-| a basic tile
-the first tile in a tileset is obtailed by
-tile (0,0)
+{-| A basic tile.
+The first tile in a tileset is obtailed by
+
+    tile (0,0)
+
 -}
 tile : ( Int, Int ) -> Tile
 tile ( left, top ) =
     Tile { top = top, left = left, steps = 0, transitionId = Nothing }
 
 
-{-| an animated tile
-the sprites of the animation must be arranged horizontally in the tileset
+{-| An animated tile.
+The sprites of the animation must be arranged horizontally in the tileset.
 
-  - steps - steps of the animation (one less then the number of sprites.)
+  - steps - Steps of the animation (one less then the number of sprites.)
 
-```
-danimatedTile (0,0) 0 == tile (0,0)
-```
+    animatedTile (0,0) 0 == tile (0,0)
 
 -}
 animatedTile : ( Int, Int ) -> Int -> Tile
@@ -218,10 +223,10 @@ animatedTile ( left, top ) steps =
         }
 
 
-{-| a movable tile
-this means it will transition if the location gets chanced.
+{-| A movable tile.
+This means it will transition if the location gets chanced.
 
-Note: the id should be unique, if not the transition might fail every now and then.
+**Note:** the id should be a unique string, if not the transition might fail every now and then.
 
 -}
 movableTile : ( Int, Int ) -> String -> Tile
@@ -229,10 +234,10 @@ movableTile ( left, top ) id =
     Tile { top = top, left = left, steps = 0, transitionId = Just id }
 
 
-{-| a animated movable tile
-this means it will transition if the location gets chanced.
+{-| A animated movable tile.
+This means it will transition if the location gets chanced.
 
-Note: the id should be unique, if not the transition might fail every now and then.
+**Note:** the id should be a unique string, if not the transition might fail every now and then.
 
 -}
 animatedMovableTile : ( Int, Int ) -> Int -> String -> Tile
@@ -249,7 +254,8 @@ animatedMovableTile ( left, top ) steps id =
         }
 
 
-{-| renders the content. Use the elm-css Html in combination with this function.
+{-| Renders the content.
+Use the [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html) in combination with this function.
 -}
 render : Config compatible -> List Area -> Html msg
 render config listOfArea =

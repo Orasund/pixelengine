@@ -1,5 +1,18 @@
 # pixelEngine
-A graphic engine for turn-based pixel games.
+A graphic engine for rendering turn-based pixel games.
 
-Demo
-..* [Using Tilesets](https://orasund.github.io/pixelEngine/)
+When to use it:
+
+  * The game is turned based. (Chess, Rogue-likes games, Puzzle games, Turn based stragety games)
+  * The game has a idle state. (Farming games, Jump 'n' Run games with no enemies, J-RPG games like Pokemon)
+  * The game is tile based. (Tetris,Pack-man)
+
+When not to use it:
+
+  * The game is about speed or accuracy. (Racing games)
+  * The game is physics based. (Flappy Birds)
+  * The game has a continues gameloop. (Jump 'n' Run games with enemies, western RPGs like Zelda)
+
+**Games made with this Engine**
+
+  * [Using a Tileset](https://orasund.github.io/pixelEngine/)
