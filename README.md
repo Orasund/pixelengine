@@ -15,4 +15,4 @@ When not to use it:
 
 **Games made with this Engine**
 
-  * [Rogue-like game using a Tileset](https://orasund.github.io/pixelEngine/)
+  * [Rogue-like game using a Tileset](https://orasund.github.io/pixelengine/)
