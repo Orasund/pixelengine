@@ -1,4 +1,4 @@
-# pixelEngine: [DEPRECIATED] use Orasund/pixelengine instead.
+# pixelEngine
 A graphic engine for rendering turn-based pixel games.
 
 When to use it:
