@@ -3,6 +3,7 @@ module PixelEngine.Graphics
         ( Area
         , Background(..)
         , Config
+        , SupportedUnit(..)
         , Tile
         , Tileset
         , animatedMovableTile
@@ -41,7 +42,7 @@ To get started, copy the following project
 
             tileset : Tileset
             tileset =
-                { source = "tileset.png", width = 16, height = 16 }
+                { source = "https://orasund.github.io/pixelengine/tileset.png", width = 16, height = 16 }
 
             goblin =
                 Graphics.animatedTile ( 2, 8 ) 1
@@ -70,7 +71,7 @@ To get started, copy the following project
 
 ## Definition
 
-@docs Tileset,Background,Config
+@docs Tileset,Background,SupportedUnit,Config
 
 
 ## Basic Functions
@@ -91,13 +92,29 @@ To get started, copy the following project
 
 import Css exposing (px)
 import Css.Foreign as Foreign
-import Html.Styled exposing (Html, div, img)
+import Html.Styled exposing (Attribute, Html, div, img)
 import Html.Styled.Attributes exposing (css, src)
 import Html.Styled.Keyed as Keyed
 
 
 type alias Location =
     ( Int, Int )
+
+
+type alias Dimensions =
+    { width : Float, height : Float, unit : SupportedUnit }
+
+
+{-| Lengths can only be in one of the following units.
+They are equivalent to the corresponding [elm-css units](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#Length)
+-}
+type SupportedUnit
+    = Px
+    | Cm
+    | Mm
+    | In
+    | Pc
+    | Pt
 
 
 {-| A single tile of a tileset
@@ -120,8 +137,8 @@ type Tile
 -}
 type alias Tileset =
     { source : String
-    , width : Int
-    , height : Int
+    , spriteWidth : Int
+    , spriteHeight : Int
     }
 
 
@@ -142,14 +159,22 @@ Image "groundTile.png"
 -}
 type Background
     = Color Css.Color
-    | Image String
+    | Image { src : String, width : Float, height : Float }
 
 
 type alias TiledArea =
-    { height : Int
+    { rows : Int
+    , cols : Int
     , tileset : Tileset
     , background : Background
     , content : List ( Location, Tile )
+    }
+
+
+type alias ImageArea =
+    { height : ( Float, SupportedUnit )
+    , background : Background
+    , content : List ( ( Float, Float ), String )
     }
 
 
@@ -159,6 +184,10 @@ So for a tiled area contains only tiles of the same tileset.
 -}
 type Area
     = Tiled TiledArea
+
+
+
+-- Images ImageArea
 
 
 {-| Configurations of the engine.
@@ -171,9 +200,9 @@ type Area
 ```
 
 -}
-type alias Config compatible =
-    { scale : Int
-    , width : Css.LengthOrAuto compatible
+type alias Config =
+    { width : Float
+    , unit : SupportedUnit
     }
 
 
@@ -184,14 +213,26 @@ The content consists of
   - Tile - a tile in the tileset
 
 -}
-tiledArea : { height : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile ) -> Area
-tiledArea { height, tileset, background } content =
+tiledArea : { cols : Int, rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile ) -> Area
+tiledArea { cols, rows, tileset, background } content =
     Tiled
-        { height = height
+        { rows = rows
+        , cols = cols
         , tileset = tileset
         , background = background
         , content = content
         }
+
+
+
+{- imgArea : { height : ( Float, SupportedUnit ), background : Background } -> List ( ( Float, Float ), String ) -> Area
+   imgArea { height, background } content =
+       Images
+           { height = height
+           , background = background
+           , content = content
+           }
+-}
 
 
 {-| A basic tile.
@@ -265,7 +306,7 @@ animatedMovableTile ( left, top ) steps id =
 {-| Renders the content.
 Use the [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html) in combination with this function.
 -}
-render : Config compatible -> List Area -> Html msg
+render : Config -> List Area -> Html msg
 render config listOfArea =
     div [ css [ Css.backgroundColor (Css.rgb 0 0 0) ] ]
         (listOfArea
@@ -275,6 +316,10 @@ render config listOfArea =
                         Tiled tiledArea ->
                             [ renderTiledArea config tiledArea ]
                                 |> List.append list
+                 {- Images imgArea ->
+                    [ renderImageArea config imgArea ]
+                        |> List.append list
+                 -}
                 )
                 [ Foreign.global
                     [ Foreign.selector
@@ -285,31 +330,33 @@ render config listOfArea =
         )
 
 
-renderTiledArea : Config compatible -> TiledArea -> Html msg
-renderTiledArea { scale, width } { height, background, content, tileset } =
-    div
-        [ css
-            (let
-                style =
-                    [ Css.width width
-                    , Css.height <| px <| toFloat <| scale * tileset.height * height
-                    , Css.margin Css.auto
-                    , Css.position Css.relative
-                    ]
-             in
-             case background of
-                Color color ->
-                    List.append style
-                        [ Css.backgroundColor color ]
 
-                Image image ->
-                    List.append style
-                        [ Css.backgroundImage (Css.url image)
-                        , Css.backgroundRepeat Css.repeat
-                        , Css.backgroundSize2 (px <| toFloat <| scale * tileset.width) (px <| toFloat <| scale * tileset.height)
-                        , Css.property "image-rendering" "pixelated"
-                        ]
-            )
+{- renderImageArea : Config -> ImageArea -> Html msg
+   renderImageArea { scale, width, unit } { height, background, content } =
+       div
+           [ cssArea scale
+               background
+               { width = width, height = height, unit = unit }
+           ]
+           content
+           |> List.map displayImage
+-}
+
+
+renderTiledArea : Config -> TiledArea -> Html msg
+renderTiledArea { width } { rows, cols, background, content, tileset } =
+    let
+        scale : Float
+        scale =
+            width / (toFloat <| tileset.spriteWidth * cols)
+    in
+    div
+        [ cssArea
+            background
+            { width = width
+            , height = scale * (toFloat <| tileset.spriteHeight * rows)
+            , unit = Px
+            }
         ]
         (content
             |> List.partition (\( _, Tile { transitionId } ) -> transitionId == Nothing)
@@ -323,8 +370,176 @@ renderTiledArea { scale, width } { height, background, content, tileset } =
         )
 
 
-displayTile : Tileset -> Int -> ( Location, Tile ) -> ( String, Html msg )
-displayTile { width, height, source } scale ( pos, Tile { left, top, steps, transitionId } ) =
+cssArea : Background -> Dimensions -> Attribute msg
+cssArea background dimensions =
+    css
+        ((case background of
+            Color color ->
+                [ Css.backgroundColor color ]
+
+            Image { src, width, height } ->
+                cssBackgroundImage
+                    src
+                    { width = width
+                    , height = height
+                    , unit = Px
+                    }
+         )
+            |> List.append (cssDimensions dimensions)
+            |> List.append
+                [ Css.margin Css.auto
+                , Css.position Css.relative
+                ]
+        )
+
+
+cssDimensions : Dimensions -> List Css.Style
+cssDimensions { width, height, unit } =
+    case unit of
+        Px ->
+            [ Css.width (Css.px <| width)
+            , Css.height (Css.px <| height)
+            ]
+
+        Cm ->
+            [ Css.width (Css.cm <| width)
+            , Css.height (Css.cm <| height)
+            ]
+
+        Mm ->
+            [ Css.width (Css.mm <| width)
+            , Css.height (Css.mm <| height)
+            ]
+
+        In ->
+            [ Css.width (Css.inches <| width)
+            , Css.height (Css.inches <| height)
+            ]
+
+        Pc ->
+            [ Css.width (Css.pc <| width)
+            , Css.height (Css.pc <| height)
+            ]
+
+        Pt ->
+            [ Css.width (Css.pt <| width)
+            , Css.height (Css.pt <| height)
+            ]
+
+
+cssPositions : { top : Float, left : Float, unit : SupportedUnit } -> List Css.Style
+cssPositions { left, top, unit } =
+    case unit of
+        Px ->
+            [ Css.left (Css.px <| left)
+            , Css.top (Css.px <| top)
+            ]
+
+        Cm ->
+            [ Css.left (Css.cm <| left)
+            , Css.top (Css.cm <| top)
+            ]
+
+        Mm ->
+            [ Css.left (Css.mm <| left)
+            , Css.top (Css.mm <| top)
+            ]
+
+        In ->
+            [ Css.left (Css.inches <| left)
+            , Css.top (Css.inches <| top)
+            ]
+
+        Pc ->
+            [ Css.left (Css.pc <| left)
+            , Css.top (Css.pc <| top)
+            ]
+
+        Pt ->
+            [ Css.left (Css.pt <| left)
+            , Css.top (Css.pt <| top)
+            ]
+
+
+cssPositionsAnimated : { top : Float, marginLeft : Float, right : Float, unit : SupportedUnit } -> List Css.Style
+cssPositionsAnimated { right, top, marginLeft, unit } =
+    case unit of
+        Px ->
+            [ Css.right (Css.px <| right)
+            , Css.top (Css.px <| top)
+            , Css.marginLeft (Css.px <| marginLeft)
+            ]
+
+        Cm ->
+            [ Css.right (Css.cm <| right)
+            , Css.top (Css.cm <| top)
+            , Css.marginLeft (Css.cm <| marginLeft)
+            ]
+
+        Mm ->
+            [ Css.right (Css.mm <| right)
+            , Css.top (Css.mm <| top)
+            , Css.marginLeft (Css.mm <| marginLeft)
+            ]
+
+        In ->
+            [ Css.right (Css.inches <| right)
+            , Css.top (Css.inches <| top)
+            , Css.marginLeft (Css.inches <| marginLeft)
+            ]
+
+        Pc ->
+            [ Css.right (Css.pc <| right)
+            , Css.top (Css.pc <| top)
+            , Css.marginLeft (Css.pc <| marginLeft)
+            ]
+
+        Pt ->
+            [ Css.right (Css.pt <| right)
+            , Css.top (Css.pt <| top)
+            , Css.marginLeft (Css.pt <| marginLeft)
+            ]
+
+
+cssBackgroundImage : String -> Dimensions -> List Css.Style
+cssBackgroundImage image { width, height, unit } =
+    let
+        backgroundSize : SupportedUnit -> Float -> Float -> Css.Style
+        backgroundSize u w h =
+            case u of
+                Px ->
+                    Css.backgroundSize2 (Css.px <| w) (Css.px <| h)
+
+                Cm ->
+                    Css.backgroundSize2 (Css.cm <| w) (Css.cm <| h)
+
+                Mm ->
+                    Css.backgroundSize2 (Css.mm <| w) (Css.mm <| h)
+
+                In ->
+                    Css.backgroundSize2 (Css.inches <| w) (Css.inches <| h)
+
+                Pc ->
+                    Css.backgroundSize2 (Css.pc <| w) (Css.pc <| h)
+
+                Pt ->
+                    Css.backgroundSize2 (Css.pt <| w) (Css.pt <| h)
+    in
+    [ Css.backgroundImage (Css.url image)
+    , Css.backgroundRepeat Css.repeat
+    , backgroundSize unit width height
+    , Css.property "image-rendering" "pixelated"
+    ]
+
+
+
+{- displayImage :  Float -> SupportedUnit -> (Location,{ src : String, width : Float, height : Float }) -> Html msg
+   displayImage scale unit (pos,{src,width,height}) =
+-}
+
+
+displayTile : Tileset -> Float -> ( Location, Tile ) -> ( String, Html msg )
+displayTile { spriteWidth, spriteHeight, source } scale ( pos, Tile { left, top, steps, transitionId } ) =
     let
         ( x, y ) =
             pos
@@ -340,12 +555,12 @@ displayTile { width, height, source } scale ( pos, Tile { left, top, steps, tran
                 [ Css.property "object-fit" "none"
                 , Css.property
                     "object-position"
-                    (toString (-1 * width * i) ++ "px " ++ toString (-1 * height * j) ++ "px")
-                , Css.width <| px <| toFloat <| width
-                , Css.height <| px <| toFloat <| height
+                    (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                , Css.width <| px <| toFloat <| spriteWidth
+                , Css.height <| px <| toFloat <| spriteHeight
                 , Css.position Css.absolute
-                , Css.top <| px <| toFloat <| scale * height * y + height // 2
-                , Css.left <| px <| toFloat <| scale * width * x + width // 2
+                , Css.top <| px <| scale * (toFloat <| spriteHeight * y) + (toFloat <| spriteHeight // 2)
+                , Css.left <| px <| scale * (toFloat <| spriteWidth * x) + (toFloat <| spriteWidth // 2)
                 , Css.property "image-rendering" "pixelated"
                 , Css.transform <| Css.scale2 scale scale
                 ]
@@ -364,10 +579,10 @@ displayTile { width, height, source } scale ( pos, Tile { left, top, steps, tran
                  )
                     |> List.append
                         [ Css.position Css.absolute
-                        , Css.top <| px <| toFloat <| scale * height * y
-                        , Css.left <| px <| toFloat <| scale * width * x
-                        , Css.width <| px <| toFloat <| scale * width
-                        , Css.height <| px <| toFloat <| scale * height
+                        , Css.top <| px <| scale * (toFloat <| spriteHeight * y)
+                        , Css.left <| px <| scale * (toFloat <| spriteWidth * x)
+                        , Css.width <| px <| scale * (toFloat <| spriteWidth)
+                        , Css.height <| px <| scale * (toFloat <| spriteHeight)
                         , Css.overflow Css.hidden
                         ]
                 )
@@ -378,13 +593,13 @@ displayTile { width, height, source } scale ( pos, Tile { left, top, steps, tran
                     [ Css.property "object-fit" "none"
                     , Css.property
                         "object-position"
-                        (toString (-1 * width * (i - 1)) ++ "px " ++ toString (-1 * height * j) ++ "px")
-                    , Css.width <| px <| toFloat <| width * (steps + 2)
-                    , Css.height <| px <| toFloat <| height
+                        (toString (-1 * spriteWidth * (i - 1)) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                    , Css.width <| px <| toFloat <| spriteWidth * (steps + 2)
+                    , Css.height <| px <| toFloat <| spriteHeight
                     , Css.position Css.relative
-                    , Css.right <| px <| toFloat <| width * 2 * (steps + 1)
-                    , Css.marginLeft <| px <| toFloat <| width * (steps + 2) // 2
-                    , Css.top <| px <| toFloat <| height // 2
+                    , Css.right <| px <| toFloat <| spriteWidth * 2 * (steps + 1)
+                    , Css.marginLeft <| px <| toFloat <| spriteWidth * (steps + 2) // 2
+                    , Css.top <| px <| toFloat <| spriteHeight // 2
                     , Css.property "image-rendering" "pixelated"
                     , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
                     , Css.transform <| Css.scale2 scale scale

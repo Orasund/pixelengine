@@ -2,7 +2,7 @@ module TilesetExample exposing (main)
 
 import Css exposing (px)
 import Html.Styled exposing (toUnstyled)
-import PixelEngine.Graphics as Graphics exposing (Background(..), Tileset)
+import PixelEngine.Graphics as Graphics exposing (Background(..), SupportedUnit(..), Tileset)
 
 
 main =
@@ -15,18 +15,23 @@ main =
         windowSize =
             16
 
-        scale : Int
+        scale : Float
         scale =
             2
 
-        width : Css.Px
+        width : Float
         width =
-            px <| toFloat <| (windowSize * tileSize * scale)
+            (toFloat <| windowSize * tileSize) * scale
 
         tileset : Tileset
         tileset =
-            { source = "tileset.png", width = 16, height = 16 }
+            { source = "tileset.png", spriteWidth = tileSize, spriteHeight = tileSize }
 
+        background : Background
+        background =
+            Image { src = "background.png", width = 16 * scale, height = 16 * scale }
+
+        --Color (Css.rgb 20 12 28)
         goblin =
             Graphics.animatedTile ( 2, 8 ) 1
 
@@ -40,8 +45,13 @@ main =
             Graphics.tile ( 4, 8 )
     in
     Graphics.render
-        { scale = scale, width = width }
-        [ Graphics.tiledArea { height = windowSize, tileset = tileset, background = Color (Css.rgb 20 12 28) }
+        { width = width, unit = Px }
+        [ Graphics.tiledArea
+            { rows = windowSize
+            , cols = windowSize
+            , tileset = tileset
+            , background = background
+            }
             [ ( ( 6, 7 ), goblin )
             , ( ( 7, 7 ), letter_h )
             , ( ( 8, 7 ), letter_i )
