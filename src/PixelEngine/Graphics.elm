@@ -1,8 +1,9 @@
 module PixelEngine.Graphics
     exposing
         ( Area
+        , AreaForUnit
         , Background(..)
-        , Config
+        , Options
         , SupportedUnit(..)
         , Tile
         , Tileset
@@ -71,7 +72,7 @@ To get started, copy the following project
 
 ## Definition
 
-@docs Tileset,Background,SupportedUnit,Config
+@docs Tileset,Background,Options
 
 
 ## Basic Functions
@@ -87,6 +88,11 @@ To get started, copy the following project
 ## Area
 
 @docs Area,tiledArea
+
+
+## Advanced
+
+@docs SupportedUnit,AreaForUnit
 
 -}
 
@@ -115,6 +121,8 @@ type SupportedUnit
     | In
     | Pc
     | Pt
+    | Em
+    | Rem
 
 
 {-| A single tile of a tileset
@@ -162,7 +170,7 @@ type Background
     | Image { src : String, width : Float, height : Float }
 
 
-type alias TiledArea =
+type alias TiledAreaContent =
     { rows : Int
     , cols : Int
     , tileset : Tileset
@@ -171,26 +179,75 @@ type alias TiledArea =
     }
 
 
-type alias ImageArea =
+type alias ImageAreaContent =
     { height : ( Float, SupportedUnit )
     , background : Background
     , content : List ( ( Float, Float ), String )
     }
 
 
+type AreaType
+    = Tiled TiledAreaContent
+    | Images ImageAreaContent
+
+
 {-| An area of the window.
 Elements in the area must be of the same type.
 So for a tiled area contains only tiles of the same tileset.
 -}
-type Area
-    = Tiled TiledArea
+type alias Area compatible =
+    { compatible
+        | px : Compatible
+        , area : AreaType
+    }
 
 
+{-| Areas supporting units other than pixels
+-}
+type alias AreaForUnit compatible =
+    { compatible
+        | unit : Compatible
+        , area : AreaType
+    }
 
--- Images ImageArea
+
+type alias AreaForAny compatible =
+    { compatible
+        | area : AreaType
+    }
 
 
-{-| Configurations of the engine.
+type Compatible
+    = Compatible
+
+
+type alias TiledArea =
+    AreaForAny
+        { px : Compatible
+        , tiledArea : Compatible
+        }
+
+
+type alias ImageArea =
+    AreaForAny
+        { unit : Compatible
+        , tiledArea : Compatible
+        }
+
+
+{-| Content.
+
+there are two options to pick from. The intended usecase is with pixels as unit.
+If you want to use tilesets, this is the only way to use them.
+But if not, then other units might be also interesting, thats why the second option exists.
+
+-}
+type Content compatible areaType
+    = UsingPixels (List (Area compatible))
+    | Using ( SupportedUnit, List (AreaForUnit compatible) )
+
+
+{-| Options of the engine.
 
   - scale - Upscales all images (use scale = 1 for no scaleing).
   - width - Width of the window. Use [elm-css lengths](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#Length).
@@ -200,7 +257,13 @@ type Area
 ```
 
 -}
-type alias Config =
+type alias Options options =
+    { options
+        | width : Float
+    }
+
+
+type alias FullOptions =
     { width : Float
     , unit : SupportedUnit
     }
@@ -213,15 +276,19 @@ The content consists of
   - Tile - a tile in the tileset
 
 -}
-tiledArea : { cols : Int, rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile ) -> Area
+tiledArea : { cols : Int, rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile ) -> TiledArea
 tiledArea { cols, rows, tileset, background } content =
-    Tiled
-        { rows = rows
-        , cols = cols
-        , tileset = tileset
-        , background = background
-        , content = content
-        }
+    { px = Compatible
+    , tiledArea = Compatible
+    , area =
+        Tiled
+            { rows = rows
+            , cols = cols
+            , tileset = tileset
+            , background = background
+            , content = content
+            }
+    }
 
 
 
@@ -306,16 +373,34 @@ animatedMovableTile ( left, top ) steps id =
 {-| Renders the content.
 Use the [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html) in combination with this function.
 -}
-render : Config -> List Area -> Html msg
-render config listOfArea =
+render : Options {} -> List (Area compatible) -> Html msg
+render { width } listOfArea =
+    renderFunction { width = width, unit = Px } listOfArea
+
+
+renderWithUnit : Options {} -> Content compatible areaType -> Html msg
+renderWithUnit { width } content =
+    case content of
+        UsingPixels listOfArea ->
+            renderFunction { width = width, unit = Px } listOfArea
+
+        Using ( unit, listOfArea ) ->
+            renderFunction { width = width, unit = unit } listOfArea
+
+
+renderFunction : FullOptions -> List (AreaForAny compatible) -> Html msg
+renderFunction ({ width } as options) listOfArea =
     div [ css [ Css.backgroundColor (Css.rgb 0 0 0) ] ]
         (listOfArea
             |> List.foldl
-                (\area list ->
+                (\({ area } as areaForAny) list ->
                     case area of
-                        Tiled tiledArea ->
-                            [ renderTiledArea config tiledArea ]
+                        Tiled tiledAreaContent ->
+                            [ renderTiledArea options tiledAreaContent ]
                                 |> List.append list
+
+                        _ ->
+                            list
                  {- Images imgArea ->
                     [ renderImageArea config imgArea ]
                         |> List.append list
@@ -343,7 +428,7 @@ render config listOfArea =
 -}
 
 
-renderTiledArea : Config -> TiledArea -> Html msg
+renderTiledArea : Options options -> TiledAreaContent -> Html msg
 renderTiledArea { width } { rows, cols, background, content, tileset } =
     let
         scale : Float
@@ -426,6 +511,16 @@ cssDimensions { width, height, unit } =
             , Css.height (Css.pt <| height)
             ]
 
+        Em ->
+            [ Css.width (Css.em <| width)
+            , Css.height (Css.em <| height)
+            ]
+
+        Rem ->
+            [ Css.width (Css.rem <| width)
+            , Css.height (Css.rem <| height)
+            ]
+
 
 cssPositions : { top : Float, left : Float, unit : SupportedUnit } -> List Css.Style
 cssPositions { left, top, unit } =
@@ -458,6 +553,16 @@ cssPositions { left, top, unit } =
         Pt ->
             [ Css.left (Css.pt <| left)
             , Css.top (Css.pt <| top)
+            ]
+
+        Em ->
+            [ Css.left (Css.em <| left)
+            , Css.top (Css.em <| top)
+            ]
+
+        Rem ->
+            [ Css.left (Css.rem <| left)
+            , Css.top (Css.rem <| top)
             ]
 
 
@@ -500,6 +605,18 @@ cssPositionsAnimated { right, top, marginLeft, unit } =
             , Css.marginLeft (Css.pt <| marginLeft)
             ]
 
+        Em ->
+            [ Css.right (Css.em <| right)
+            , Css.top (Css.em <| top)
+            , Css.marginLeft (Css.em <| marginLeft)
+            ]
+
+        Rem ->
+            [ Css.right (Css.rem <| right)
+            , Css.top (Css.rem <| top)
+            , Css.marginLeft (Css.rem <| marginLeft)
+            ]
+
 
 cssBackgroundImage : String -> Dimensions -> List Css.Style
 cssBackgroundImage image { width, height, unit } =
@@ -524,6 +641,12 @@ cssBackgroundImage image { width, height, unit } =
 
                 Pt ->
                     Css.backgroundSize2 (Css.pt <| w) (Css.pt <| h)
+
+                Em ->
+                    Css.backgroundSize2 (Css.em <| w) (Css.em <| h)
+
+                Rem ->
+                    Css.backgroundSize2 (Css.rem <| w) (Css.rem <| h)
     in
     [ Css.backgroundImage (Css.url image)
     , Css.backgroundRepeat Css.repeat
