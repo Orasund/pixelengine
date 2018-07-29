@@ -1,8 +1,14 @@
 module TilesetExample exposing (main)
 
-import Css exposing (px)
+import Css
 import Html.Styled exposing (toUnstyled)
-import PixelEngine.Graphics as Graphics exposing (Background(..), SupportedUnit(..), Tileset)
+import PixelEngine.Graphics as Graphics exposing (Background)
+import PixelEngine.Graphics.Image exposing (image)
+import PixelEngine.Graphics.Tile as Tile
+    exposing
+        ( Tileset
+        , tile
+        )
 
 
 main =
@@ -11,8 +17,8 @@ main =
         tileSize =
             16
 
-        windowSize : Int
-        windowSize =
+        windowWidth : Int
+        windowWidth =
             16
 
         scale : Float
@@ -21,7 +27,7 @@ main =
 
         width : Float
         width =
-            (toFloat <| windowSize * tileSize) * scale
+            (toFloat <| windowWidth * tileSize) * scale
 
         tileset : Tileset
         tileset =
@@ -29,33 +35,39 @@ main =
 
         background : Background
         background =
-            Image { src = "background.png", width = 16 * scale, height = 16 * scale }
+            Graphics.colorBackground (Css.rgb 20 12 28)
 
-        --Color (Css.rgb 20 12 28)
+        --Image { src = "background.png", width = 16 * scale, height = 16 * scale }
         goblin =
-            Graphics.animatedTile ( 2, 8 ) 1
+            tile ( 2, 8 ) |> Tile.animated 1
 
         letter_h =
-            Graphics.tile ( 1, 15 )
+            tile ( 1, 15 )
 
         letter_i =
-            Graphics.tile ( 2, 12 )
+            tile ( 2, 12 )
 
         heart =
-            Graphics.tile ( 4, 8 )
+            tile ( 4, 8 )
     in
     Graphics.render
-        { width = width, unit = Px }
+        { width = width, transitionSpeedInSec = 0.2, scale = scale }
         [ Graphics.tiledArea
-            { rows = windowSize
-            , cols = windowSize
+            { rows = 4
+            , cols = windowWidth
             , tileset = tileset
             , background = background
             }
-            [ ( ( 6, 7 ), goblin )
-            , ( ( 7, 7 ), letter_h )
-            , ( ( 8, 7 ), letter_i )
-            , ( ( 9, 7 ), heart )
+            [ ( ( 6, 2 ), goblin )
+            , ( ( 7, 2 ), letter_h )
+            , ( ( 8, 2 ), letter_i )
+            , ( ( 9, 2 ), heart )
+            ]
+        , Graphics.imageArea
+            { height = scale * (toFloat <| tileSize * 12)
+            , background = background
+            }
+            [ ( ( width / 2 - 80 * scale, 0 ), image "pixelengine-logo.png" )
             ]
         ]
         |> toUnstyled
