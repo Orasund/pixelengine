@@ -171,7 +171,7 @@ renderTiledArea ({ width, scale } as options) { rows, background, content, tiles
                 )
             |> (\( noTransition, transition ) ->
                     [ div [] (noTransition |> List.map Tuple.second)
-                    , Keyed.node "div" [] transition
+                    , Keyed.node "div" [] (transition |> List.sortBy Tuple.first)
                     ]
                )
         )
