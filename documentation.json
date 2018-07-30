@@ -1,11 +1,11 @@
 [
   {
     "name": "PixelEngine.Graphics",
-    "comment": " A graphic engine for turn-based pixel games.\n\nTo get started, copy the following project\n\n    module TilesetExample exposing (main)\n\n    import Css\n    import Html.Styled exposing (toUnstyled)\n    import PixelEngine.Graphics as Graphics exposing (Background)\n    import PixelEngine.Graphics.Image exposing (image)\n    import PixelEngine.Graphics.Tile as Tile\n        exposing\n            ( Tileset\n            , tile\n            )\n\n\n    main =\n        let\n            tileSize : Int\n            tileSize =\n                16\n\n            windowWidth : Int\n            windowWidth =\n                16\n\n            scale : Float\n            scale =\n                2\n\n            width : Float\n            width =\n                (toFloat <| windowWidth * tileSize) * scale\n\n            tileset : Tileset\n            tileset =\n                { source = \"tileset.png\"\n                , spriteWidth = tileSize\n                , spriteHeight = tileSize\n                }\n\n            background : Background\n            background =\n                Graphics.colorBackground (Css.rgb 20 12 28)\n\n            goblin =\n                tile ( 2, 8 ) |> Tile.animated 1\n\n            letter_h =\n                tile ( 1, 15 )\n\n            letter_i =\n                tile ( 2, 12 )\n\n            heart =\n                tile ( 4, 8 )\n        in\n        Graphics.render\n            { width = width\n            , transitionSpeedInSec = 0.2\n            , scale = scale\n            }\n            [ Graphics.tiledArea\n                { rows = 4\n                , cols = windowWidth\n                , tileset = tileset\n                , background = background\n                }\n                [ ( ( 6, 2 ), goblin )\n                , ( ( 7, 2 ), letter_h )\n                , ( ( 8, 2 ), letter_i )\n                , ( ( 9, 2 ), heart )\n                ]\n            , Graphics.imageArea\n                { height = scale * (toFloat <| tileSize * 12)\n                , background = background\n                }\n                [   ( ( width / 2 - 80 * scale, 0 )\n                    , image \"pixelengine-logo.png\"\n                    )\n                ]\n            ]\n            |> toUnstyled\n\n\n## Main Function\n\n@docs render\n\n\n## Area\n\n@docs Area,tiledArea,imageArea\n\n\n## Background\n\n@docs Background,imageBackground,colorBackground\n\n",
+    "comment": " A graphic engine for turn-based pixel games.\n\nTo get started, copy the following example:\n\n    module TilesetExample exposing (main)\n\n    import Css\n    import Html.Styled exposing (toUnstyled)\n    import PixelEngine.Graphics as Graphics exposing (Background)\n    import PixelEngine.Graphics.Image exposing (image)\n    import PixelEngine.Graphics.Tile as Tile\n        exposing\n            ( Tileset\n            , tile\n            )\n\n\n    main =\n        let\n            tileSize : Int\n            tileSize =\n                16\n\n            windowWidth : Int\n            windowWidth =\n                16\n\n            scale : Float\n            scale =\n                2\n\n            width : Float\n            width =\n                (toFloat <| windowWidth * tileSize) * scale\n\n            tileset : Tileset\n            tileset =\n                { source = \"https://orasund.github.io/pixelengine/tileset.png\"\n                , spriteWidth = tileSize\n                , spriteHeight = tileSize\n                }\n\n            background : Background\n            background =\n                Graphics.colorBackground (Css.rgb 20 12 28)\n\n            goblin =\n                tile ( 2, 8 ) |> Tile.animated 1\n\n            letter_h =\n                tile ( 1, 15 )\n\n            letter_i =\n                tile ( 2, 12 )\n\n            heart =\n                tile ( 4, 8 )\n        in\n        Graphics.render\n            { width = width\n            , transitionSpeedInSec = 0.2\n            , scale = scale\n            }\n            [ Graphics.tiledArea\n                { rows = 4\n                , cols = windowWidth\n                , tileset = tileset\n                , background = background\n                }\n                [ ( ( 6, 2 ), goblin )\n                , ( ( 7, 2 ), letter_h )\n                , ( ( 8, 2 ), letter_i )\n                , ( ( 9, 2 ), heart )\n                ]\n            , Graphics.imageArea\n                { height = scale * (toFloat <| tileSize * 12)\n                , background = background\n                }\n                [   ( ( width / 2 - 80 * scale, 0 )\n                    , image \"https://orasund.github.io/pixelengine/pixelengine-logo.png\"\n                    )\n                ]\n            ]\n            |> toUnstyled\n\n\n## Main Function\n\n@docs render\n\n\n## Area\n\n@docs Area,tiledArea,imageArea\n\n\n## Background\n\n@docs Background,imageBackground,colorBackground\n\n",
     "aliases": [
       {
         "name": "Area",
-        "comment": " A horizontal area of the content\n\nA area defines how the content should be displayed.\n\n**Note:** an area can only contain elements that are supported by that type of area.\nYou can find more information about the valid elements in the curresponding modules.\n\n",
+        "comment": " A horizontal area of the content.\nA area defines how the content should be displayed.\n\n**Note:** An area can only contain elements that are supported by the type of that area.\nYou can find more information about the valid elements in the curresponding modules.\n\n",
         "args": [
           "msg"
         ],
@@ -13,7 +13,7 @@
       },
       {
         "name": "Background",
-        "comment": " ever area has a background.\n",
+        "comment": " Ever area has a background.\n",
         "args": [],
         "type": "PixelEngine.Graphics.Abstract.Background"
       }
@@ -22,27 +22,27 @@
     "values": [
       {
         "name": "colorBackground",
-        "comment": " a single color, use the [elm-css colors](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#rgb)\n\n```\nColor (Css.rgb 20 12 28)\n```\n\n",
+        "comment": " A single color using the [elm-css colors](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#rgb)\n\n```\nColor (Css.rgb 20 12 28)\n```\n\n",
         "type": "Css.Color -> PixelEngine.Graphics.Background"
       },
       {
         "name": "imageArea",
-        "comment": " an area that contains images that can be arranged freely i that area.\nThis is a complete contrast to the way how tiledArea is working.\nusefull applications are guis, menus or loading screens.\n\nThis area has the following options:\n\n  - height - the height or the area in pixels\n  - background - the background of the area\n\n",
+        "comment": " An area containing images that can be arranged freely.\nThis is a complete contrast to the way how tiledArea is working.\nusefull applications are GUIs, menus or loading screens.\n\nThis area has the following options:\n\n  - height - the height or the area in pixels\n  - background - the background of the area\n\n",
         "type": "{ height : Float, background : PixelEngine.Graphics.Background } -> List ( ( Float, Float ), PixelEngine.Graphics.Image.Image msg ) -> PixelEngine.Graphics.Area msg"
       },
       {
         "name": "imageBackground",
-        "comment": " a image that gets repeated.\n\n```\nImage \"groundTile.png\"\n```\n\n",
+        "comment": " An image that gets repeated.\n\n```\nImage \"groundTile.png\"\n```\n\n",
         "type": "{ source : String, width : Float, height : Float } -> PixelEngine.Graphics.Background"
       },
       {
         "name": "render",
-        "comment": " This functions displays the content of the game.\nIt returns [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html).\n\nthe main idea of this graphic engine is to arrage the content into so called _Areas_.\nThese Areas are then displayed vertically on top of eachother.\n\nthe engine comes with a set of options:\n\n  - width - Width of the game. **Note:** all spatial values are given in _Pixels_.\n\n  - scale - This value scales up all content of the game.\n    **Default value:** 1 for original sized images\n\n  - transitionSpeedInSec - the speed of animations. *Default value:** 0 for no animations\n\nfor the start use the following settings\n\n```\n{scale = 2,width = 800, transitionSpeedInSec = 0.2}\n```\n\n",
+        "comment": " This functions displays the content of the game.\nIt returns [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html).\n\nThe main idea of this graphic engine is to arrage the content into so called _Areas_.\nThese Areas are then displayed vertically on top of eachother.\n\nthe engine comes with a set of options:\n\n  - width - Width of the game.\n    **Note:** all spatial values are given in _Pixels_.\n\n  - scale - This value scales up all content of the game.\n    **Default value:** 1 for original sized images\n\n  - transitionSpeedInSec - the speed of animations.\n    **Default value:** 0 for no animations\n\nfor the start use the following settings\n\n```\n{scale = 2,width = 800, transitionSpeedInSec = 0.2}\n```\n\n",
         "type": "{ width : Float, scale : Float, transitionSpeedInSec : Float } -> List (PixelEngine.Graphics.Area msg) -> Html.Styled.Html msg"
       },
       {
         "name": "tiledArea",
-        "comment": " an area for using tilesets. It supports one tileset at a time,\nthat means all sprites must be of the same size and stored as a grid in one single file.\nThis area is useful for displaying the playing field of a game.\n\nThis area has the following options:\n\n  - row - the amount of rows of the grid. This value defines the height of the area.\n  - tileset - the tileset that will be used for all elements in the area.\n  - background - the background of the area\n\n",
+        "comment": " An area for using tilesets. It supports one tileset at a time,\nthat means all sprites must be of the same size and stored as a grid in one single file.\nThis area is useful for displaying the playing field of a game.\n\nThis area has the following options:\n\n  - rows - The amount of rows of the grid. This value defines the height of the area.\n  - tileset - The tileset that will be used for all elements in the area.\n  - background - The background of the area.\n\n",
         "type": "{ rows : Int , tileset : PixelEngine.Graphics.Tile.Tileset , background : PixelEngine.Graphics.Background } -> List ( ( Int, Int ), PixelEngine.Graphics.Tile.Tile msg ) -> PixelEngine.Graphics.Area msg"
       }
     ],
@@ -50,11 +50,11 @@
   },
   {
     "name": "PixelEngine.Graphics.Image",
-    "comment": " a\n\n@docs Image,image,movable,fromTile,withAttributes\n\n",
+    "comment": " This module contains functions for creating images.\nThese Images can then be used for the _imageArea_ function from the main module\n\n@docs Image,image,movable,fromTile,withAttributes\n\n",
     "aliases": [
       {
         "name": "Image",
-        "comment": " a content Element\n",
+        "comment": " A image is a very general object: as we will see later,\neven tiles are essentially images.\nThe following functions are intended to be modular.\n\nA example of a image could be:\n\n```\nimage \"img.png\" |> movable \"uniqueName\"\n```\n\n",
         "args": [
           "msg"
         ],
@@ -65,22 +65,22 @@
     "values": [
       {
         "name": "fromTile",
-        "comment": " imageFromTile\n",
+        "comment": " tiles are essentially also images,\ntherefore this constructor transforms a tile and a tileset into an image.\n\n```\nfromTile (tile (0,0))\n    (tileset {source:\"https://orasund.github.io/pixelengine/pixelengine-logo.png\",width:80,height:80})\n==\nimage \"https://orasund.github.io/pixelengine/pixelengine-logo.png\"\n```\n\n**Note:** fromTile displays only the width and height of the image, that where given.\nThis means setting width and height to 0 would not display the image at all.\n\n```\nfromTile (tile (0,0) |> movable \"uniqueId\")\n==\nfromTile (tile (0,0)) |> movable \"uniqueId\"\n```\n\n**Note:** if you want to animate an image use this function instead\n\n",
         "type": "PixelEngine.Graphics.Tile.Tile msg -> PixelEngine.Graphics.Tile.Tileset -> PixelEngine.Graphics.Image.Image msg"
       },
       {
         "name": "image",
-        "comment": " creates a image\n",
+        "comment": " The basic image constructor.\nthe string contains the url to the image\n\n```\nimage \"https://orasund.github.io/pixelengine/pixelengine-logo.png\"\n```\n\n",
         "type": "String -> PixelEngine.Graphics.Image.Image msg"
       },
       {
         "name": "movable",
-        "comment": " creates a movable image\n",
+        "comment": " makes a image transition between positions.\nThis is useful for images that will change their position during the game.\n\n**Note:** the string should be unique, if not the transition might fail every now and then.\n\n**Note:** the string will be a id Attribute in a html node, so be careful not to use names that might be already taken.\n\n",
         "type": "String -> PixelEngine.Graphics.Image.Image msg -> PixelEngine.Graphics.Image.Image msg"
       },
       {
         "name": "withAttributes",
-        "comment": " s\n",
+        "comment": " Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Svg-Styled-Attributes)\n\nthe motivation for this function was so that one can create [onClick](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Events#onClick) events.\n\n",
         "type": "List (Html.Styled.Attribute msg) -> PixelEngine.Graphics.Image.Image msg -> PixelEngine.Graphics.Image.Image msg"
       }
     ],
@@ -88,11 +88,11 @@
   },
   {
     "name": "PixelEngine.Graphics.Tile",
-    "comment": " a\n\n@docs Tile, animated, movable, tile\n\n\n## Tileset\n\n@docs Tileset,tileset\n\n",
+    "comment": " This module contains functions for creating tiles.\nThese tiles are used for the _tiledArea_ function from the main module.\n\n\n## Tile\n\n@docs Tile, tile, movable, animated, withAttributes\n\n\n## Tileset\n\n@docs Tileset,tileset\n\n",
     "aliases": [
       {
         "name": "Tile",
-        "comment": " a Tiles\n",
+        "comment": " A tile defines a sprite in a tileset.\nThe following functions are intended to be modular.\n\nA example for a tile could be:\n\n```\ntile (1,2) |> animated 1 |> movable \"uniqueName\"\n```\n\n",
         "args": [
           "msg"
         ],
@@ -100,7 +100,7 @@
       },
       {
         "name": "Tileset",
-        "comment": " A tileset. It contains the link to the image as well as the size of a tile.\n\n```\n{source: \"tileset.png\",width: 16, height 16}\n```\n\n",
+        "comment": " A Tileset contains the actuall image that a tile can reference.\n",
         "args": [],
         "type": "PixelEngine.Graphics.Abstract.Tileset"
       }
@@ -109,23 +109,28 @@
     "values": [
       {
         "name": "animated",
-        "comment": " An animated tile.\nThe sprites of the animation must be arranged horizontally in the tileset.\n\n  - steps - Steps of the animation (one less then the number of sprites.)\n\n```\nanimatedTile (0,0) 0 == tile (0,0)\n```\n\n",
+        "comment": " Adds animations to a tile.\nThe sprites of the animation must be arranged horizontally in the tileset.\n\n  - steps - Steps of the animation (one less then the number of sprites.)\n\nthe following code specifies a tile with 3+1 frames\n\n```\ntile (0,0) |> animated 3\n```\n\n**Note:** setting the steps to 0 describes a tile with no animation.\n\n```\ntile (0,0) |> animated 0 == tile (0,0)\n```\n\n**Note:** negaive steps are not supported, in this case no animation will be played.\n\n",
         "type": "Int -> PixelEngine.Graphics.Tile.Tile msg -> PixelEngine.Graphics.Tile.Tile msg"
       },
       {
         "name": "movable",
-        "comment": " A movable tile.\nThis means it will transition if the location gets chanced.\n\n**Note:** the id should be a unique string, if not the transition might fail every now and then.\n\n",
+        "comment": " Makes a Tile transition between positions.\nThis is useful for sprites that will change their position during the game.\n\n**Note:** the string should be unique, if not the transition might fail every now and then.\n\n**Note:** the string will be a id Attribute in a html node, so be careful not to use names that might be already taken.\n\n",
         "type": "String -> PixelEngine.Graphics.Tile.Tile msg -> PixelEngine.Graphics.Tile.Tile msg"
       },
       {
         "name": "tile",
-        "comment": " A basic tile.\nThe first tile in a tileset is obtailed by\n\n```\ntile (0,0)\n```\n\n",
+        "comment": " The basic tile constructor.\nThe two arguments is the position of the sprite in the tileset.\n\nAs an example\n\n```\ntile (4,2)\n```\n\nis the 4 row in the second column of the tileset.\n\n",
         "type": "( Int, Int ) -> PixelEngine.Graphics.Tile.Tile msg"
       },
       {
         "name": "tileset",
-        "comment": " tileset\n",
+        "comment": " The tileset constructor has the following parameters:\n\n  - source - the adress to the file\n  - spriteWidth - the size of a single sprite in the tileset (in pixels)\n  - spriteHeight - the height of a single sprite (also in pixels)\n\nFor example the following defines the tileset that is used in the example.\n\n```\n{source: \"https://orasund.github.io/pixelengine/tileset.png\",width: 16, height 16}\n```\n\n",
         "type": "{ source : String, spriteWidth : Int, spriteHeight : Int } -> PixelEngine.Graphics.Tile.Tileset"
+      },
+      {
+        "name": "withAttributes",
+        "comment": " Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Svg-Styled-Attributes)\n\nthe motivation for this function was so that one can create [onClick](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Events#onClick) events.\n\n",
+        "type": "List (Html.Styled.Attribute msg) -> PixelEngine.Graphics.Tile.Tile msg -> PixelEngine.Graphics.Tile.Tile msg"
       }
     ],
     "generated-with-elm-version": "0.18.0"

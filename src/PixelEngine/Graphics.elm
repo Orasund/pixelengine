@@ -2,7 +2,7 @@ module PixelEngine.Graphics exposing (Area, Background, colorBackground, imageAr
 
 {-| A graphic engine for turn-based pixel games.
 
-To get started, copy the following project
+To get started, copy the following example:
 
     module TilesetExample exposing (main)
 
@@ -37,7 +37,7 @@ To get started, copy the following project
 
             tileset : Tileset
             tileset =
-                { source = "tileset.png"
+                { source = "https://orasund.github.io/pixelengine/tileset.png"
                 , spriteWidth = tileSize
                 , spriteHeight = tileSize
                 }
@@ -79,7 +79,7 @@ To get started, copy the following project
                 , background = background
                 }
                 [   ( ( width / 2 - 80 * scale, 0 )
-                    , image "pixelengine-logo.png"
+                    , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
                     )
                 ]
             ]
@@ -109,11 +109,10 @@ import PixelEngine.Graphics.Image exposing (Image)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 
 
-{-| A horizontal area of the content
-
+{-| A horizontal area of the content.
 A area defines how the content should be displayed.
 
-**Note:** an area can only contain elements that are supported by that type of area.
+**Note:** An area can only contain elements that are supported by the type of that area.
 You can find more information about the valid elements in the curresponding modules.
 
 -}
@@ -121,13 +120,13 @@ type alias Area msg =
     Abstract.Area msg
 
 
-{-| ever area has a background.
+{-| Ever area has a background.
 -}
 type alias Background =
     Abstract.Background
 
 
-{-| a single color, use the [elm-css colors](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#rgb)
+{-| A single color using the [elm-css colors](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#rgb)
 
 ```
 Color (Css.rgb 20 12 28)
@@ -139,7 +138,7 @@ colorBackground color =
     Abstract.ColorBackground color
 
 
-{-| a image that gets repeated.
+{-| An image that gets repeated.
 
 ```
 Image "groundTile.png"
@@ -151,9 +150,9 @@ imageBackground image =
     Abstract.ImageBackground image
 
 
-{-| an area that contains images that can be arranged freely i that area.
+{-| An area containing images that can be arranged freely.
 This is a complete contrast to the way how tiledArea is working.
-usefull applications are guis, menus or loading screens.
+usefull applications are GUIs, menus or loading screens.
 
 This area has the following options:
 
@@ -170,15 +169,15 @@ imageArea { height, background } content =
         }
 
 
-{-| an area for using tilesets. It supports one tileset at a time,
+{-| An area for using tilesets. It supports one tileset at a time,
 that means all sprites must be of the same size and stored as a grid in one single file.
 This area is useful for displaying the playing field of a game.
 
 This area has the following options:
 
-  - row - the amount of rows of the grid. This value defines the height of the area.
-  - tileset - the tileset that will be used for all elements in the area.
-  - background - the background of the area
+  - rows - The amount of rows of the grid. This value defines the height of the area.
+  - tileset - The tileset that will be used for all elements in the area.
+  - background - The background of the area.
 
 -}
 tiledArea : { rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile msg ) -> Area msg
@@ -199,12 +198,14 @@ These Areas are then displayed vertically on top of eachother.
 
 the engine comes with a set of options:
 
-  - width - Width of the game. **Note:** all spatial values are given in _Pixels_.
+  - width - Width of the game.
+    **Note:** all spatial values are given in _Pixels_.
 
   - scale - This value scales up all content of the game.
     **Default value:** 1 for original sized images
 
-  - transitionSpeedInSec - the speed of animations. *Default value:** 0 for no animations
+  - transitionSpeedInSec - the speed of animations.
+    **Default value:** 0 for no animations
 
 for the start use the following settings
 
