@@ -140,6 +140,7 @@ renderTiledArea ({ width, scale } as options) { rows, background, content, tiles
     in
     div
         [ cssArea
+            scale
             background
             { width = width
             , height = scale * (toFloat <| tileset.spriteHeight * rows)
@@ -177,9 +178,10 @@ renderTiledArea ({ width, scale } as options) { rows, background, content, tiles
 
 
 renderImageArea : Options {} -> ImageAreaContent msg -> Html msg
-renderImageArea ({ width } as options) { height, background, content } =
+renderImageArea ({ scale,width } as options) { height, background, content } =
     div
         [ cssArea
+            scale
             background
             { width = width
             , height = height
@@ -196,15 +198,15 @@ renderImageArea ({ width } as options) { height, background, content } =
         )
 
 
-cssArea : Background -> Dimensions -> Attribute msg
-cssArea background { width, height } =
+cssArea : Float -> Background -> Dimensions -> Attribute msg
+cssArea scale background { width, height } =
     css
         ((case background of
             ColorBackground color ->
                 [ Css.backgroundColor color ]
 
             ImageBackground imageBackground ->
-                cssBackgroundImage imageBackground.source {width = imageBackground.width, height = imageBackground.height}
+                cssBackgroundImage scale imageBackground.source {width = imageBackground.width, height = imageBackground.height}
          )
             |> List.append
                 [ Css.width (Css.px <| width)
@@ -224,11 +226,11 @@ cssDimensions { width, height } =
     ]
 
 
-cssBackgroundImage : String -> Dimensions -> List Css.Style
-cssBackgroundImage image { width, height } =
+cssBackgroundImage : Float -> String -> Dimensions -> List Css.Style
+cssBackgroundImage scale image { width, height } =
     [ Css.backgroundImage (Css.url image)
     , Css.backgroundRepeat Css.repeat
-    , Css.backgroundSize2 (Css.px <| width) (Css.px <| height)
+    , Css.backgroundSize2 (Css.px <| width*scale) (Css.px <| height*scale)
     , Css.property "image-rendering" "pixelated"
     ]
 
