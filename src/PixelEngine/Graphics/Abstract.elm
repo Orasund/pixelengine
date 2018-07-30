@@ -178,7 +178,7 @@ renderTiledArea ({ width, scale } as options) { rows, background, content, tiles
 
 
 renderImageArea : Options {} -> ImageAreaContent msg -> Html msg
-renderImageArea ({ scale,width } as options) { height, background, content } =
+renderImageArea ({ scale, width } as options) { height, background, content } =
     div
         [ cssArea
             scale
@@ -192,7 +192,7 @@ renderImageArea ({ scale,width } as options) { height, background, content } =
             |> pairMap (List.map (displayElement options))
             |> (\( noTransition, transition ) ->
                     [ div [] (noTransition |> List.map Tuple.second)
-                    , Keyed.node "div" [] transition
+                    , Keyed.node "div" [] (transition |> List.sortBy Tuple.first)
                     ]
                )
         )
@@ -206,7 +206,7 @@ cssArea scale background { width, height } =
                 [ Css.backgroundColor color ]
 
             ImageBackground imageBackground ->
-                cssBackgroundImage scale imageBackground.source {width = imageBackground.width, height = imageBackground.height}
+                cssBackgroundImage scale imageBackground.source { width = imageBackground.width, height = imageBackground.height }
          )
             |> List.append
                 [ Css.width (Css.px <| width)
@@ -230,7 +230,7 @@ cssBackgroundImage : Float -> String -> Dimensions -> List Css.Style
 cssBackgroundImage scale image { width, height } =
     [ Css.backgroundImage (Css.url image)
     , Css.backgroundRepeat Css.repeat
-    , Css.backgroundSize2 (Css.px <| width*scale) (Css.px <| height*scale)
+    , Css.backgroundSize2 (Css.px <| width * scale) (Css.px <| height * scale)
     , Css.property "image-rendering" "pixelated"
     ]
 
