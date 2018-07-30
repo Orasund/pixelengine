@@ -204,7 +204,7 @@ cssArea background { width, height } =
                 [ Css.backgroundColor color ]
 
             ImageBackground imageBackground ->
-                [ Css.backgroundSize2 (Css.px <| imageBackground.width) (Css.px <| imageBackground.height) ]
+                cssBackgroundImage imageBackground.source {width = imageBackground.width, height = imageBackground.height}
          )
             |> List.append
                 [ Css.width (Css.px <| width)
