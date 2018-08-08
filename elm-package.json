@@ -1,5 +1,5 @@
 {
-    "version": "2.0.5",
+    "version": "2.1.0",
     "summary": "Graphic engine for turn based pixel games.",
     "repository": "https://github.com/Orasund/pixelengine.git",
     "license": "BSD3",
@@ -10,7 +10,8 @@
     "exposed-modules": [
         "PixelEngine.Graphics",
         "PixelEngine.Graphics.Image",
-        "PixelEngine.Graphics.Tile"
+        "PixelEngine.Graphics.Tile",
+        "PixelEngine.ScreenTransition"
     ],
     "dependencies": {
         "elm-lang/core": "5.0.0 <= v < 6.0.0",

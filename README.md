@@ -4,7 +4,7 @@ A graphic engine for rendering turn-based pixel games.
 When to use it:
 
   * The game is turned based. (Board Games, Rogue-likes games, Puzzle games, Turn based stragety games)
-  * The game has a idle state. (Farming games, Jump 'n' Run games with no enemies, J-RPG games like Pokemon)
+  * The game has an idle state. (Farming games, Jump 'n' Run games with no enemies, J-RPG games like Pokemon)
   * The game is tile based. (Tetris,Pack-man)
 
 When not to use it:
@@ -15,4 +15,4 @@ When not to use it:
 
 **Games made with this Engine**
 
-  * [Rogue-like game using a Tileset](https://orasund.github.io/pixelengine/)
+  * [Dig Dig Boom - Rogue-like game](https://orasund.itch.io/dig-dig-boom)
