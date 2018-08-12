@@ -145,7 +145,7 @@ multipleImages list =
         images : Abstract.MultipleSources
         images =
             list
-                |> List.foldl
+                |> List.foldr
                     (\( ( left, top ), contentElement ) ->
                         case contentElement.elementType of
                             Abstract.SingleSource singleSource ->
