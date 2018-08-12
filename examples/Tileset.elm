@@ -66,9 +66,9 @@ main =
             { height = scale * (toFloat <| tileSize * 12)
             , background = background
             }
-            [ ( ( 0, 0 )
+            [ ( ( width / 2 - 80 * scale, 0 )
               , multipleImages
-                    [ ( ( width / 2 - 80 * scale, 0 ), image "pixelengine-logo.png" )
+                    [ ( ( 0, 0 ), image "pixelengine-logo.png" )
                     ]
               )
             ]
