@@ -120,7 +120,7 @@ type alias Area msg =
     Abstract.Area msg
 
 
-{-| Ever area has a background.
+{-| Every area has a background.
 -}
 type alias Background =
     Abstract.Background
@@ -196,7 +196,7 @@ It returns [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css
 The main idea of this graphic engine is to arrage the content into so called _Areas_.
 These Areas are then displayed vertically on top of eachother.
 
-the engine comes with a set of options:
+The engine comes with a set of options:
 
   - width - Width of the game.
     **Note:** all spatial values are given in _Pixels_.
@@ -204,10 +204,10 @@ the engine comes with a set of options:
   - scale - This value scales up all content of the game.
     **Default value:** 1 for original sized images
 
-  - transitionSpeedInSec - the speed of animations.
+  - transitionSpeedInSec - The speed of animations.
     **Default value:** 0 for no animations
 
-for the start use the following settings
+For the start use the following settings
 
 ```
 {scale = 2,width = 800, transitionSpeedInSec = 0.2}

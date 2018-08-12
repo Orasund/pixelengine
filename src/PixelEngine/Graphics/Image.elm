@@ -1,9 +1,9 @@
-module PixelEngine.Graphics.Image exposing (Image, fromTile, image, movable, withAttributes)
+module PixelEngine.Graphics.Image exposing (Image, fromTile, image, movable, multipleImages, withAttributes)
 
 {-| This module contains functions for creating images.
 These Images can then be used for the _imageArea_ function from the main module
 
-@docs Image,image,movable,fromTile,withAttributes
+@docs Image,image,movable,fromTile,multipleImages,withAttributes
 
 -}
 
@@ -37,8 +37,9 @@ image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
 -}
 image : String -> Image msg
 image source =
-    { elementSource =
-        Abstract.ImageSource source
+    { elementType =
+        Abstract.SingleSource <|
+            Abstract.ImageSource source
     , customAttributes = []
     , uniqueId = Nothing
     }
@@ -87,13 +88,14 @@ fromTile { info, uniqueId, customAttributes } tileset =
         { top, left, steps } =
             info
     in
-    { elementSource =
-        Abstract.TileSource
-            { left = left
-            , top = top
-            , steps = steps
-            , tileset = tileset
-            }
+    { elementType =
+        Abstract.SingleSource <|
+            Abstract.TileSource
+                { left = left
+                , top = top
+                , steps = steps
+                , tileset = tileset
+                }
     , customAttributes = customAttributes
     , uniqueId = uniqueId
     }
@@ -108,4 +110,54 @@ withAttributes : List (Attribute msg) -> Image msg -> Image msg
 withAttributes attributes image =
     { image
         | customAttributes = attributes
+    }
+
+
+{-| it is possible to compose an image from a set of other images.
+the two Floats are realtive coordinates so
+
+```
+((100,100),image "img.png")
+=
+((20,50), multipleimages [((80,50),image "img.png")])
+```
+
+sub-images loose the ability to be movable:
+
+```
+multipleimages [((x,y),image "img.png" |> movable "id")]
+=
+multipleimages [((x,y),image "img.png")]
+```
+
+instead use the following:
+
+```
+image "img.png" |> movable "id"
+=
+multipleimages [((0,0),image "img.png")] |> movable "id"
+```
+
+-}
+multipleImages : List ( ( Float, Float ), Image msg ) -> Image msg
+multipleImages list =
+    let
+        images : Abstract.MultipleSources
+        images =
+            list
+                |> List.foldl
+                    (\( ( left, top ), contentElement ) ->
+                        case contentElement.elementType of
+                            Abstract.SingleSource singleSource ->
+                                (::) ( { left = left, top = top }, singleSource )
+
+                            Abstract.MultipleSources _ ->
+                                identity
+                    )
+                    []
+    in
+    { elementType =
+        Abstract.MultipleSources images
+    , customAttributes = []
+    , uniqueId = Nothing
     }

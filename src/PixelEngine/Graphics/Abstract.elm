@@ -64,13 +64,22 @@ type alias SingleImage =
     String
 
 
-type ElementSource
+type alias MultipleSources =
+    List ( Position, SingleSource )
+
+
+type SingleSource
     = TileSource TileWithTileset
     | ImageSource SingleImage
 
 
+type ElementType
+    = SingleSource SingleSource
+    | MultipleSources MultipleSources
+
+
 type alias ContentElement msg =
-    { elementSource : ElementSource
+    { elementType : ElementType
     , customAttributes : List (Attribute msg)
     , uniqueId : Maybe String
     }
@@ -243,17 +252,145 @@ cssPositions { left, top } =
 
 
 displayElement : Options {} -> ( ( Float, Float ), ContentElement msg ) -> ( String, Html msg )
-displayElement options ( ( left, top ), { elementSource, uniqueId, customAttributes } ) =
+displayElement options ( ( left, top ), { elementType, uniqueId, customAttributes } ) =
     let
         position =
             { left = left, top = top }
     in
-    case elementSource of
-        TileSource tileSource ->
-            displayTile options ( position, tileSource ) uniqueId customAttributes
+    case elementType of
+        {- SingleSource (TileSource tileSource) ->
+               displayTile options ( position, tileSource ) uniqueId customAttributes
 
-        ImageSource imageSource ->
-            displayImage options ( position, imageSource ) uniqueId customAttributes
+           SingleSource (ImageSource imageSource) ->
+               displayImage options ( position, imageSource ) uniqueId customAttributes
+        -}
+        SingleSource singleSource ->
+            displayMultiple options ( position, [ ( { top = 0, left = 0 }, singleSource ) ] ) uniqueId customAttributes
+
+        MultipleSources multipleSources ->
+            displayMultiple options ( position, multipleSources ) uniqueId customAttributes
+
+
+displayMultiple : Options {} -> ( Position, MultipleSources ) -> Maybe String -> List (Attribute msg) -> ( String, Html msg )
+displayMultiple { scale, transitionSpeedInSec } ( rootPosition, multipleSources ) transitionId attributes =
+    ( transitionId |> Maybe.withDefault ""
+    , div []
+        (multipleSources
+            |> List.map
+                (\( position, source ) ->
+                    let
+                        pos =
+                            { top = rootPosition.top + position.top
+                            , left = rootPosition.left + position.left
+                            }
+                    in
+                    case source of
+                        ImageSource imageSource ->
+                            img
+                                ([ src imageSource
+                                 , css
+                                    ((if transitionId == Nothing then
+                                        []
+                                      else
+                                        [ Css.property "transition" ("left " ++ toString transitionSpeedInSec ++ "s,top " ++ toString transitionSpeedInSec ++ "s;")
+                                        ]
+                                     )
+                                        |> List.append
+                                            [ Css.position Css.absolute
+                                            , Css.property "image-rendering" "pixelated"
+                                            , Css.property "transform-origin" "top left"
+                                            , Css.transform <| Css.scale2 scale scale
+                                            ]
+                                        |> List.append
+                                            [ Css.left (Css.px <| pos.left)
+                                            , Css.top (Css.px <| pos.top)
+                                            ]
+                                    )
+                                 ]
+                                    |> List.append attributes
+                                )
+                                []
+
+                        TileSource { left, top, steps, tileset } ->
+                            let
+                                ( i, j ) =
+                                    ( left, top )
+
+                                { spriteWidth, spriteHeight, source } =
+                                    tileset
+                            in
+                            if steps == 0 then
+                                img
+                                    ([ src source
+                                     , css
+                                        ((if transitionId == Nothing then
+                                            []
+                                          else
+                                            [ Css.property "transition" ("left " ++ toString transitionSpeedInSec ++ "s,top " ++ toString transitionSpeedInSec ++ "s;")
+                                            ]
+                                         )
+                                            |> List.append
+                                                [ Css.property "object-fit" "none"
+                                                , Css.property
+                                                    "object-position"
+                                                    (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                                                , Css.width <| px <| toFloat <| spriteWidth
+                                                , Css.height <| px <| toFloat <| spriteHeight
+                                                , Css.position Css.absolute
+                                                , Css.top <| px <| pos.top --+ (toFloat <| spriteHeight // 2)
+                                                , Css.left <| px <| pos.left --+ (toFloat <| spriteWidth // 2)
+                                                , Css.property "image-rendering" "pixelated"
+                                                , Css.property "transform-origin" "top left"
+                                                , Css.transform <| Css.scale2 scale scale
+                                                ]
+                                        )
+                                     ]
+                                        |> List.append attributes
+                                    )
+                                    []
+                            else
+                                div
+                                    ([ css
+                                        ((if transitionId == Nothing then
+                                            []
+                                          else
+                                            [ Css.property "transition" ("left " ++ toString transitionSpeedInSec ++ "s,top " ++ toString transitionSpeedInSec ++ "s;")
+                                            ]
+                                         )
+                                            |> List.append
+                                                [ Css.position Css.absolute
+                                                , Css.top <| px <| pos.top
+                                                , Css.left <| px <| pos.left
+                                                , Css.width <| px <| scale * (toFloat <| spriteWidth)
+                                                , Css.height <| px <| scale * (toFloat <| spriteHeight)
+                                                , Css.overflow Css.hidden
+                                                ]
+                                        )
+                                     ]
+                                        |> List.append attributes
+                                    )
+                                    [ img
+                                        [ src source
+                                        , css
+                                            [ Css.property "object-fit" "none"
+                                            , Css.property
+                                                "object-position"
+                                                (toString (-1 * spriteWidth * (i - 1)) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                                            , Css.width <| px <| toFloat <| spriteWidth * (steps + 2)
+                                            , Css.height <| px <| toFloat <| spriteHeight
+                                            , Css.position Css.relative
+                                            , Css.right <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
+                                            , Css.property "image-rendering" "pixelated"
+                                            , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
+                                            , Css.property "transform-origin" "top left"
+                                            , Css.transform <| Css.scale2 scale scale
+                                            ]
+                                        ]
+                                        []
+                                    ]
+                )
+        )
+    )
 
 
 displayImage : Options {} -> ( Position, SingleImage ) -> Maybe String -> List (Attribute msg) -> ( String, Html msg )

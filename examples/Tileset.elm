@@ -3,7 +3,7 @@ module TilesetExample exposing (main)
 import Css
 import Html.Styled exposing (toUnstyled)
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image exposing (image)
+import PixelEngine.Graphics.Image exposing (image, multipleImages)
 import PixelEngine.Graphics.Tile as Tile
     exposing
         ( Tileset
@@ -54,7 +54,6 @@ main =
         { width = width, transitionSpeedInSec = 0.2, scale = scale }
         [ Graphics.tiledArea
             { rows = 4
-            , cols = windowWidth
             , tileset = tileset
             , background = background
             }
@@ -67,7 +66,11 @@ main =
             { height = scale * (toFloat <| tileSize * 12)
             , background = background
             }
-            [ ( ( width / 2 - 80 * scale, 0 ), image "pixelengine-logo.png" )
+            [ ( ( 0, 0 )
+              , multipleImages
+                    [ ( ( width / 2 - 80 * scale, 0 ), image "pixelengine-logo.png" )
+                    ]
+              )
             ]
         ]
         |> toUnstyled
