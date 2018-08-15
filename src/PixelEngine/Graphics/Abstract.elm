@@ -381,7 +381,7 @@ displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset }
                     , Css.height <| px <| toFloat <| spriteHeight
                     , Css.position Css.absolute
                     , Css.marginRight <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
-                    , Css.right <| px <| -1 * scale * (toFloat <| spriteWidth//2)
+                    , Css.right <| px <| -1 * (toFloat <|(spriteWidth * (steps + 2))//2)
                     , Css.property "image-rendering" "pixelated"
                     , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
                     , Css.property "transform-origin" "top left"
