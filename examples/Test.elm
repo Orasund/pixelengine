@@ -46,7 +46,7 @@ main =
             }
             [ ( ( 0, 0 )
               , multipleImages
-                    [ ( ( 0, 0 ), fromTile ( tile (14,0)|> Tile.animated 1) tileset )
+                    [ ( ( 0, 0 ), fromTile ( tile (13,0)|> Tile.animated 2) tileset )
                     ]
               )
             ]

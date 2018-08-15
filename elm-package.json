@@ -1,5 +1,5 @@
 {
-    "version": "2.2.6",
+    "version": "2.2.7",
     "summary": "Graphic engine for turn based pixel games.",
     "repository": "https://github.com/Orasund/pixelengine.git",
     "license": "BSD3",
