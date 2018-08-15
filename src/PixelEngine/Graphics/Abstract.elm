@@ -135,7 +135,7 @@ renderFunction options listOfArea =
                 [ Foreign.global
                     [ Foreign.selector
                         "@keyframes pixelengine_graphics_basic"
-                        [ Css.property "100% { right:0px };" "" ]
+                        [ Css.property "100% { margin-right:0px };" "" ]
                     ]
                 ]
         )
@@ -282,14 +282,15 @@ displayMultiple ({ transitionSpeedInSec } as options) ( rootPosition, multipleSo
         ([ css
             ((if transitionId == Nothing then
                 []
-             else
+              else
                 [ Css.property "transition" ("left " ++ toString transitionSpeedInSec ++ "s,top " ++ toString transitionSpeedInSec ++ "s;")
-                ])
-                    |> List.append
-                        [ Css.position Css.absolute
-                        , Css.left (Css.px <| rootPosition.left)
-                        , Css.top (Css.px <| rootPosition.top)
-                        ]
+                ]
+             )
+                |> List.append
+                    [ Css.position Css.absolute
+                    , Css.left (Css.px <| rootPosition.left)
+                    , Css.top (Css.px <| rootPosition.top)
+                    ]
             )
          ]
             |> List.append attributes
@@ -378,11 +379,9 @@ displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset }
                         (toString (-1 * spriteWidth * (i - 1)) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
                     , Css.width <| px <| toFloat <| spriteWidth * (steps + 2)
                     , Css.height <| px <| toFloat <| spriteHeight
-                    , Css.position Css.relative
-                    , Css.right <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
-
-                    --, Css.marginLeft <| px <| toFloat <| spriteWidth * (steps + 2)
-                    --, Css.top <| px <| toFloat <| spriteHeight // 2
+                    , Css.position Css.absolute
+                    , Css.marginRight <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
+                    , Css.right <| px <| -1 * scale * (toFloat <| spriteWidth//2)
                     , Css.property "image-rendering" "pixelated"
                     , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
                     , Css.property "transform-origin" "top left"

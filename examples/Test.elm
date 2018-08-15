@@ -1,4 +1,4 @@
-module TilesetExample exposing (main)
+module TestExample exposing (main)
 
 import Css
 import Html.Styled exposing (toUnstyled)
@@ -31,44 +31,22 @@ main =
 
         tileset : Tileset
         tileset =
-            { source = "tileset.png", spriteWidth = tileSize, spriteHeight = tileSize }
+            { source = "blue_bar.png", spriteWidth = 16, spriteHeight = 4}
 
         background : Background
         background =
             Graphics.colorBackground (Css.rgb 20 12 28)
 
-        --Image { src = "background.png", width = 16 * scale, height = 16 * scale }
-        goblin =
-            tile ( 2, 8 ) |> Tile.animated 1
-
-        letter_h =
-            tile ( 1, 15 )
-
-        letter_i =
-            tile ( 2, 12 )
-
-        heart =
-            tile ( 4, 8 )
     in
     Graphics.render
         { width = width, transitionSpeedInSec = 0.2, scale = scale }
-        [ Graphics.tiledArea
-            { rows = 4
-            , tileset = tileset
-            , background = background
-            }
-            [ ( ( 6, 2 ), goblin )
-            , ( ( 7, 2 ), letter_h )
-            , ( ( 8, 2 ), letter_i )
-            , ( ( 9, 2 ), heart )
-            ]
-        , Graphics.imageArea
+        [ Graphics.imageArea
             { height = scale * (toFloat <| tileSize * 12)
             , background = background
             }
-            [ ( ( width / 2 - 80 * scale, 0 )
+            [ ( ( 0, 0 )
               , multipleImages
-                    [ ( ( 0, 0 ), image "pixelengine-logo.png" )
+                    [ ( ( 0, 0 ), fromTile ( tile (14,0)|> Tile.animated 1) tileset )
                     ]
               )
             ]
