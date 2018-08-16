@@ -15,4 +15,5 @@ When not to use it:
 
 **Games made with this Engine**
 
-  * [Dig Dig Boom - Rogue-like game](https://orasund.itch.io/dig-dig-boom)
+  * [Dig Dig Boom - Rogue-like game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/elm-playground/tree/master/docs/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
+  * [Cult Simulator - Idle game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/elm-playground/tree/master/docs/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses MultipleImages
