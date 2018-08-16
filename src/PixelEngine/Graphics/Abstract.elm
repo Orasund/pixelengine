@@ -135,7 +135,7 @@ renderFunction options listOfArea =
                 [ Foreign.global
                     [ Foreign.selector
                         "@keyframes pixelengine_graphics_basic"
-                        [ Css.property "100% { margin-left:0px };" "" ]
+                        [ Css.property "100% { left:0px };" "" ]
                     ]
                 ]
         )
@@ -370,25 +370,33 @@ displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset }
                 , Css.overflow Css.hidden
                 ]
             ]
-            [ img
-                [ src source
-                , css
-                    [ Css.property "object-fit" "none"
-                    , Css.property
-                        "object-position"
-                        (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
-                    , Css.width <| px <| toFloat <| spriteWidth * (steps + 1)
-                    , Css.height <| px <| toFloat <| spriteHeight
-                    , Css.position Css.absolute
-                    , Css.marginLeft <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
-                    , Css.left <| px <| -1 * (scale * (toFloat <| spriteWidth * (steps + 1)))
-                    , Css.property "image-rendering" "pixelated"
-                    , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
-                    , Css.property "transform-origin" "top left"
-                    , Css.transform <| Css.scale2 scale scale
+            [ div
+                [ css
+                    [Css.position Css.absolute
+                    , Css.right <| px <| scale * ((toFloat <| spriteWidth * (steps + 2)))
                     ]
                 ]
-                []
+                [ img
+                    [ src source
+                    , css
+                        [ Css.property "object-fit" "none"
+                        , Css.property
+                            "object-position"
+                            (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                        , Css.width <| px <| toFloat <| spriteWidth * (steps + 1)
+                        , Css.height <| px <| toFloat <| spriteHeight
+                        , Css.position Css.absolute
+                        , Css.left <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
+                        
+                        , Css.property "image-rendering" "pixelated"
+                        , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
+                        , Css.property "transform-origin" "top left"
+                        , Css.transform <| Css.scale2 scale scale
+                        , Css.float Css.right
+                        ]
+                    ]
+                    []
+                ]
             ]
 
 
