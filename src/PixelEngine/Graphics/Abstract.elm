@@ -135,7 +135,7 @@ renderFunction options listOfArea =
                 [ Foreign.global
                     [ Foreign.selector
                         "@keyframes pixelengine_graphics_basic"
-                        [ Css.property "100% { margin-right:0px };" "" ]
+                        [ Css.property "100% { margin-left:0px };" "" ]
                     ]
                 ]
         )
@@ -376,12 +376,12 @@ displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset }
                     [ Css.property "object-fit" "none"
                     , Css.property
                         "object-position"
-                        (toString (-1 * spriteWidth * (i - 1)) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
-                    , Css.width <| px <| toFloat <| spriteWidth * (steps + 2)
+                        (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                    , Css.width <| px <| toFloat <| spriteWidth * (steps + 1)
                     , Css.height <| px <| toFloat <| spriteHeight
                     , Css.position Css.absolute
-                    , Css.marginRight <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
-                    , Css.right <| px <| -1 * ((toFloat <|spriteWidth * (steps + 2)) - scale * (toFloat <|spriteWidth))
+                    , Css.marginLeft <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
+                    , Css.left <| px <| -1 * (scale * (toFloat <| spriteWidth * (steps + 1)))
                     , Css.property "image-rendering" "pixelated"
                     , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
                     , Css.property "transform-origin" "top left"
