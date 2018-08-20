@@ -1,9 +1,10 @@
 module TestExample exposing (main)
 
 import Css
+import Html.Styled.Attributes exposing (css)
 import Html.Styled exposing (toUnstyled)
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages)
+import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages,withAttributes)
 import PixelEngine.Graphics.Tile as Tile
     exposing
         ( Tileset
@@ -54,6 +55,7 @@ main =
                     , ( ( 0, 8 * 6 ), fromTile (tile ( 6, 0 ) |> Tile.animated 9) tileset )
                     , ( ( 0, 8 * 7 ), fromTile (tile ( 7, 0 ) |> Tile.animated 8) tileset )
                     ]
+                |> withAttributes [css [Css.float Css.left]]
               )
             ]
         ]
