@@ -1,5 +1,7 @@
 # pixelEngine
-A graphic engine for rendering turn-based pixel games.
+PixelEngine is a graphic engine for rendering turn-based pixel games.
+
+In future this libary may become a full game engine. But this is not a main goal; More over additional features will be added if they are usefull for [PixelEngine.Graphics](https://package.elm-lang.org/packages/Orasund/pixelengine/latest/PixelEngine-Graphics).
 
 When to use it:
 
@@ -13,7 +15,21 @@ When not to use it:
   * The game is physics based. (Flappy Birds)
   * The game has a continues gameloop. (Platformers, western RPGs like Zelda)
 
-**Games made with this Engine**
+## Motivation
+I had just watched a talk about the **time-travel debugger** of elm. So i wanted to test it out for my next project: [a little game](https://orasund.itch.io/dig-dig-boom).
+
+The graphics engines that i could choose of where
+  * [elm-2d-game](https://package.elm-lang.org/packages/Zinggi/elm-2d-game/latest)
+  * [elmo-8](https://package.elm-lang.org/packages/micktwomey/elmo-8/latest)
+
+Both used a loop to draw animations and therefore did not support the time travelling. And besides elmo-8 couldn't even render pixel graphics properly.
+
+So i desided to try something different and to use HTML and CSS instead of WebGL. This way i could let CSS handle the animations. I knew that my little project was not a universal game engine, but for very specific games it might be just right. 
+## Games made with this Engine
 
   * [Dig Dig Boom - Rogue-like game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
   * [Cult Simulator - Idle game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the MultipleImages Type
+
+## Upcoming Features
+  * MultipleTiles - Similar to MultipleImages but for Tiles.
+  * Particles - Maybe using SVG?

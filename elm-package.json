@@ -11,7 +11,7 @@
         "PixelEngine.Graphics",
         "PixelEngine.Graphics.Image",
         "PixelEngine.Graphics.Tile",
-        "PixelEngine.ScreenTransition"
+        "PixelEngine.Graphics.Transition"
     ],
     "dependencies": {
         "elm-lang/core": "5.0.0 <= v < 6.0.0",

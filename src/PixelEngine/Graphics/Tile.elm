@@ -1,4 +1,4 @@
-module PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, movable, tile, tileset, withAttributes)
+module PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, movable, tile, tileset, withAttributes, withBackgroundColor)
 
 {-| This module contains functions for creating tiles.
 These tiles are used for the _tiledArea_ function from the main module.
