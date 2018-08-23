@@ -2,9 +2,11 @@ module PixelEngine.Graphics.Abstract exposing (..)
 
 import Css exposing (px)
 import Css.Foreign as Foreign
-import Html.Styled exposing (Attribute, Html, div, img)
+import Html.Styled as Html exposing (Attribute, Html, div, img)
 import Html.Styled.Attributes exposing (css, src)
+import Html.Styled.Events as Events
 import Html.Styled.Keyed as Keyed
+import Window
 
 
 type alias TileInformation additional =
@@ -13,6 +15,18 @@ type alias TileInformation additional =
         , left : Int
         , steps : Int
     }
+
+
+type AbstractInput
+    = AbstractInputLeft
+    | AbstractInputRight
+    | AbstractInputUp
+    | AbstractInputDown
+    | AbstractInputA
+    | AbstractInputB
+    | AbstractInputX
+    | AbstractInputY
+    | AbstractInputNone
 
 
 type alias Tile msg =
@@ -35,17 +49,42 @@ type alias Tileset =
     }
 
 
+type Transition
+    = Transition { name : String, transitionList : List ( Float, String ) }
+
+
 type Background
     = ColorBackground Css.Color
     | ImageBackground { source : String, width : Float, height : Float }
 
 
-type alias Options options =
-    { options
-        | width : Float
+type alias ControllerOptions msg =
+    { windowSize : Window.Size
+    , controls : AbstractInput -> msg
+    }
+
+
+type Options msg
+    = Options
+        { width : Float
         , scale : Float
         , transitionSpeedInSec : Float
-    }
+        , controllerOptions : Maybe (ControllerOptions msg)
+        , transitionFrom : List (Area msg)
+        , transition : Transition
+        }
+
+
+options : { width : Float, scale : Float, transitionSpeedInSec : Float } -> Options msg
+options { width, scale, transitionSpeedInSec } =
+    Options
+        { width = width
+        , scale = scale
+        , transitionSpeedInSec = transitionSpeedInSec
+        , controllerOptions = Nothing
+        , transitionFrom = []
+        , transition = Transition { name = "", transitionList = [ ( 0, "" ) ] }
+        }
 
 
 type alias ImageAreaContent msg =
@@ -117,8 +156,8 @@ type Compatible
     = Compatible
 
 
-renderFunction : Options {} -> List (Area msg) -> Html msg
-renderFunction options listOfArea =
+renderScreen : Options msg -> List (Area msg) -> Html msg
+renderScreen options listOfArea =
     div [ css [ Css.backgroundColor (Css.rgb 0 0 0) ] ]
         (listOfArea
             |> List.foldl
@@ -141,8 +180,194 @@ renderFunction options listOfArea =
         )
 
 
-renderTiledArea : Options {} -> TiledAreaContent msg -> Html msg
-renderTiledArea ({ width, scale } as options) { rows, background, content, tileset } =
+render : Options msg -> List (Area msg) -> Html msg
+render ((Options { width, transitionFrom, transition, controllerOptions }) as options) to =
+    let
+        (Transition { name, transitionList }) =
+            transition
+
+        transitionLength : Float
+        transitionLength =
+            transitionList
+                |> List.map Tuple.first
+                |> List.sum
+
+        animationCss =
+            transitionList
+                |> List.foldl
+                    (\( length, cssCommands ) ( sum, string ) ->
+                        ( sum + length
+                        , string
+                            ++ (toString <| (sum + length) * 100 / transitionLength)
+                            ++ "% {"
+                            ++ "visibility:visible;"
+                            ++ cssCommands
+                            ++ "} "
+                        )
+                    )
+                    ( 0, "" )
+                |> Tuple.second
+                |> (\a -> a ++ ";")
+    in
+    div
+        [ css
+            [ Css.backgroundColor (Css.rgb 0 0 0)
+            ]
+        ]
+        ([ Foreign.global
+            [ Foreign.selector
+                ("@keyframes pixelengine_screen_transition_"
+                    ++ name
+                )
+                [ Css.property
+                    animationCss
+                    ""
+                ]
+            ]
+         , div
+            [ css
+                [ Css.position Css.relative
+                , Css.width <| px <| width
+                , Css.margin Css.auto
+                ]
+            ]
+            [ div
+                []
+                [ renderScreen options to ]
+            , div
+                [ css
+                    [ Css.position Css.absolute
+                    , Css.top <| px 0
+                    , Css.left <| px 0
+                    , Css.visibility Css.hidden
+                    , Css.property "animation"
+                        ("pixelengine_screen_transition_"
+                            ++ name
+                            ++ " "
+                            ++ toString transitionLength
+                            ++ "s 1"
+                        )
+                    ]
+                ]
+                [ renderScreen options transitionFrom ]
+            ]
+         ]
+            |> (case controllerOptions of
+                    Nothing ->
+                        identity
+
+                    Just ({ windowSize } as justCtrlOptions) ->
+                        if windowSize.width > windowSize.height then
+                            \l -> renderControls justCtrlOptions |> List.append l
+                        else
+                            identity
+               )
+        )
+
+
+renderControls : ControllerOptions msg -> List (Html msg)
+renderControls { windowSize, controls } =
+    let
+        diameter : Float
+        diameter =
+            toFloat <| windowSize.height // 4
+
+        circle : String -> AbstractInput -> Float -> List Css.Style -> Html msg
+        circle char input size listOfCss =
+            div
+                [ css
+                    ([ Css.width <| Css.px <| size
+                     , Css.height <| Css.px <| size
+                     , Css.borderRadius <| Css.px <| size / 2
+                     , Css.backgroundColor <| Css.rgb 256 256 256
+                     , Css.textAlign Css.center
+                     , Css.fontFamily Css.sansSerif
+                     , Css.fontSize <| Css.px <| size * 0.9
+                     , Css.opacity <| Css.num 0.5
+                     ]
+                        |> List.append listOfCss
+                    )
+                , Events.onClick <| controls <| input
+                ]
+                [ Html.text <| char ]
+    in
+    [ div
+        [ css
+            [ Css.position Css.absolute
+            , Css.top <| px 0
+            , Css.left <| px 0
+            ]
+        ]
+        [ circle "◀"
+            AbstractInputLeft
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 1.5
+            , Css.left <| px 0
+            ]
+        , circle "▶"
+            AbstractInputRight
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 1.5
+            , Css.left <| px <| diameter + (sqrt (2 * diameter ^ 2) - diameter)
+            ]
+        , circle "▲"
+            AbstractInputUp
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 1.0 - (sqrt (2 * diameter ^ 2) - diameter) / 2
+            , Css.left <| px <| diameter * 0.5 + (sqrt (2 * diameter ^ 2) - diameter) / 2
+            ]
+        , circle "▼"
+            AbstractInputDown
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 2.0 + (sqrt (2 * diameter ^ 2) - diameter) / 2
+            , Css.left <| px <| diameter * 0.5 + (sqrt (2 * diameter ^ 2) - diameter) / 2
+            ]
+        ]
+    , div
+        [ css
+            [ Css.position Css.absolute
+            , Css.top <| px 0
+            , Css.right <| px 0
+            ]
+        ]
+        [ circle "A"
+            AbstractInputA
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 1.5
+            , Css.right <| px 0
+            ]
+        , circle "X"
+            AbstractInputX
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 1.5
+            , Css.right <| px <| diameter + (sqrt (2 * diameter ^ 2) - diameter)
+            ]
+        , circle "Y"
+            AbstractInputY
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 1.0 - (sqrt (2 * diameter ^ 2) - diameter) / 2
+            , Css.right <| px <| diameter * 0.5 + (sqrt (2 * diameter ^ 2) - diameter) / 2
+            ]
+        , circle "B"
+            AbstractInputB
+            diameter
+            [ Css.position Css.absolute
+            , Css.top <| px <| diameter * 2.0 + (sqrt (2 * diameter ^ 2) - diameter) / 2
+            , Css.right <| px <| diameter * 0.5 + (sqrt (2 * diameter ^ 2) - diameter) / 2
+            ]
+        ]
+    ]
+
+
+renderTiledArea : Options msg -> TiledAreaContent msg -> Html msg
+renderTiledArea ((Options { width, scale }) as options) { rows, background, content, tileset } =
     let
         { spriteWidth, spriteHeight } =
             tileset
@@ -190,8 +415,8 @@ renderTiledArea ({ width, scale } as options) { rows, background, content, tiles
         )
 
 
-renderImageArea : Options {} -> ImageAreaContent msg -> Html msg
-renderImageArea ({ scale, width } as options) { height, background, content } =
+renderImageArea : Options msg -> ImageAreaContent msg -> Html msg
+renderImageArea ((Options { scale, width }) as options) { height, background, content } =
     div
         [ cssArea
             scale
@@ -255,7 +480,7 @@ cssPositions { left, top } =
     ]
 
 
-displayElement : Options {} -> ( ( Float, Float ), ContentElement msg ) -> ( String, Html msg )
+displayElement : Options msg -> ( ( Float, Float ), ContentElement msg ) -> ( String, Html msg )
 displayElement options ( ( left, top ), { elementType, uniqueId, customAttributes } ) =
     let
         position =
@@ -275,8 +500,8 @@ displayElement options ( ( left, top ), { elementType, uniqueId, customAttribute
             displayMultiple options ( position, multipleSources ) uniqueId customAttributes
 
 
-displayMultiple : Options {} -> ( Position, MultipleSources ) -> Maybe String -> List (Attribute msg) -> ( String, Html msg )
-displayMultiple ({ transitionSpeedInSec } as options) ( rootPosition, multipleSources ) transitionId attributes =
+displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe String -> List (Attribute msg) -> ( String, Html msg )
+displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPosition, multipleSources ) transitionId attributes =
     ( transitionId |> Maybe.withDefault ""
     , div
         ([ css
@@ -291,6 +516,20 @@ displayMultiple ({ transitionSpeedInSec } as options) ( rootPosition, multipleSo
                     , Css.left (Css.px <| rootPosition.left)
                     , Css.top (Css.px <| rootPosition.top)
                     ]
+                |> (case multipleSources of
+                        [ ( _, TileSource { tileset } ) ] ->
+                            let
+                                { spriteWidth, spriteHeight } =
+                                    tileset
+                            in
+                            List.append
+                                [ Css.width <| Css.px <| scale * (toFloat <| spriteWidth)
+                                , Css.height <| Css.px <| scale * (toFloat <| spriteHeight)
+                                ]
+
+                        _ ->
+                            identity
+                   )
             )
          ]
             |> List.append attributes
@@ -315,8 +554,8 @@ displayMultiple ({ transitionSpeedInSec } as options) ( rootPosition, multipleSo
     )
 
 
-displayImage : Options {} -> ( Position, SingleImage ) -> Html msg
-displayImage { scale, transitionSpeedInSec } ( { top, left }, source ) =
+displayImage : Options msg -> ( Position, SingleImage ) -> Html msg
+displayImage (Options { scale, transitionSpeedInSec }) ( { top, left }, source ) =
     img
         [ src source
         , css
@@ -331,8 +570,8 @@ displayImage { scale, transitionSpeedInSec } ( { top, left }, source ) =
         []
 
 
-displayTile : Options {} -> ( Position, TileWithTileset ) -> Html msg
-displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset } ) =
+displayTile : Options msg -> ( Position, TileWithTileset ) -> Html msg
+displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps, tileset } ) =
     let
         ( i, j ) =
             ( left, top )
@@ -372,8 +611,8 @@ displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset }
             ]
             [ div
                 [ css
-                    [Css.position Css.absolute
-                    , Css.right <| px <| scale * ((toFloat <| spriteWidth * (steps + 2)))
+                    [ Css.position Css.absolute
+                    , Css.right <| px <| scale * (toFloat <| spriteWidth * (steps + 2))
                     ]
                 ]
                 [ img
@@ -387,7 +626,6 @@ displayTile { scale, transitionSpeedInSec } ( pos, { left, top, steps, tileset }
                         , Css.height <| px <| toFloat <| spriteHeight
                         , Css.position Css.absolute
                         , Css.left <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
-                        
                         , Css.property "image-rendering" "pixelated"
                         , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
                         , Css.property "transform-origin" "top left"

@@ -8,10 +8,12 @@
         "examples"
     ],
     "exposed-modules": [
-        "PixelEngine.Graphics",
         "PixelEngine.Graphics.Image",
         "PixelEngine.Graphics.Tile",
-        "PixelEngine.Graphics.Transition"
+        "PixelEngine.Graphics.Transition",
+        "PixelEngine.Graphics",
+        "PixelEngine.Controls",
+        "PixelEngine"
     ],
     "dependencies": {
         "elm-lang/core": "5.0.0 <= v < 6.0.0",

@@ -1,4 +1,4 @@
-module PixelEngine.Graphics exposing (Area, Background, colorBackground, imageArea, imageBackground, render, tiledArea)
+module PixelEngine.Graphics exposing (Area, Background, Options, colorBackground, imageArea, imageBackground, options, render, tiledArea)
 
 {-| A graphic engine for turn-based pixel games.
 
@@ -88,7 +88,7 @@ To get started, copy the following example:
 
 ## Main Function
 
-@docs render
+@docs Options,options,render
 
 
 ## Area
@@ -124,6 +124,12 @@ type alias Area msg =
 -}
 type alias Background =
     Abstract.Background
+
+
+{-| Options for the render function
+-}
+type alias Options msg =
+    Abstract.Options msg
 
 
 {-| A single color using the [elm-css colors](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#rgb)
@@ -190,13 +196,7 @@ tiledArea { rows, tileset, background } content =
         }
 
 
-{-| This functions displays the content of the game.
-It returns [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html).
-
-The main idea of this graphic engine is to arrage the content into so called _Areas_.
-These Areas are then displayed vertically on top of eachother.
-
-The engine comes with a set of options:
+{-| The engine comes with a set of options:
 
   - width - Width of the game.
     **Note:** all spatial values are given in _Pixels_.
@@ -214,11 +214,20 @@ For the start use the following settings
 ```
 
 -}
-render : { width : Float, scale : Float, transitionSpeedInSec : Float } -> List (Area msg) -> Html msg
-render { width, scale, transitionSpeedInSec } listOfArea =
-    Abstract.renderFunction
-        { width = width
-        , scale = scale
-        , transitionSpeedInSec = transitionSpeedInSec
-        }
+options : { width : Float, scale : Float, transitionSpeedInSec : Float } -> Options msg
+options =
+    Abstract.options
+
+
+{-| This functions displays the content of the game.
+It returns [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html).
+
+The main idea of this graphic engine is to arrage the content into so called _Areas_.
+These Areas are then displayed vertically on top of eachother.
+
+-}
+render : Options msg -> List (Area msg) -> Html msg
+render options listOfArea =
+    Abstract.render
+        options
         listOfArea
