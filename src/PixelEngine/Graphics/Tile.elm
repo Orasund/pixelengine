@@ -1,4 +1,4 @@
-module PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, movable, tile, tileset, withAttributes, withBackgroundColor)
+module PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, backgroundColor, movable, onClick, tile, tileset, withAttributes)
 
 {-| This module contains functions for creating tiles.
 These tiles are used for the _tiledArea_ function from the main module.
@@ -6,7 +6,12 @@ These tiles are used for the _tiledArea_ function from the main module.
 
 ## Tile
 
-@docs Tile, tile, movable, animated, withBackgroundColor, withAttributes
+@docs Tile, tile, movable, animated
+
+
+## Attributes
+
+@docs withAttributes,onClick,backgroundColor
 
 
 ## Tileset
@@ -18,6 +23,7 @@ These tiles are used for the _tiledArea_ function from the main module.
 import Css
 import Html.Styled exposing (Attribute)
 import Html.Styled.Attributes exposing (css)
+import Html.Styled.Events as Events
 import PixelEngine.Graphics.Abstract as Abstract
 
 
@@ -128,15 +134,12 @@ movable id tile =
     }
 
 
-{-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Svg-Styled-Attributes).
-
-The motivation for this function was so that one can create [onClick](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Events#onClick) events.
-
+{-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
 -}
 withAttributes : List (Attribute msg) -> Tile msg -> Tile msg
-withAttributes attributes tile =
+withAttributes attributes ({ customAttributes } as tile) =
     { tile
-        | customAttributes = attributes
+        | customAttributes = List.append customAttributes attributes
     }
 
 
@@ -145,12 +148,26 @@ withAttributes attributes tile =
 This can be used to simulate monochrome sprites or to implement team colors.
 
 ```
-tile (0,0) |> withAttributes [css [Css.backgroundColor <| Css.rgb 255 0 0]]
+withAttributes [css [Css.backgroundColor <| Css.rgb 255 0 0]]
 =
-tile (0,0) |> withBackgroundColor Css.rgb 255 0 0
+withAttributes [ backgroundColor <| Css.rgb 255 0 0]
 ```
 
 -}
-withBackgroundColor : Css.Color -> Tile msg -> Tile msg
-withBackgroundColor color =
-    withAttributes [ css [ Css.backgroundColor <| color ] ]
+backgroundColor : Css.Color -> Attribute msg
+backgroundColor color =
+    css [ Css.backgroundColor <| color ]
+
+
+{-| returns a Msg when it has been clicked.
+
+```
+withAttributes [Events.onClick msg]
+=
+withAttributes [ onClick msg]
+```
+
+-}
+onClick : msg -> Attribute msg
+onClick msg =
+    Events.onClick msg

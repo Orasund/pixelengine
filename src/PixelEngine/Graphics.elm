@@ -59,13 +59,14 @@ To get started, copy the following example:
                 tile ( 4, 8 )
         in
         Graphics.render
-            { width = width
-            , transitionSpeedInSec = 0.2
-            , scale = scale
-            }
+            (Graphics.options
+                { width = width
+                , transitionSpeedInSec = 0.2
+                , scale = scale
+                }
+            )
             [ Graphics.tiledArea
                 { rows = 4
-                , cols = windowWidth
                 , tileset = tileset
                 , background = background
                 }
@@ -78,9 +79,9 @@ To get started, copy the following example:
                 { height = scale * (toFloat <| tileSize * 12)
                 , background = background
                 }
-                [   ( ( width / 2 - 80 * scale, 0 )
-                    , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
-                    )
+                [ ( ( width / 2 - 80 * scale, 0 )
+                , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
+                )
                 ]
             ]
             |> toUnstyled
