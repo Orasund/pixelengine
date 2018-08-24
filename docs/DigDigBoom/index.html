@@ -20126,7 +20126,16 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction = F2(
 			function () {
 				var _p12 = windowSize;
 				if (_p12.ctor === 'Just') {
-					return A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$render, options, listOfArea);
+					return A2(
+						_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$render,
+						A2(
+							_elm_lang$elm_architecture_tutorial$PixelEngine_Controls$supportingMobile,
+							{
+								windowSize: _p12._0,
+								controls: _elm_lang$core$Tuple$second(controls)
+							},
+							options),
+						listOfArea);
 				} else {
 					return A2(
 						_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$render,
