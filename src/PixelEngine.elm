@@ -79,8 +79,7 @@ viewFunction view ({ modelContent, config } as model) =
     (case windowSize of
         Just wS ->
             Graphics.render
-                options
-                --(options |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second })
+                (options |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second })
                 listOfArea
 
         Nothing ->

@@ -3,7 +3,7 @@ module PixelEngine.Graphics.Abstract exposing (..)
 import Css exposing (px)
 import Css.Foreign as Foreign
 import Html.Styled as Html exposing (Attribute, Html, div, img)
-import Html.Styled.Attributes exposing (css, src)
+import Html.Styled.Attributes as Attributes exposing (css, src)
 import Html.Styled.Events as Events
 import Html.Styled.Keyed as Keyed
 import Window
@@ -224,6 +224,11 @@ render ((Options { width, transitionFrom, transition, controllerOptions }) as op
                     ""
                 ]
             ]
+         , Html.node "meta"
+            [ Attributes.name "viewport"
+            , Attributes.content "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+            ]
+            []
          , div
             [ css
                 [ Css.position Css.relative
