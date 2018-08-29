@@ -10,6 +10,7 @@ It provides a document that is already set up.
 import Html.Styled as Html exposing (Html)
 import PixelEngine.Controls as Controls exposing (Input)
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
+import PixelEngine.Graphics.Abstract as Abstract
 import Task
 import Window
 
@@ -73,19 +74,23 @@ viewFunction view ({ modelContent, config } as model) =
         { windowSize, controls } =
             config
 
-        ( options, listOfArea ) =
+        ( (Abstract.Options { width, scale }) as options, listOfArea ) =
             view modelContent
+
+        height =
+            scale * Graphics.heightOf listOfArea
     in
     (case windowSize of
         Just wS ->
             Graphics.render
-                (options |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second })
+                (options
+                    |> Graphics.usingScale (min ((toFloat <| wS.height) / height) ((toFloat <| wS.width) / width))
+                    |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second }
+                )
                 listOfArea
 
         Nothing ->
-            Graphics.render
-                options
-                []
+            Graphics.render options []
     )
         |> Html.map MsgContent
 

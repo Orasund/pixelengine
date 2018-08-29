@@ -181,7 +181,7 @@ renderScreen options listOfArea =
 
 
 render : Options msg -> List (Area msg) -> Html msg
-render ((Options { width, transitionFrom, transition, controllerOptions }) as options) to =
+render ((Options { width, scale, transitionFrom, transition, controllerOptions }) as options) to =
     let
         (Transition { name, transitionList }) =
             transition
@@ -232,7 +232,7 @@ render ((Options { width, transitionFrom, transition, controllerOptions }) as op
          , div
             [ css
                 [ Css.position Css.relative
-                , Css.width <| px <| width
+                , Css.width <| px <| scale * width
                 , Css.margin Css.auto
                 ]
             ]
@@ -262,7 +262,7 @@ render ((Options { width, transitionFrom, transition, controllerOptions }) as op
                         identity
 
                     Just ({ windowSize } as justCtrlOptions) ->
-                        if windowSize.width > windowSize.height then
+                        if toFloat windowSize.width > 1.5 * toFloat windowSize.height then
                             \l -> renderControls justCtrlOptions |> List.append l
                         else
                             identity
@@ -382,7 +382,7 @@ renderTiledArea ((Options { width, scale }) as options) { rows, background, cont
             scale
             background
             { width = width
-            , height = scale * (toFloat <| tileset.spriteHeight * rows)
+            , height = toFloat <| tileset.spriteHeight * rows
             }
         ]
         (content
@@ -395,8 +395,8 @@ renderTiledArea ((Options { width, scale }) as options) { rows, background, cont
                                 info
                         in
                         displayMultiple options
-                            ( { left = scale * (toFloat <| spriteWidth * (location |> Tuple.first))
-                              , top = scale * (toFloat <| spriteHeight * (location |> Tuple.second))
+                            ( { left = toFloat <| spriteWidth * (location |> Tuple.first)
+                              , top = toFloat <| spriteHeight * (location |> Tuple.second)
                               }
                             , [ ( { top = 0, left = 0 }
                                 , TileSource
@@ -452,8 +452,8 @@ cssArea scale background { width, height } =
                 cssBackgroundImage scale imageBackground.source { width = imageBackground.width, height = imageBackground.height }
          )
             |> List.append
-                [ Css.width (Css.px <| width)
-                , Css.height (Css.px <| height)
+                [ Css.width (Css.px <| scale * width)
+                , Css.height (Css.px <| scale * height)
                 ]
             |> List.append
                 [ Css.margin Css.auto
@@ -486,9 +486,9 @@ cssPositions { left, top } =
 
 
 displayElement : Options msg -> ( ( Float, Float ), ContentElement msg ) -> ( String, Html msg )
-displayElement options ( ( left, top ), { elementType, uniqueId, customAttributes } ) =
+displayElement ((Options { scale }) as options) ( ( left, top ), { elementType, uniqueId, customAttributes } ) =
     let
-        position =
+        pos =
             { left = left, top = top }
     in
     case elementType of
@@ -499,10 +499,10 @@ displayElement options ( ( left, top ), { elementType, uniqueId, customAttribute
                displayImage options ( position, imageSource ) uniqueId customAttributes
         -}
         SingleSource singleSource ->
-            displayMultiple options ( position, [ ( { top = 0, left = 0 }, singleSource ) ] ) uniqueId customAttributes
+            displayMultiple options ( pos, [ ( { top = 0, left = 0 }, singleSource ) ] ) uniqueId customAttributes
 
         MultipleSources multipleSources ->
-            displayMultiple options ( position, multipleSources ) uniqueId customAttributes
+            displayMultiple options ( pos, multipleSources ) uniqueId customAttributes
 
 
 displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe String -> List (Attribute msg) -> ( String, Html msg )
@@ -518,8 +518,8 @@ displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPos
              )
                 |> List.append
                     [ Css.position Css.absolute
-                    , Css.left (Css.px <| rootPosition.left)
-                    , Css.top (Css.px <| rootPosition.top)
+                    , Css.left (Css.px <| scale * rootPosition.left)
+                    , Css.top (Css.px <| scale * rootPosition.top)
                     ]
                 |> (case multipleSources of
                         [ ( _, TileSource { tileset } ) ] ->
@@ -544,8 +544,8 @@ displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPos
                 (\( position, source ) ->
                     let
                         pos =
-                            { top = position.top
-                            , left = position.left
+                            { top = scale * position.top
+                            , left = scale * position.left
                             }
                     in
                     case source of

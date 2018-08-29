@@ -1,10 +1,10 @@
 module TestExample exposing (main)
 
 import Css
-import Html.Styled.Attributes exposing (css)
 import Html.Styled exposing (toUnstyled)
+import Html.Styled.Attributes exposing (css)
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages,withAttributes)
+import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages, withAttributes)
 import PixelEngine.Graphics.Tile as Tile
     exposing
         ( Tileset
@@ -22,13 +22,9 @@ main =
         windowWidth =
             16
 
-        scale : Float
-        scale =
-            2
-
         width : Float
         width =
-            (toFloat <| windowWidth * tileSize) * scale
+            toFloat <| windowWidth * tileSize
 
         tileset : Tileset
         tileset =
@@ -39,9 +35,11 @@ main =
             Graphics.colorBackground (Css.rgb 20 12 28)
     in
     Graphics.render
-        { width = width, transitionSpeedInSec = 0.2, scale = scale }
+        (Graphics.options { width = width, transitionSpeedInSec = 0.2 }
+            |> Graphics.usingScale 2
+        )
         [ Graphics.imageArea
-            { height = scale * (toFloat <| tileSize * 12)
+            { height = toFloat <| tileSize * 12
             , background = background
             }
             [ ( ( 0, 0 )
@@ -55,7 +53,7 @@ main =
                     , ( ( 0, 8 * 6 ), fromTile (tile ( 6, 0 ) |> Tile.animated 9) tileset )
                     , ( ( 0, 8 * 7 ), fromTile (tile ( 7, 0 ) |> Tile.animated 8) tileset )
                     ]
-                |> withAttributes [css [Css.float Css.left]]
+                    |> withAttributes [ css [ Css.float Css.left ] ]
               )
             ]
         ]

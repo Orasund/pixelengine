@@ -21,13 +21,9 @@ main =
         windowWidth =
             16
 
-        scale : Float
-        scale =
-            2
-
         width : Float
         width =
-            (toFloat <| windowWidth * tileSize) * scale
+            toFloat <| windowWidth * tileSize
 
         tileset : Tileset
         tileset =
@@ -56,8 +52,8 @@ main =
         (Graphics.options
             { width = width
             , transitionSpeedInSec = 0.2
-            , scale = scale
             }
+            |> Graphics.usingScale 2
         )
         [ Graphics.tiledArea
             { rows = 4
@@ -70,10 +66,10 @@ main =
             , ( ( 9, 2 ), heart )
             ]
         , Graphics.imageArea
-            { height = scale * (toFloat <| tileSize * 12)
+            { height = toFloat <| tileSize * 12
             , background = background
             }
-            [ ( ( width / 2 - 80 * scale, 0 )
+            [ ( ( width / 2 - 80, 0 )
               , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
               )
             ]

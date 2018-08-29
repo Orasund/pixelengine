@@ -20139,6 +20139,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction = F2(
 		var _p9 = _p8;
 		var _p10 = view(_p9.modelContent);
 		var options = _p10._0;
+		var width = _p10._0._0.width;
 		var scale = _p10._0._0.scale;
 		var listOfArea = _p10._1;
 		var height = scale * _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$heightOf(listOfArea);
@@ -20162,7 +20163,10 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction = F2(
 							},
 							A2(
 								_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$usingScale,
-								_elm_lang$core$Basics$toFloat(_p13.height) / height,
+								A2(
+									_elm_lang$core$Basics$min,
+									_elm_lang$core$Basics$toFloat(_p13.height) / height,
+									_elm_lang$core$Basics$toFloat(_p13.width) / width),
 								options)),
 						listOfArea);
 				} else {
