@@ -29,11 +29,11 @@ To get started, copy the following example:
 
             width : Float
             width =
-                (toFloat <| windowWidth * tileSize) * scale
+                toFloat <| windowWidth * tileSize
 
             tileset : Tileset
             tileset =
-                { source = "https://orasund.github.io/pixelengine/tileset.png"
+                { source = "https://orasund.github.io/pixelengine/DigDigBoom/tileset.png"
                 , spriteWidth = tileSize
                 , spriteHeight = tileSize
                 }
@@ -59,24 +59,25 @@ To get started, copy the following example:
                 { width = width
                 , transitionSpeedInSec = 0.2
                 }
+                |> Graphics.usingScale 2
             )
             [ Graphics.tiledArea
                 { rows = 4
                 , tileset = tileset
                 , background = background
                 }
-                [ ( ( 6, 2 ), goblin )
-                , ( ( 7, 2 ), letter_h )
-                , ( ( 8, 2 ), letter_i )
-                , ( ( 9, 2 ), heart )
+                [ ( ( 6, 2 ), goblin |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 170 57 57) ] )
+                , ( ( 7, 2 ), letter_h |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 97 81 146) ] )
+                , ( ( 8, 2 ), letter_i |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 170 151 57) ] )
+                , ( ( 9, 2 ), heart |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 45 134 51) ] )
                 ]
             , Graphics.imageArea
-                { height = scale * (toFloat <| tileSize * 12)
+                { height = toFloat <| tileSize * 12
                 , background = background
                 }
-                [ ( ( width / 2 - 80 * scale, 0 )
-                    , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
-                    )
+                [ ( ( width / 2 - 80, 0 )
+                , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
+                )
                 ]
             ]
             |> toUnstyled
