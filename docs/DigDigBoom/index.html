@@ -16325,11 +16325,11 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayMul
 										_1: {
 											ctor: '::',
 											_0: _rtfeldman$elm_css$Css$left(
-												_rtfeldman$elm_css$Css$px(_p27.left)),
+												_rtfeldman$elm_css$Css$px(_p29 * _p27.left)),
 											_1: {
 												ctor: '::',
 												_0: _rtfeldman$elm_css$Css$top(
-													_rtfeldman$elm_css$Css$px(_p27.top)),
+													_rtfeldman$elm_css$Css$px(_p29 * _p27.top)),
 												_1: {ctor: '[]'}
 											}
 										}
@@ -16361,7 +16361,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayMul
 					function (_p22) {
 						var _p23 = _p22;
 						var _p25 = _p23._0;
-						var pos = {top: _p25.top, left: _p25.left};
+						var pos = {top: _p29 * _p25.top, left: _p29 * _p25.left};
 						var _p24 = _p23._1;
 						if (_p24.ctor === 'ImageSource') {
 							return A2(
@@ -16379,57 +16379,59 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayMul
 		};
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayElement = F2(
-	function (options, _p31) {
-		var _p32 = _p31;
-		var _p35 = _p32._1.uniqueId;
-		var _p34 = _p32._1.customAttributes;
-		var position = {left: _p32._0._0, top: _p32._0._1};
-		var _p33 = _p32._1.elementType;
-		if (_p33.ctor === 'SingleSource') {
+	function (_p32, _p31) {
+		var _p33 = _p32;
+		var _p38 = _p33;
+		var _p34 = _p31;
+		var _p37 = _p34._1.uniqueId;
+		var _p36 = _p34._1.customAttributes;
+		var pos = {left: _p34._0._0, top: _p34._0._1};
+		var _p35 = _p34._1.elementType;
+		if (_p35.ctor === 'SingleSource') {
 			return A4(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayMultiple,
-				options,
+				_p38,
 				{
 					ctor: '_Tuple2',
-					_0: position,
+					_0: pos,
 					_1: {
 						ctor: '::',
 						_0: {
 							ctor: '_Tuple2',
 							_0: {top: 0, left: 0},
-							_1: _p33._0
+							_1: _p35._0
 						},
 						_1: {ctor: '[]'}
 					}
 				},
-				_p35,
-				_p34);
+				_p37,
+				_p36);
 		} else {
 			return A4(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayMultiple,
-				options,
-				{ctor: '_Tuple2', _0: position, _1: _p33._0},
-				_p35,
-				_p34);
+				_p38,
+				{ctor: '_Tuple2', _0: pos, _1: _p35._0},
+				_p37,
+				_p36);
 		}
 	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssPositions = function (_p36) {
-	var _p37 = _p36;
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssPositions = function (_p39) {
+	var _p40 = _p39;
 	return {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$left(
-			_rtfeldman$elm_css$Css$px(_p37.left)),
+			_rtfeldman$elm_css$Css$px(_p40.left)),
 		_1: {
 			ctor: '::',
 			_0: _rtfeldman$elm_css$Css$top(
-				_rtfeldman$elm_css$Css$px(_p37.top)),
+				_rtfeldman$elm_css$Css$px(_p40.top)),
 			_1: {ctor: '[]'}
 		}
 	};
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssBackgroundImage = F3(
-	function (scale, image, _p38) {
-		var _p39 = _p38;
+	function (scale, image, _p41) {
+		var _p42 = _p41;
 		return {
 			ctor: '::',
 			_0: _rtfeldman$elm_css$Css$backgroundImage(
@@ -16441,8 +16443,8 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssBackgro
 					ctor: '::',
 					_0: A2(
 						_rtfeldman$elm_css$Css$backgroundSize2,
-						_rtfeldman$elm_css$Css$px(_p39.width * scale),
-						_rtfeldman$elm_css$Css$px(_p39.height * scale)),
+						_rtfeldman$elm_css$Css$px(_p42.width * scale),
+						_rtfeldman$elm_css$Css$px(_p42.height * scale)),
 					_1: {
 						ctor: '::',
 						_0: A2(_rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
@@ -16452,23 +16454,23 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssBackgro
 			}
 		};
 	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssDimensions = function (_p40) {
-	var _p41 = _p40;
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssDimensions = function (_p43) {
+	var _p44 = _p43;
 	return {
 		ctor: '::',
 		_0: _rtfeldman$elm_css$Css$width(
-			_rtfeldman$elm_css$Css$px(_p41.width)),
+			_rtfeldman$elm_css$Css$px(_p44.width)),
 		_1: {
 			ctor: '::',
 			_0: _rtfeldman$elm_css$Css$height(
-				_rtfeldman$elm_css$Css$px(_p41.height)),
+				_rtfeldman$elm_css$Css$px(_p44.height)),
 			_1: {ctor: '[]'}
 		}
 	};
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssArea = F3(
-	function (scale, background, _p42) {
-		var _p43 = _p42;
+	function (scale, background, _p45) {
+		var _p46 = _p45;
 		return _rtfeldman$elm_css$Html_Styled_Attributes$css(
 			A2(
 				_elm_lang$core$List$append,
@@ -16486,62 +16488,62 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssArea = 
 					{
 						ctor: '::',
 						_0: _rtfeldman$elm_css$Css$width(
-							_rtfeldman$elm_css$Css$px(_p43.width)),
+							_rtfeldman$elm_css$Css$px(scale * _p46.width)),
 						_1: {
 							ctor: '::',
 							_0: _rtfeldman$elm_css$Css$height(
-								_rtfeldman$elm_css$Css$px(_p43.height)),
+								_rtfeldman$elm_css$Css$px(scale * _p46.height)),
 							_1: {ctor: '[]'}
 						}
 					},
 					function () {
-						var _p44 = background;
-						if (_p44.ctor === 'ColorBackground') {
+						var _p47 = background;
+						if (_p47.ctor === 'ColorBackground') {
 							return {
 								ctor: '::',
-								_0: _rtfeldman$elm_css$Css$backgroundColor(_p44._0),
+								_0: _rtfeldman$elm_css$Css$backgroundColor(_p47._0),
 								_1: {ctor: '[]'}
 							};
 						} else {
-							var _p45 = _p44._0;
+							var _p48 = _p47._0;
 							return A3(
 								_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssBackgroundImage,
 								scale,
-								_p45.source,
-								{width: _p45.width, height: _p45.height});
+								_p48.source,
+								{width: _p48.width, height: _p48.height});
 						}
 					}())));
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderImageArea = F2(
-	function (_p47, _p46) {
-		var _p48 = _p47;
-		var _p49 = _p46;
+	function (_p50, _p49) {
+		var _p51 = _p50;
+		var _p52 = _p49;
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
 				ctor: '::',
 				_0: A3(
 					_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssArea,
-					_p48._0.scale,
-					_p49.background,
-					{width: _p48._0.width, height: _p49.height}),
+					_p51._0.scale,
+					_p52.background,
+					{width: _p51._0.width, height: _p52.height}),
 				_1: {ctor: '[]'}
 			},
-			function (_p50) {
-				var _p51 = _p50;
+			function (_p53) {
+				var _p54 = _p53;
 				return {
 					ctor: '::',
 					_0: A2(
 						_rtfeldman$elm_css$Html_Styled$div,
 						{ctor: '[]'},
-						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$second, _p51._0)),
+						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$second, _p54._0)),
 					_1: {
 						ctor: '::',
 						_0: A3(
 							_rtfeldman$elm_css$Html_Styled_Keyed$node,
 							'div',
 							{ctor: '[]'},
-							A2(_elm_lang$core$List$sortBy, _elm_lang$core$Tuple$first, _p51._1)),
+							A2(_elm_lang$core$List$sortBy, _elm_lang$core$Tuple$first, _p54._1)),
 						_1: {ctor: '[]'}
 					}
 				};
@@ -16549,10 +16551,10 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderImag
 				A2(
 					_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$pairMap,
 					_elm_lang$core$List$map(
-						_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayElement(_p48)),
+						_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayElement(_p51)),
 					A2(
 						_elm_lang$core$List$partition,
-						function (_p52) {
+						function (_p55) {
 							return A2(
 								F2(
 									function (x, y) {
@@ -16562,9 +16564,9 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderImag
 								function (_) {
 									return _.uniqueId;
 								}(
-									_elm_lang$core$Tuple$second(_p52)));
+									_elm_lang$core$Tuple$second(_p55)));
 						},
-						_p49.content))));
+						_p52.content))));
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Tile = F3(
 	function (a, b, c) {
@@ -16611,8 +16613,8 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$AbstractIn
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$AbstractInputUp = {ctor: 'AbstractInputUp'};
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$AbstractInputRight = {ctor: 'AbstractInputRight'};
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$AbstractInputLeft = {ctor: 'AbstractInputLeft'};
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderControls = function (_p53) {
-	var _p54 = _p53;
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderControls = function (_p56) {
+	var _p57 = _p56;
 	var circle = F4(
 		function ($char, input, size, listOfCss) {
 			return A2(
@@ -16665,7 +16667,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderCont
 					_1: {
 						ctor: '::',
 						_0: _rtfeldman$elm_css$Html_Styled_Events$onClick(
-							_p54.controls(input)),
+							_p57.controls(input)),
 						_1: {ctor: '[]'}
 					}
 				},
@@ -16675,7 +16677,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderCont
 					_1: {ctor: '[]'}
 				});
 		});
-	var diameter = _elm_lang$core$Basics$toFloat((_p54.windowSize.height / 4) | 0);
+	var diameter = _elm_lang$core$Basics$toFloat((_p57.windowSize.height / 4) | 0);
 	return {
 		ctor: '::',
 		_0: A2(
@@ -16946,13 +16948,13 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$ColorBackg
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Options = function (a) {
 	return {ctor: 'Options', _0: a};
 };
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options = function (_p55) {
-	var _p56 = _p55;
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options = function (_p58) {
+	var _p59 = _p58;
 	return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Options(
 		{
-			width: _p56.width,
-			scale: _p56.scale,
-			transitionSpeedInSec: _p56.transitionSpeedInSec,
+			width: _p59.width,
+			scale: _p59.scale,
+			transitionSpeedInSec: _p59.transitionSpeedInSec,
 			controllerOptions: _elm_lang$core$Maybe$Nothing,
 			transitionFrom: {ctor: '[]'},
 			transition: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Transition(
@@ -16979,43 +16981,42 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$TileSource
 	return {ctor: 'TileSource', _0: a};
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderTiledArea = F2(
-	function (_p58, _p57) {
-		var _p59 = _p58;
-		var _p70 = _p59._0.scale;
-		var _p60 = _p57;
-		var _p69 = _p60.tileset;
-		var _p61 = _p69;
-		var spriteWidth = _p61.spriteWidth;
-		var spriteHeight = _p61.spriteHeight;
+	function (_p61, _p60) {
+		var _p62 = _p61;
+		var _p63 = _p60;
+		var _p72 = _p63.tileset;
+		var _p64 = _p72;
+		var spriteWidth = _p64.spriteWidth;
+		var spriteHeight = _p64.spriteHeight;
 		return A2(
 			_rtfeldman$elm_css$Html_Styled$div,
 			{
 				ctor: '::',
 				_0: A3(
 					_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$cssArea,
-					_p70,
-					_p60.background,
+					_p62._0.scale,
+					_p63.background,
 					{
-						width: _p59._0.width,
-						height: _p70 * _elm_lang$core$Basics$toFloat(_p69.spriteHeight * _p60.rows)
+						width: _p62._0.width,
+						height: _elm_lang$core$Basics$toFloat(_p72.spriteHeight * _p63.rows)
 					}),
 				_1: {ctor: '[]'}
 			},
-			function (_p62) {
-				var _p63 = _p62;
+			function (_p65) {
+				var _p66 = _p65;
 				return {
 					ctor: '::',
 					_0: A2(
 						_rtfeldman$elm_css$Html_Styled$div,
 						{ctor: '[]'},
-						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$second, _p63._0)),
+						A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$second, _p66._0)),
 					_1: {
 						ctor: '::',
 						_0: A3(
 							_rtfeldman$elm_css$Html_Styled_Keyed$node,
 							'div',
 							{ctor: '[]'},
-							A2(_elm_lang$core$List$sortBy, _elm_lang$core$Tuple$first, _p63._1)),
+							A2(_elm_lang$core$List$sortBy, _elm_lang$core$Tuple$first, _p66._1)),
 						_1: {ctor: '[]'}
 					}
 				};
@@ -17023,23 +17024,23 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderTile
 				A2(
 					_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$pairMap,
 					_elm_lang$core$List$map(
-						function (_p64) {
-							var _p65 = _p64;
-							var _p67 = _p65._0;
-							var _p66 = _p65._1.info;
-							var top = _p66.top;
-							var left = _p66.left;
-							var steps = _p66.steps;
+						function (_p67) {
+							var _p68 = _p67;
+							var _p70 = _p68._0;
+							var _p69 = _p68._1.info;
+							var top = _p69.top;
+							var left = _p69.left;
+							var steps = _p69.steps;
 							return A4(
 								_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$displayMultiple,
-								_p59,
+								_p62,
 								{
 									ctor: '_Tuple2',
 									_0: {
-										left: _p70 * _elm_lang$core$Basics$toFloat(
-											spriteWidth * _elm_lang$core$Tuple$first(_p67)),
-										top: _p70 * _elm_lang$core$Basics$toFloat(
-											spriteHeight * _elm_lang$core$Tuple$second(_p67))
+										left: _elm_lang$core$Basics$toFloat(
+											spriteWidth * _elm_lang$core$Tuple$first(_p70)),
+										top: _elm_lang$core$Basics$toFloat(
+											spriteHeight * _elm_lang$core$Tuple$second(_p70))
 									},
 									_1: {
 										ctor: '::',
@@ -17047,17 +17048,17 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderTile
 											ctor: '_Tuple2',
 											_0: {top: 0, left: 0},
 											_1: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$TileSource(
-												{left: left, top: top, steps: steps, tileset: _p69})
+												{left: left, top: top, steps: steps, tileset: _p72})
 										},
 										_1: {ctor: '[]'}
 									}
 								},
-								_p65._1.uniqueId,
-								_p65._1.customAttributes);
+								_p68._1.uniqueId,
+								_p68._1.customAttributes);
 						}),
 					A2(
 						_elm_lang$core$List$partition,
-						function (_p68) {
+						function (_p71) {
 							return A2(
 								F2(
 									function (x, y) {
@@ -17067,9 +17068,9 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderTile
 								function (_) {
 									return _.uniqueId;
 								}(
-									_elm_lang$core$Tuple$second(_p68)));
+									_elm_lang$core$Tuple$second(_p71)));
 						},
-						_p60.content))));
+						_p63.content))));
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScreen = F2(
 	function (options, listOfArea) {
@@ -17090,14 +17091,14 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScre
 				_elm_lang$core$List$foldl,
 				F2(
 					function (area, list) {
-						var _p71 = area;
-						if (_p71.ctor === 'Tiled') {
+						var _p73 = area;
+						if (_p73.ctor === 'Tiled') {
 							return A2(
 								_elm_lang$core$List$append,
 								list,
 								{
 									ctor: '::',
-									_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderTiledArea, options, _p71._0),
+									_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderTiledArea, options, _p73._0),
 									_1: {ctor: '[]'}
 								});
 						} else {
@@ -17106,7 +17107,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScre
 								list,
 								{
 									ctor: '::',
-									_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderImageArea, options, _p71._0),
+									_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderImageArea, options, _p73._0),
 									_1: {ctor: '[]'}
 								});
 						}
@@ -17131,12 +17132,12 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScre
 				listOfArea));
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render = F2(
-	function (_p72, to) {
-		var _p73 = _p72;
-		var _p83 = _p73;
-		var _p74 = _p73._0.transition;
-		var name = _p74._0.name;
-		var transitionList = _p74._0.transitionList;
+	function (_p74, to) {
+		var _p75 = _p74;
+		var _p85 = _p75;
+		var _p76 = _p75._0.transition;
+		var name = _p76._0.name;
+		var transitionList = _p76._0.transitionList;
 		var transitionLength = _elm_lang$core$List$sum(
 			A2(_elm_lang$core$List$map, _elm_lang$core$Tuple$first, transitionList));
 		var animationCss = function (a) {
@@ -17146,27 +17147,27 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render = F
 				A3(
 					_elm_lang$core$List$foldl,
 					F2(
-						function (_p76, _p75) {
-							var _p77 = _p76;
-							var _p80 = _p77._0;
-							var _p78 = _p75;
-							var _p79 = _p78._0;
+						function (_p78, _p77) {
+							var _p79 = _p78;
+							var _p82 = _p79._0;
+							var _p80 = _p77;
+							var _p81 = _p80._0;
 							return {
 								ctor: '_Tuple2',
-								_0: _p79 + _p80,
+								_0: _p81 + _p82,
 								_1: A2(
 									_elm_lang$core$Basics_ops['++'],
-									_p78._1,
+									_p80._1,
 									A2(
 										_elm_lang$core$Basics_ops['++'],
-										_elm_lang$core$Basics$toString(((_p79 + _p80) * 100) / transitionLength),
+										_elm_lang$core$Basics$toString(((_p81 + _p82) * 100) / transitionLength),
 										A2(
 											_elm_lang$core$Basics_ops['++'],
 											'% {',
 											A2(
 												_elm_lang$core$Basics_ops['++'],
 												'visibility:visible;',
-												A2(_elm_lang$core$Basics_ops['++'], _p77._1, '} ')))))
+												A2(_elm_lang$core$Basics_ops['++'], _p79._1, '} ')))))
 							};
 						}),
 					{ctor: '_Tuple2', _0: 0, _1: ''},
@@ -17185,16 +17186,18 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render = F
 				_1: {ctor: '[]'}
 			},
 			function () {
-				var _p81 = _p73._0.controllerOptions;
-				if (_p81.ctor === 'Nothing') {
+				var _p83 = _p75._0.controllerOptions;
+				if (_p83.ctor === 'Nothing') {
 					return _elm_lang$core$Basics$identity;
 				} else {
-					var _p82 = _p81._0.windowSize;
-					return (_elm_lang$core$Native_Utils.cmp(_p82.width, _p82.height) > 0) ? function (l) {
+					var _p84 = _p83._0.windowSize;
+					return (_elm_lang$core$Native_Utils.cmp(
+						_elm_lang$core$Basics$toFloat(_p84.width),
+						1.5 * _elm_lang$core$Basics$toFloat(_p84.height)) > 0) ? function (l) {
 						return A2(
 							_elm_lang$core$List$append,
 							l,
-							_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderControls(_p81._0));
+							_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderControls(_p83._0));
 					} : _elm_lang$core$Basics$identity;
 				}
 			}()(
@@ -17241,7 +17244,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render = F
 											_1: {
 												ctor: '::',
 												_0: _rtfeldman$elm_css$Css$width(
-													_rtfeldman$elm_css$Css$px(_p73._0.width)),
+													_rtfeldman$elm_css$Css$px(_p75._0.scale * _p75._0.width)),
 												_1: {
 													ctor: '::',
 													_0: _rtfeldman$elm_css$Css$margin(_rtfeldman$elm_css$Css$auto),
@@ -17258,7 +17261,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render = F
 										{ctor: '[]'},
 										{
 											ctor: '::',
-											_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScreen, _p83, to),
+											_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScreen, _p85, to),
 											_1: {ctor: '[]'}
 										}),
 									_1: {
@@ -17310,7 +17313,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render = F
 											},
 											{
 												ctor: '::',
-												_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScreen, _p83, _p73._0.transitionFrom),
+												_0: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$renderScreen, _p85, _p75._0.transitionFrom),
 												_1: {ctor: '[]'}
 											}),
 										_1: {ctor: '[]'}
@@ -19942,24 +19945,44 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$render = F2(
 	function (options, listOfArea) {
 		return A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$render, options, listOfArea);
 	});
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$usingScale = F2(
+	function (scale, _p0) {
+		var _p1 = _p0;
+		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options(
+			{width: _p1._0.width, scale: scale, transitionSpeedInSec: _p1._0.transitionSpeedInSec});
+	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$options = _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options;
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$tiledArea = F2(
-	function (_p0, content) {
-		var _p1 = _p0;
-		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Tiled(
-			{rows: _p1.rows, tileset: _p1.tileset, background: _p1.background, content: content});
-	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageArea = F2(
 	function (_p2, content) {
 		var _p3 = _p2;
+		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Tiled(
+			{rows: _p3.rows, tileset: _p3.tileset, background: _p3.background, content: content});
+	});
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageArea = F2(
+	function (_p4, content) {
+		var _p5 = _p4;
 		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Images(
-			{height: _p3.height, background: _p3.background, content: content});
+			{height: _p5.height, background: _p5.background, content: content});
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageBackground = function (image) {
 	return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$ImageBackground(image);
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$colorBackground = function (color) {
 	return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$ColorBackground(color);
+};
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$heightOf = function (listOfArea) {
+	return _elm_lang$core$List$sum(
+		A2(
+			_elm_lang$core$List$map,
+			function (area) {
+				var _p6 = area;
+				if (_p6.ctor === 'Tiled') {
+					return _elm_lang$core$Basics$toFloat(_p6._0.rows * _p6._0.tileset.spriteHeight);
+				} else {
+					return _p6._0.height;
+				}
+			},
+			listOfArea));
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Controls$custom = F2(
 	function (toInput, fun) {
@@ -20116,7 +20139,9 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction = F2(
 		var _p9 = _p8;
 		var _p10 = view(_p9.modelContent);
 		var options = _p10._0;
+		var scale = _p10._0._0.scale;
 		var listOfArea = _p10._1;
+		var height = scale * _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$heightOf(listOfArea);
 		var _p11 = _p9.config;
 		var windowSize = _p11.windowSize;
 		var controls = _p11.controls;
@@ -20126,15 +20151,19 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction = F2(
 			function () {
 				var _p12 = windowSize;
 				if (_p12.ctor === 'Just') {
+					var _p13 = _p12._0;
 					return A2(
 						_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$render,
 						A2(
 							_elm_lang$elm_architecture_tutorial$PixelEngine_Controls$supportingMobile,
 							{
-								windowSize: _p12._0,
+								windowSize: _p13,
 								controls: _elm_lang$core$Tuple$second(controls)
 							},
-							options),
+							A2(
+								_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$usingScale,
+								_elm_lang$core$Basics$toFloat(_p13.height) / height,
+								options)),
 						listOfArea);
 				} else {
 					return A2(
@@ -20148,15 +20177,15 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$Resize = function (a) {
 	return {ctor: 'Resize', _0: a};
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine$subscriptionsFunction = F2(
-	function (subscriptions, _p13) {
-		var _p14 = _p13;
+	function (subscriptions, _p14) {
+		var _p15 = _p14;
 		return _elm_lang$core$Platform_Sub$batch(
 			{
 				ctor: '::',
 				_0: A2(
 					_elm_lang$core$Platform_Sub$map,
 					_elm_lang$elm_architecture_tutorial$PixelEngine$MsgContent,
-					subscriptions(_p14.modelContent)),
+					subscriptions(_p15.modelContent)),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$window$Window$resizes(_elm_lang$elm_architecture_tutorial$PixelEngine$Resize),
@@ -20166,7 +20195,7 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$subscriptionsFunction = F2(
 							_elm_lang$core$Platform_Sub$map,
 							_elm_lang$elm_architecture_tutorial$PixelEngine$MsgContent,
 							_elm_lang$elm_architecture_tutorial$PixelEngine_Controls$basic(
-								_elm_lang$core$Tuple$second(_p14.config.controls))),
+								_elm_lang$core$Tuple$second(_p15.config.controls))),
 						_1: {ctor: '[]'}
 					}
 				}
@@ -20174,9 +20203,9 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$subscriptionsFunction = F2(
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine$initFunction = F2(
 	function (controls, init) {
-		var _p15 = init;
-		var modelContent = _p15._0;
-		var msg = _p15._1;
+		var _p16 = init;
+		var modelContent = _p16._0;
+		var msg = _p16._1;
 		return A2(
 			_elm_lang$core$Platform_Cmd_ops['!'],
 			{
@@ -20193,25 +20222,25 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$initFunction = F2(
 				}
 			});
 	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine$programWithCustomControls = function (_p16) {
-	var _p17 = _p16;
+var _elm_lang$elm_architecture_tutorial$PixelEngine$programWithCustomControls = function (_p17) {
+	var _p18 = _p17;
 	return _rtfeldman$elm_css$Html_Styled$program(
 		{
-			init: A2(_elm_lang$elm_architecture_tutorial$PixelEngine$initFunction, _p17.controls, _p17.init),
-			update: _elm_lang$elm_architecture_tutorial$PixelEngine$updateFunction(_p17.update),
-			subscriptions: _elm_lang$elm_architecture_tutorial$PixelEngine$subscriptionsFunction(_p17.subscriptions),
-			view: _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction(_p17.view)
+			init: A2(_elm_lang$elm_architecture_tutorial$PixelEngine$initFunction, _p18.controls, _p18.init),
+			update: _elm_lang$elm_architecture_tutorial$PixelEngine$updateFunction(_p18.update),
+			subscriptions: _elm_lang$elm_architecture_tutorial$PixelEngine$subscriptionsFunction(_p18.subscriptions),
+			view: _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction(_p18.view)
 		});
 };
-var _elm_lang$elm_architecture_tutorial$PixelEngine$program = function (_p18) {
-	var _p19 = _p18;
+var _elm_lang$elm_architecture_tutorial$PixelEngine$program = function (_p19) {
+	var _p20 = _p19;
 	return _elm_lang$elm_architecture_tutorial$PixelEngine$programWithCustomControls(
 		{
-			init: _p19.init,
-			update: _p19.update,
-			subscriptions: _p19.subscriptions,
-			view: _p19.view,
-			controls: {ctor: '_Tuple2', _0: _elm_lang$elm_architecture_tutorial$PixelEngine_Controls$defaultLayout, _1: _p19.controls}
+			init: _p20.init,
+			update: _p20.update,
+			subscriptions: _p20.subscriptions,
+			view: _p20.view,
+			controls: {ctor: '_Tuple2', _0: _elm_lang$elm_architecture_tutorial$PixelEngine_Controls$defaultLayout, _1: _p20.controls}
 		});
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Transition$from = F3(
@@ -20233,7 +20262,6 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$tileset = _elm_lang$elm_
 	{source: 'tileset.png', spriteHeight: 16, spriteWidth: 16});
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$deathScreen = function () {
 	var width = 16;
-	var scale = 2;
 	return {
 		ctor: '::',
 		_0: A2(
@@ -20349,7 +20377,7 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$deathScreen = function (
 				_0: A2(
 					_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageArea,
 					{
-						height: _elm_lang$core$Basics$toFloat((scale * 12) * 16),
+						height: _elm_lang$core$Basics$toFloat(12 * 16),
 						background: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$colorBackground(
 							A3(_rtfeldman$elm_css$Css$rgb, 20, 12, 28))
 					},
@@ -20359,8 +20387,8 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$deathScreen = function (
 							ctor: '_Tuple2',
 							_0: {
 								ctor: '_Tuple2',
-								_0: _elm_lang$core$Basics$toFloat(((((scale * 16) * width) / 2) | 0) - 128),
-								_1: _elm_lang$core$Basics$toFloat(((((scale * 12) * width) / 2) | 0) - 128)
+								_0: _elm_lang$core$Basics$toFloat((((16 * width) / 2) | 0) - 64),
+								_1: _elm_lang$core$Basics$toFloat((((12 * width) / 2) | 0) - 64)
 							},
 							_1: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Image$image('skull.png')
 						},
@@ -20514,7 +20542,6 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$menuScreen = function ()
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 0}));
 	var width = 16;
-	var scale = 2;
 	return {
 		ctor: '::',
 		_0: A2(
@@ -20622,7 +20649,7 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$menuScreen = function ()
 				_0: A2(
 					_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageArea,
 					{
-						height: _elm_lang$core$Basics$toFloat((scale * 9) * 16),
+						height: _elm_lang$core$Basics$toFloat(9 * 16),
 						background: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$colorBackground(
 							A3(_rtfeldman$elm_css$Css$rgb, 20, 12, 28))
 					},
@@ -20632,7 +20659,7 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$menuScreen = function ()
 							ctor: '_Tuple2',
 							_0: {
 								ctor: '_Tuple2',
-								_0: _elm_lang$core$Basics$toFloat(((((scale * 16) * width) / 2) | 0) - 128),
+								_0: _elm_lang$core$Basics$toFloat((((16 * width) / 2) | 0) - 64),
 								_1: 0
 							},
 							_1: A2(_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Image$fromTile, tile, _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$logo)
@@ -21286,11 +21313,11 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$worldScreen = F4(
 	});
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$view = function (model) {
 	var width = 16;
-	var scale = 2;
+	var scale = 1;
 	var options = _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$options(
 		{
 			scale: _elm_lang$core$Basics$toFloat(scale),
-			width: _elm_lang$core$Basics$toFloat((scale * _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$tileset.spriteWidth) * width),
+			width: _elm_lang$core$Basics$toFloat(_elm_lang$elm_architecture_tutorial$DigDigBoom_Main$tileset.spriteWidth * width),
 			transitionSpeedInSec: 0.2
 		});
 	var _p1 = model;
@@ -21352,7 +21379,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$view = function (model) 
 					ctor: '_Tuple2',
 					_0: A3(
 						_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Transition$from,
-						_elm_lang$elm_architecture_tutorial$DigDigBoom_Main$deathScreen,
+						A4(
+							_elm_lang$elm_architecture_tutorial$DigDigBoom_Main$worldScreen,
+							_p4,
+							_p8,
+							_p10,
+							{ctor: '[]'}),
 						A2(
 							_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Transition$custom,
 							'death_transition',
@@ -21370,12 +21402,7 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$view = function (model) 
 								}
 							}),
 						options),
-					_1: A4(
-						_elm_lang$elm_architecture_tutorial$DigDigBoom_Main$worldScreen,
-						_p4,
-						_p8,
-						_p10,
-						{ctor: '[]'})
+					_1: _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$deathScreen
 				};
 			}
 		} else {
