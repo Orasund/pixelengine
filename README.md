@@ -30,6 +30,11 @@ So i desided to try something different and to use HTML and CSS instead of WebGL
   * [Dig Dig Boom - Rogue-like game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
   * [Cult Simulator - Idle game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the MultipleImages Type
 
+## Upgrading
+  * First follow the error messages of the compiler
+  * Next set the scale of your game to 1. In the new version the scale feature scales the entire game.
+  * If you want keyboard support use Graphics.document. It will also take care of the new way scaling works.
+
 ## Upcoming Features
   * MultipleTiles - Similar to MultipleImages but for Tiles.
   * Particles - Maybe using SVG?
