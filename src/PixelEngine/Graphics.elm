@@ -85,7 +85,6 @@ To get started, copy the following example:
                 )
                 ]
             ]
-            |> toUnstyled
 
 
 ## Main Function
