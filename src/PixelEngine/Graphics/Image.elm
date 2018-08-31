@@ -1,9 +1,9 @@
-module PixelEngine.Graphics.Image exposing (Image, fromTile, image, movable, multipleImages, withAttributes)
+module PixelEngine.Graphics.Image exposing (Image, image, movable, fromTile, multipleImages, withAttributes)
 
 {-| This module contains functions for creating images.
 These Images can then be used for the _imageArea_ function from the main module
 
-@docs Image,image,movable,fromTile,multipleImages,withAttributes
+@docs Image, image, movable, fromTile, multipleImages, withAttributes
 
 -}
 
@@ -107,8 +107,8 @@ The motivation for this function was so that one can create [onClick](http://pac
 
 -}
 withAttributes : List (Attribute msg) -> Image msg -> Image msg
-withAttributes attributes image =
-    { image
+withAttributes attributes i =
+    { i
         | customAttributes = attributes
     }
 

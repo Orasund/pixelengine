@@ -7,12 +7,14 @@ It provides a document that is already set up.
 
 -}
 
-import Html.Styled as Html exposing (Html)
+import Browser
+import Browser.Events as Events
+import Browser.Dom as Dom
+import Html exposing (Html)
 import PixelEngine.Controls as Controls exposing (Input)
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Abstract as Abstract
 import Task
-import Window
 
 
 {-| an alias for the specific document
@@ -22,8 +24,8 @@ type alias PixelEngine flag model msg =
 
 
 type alias Config msg =
-    { windowSize : Maybe Window.Size
-    , controls : ( Char -> Input, Input -> msg )
+    { windowSize : Maybe { width : Float, height : Float }
+    , controls : ( String -> Input, Input -> msg )
     }
 
 
@@ -34,7 +36,7 @@ type alias Model model msg =
 
 
 type Msg msg
-    = Resize Window.Size
+    = Resize { width : Float, height : Float }
     | MsgContent msg
 
 
@@ -47,80 +49,95 @@ updateFunction : (msg -> model -> ( model, Cmd msg )) -> Msg msg -> Model model 
 updateFunction update msg ({ modelContent, config } as model) =
     case msg of
         Resize windowSize ->
-            { model
+            ( { model
                 | config =
                     { config
                         | windowSize = Just windowSize
                     }
-            }
-                ! []
+              }
+            , Cmd.none
+            )
 
-        MsgContent msg ->
-            model |> batch (update msg modelContent)
+        MsgContent msgC ->
+            model |> batch (update msgC modelContent)
 
 
 subscriptionsFunction : (model -> Sub msg) -> Model model msg -> Sub (Msg msg)
 subscriptionsFunction subscriptions ({ modelContent, config } as model) =
     Sub.batch
         [ subscriptions modelContent |> Sub.map MsgContent
-        , Window.resizes Resize
+        , Events.onResize <| \w h -> Resize { width = toFloat w, height = toFloat h }
         , Controls.basic (config.controls |> Tuple.second) |> Sub.map MsgContent
         ]
 
 
-viewFunction : (model -> ( Options msg, List (Area msg) )) -> Model model msg -> Html (Msg msg)
+viewFunction : (model -> { title : String, options : Options msg, body : List (Area msg) }) -> Model model msg -> Browser.Document (Msg msg)
 viewFunction view ({ modelContent, config } as model) =
     let
         { windowSize, controls } =
             config
 
-        ( (Abstract.Options { width, scale }) as options, listOfArea ) =
+        { title, options, body } =
             view modelContent
 
+        (Abstract.Options { width, scale }) =
+            options
+
         height =
-            scale * Graphics.heightOf listOfArea
+            scale * Graphics.heightOf body
     in
-    (case windowSize of
-        Just wS ->
-            Graphics.render
-                (options
-                    |> Graphics.usingScale (min ((toFloat <| wS.height) / height) ((toFloat <| wS.width) / width))
-                    |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second }
-                )
-                listOfArea
+    { title = title
+    , body =
+        [(case windowSize of
+            Just wS ->
+                Graphics.render
+                    (options
+                        |> Graphics.usingScale
+                            (toFloat <|
+                                min (2 ^ (floor <| logBase 2 <| ( wS.height) / height))
+                                    (2 ^ (floor <| logBase 2 <| ( wS.width) / width))
+                            )
+                        |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second }
+                    )
+                    body
 
-        Nothing ->
-            Graphics.render options []
-    )
-        |> Html.map MsgContent
-
-
-initFunction : ( Char -> Input, Input -> msg ) -> ( model, Cmd msg ) -> ( Model model msg, Cmd (Msg msg) )
-initFunction controls init =
-    let
-        ( modelContent, msg ) =
-            init
-    in
-    { modelContent = modelContent
-    , config = { windowSize = Nothing, controls = controls }
+            Nothing ->
+                Graphics.render options []
+        )
+            |> Html.map MsgContent
+        ]
     }
-        ! [ Task.perform Resize Window.size
-          , msg |> Cmd.map MsgContent
-          ]
+
+
+initFunction : ( String -> Input, Input -> msg ) -> (flags -> ( model, Cmd msg )) -> (flags -> ( Model model msg, Cmd (Msg msg) ))
+initFunction controls init =
+    \flag ->
+        let
+            ( modelContent, msg ) =
+                init flag
+        in
+        ( { modelContent = modelContent
+          , config = { windowSize = Nothing, controls = controls }
+          }
+        , Cmd.batch
+            [ msg |> Cmd.map MsgContent
+            -- , Task.perform (\{viewport} -> let {width,height} = viewport in Resize { width = width, height = height }) Dom.getViewport
+            ]
+        )
 
 
 {-| uses custom controls
 -}
 programWithCustomControls :
-    { init : ( model, Cmd msg )
+    { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
-    , view : model -> ( Options msg, List (Area msg) )
-    , controls : ( Char -> Input, Input -> msg )
+    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
+    , controls : ( String -> Input, Input -> msg )
     }
-    -> Program Never (Model model msg) (Msg msg)
+    -> Program flags (Model model msg) (Msg msg)
 programWithCustomControls { init, update, subscriptions, view, controls } =
-    Html.program
+    Browser.document
         { init =
             initFunction controls init
         , update =
@@ -135,13 +152,13 @@ programWithCustomControls { init, update, subscriptions, view, controls } =
 {-| use this function as usual
 -}
 program :
-    { init : ( model, Cmd msg )
+    { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
-    , view : model -> ( Options msg, List (Area msg) )
+    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
     , controls : Input -> msg
     }
-    -> Program Never (Model model msg) (Msg msg)
+    -> Program flags (Model model msg) (Msg msg)
 program { init, update, subscriptions, view, controls } =
     programWithCustomControls
         { init = init

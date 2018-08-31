@@ -1,95 +1,95 @@
 module DigDigBoom.Tileset exposing (..)
 
 import Css
-import PixelEngine.Graphics.Tile exposing (Tile, animated, movable, tile, withBackgroundColor)
+import PixelEngine.Graphics.Tile exposing (Tile, animated, backgroundColor, movable, tile, withAttributes)
 
 
 colorWhite : Css.Color
 colorWhite =
-    Css.rgb 87 93 84
+    Css.rgb 222 238 214
 
 
 colorGray : Css.Color
 colorGray =
-    Css.rgb 31 29 31
+    Css.rgb 78 74 78
 
 
 colorBrown : Css.Color
 colorBrown =
-    Css.rgb 52 30 19
+    Css.rgb 133 76 48
 
 
 colorYellow : Css.Color
 colorYellow =
-    Css.rgb 85 83 37
+    Css.rgb 218 212 94
 
 
 colorGreen : Css.Color
 colorGreen =
-    Css.rgb 43 67 17
+    Css.rgb 109 170 44
 
 
 colorBlue : Css.Color
 colorBlue =
-    Css.rgb 35 49 81
+    Css.rgb 89 125 206
 
 
 colorRed : Css.Color
 colorRed =
-    Css.rgb 82 27 28
+    Css.rgb 208 70 72
 
 
-digit_0 : Tile msg
-digit_0 =
-    tile ( 8, 12 ) |> withBackgroundColor colorWhite
+digit_0 : Css.Color -> Tile msg
+digit_0 color =
+    tile ( 8, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_1 : Tile msg
-digit_1 =
-    tile ( 8, 13 ) |> withBackgroundColor colorWhite
+digit_1 : Css.Color -> Tile msg
+digit_1 color =
+    tile ( 8, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_2 : Tile msg
-digit_2 =
-    tile ( 8, 14 ) |> withBackgroundColor colorWhite
+digit_2 : Css.Color -> Tile msg
+digit_2 color =
+    tile ( 8, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_3 : Tile msg
-digit_3 =
-    tile ( 8, 15 ) |> withBackgroundColor colorWhite
+digit_3 : Css.Color -> Tile msg
+digit_3 color =
+    tile ( 8, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_4 : Tile msg
-digit_4 =
-    tile ( 9, 12 ) |> withBackgroundColor colorWhite
+digit_4 : Css.Color -> Tile msg
+digit_4 color =
+    tile ( 9, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_5 : Tile msg
-digit_5 =
-    tile ( 9, 13 ) |> withBackgroundColor colorWhite
+digit_5 : Css.Color -> Tile msg
+digit_5 color =
+    tile ( 9, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_6 : Tile msg
-digit_6 =
-    tile ( 9, 14 ) |> withBackgroundColor colorWhite
+digit_6 : Css.Color -> Tile msg
+digit_6 color =
+    tile ( 9, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_7 : Tile msg
-digit_7 =
-    tile ( 9, 15 ) |> withBackgroundColor colorWhite
+digit_7 : Css.Color -> Tile msg
+digit_7 color =
+    tile ( 9, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_8 : Tile msg
-digit_8 =
-    tile ( 10, 12 ) |> withBackgroundColor colorWhite
+digit_8 : Css.Color -> Tile msg
+digit_8 color =
+    tile ( 10, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-digit_9 : Tile msg
-digit_9 =
-    tile ( 10, 13 ) |> withBackgroundColor colorWhite
+digit_9 : Css.Color -> Tile msg
+digit_9 color =
+    tile ( 10, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-numberToTile : Int -> Tile msg
+numberToTile : Int -> Css.Color -> Tile msg
 numberToTile digit =
     case digit of
         1 ->
@@ -123,311 +123,311 @@ numberToTile digit =
             digit_0
 
 
-letter_a : Tile msg
-letter_a =
-    tile ( 0, 12 ) |> withBackgroundColor colorWhite
+letter_a : Css.Color -> Tile msg
+letter_a color =
+    tile ( 0, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_b : Tile msg
-letter_b =
-    tile ( 0, 13 ) |> withBackgroundColor colorWhite
+letter_b : Css.Color -> Tile msg
+letter_b color =
+    tile ( 0, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_c : Tile msg
-letter_c =
-    tile ( 0, 14 ) |> withBackgroundColor colorWhite
+letter_c : Css.Color -> Tile msg
+letter_c color =
+    tile ( 0, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_d : Tile msg
-letter_d =
-    tile ( 0, 15 ) |> withBackgroundColor colorWhite
+letter_d : Css.Color -> Tile msg
+letter_d color =
+    tile ( 0, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_e : Tile msg
-letter_e =
-    tile ( 1, 12 ) |> withBackgroundColor colorWhite
+letter_e : Css.Color -> Tile msg
+letter_e color =
+    tile ( 1, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_f : Tile msg
-letter_f =
-    tile ( 1, 13 ) |> withBackgroundColor colorWhite
+letter_f : Css.Color -> Tile msg
+letter_f color =
+    tile ( 1, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_g : Tile msg
-letter_g =
-    tile ( 1, 14 ) |> withBackgroundColor colorWhite
+letter_g : Css.Color -> Tile msg
+letter_g color =
+    tile ( 1, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_h : Tile msg
-letter_h =
-    tile ( 1, 15 ) |> withBackgroundColor colorWhite
+letter_h : Css.Color -> Tile msg
+letter_h color =
+    tile ( 1, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_i : Tile msg
-letter_i =
-    tile ( 2, 12 ) |> withBackgroundColor colorWhite
+letter_i : Css.Color -> Tile msg
+letter_i color =
+    tile ( 2, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_j : Tile msg
-letter_j =
-    tile ( 2, 13 ) |> withBackgroundColor colorWhite
+letter_j : Css.Color -> Tile msg
+letter_j color =
+    tile ( 2, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_k : Tile msg
-letter_k =
-    tile ( 2, 14 ) |> withBackgroundColor colorWhite
+letter_k : Css.Color -> Tile msg
+letter_k color =
+    tile ( 2, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_l : Tile msg
-letter_l =
-    tile ( 2, 15 ) |> withBackgroundColor colorWhite
+letter_l : Css.Color -> Tile msg
+letter_l color =
+    tile ( 2, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_m : Tile msg
-letter_m =
-    tile ( 3, 12 ) |> withBackgroundColor colorWhite
+letter_m : Css.Color -> Tile msg
+letter_m color =
+    tile ( 3, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_n : Tile msg
-letter_n =
-    tile ( 3, 13 ) |> withBackgroundColor colorWhite
+letter_n : Css.Color -> Tile msg
+letter_n color =
+    tile ( 3, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_o : Tile msg
-letter_o =
-    tile ( 3, 14 ) |> withBackgroundColor colorWhite
+letter_o : Css.Color -> Tile msg
+letter_o color =
+    tile ( 3, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_p : Tile msg
-letter_p =
-    tile ( 3, 15 ) |> withBackgroundColor colorWhite
+letter_p : Css.Color -> Tile msg
+letter_p color =
+    tile ( 3, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_q : Tile msg
-letter_q =
-    tile ( 4, 12 ) |> withBackgroundColor colorWhite
+letter_q : Css.Color -> Tile msg
+letter_q color =
+    tile ( 4, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_r : Tile msg
-letter_r =
-    tile ( 4, 13 ) |> withBackgroundColor colorWhite
+letter_r : Css.Color -> Tile msg
+letter_r color =
+    tile ( 4, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_s : Tile msg
-letter_s =
-    tile ( 4, 14 ) |> withBackgroundColor colorWhite
+letter_s : Css.Color -> Tile msg
+letter_s color =
+    tile ( 4, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_t : Tile msg
-letter_t =
-    tile ( 4, 15 ) |> withBackgroundColor colorWhite
+letter_t : Css.Color -> Tile msg
+letter_t color =
+    tile ( 4, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_u : Tile msg
-letter_u =
-    tile ( 5, 12 ) |> withBackgroundColor colorWhite
+letter_u : Css.Color -> Tile msg
+letter_u color =
+    tile ( 5, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_v : Tile msg
-letter_v =
-    tile ( 5, 13 ) |> withBackgroundColor colorWhite
+letter_v : Css.Color -> Tile msg
+letter_v color =
+    tile ( 5, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_w : Tile msg
-letter_w =
-    tile ( 5, 14 ) |> withBackgroundColor colorWhite
+letter_w : Css.Color -> Tile msg
+letter_w color =
+    tile ( 5, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_x : Tile msg
-letter_x =
-    tile ( 5, 15 ) |> withBackgroundColor colorWhite
+letter_x : Css.Color -> Tile msg
+letter_x color =
+    tile ( 5, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_y : Tile msg
-letter_y =
-    tile ( 6, 12 ) |> withBackgroundColor colorWhite
+letter_y : Css.Color -> Tile msg
+letter_y color =
+    tile ( 6, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_z : Tile msg
-letter_z =
-    tile ( 6, 13 ) |> withBackgroundColor colorWhite
+letter_z : Css.Color -> Tile msg
+letter_z color =
+    tile ( 6, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_period : Tile msg
-letter_period =
-    tile ( 6, 14 ) |> withBackgroundColor colorWhite
+letter_period : Css.Color -> Tile msg
+letter_period color =
+    tile ( 6, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_comma : Tile msg
-letter_comma =
-    tile ( 6, 15 ) |> withBackgroundColor colorWhite
+letter_comma : Css.Color -> Tile msg
+letter_comma color =
+    tile ( 6, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_question_mark : Tile msg
-letter_question_mark =
-    tile ( 7, 12 ) |> withBackgroundColor colorWhite
+letter_question_mark : Css.Color -> Tile msg
+letter_question_mark color =
+    tile ( 7, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_exclamation_mark : Tile msg
-letter_exclamation_mark =
-    tile ( 7, 13 ) |> withBackgroundColor colorWhite
+letter_exclamation_mark : Css.Color -> Tile msg
+letter_exclamation_mark color =
+    tile ( 7, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_colon : Tile msg
-letter_colon =
-    tile ( 7, 14 ) |> withBackgroundColor colorWhite
+letter_colon : Css.Color -> Tile msg
+letter_colon color =
+    tile ( 7, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_plus : Tile msg
-letter_plus =
-    tile ( 10, 14 ) |> withBackgroundColor colorWhite
+letter_plus : Css.Color -> Tile msg
+letter_plus color =
+    tile ( 10, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_minus : Tile msg
-letter_minus =
-    tile ( 10, 15 ) |> withBackgroundColor colorWhite
+letter_minus : Css.Color -> Tile msg
+letter_minus color =
+    tile ( 10, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-letter_equals : Tile msg
-letter_equals =
-    tile ( 7, 15 ) |> withBackgroundColor colorWhite
+letter_equals : Css.Color -> Tile msg
+letter_equals color =
+    tile ( 7, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-arrow_up : Tile msg
-arrow_up =
-    tile ( 11, 12 ) |> withBackgroundColor colorWhite
+arrow_up : Css.Color -> Tile msg
+arrow_up color =
+    tile ( 11, 12 ) |> withAttributes [ backgroundColor color ]
 
 
-arrow_down : Tile msg
-arrow_down =
-    tile ( 11, 13 ) |> withBackgroundColor colorWhite
+arrow_down : Css.Color -> Tile msg
+arrow_down color =
+    tile ( 11, 13 ) |> withAttributes [ backgroundColor color ]
 
 
-arrow_right : Tile msg
-arrow_right =
-    tile ( 11, 14 ) |> withBackgroundColor colorWhite
+arrow_right : Css.Color -> Tile msg
+arrow_right color =
+    tile ( 11, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-arrow_left : Tile msg
-arrow_left =
-    tile ( 11, 15 ) |> withBackgroundColor colorWhite
+arrow_left : Css.Color -> Tile msg
+arrow_left color =
+    tile ( 11, 15 ) |> withAttributes [ backgroundColor color ]
 
 
-player_down : Tile msg
-player_down =
-    tile ( 12, 12 ) |> animated 1 |> movable "player" |> withBackgroundColor colorWhite
+player_down : Css.Color -> Tile msg
+player_down color =
+    tile ( 12, 12 ) |> animated 1 |> movable "player" |> withAttributes [ backgroundColor color ]
 
 
-player_up : Tile msg
-player_up =
-    tile ( 12, 13 ) |> animated 1 |> movable "player" |> withBackgroundColor colorWhite
+player_up : Css.Color -> Tile msg
+player_up color =
+    tile ( 12, 13 ) |> animated 1 |> movable "player" |> withAttributes [ backgroundColor color ]
 
 
-player_left : Tile msg
-player_left =
-    tile ( 12, 14 ) |> animated 1 |> movable "player" |> withBackgroundColor colorWhite
+player_left : Css.Color -> Tile msg
+player_left color =
+    tile ( 12, 14 ) |> animated 1 |> movable "player" |> withAttributes [ backgroundColor color ]
 
 
-player_right : Tile msg
-player_right =
-    tile ( 12, 15 ) |> animated 1 |> movable "player" |> withBackgroundColor colorWhite
+player_right : Css.Color -> Tile msg
+player_right color =
+    tile ( 12, 15 ) |> animated 1 |> movable "player" |> withAttributes [ backgroundColor color ]
 
 
-placed_stone : Tile msg
-placed_stone =
-    tile ( 1, 1 ) |> withBackgroundColor colorGray
+placed_stone : Css.Color -> Tile msg
+placed_stone color =
+    tile ( 1, 1 ) |> withAttributes [ backgroundColor color ]
 
 
-placed_dirt : Tile msg
-placed_dirt =
-    tile ( 0, 3 ) |> withBackgroundColor colorBrown
+placed_dirt : Css.Color -> Tile msg
+placed_dirt color =
+    tile ( 0, 3 ) |> withAttributes [ backgroundColor color ]
 
 
-stone_wall : Tile msg
-stone_wall =
-    tile ( 1, 0 ) |> withBackgroundColor colorGray
+stone_wall : Css.Color -> Tile msg
+stone_wall color =
+    tile ( 1, 0 ) |> withAttributes [ backgroundColor color ]
 
 
-dirt_wall : Tile msg
-dirt_wall =
-    tile ( 0, 2 ) |> withBackgroundColor colorBrown
+dirt_wall : Css.Color -> Tile msg
+dirt_wall color =
+    tile ( 0, 2 ) |> withAttributes [ backgroundColor color ]
 
 
-stone_brick_wall : Tile msg
-stone_brick_wall =
-    tile ( 2, 0 ) |> withBackgroundColor colorGray
+stone_brick_wall : Css.Color -> Tile msg
+stone_brick_wall color =
+    tile ( 2, 0 ) |> withAttributes [ backgroundColor color ]
 
 
-bombe : Tile msg
-bombe =
-    tile ( 6, 6 ) |> withBackgroundColor colorGreen
+bombe : Css.Color -> Tile msg
+bombe color =
+    tile ( 6, 6 ) |> withAttributes [ backgroundColor color ]
 
 
-health_potion : Tile msg
-health_potion =
-    tile ( 5, 7 ) |> withBackgroundColor colorGreen
+health_potion : Css.Color -> Tile msg
+health_potion color =
+    tile ( 5, 7 ) |> withAttributes [ backgroundColor color ]
 
 
-dirt : Tile msg
-dirt =
-    tile ( 8, 7 ) |> withBackgroundColor colorblue
+dirt : Css.Color -> Tile msg
+dirt color =
+    tile ( 8, 7 ) |> withAttributes [ backgroundColor color ]
 
 
-stone : Tile msg
-stone =
-    tile ( 8, 6 ) |> withBackgroundColor colorblue
+stone : Css.Color -> Tile msg
+stone color =
+    tile ( 8, 6 ) |> withAttributes [ backgroundColor color ]
 
 
-bone : Tile msg
-bone =
-    tile ( 0, 10 ) |> withBackgroundColor colorWhite
+bone : Css.Color -> Tile msg
+bone color =
+    tile ( 0, 10 ) |> withAttributes [ backgroundColor color ]
 
 
-placed_bombe : String -> Tile msg
-placed_bombe id =
-    tile ( 4, 9 ) |> animated 1 |> movable id |> withBackgroundColor colorRed
+placed_bombe : String -> Css.Color -> Tile msg
+placed_bombe id color =
+    tile ( 4, 9 ) |> animated 1 |> movable id |> withAttributes [ backgroundColor color ]
 
 
-oger : String -> Tile msg
-oger id =
-    tile ( 0, 8 ) |> animated 1 |> movable id |> withBackgroundColor colorRed
+oger : String -> Css.Color -> Tile msg
+oger id color =
+    tile ( 0, 8 ) |> animated 1 |> movable id |> withAttributes [ backgroundColor color ]
 
 
-goblin : String -> Tile msg
-goblin id =
-    tile ( 2, 8 ) |> animated 1 |> movable id |> withBackgroundColor colorRed
+goblin : String -> Css.Color -> Tile msg
+goblin id color =
+    tile ( 2, 8 ) |> animated 1 |> movable id |> withAttributes [ backgroundColor color ]
 
 
-rat : String -> Tile msg
-rat id =
-    tile ( 0, 9 ) |> animated 1 |> movable id |> withBackgroundColor colorRed
+rat : String -> Css.Color -> Tile msg
+rat id color =
+    tile ( 0, 9 ) |> animated 1 |> movable id |> withAttributes [ backgroundColor color ]
 
 
-smoke : Tile msg
-smoke =
-    tile ( 14, 14 ) |> withBackgroundColor colorWhite
+smoke : Css.Color -> Tile msg
+smoke color =
+    tile ( 14, 14 ) |> withAttributes [ backgroundColor color ]
 
 
-heart : Tile msg
-heart =
-    tile ( 4, 8 ) |> withBackgroundColor colorGreen
+heart : Css.Color -> Tile msg
+heart color =
+    tile ( 4, 8 ) |> withAttributes [ backgroundColor color ]
 
 
-stunned_oger : String -> Tile msg
-stunned_oger id =
-    tile ( 0, 5 ) |> movable id |> withBackgroundColor colorYellow
+stunned_oger : String -> Css.Color -> Tile msg
+stunned_oger id color =
+    tile ( 0, 5 ) |> movable id |> withAttributes [ backgroundColor color ]
 
 
-stunned_goblin : String -> Tile msg
-stunned_goblin id =
-    tile ( 1, 4 ) |> movable id |> withBackgroundColor colorYellow
+stunned_goblin : String -> Css.Color -> Tile msg
+stunned_goblin id color =
+    tile ( 1, 4 ) |> movable id |> withAttributes [ backgroundColor color ]
 
 
-stunned_rat : String -> Tile msg
-stunned_rat id =
-    tile ( 0, 4 ) |> movable id |> withBackgroundColor colorYellow
+stunned_rat : String -> Css.Color -> Tile msg
+stunned_rat id color =
+    tile ( 0, 4 ) |> movable id |> withAttributes [ backgroundColor color ]
 
 
-stunned_bombe : String -> Tile msg
-stunned_bombe id =
-    tile ( 1, 5 ) |> movable id |> withBackgroundColor colorYellow
+stunned_bombe : String -> Css.Color -> Tile msg
+stunned_bombe id color =
+    tile ( 1, 5 ) |> movable id |> withAttributes [ backgroundColor color ]

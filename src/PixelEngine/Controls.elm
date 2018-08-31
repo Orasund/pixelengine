@@ -1,4 +1,8 @@
-module PixelEngine.Controls exposing (Input(..), basic, custom, defaultLayout, supportingMobile)
+module PixelEngine.Controls exposing
+    ( supportingMobile
+    , Input(..), defaultLayout
+    , basic, custom
+    )
 
 {-| The graphic engine provides a touch-controller for mobile devices. The controllers has 8 buttons:
 Left (a key), Right (d key), Up (w key), Down (s key), A(Spacebar), B(x key), X(q key), Y(e key)
@@ -11,21 +15,21 @@ Left (a key), Right (d key), Up (w key), Down (s key), A(Spacebar), B(x key), X(
 
 ## Input
 
-@docs Input,defaultLayout
+@docs Input, defaultLayout
 
 
 ## Subscriptions
 
-@docs basic,custom
+@docs basic, custom
 
 -}
 
 import Char
-import Keyboard
+import Browser
+import Browser.Events as Events
 import PixelEngine.Graphics as Graphics exposing (Options)
 import PixelEngine.Graphics.Abstract as Abstract
-import Window
-
+import Json.Decode as Decode exposing (Decoder)
 
 {-| all possible Inputs
 -}
@@ -47,9 +51,11 @@ It needs the window size.
 [PixelEngine](https://package.elm-lang.org/packages/Orasund/pixelengine/latest/PixelEngine) provides a fully wired document that takes care of everything.
 
 -}
-supportingMobile : { windowSize : Window.Size, controls : Input -> msg } -> Options msg -> Options msg
+supportingMobile : { windowSize : {width:Float,height:Float}, controls : Input -> msg } -> Options msg -> Options msg
 supportingMobile { windowSize, controls } (Abstract.Options options) =
     let
+        {width,height} = windowSize
+
         convert : Abstract.AbstractInput -> Input
         convert input =
             case input of
@@ -80,68 +86,88 @@ supportingMobile { windowSize, controls } (Abstract.Options options) =
                 Abstract.AbstractInputNone ->
                     InputNone
     in
-    Abstract.Options { options | controllerOptions = Just { windowSize = windowSize, controls = convert >> controls } }
+    Abstract.Options { options | controllerOptions = Just { windowSize = {width= width,height= height}, controls = convert >> controls } }
 
 
 {-| the default layout:
 
-  - A - InputLeft
-  - W - InputUp
-  - D - InputRight
-  - S - InputDown
-  - ENTER - InputA
-  - X - InputB
+  - A/ArrowLeft - InputLeft
+  - W/ArrowUp - InputUp
+  - D/ArrowRight - InputRight
+  - S/ArrowDown - InputDown
+  - Space/Enter - InputA
+  - X/Backspace/Esc - InputB
   - Q - InputX
   - E - InputY
 
 -}
-defaultLayout : Char -> Input
+defaultLayout : String -> Input
 defaultLayout =
-    \char ->
-        case char of
-            'w' ->
+    \string ->
+        case string of
+            "w" ->
                 InputUp
 
-            'W' ->
+            "W" ->
+                InputUp
+            
+            "ArrowUp" ->
                 InputUp
 
-            's' ->
+            "s" ->
                 InputDown
 
-            'S' ->
+            "S" ->
+                InputDown
+            
+            "ArrowDown" ->
                 InputDown
 
-            'd' ->
+            "d" ->
                 InputRight
 
-            'D' ->
+            "D" ->
+                InputRight
+            
+            "ArrowRight" ->
                 InputRight
 
-            'a' ->
+            "a" ->
                 InputLeft
 
-            'A' ->
+            "A" ->
                 InputLeft
-
-            ' ' ->
+            
+            "ArrowLeft" ->
+                InputLeft
+            " " ->
+                InputA
+            
+            "Enter" ->
                 InputA
 
-            'q' ->
+            "q" ->
                 InputX
 
-            'Q' ->
+            "Q" ->
                 InputX
 
-            'e' ->
+            "e" ->
                 InputY
 
-            'E' ->
+            "E" ->
                 InputY
 
-            'x' ->
+            "x" ->
                 InputB
 
-            'X' ->
+            "X" ->
+                InputB
+            
+            "Escape" ->
+                InputB
+            
+            "Backspace" ->
                 InputB
 
             _ ->
@@ -149,20 +175,16 @@ defaultLayout =
 
 
 {-| subscribes to a keypress using custom key layouts
+it uses [key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) for the String.
+You can use this [website](http://keycode.info/) to find out the key value.
 -}
-custom : (Char -> Input) -> (Input -> msg) -> Sub msg
-custom toInput fun =
-    Keyboard.presses <|
-        Char.fromCode
-            >> toInput
-            >> fun
+custom : (String -> Input) -> (Input -> msg) -> Sub msg
+custom decoder fun =
+    Events.onKeyDown <| Decode.map fun <| Decode.map decoder <| Decode.field "key" Decode.string
 
 
 {-| subscribes to a keypress and sends the corresponding msg. This Function uses the default key layout.
 -}
 basic : (Input -> msg) -> Sub msg
 basic fun =
-    Keyboard.presses <|
-        Char.fromCode
-            >> defaultLayout
-            >> fun
+    custom defaultLayout fun

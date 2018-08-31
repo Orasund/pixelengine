@@ -1,12 +1,11 @@
-module PixelEngine.Graphics.Abstract exposing (..)
+module PixelEngine.Graphics.Abstract exposing (AbstractInput(..), Area(..), Background(..), Compatible(..), ContentElement, ControllerOptions, Dimensions, ElementType(..), ImageAreaContent, Location, MultipleSources, Options(..), Position, SingleImage, SingleSource(..), Tile, TileInformation, TileWithTileset, TiledAreaContent, Tileset, TilesetImage, Transition(..), cssArea, cssBackgroundImage, cssDimensions, cssPositions, displayElement, displayImage, displayMultiple, displayTile, newOptions, pairMap, render, renderControls, renderImageArea, renderScreen, renderTiledArea)
 
 import Css exposing (px)
-import Css.Foreign as Foreign
+import Css.Global as Global
 import Html.Styled as Html exposing (Attribute, Html, div, img)
 import Html.Styled.Attributes as Attributes exposing (css, src)
 import Html.Styled.Events as Events
 import Html.Styled.Keyed as Keyed
-import Window
 
 
 type alias TileInformation additional =
@@ -59,7 +58,7 @@ type Background
 
 
 type alias ControllerOptions msg =
-    { windowSize : Window.Size
+    { windowSize : Dimensions
     , controls : AbstractInput -> msg
     }
 
@@ -75,8 +74,8 @@ type Options msg
         }
 
 
-options : { width : Float, scale : Float, transitionSpeedInSec : Float } -> Options msg
-options { width, scale, transitionSpeedInSec } =
+newOptions : { width : Float, scale : Float, transitionSpeedInSec : Float } -> Options msg
+newOptions { width, scale, transitionSpeedInSec } =
     Options
         { width = width
         , scale = scale
@@ -171,8 +170,8 @@ renderScreen options listOfArea =
                             [ renderImageArea options imageAreaContent ]
                                 |> List.append list
                 )
-                [ Foreign.global
-                    [ Foreign.selector
+                [ Global.global
+                    [ Global.selector
                         "@keyframes pixelengine_graphics_basic"
                         [ Css.property "100% { left:0px };" "" ]
                     ]
@@ -198,7 +197,7 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
                     (\( length, cssCommands ) ( sum, string ) ->
                         ( sum + length
                         , string
-                            ++ (toString <| (sum + length) * 100 / transitionLength)
+                            ++ (String.fromFloat <| (sum + length) * 100 / transitionLength)
                             ++ "% {"
                             ++ "visibility:visible;"
                             ++ cssCommands
@@ -214,8 +213,8 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
             [ Css.backgroundColor (Css.rgb 0 0 0)
             ]
         ]
-        ([ Foreign.global
-            [ Foreign.selector
+        ([ Global.global
+            [ Global.selector
                 ("@keyframes pixelengine_screen_transition_"
                     ++ name
                 )
@@ -226,7 +225,7 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
             ]
          , Html.node "meta"
             [ Attributes.name "viewport"
-            , Attributes.content "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+            , Attributes.attribute "content" "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
             ]
             []
          , div
@@ -249,7 +248,7 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
                         ("pixelengine_screen_transition_"
                             ++ name
                             ++ " "
-                            ++ toString transitionLength
+                            ++ String.fromFloat transitionLength
                             ++ "s 1"
                         )
                     ]
@@ -262,8 +261,9 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
                         identity
 
                     Just ({ windowSize } as justCtrlOptions) ->
-                        if toFloat windowSize.width > 1.5 * toFloat windowSize.height then
+                        if windowSize.width > 1.5 * windowSize.height then
                             \l -> renderControls justCtrlOptions |> List.append l
+
                         else
                             identity
                )
@@ -275,7 +275,7 @@ renderControls { windowSize, controls } =
     let
         diameter : Float
         diameter =
-            toFloat <| windowSize.height // 4
+            windowSize.height / 4
 
         circle : String -> AbstractInput -> Float -> List Css.Style -> Html msg
         circle char input size listOfCss =
@@ -512,8 +512,9 @@ displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPos
         ([ css
             ((if transitionId == Nothing then
                 []
+
               else
-                [ Css.property "transition" ("left " ++ toString transitionSpeedInSec ++ "s,top " ++ toString transitionSpeedInSec ++ "s;")
+                [ Css.property "transition" ("left " ++ String.fromFloat transitionSpeedInSec ++ "s,top " ++ String.fromFloat transitionSpeedInSec ++ "s;")
                 ]
              )
                 |> List.append
@@ -591,7 +592,7 @@ displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps,
                 [ Css.property "object-fit" "none"
                 , Css.property
                     "object-position"
-                    (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                    (String.fromInt (-1 * spriteWidth * i) ++ "px " ++ String.fromInt (-1 * spriteHeight * j) ++ "px")
                 , Css.width <| px <| toFloat <| spriteWidth
                 , Css.height <| px <| toFloat <| spriteHeight
                 , Css.position Css.absolute
@@ -603,6 +604,7 @@ displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps,
                 ]
             ]
             []
+
     else
         div
             [ css
@@ -626,13 +628,13 @@ displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps,
                         [ Css.property "object-fit" "none"
                         , Css.property
                             "object-position"
-                            (toString (-1 * spriteWidth * i) ++ "px " ++ toString (-1 * spriteHeight * j) ++ "px")
+                            (String.fromInt(-1 * spriteWidth * i) ++ "px " ++ String.fromInt (-1 * spriteHeight * j) ++ "px")
                         , Css.width <| px <| toFloat <| spriteWidth * (steps + 1)
                         , Css.height <| px <| toFloat <| spriteHeight
                         , Css.position Css.absolute
                         , Css.left <| px <| scale * (toFloat <| spriteWidth * (steps + 1))
                         , Css.property "image-rendering" "pixelated"
-                        , Css.property "animation" ("pixelengine_graphics_basic " ++ toString (steps + 1) ++ ".0s steps(" ++ toString (steps + 1) ++ ") infinite")
+                        , Css.property "animation" ("pixelengine_graphics_basic " ++ String.fromInt (steps + 1) ++ ".0s steps(" ++ String.fromInt (steps + 1) ++ ") infinite")
                         , Css.property "transform-origin" "top left"
                         , Css.transform <| Css.scale2 scale scale
                         , Css.float Css.right
@@ -641,6 +643,7 @@ displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps,
                     []
                 ]
             ]
+
 
 
 pairMap : (a -> b) -> ( a, a ) -> ( b, b )

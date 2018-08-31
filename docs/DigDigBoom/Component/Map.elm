@@ -1,8 +1,8 @@
-module DigDigBoom.Component.Map exposing (Direction(..), Location, Map, approximateDirection, dirCoordinates, generate, getUnique, move, place, remove)
+module DigDigBoom.Component.Map exposing (Direction(..), Location, Map, approximateDirection, dirCoordinates, generator, getUnique, move, place, remove)
 
 import Dict exposing (Dict)
 import Pair
-import Random
+import Random exposing (Generator)
 
 
 type alias Location =
@@ -31,6 +31,37 @@ generate size fun seed =
                         out
             )
             ( Dict.empty, seed )
+
+
+generator : Int -> Generator (Location -> Maybe a) -> Generator (Map a)
+generator size fun =
+    Random.list (size * size) fun
+        |> Random.map
+            (List.foldl
+                (\maybeA ( dict, xy ) ->
+                    let
+                        x : Int
+                        x =
+                            xy % size
+
+                        y : Int
+                        y =
+                            xy // size
+                    in
+                    ( dict
+                        |> (case maybeA ( x, y ) of
+                                Just a ->
+                                    Dict.insert ( x, y ) a
+
+                                Nothing ->
+                                    identity
+                           )
+                    , xy + 1
+                    )
+                )
+                ( Dict.empty, 0 )
+                >> Tuple.first
+            )
 
 
 move : Location -> Direction -> Map a -> Map a

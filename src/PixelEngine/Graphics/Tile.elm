@@ -1,4 +1,8 @@
-module PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, backgroundColor, movable, onClick, tile, tileset, withAttributes)
+module PixelEngine.Graphics.Tile exposing
+    ( Tile, tile, movable, animated
+    , withAttributes, onClick, backgroundColor
+    , Tileset, tileset
+    )
 
 {-| This module contains functions for creating tiles.
 These tiles are used for the _tiledArea_ function from the main module.
@@ -11,12 +15,12 @@ These tiles are used for the _tiledArea_ function from the main module.
 
 ## Attributes
 
-@docs withAttributes,onClick,backgroundColor
+@docs withAttributes, onClick, backgroundColor
 
 
 ## Tileset
 
-@docs Tileset,tileset
+@docs Tileset, tileset
 
 -}
 
@@ -106,13 +110,14 @@ tile (0,0) |> animated 0 == tile (0,0)
 
 -}
 animated : Int -> Tile msg -> Tile msg
-animated steps ({ info } as tile) =
-    { tile
+animated steps ({ info } as t) =
+    { t
         | info =
             { info
                 | steps =
                     if steps > 0 then
                         steps
+
                     else
                         0
             }
@@ -128,8 +133,8 @@ This is useful for sprites that will change their position during the game.
 
 -}
 movable : String -> Tile msg -> Tile msg
-movable id tile =
-    { tile
+movable id t =
+    { t
         | uniqueId = Just id
     }
 
@@ -137,8 +142,8 @@ movable id tile =
 {-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
 -}
 withAttributes : List (Attribute msg) -> Tile msg -> Tile msg
-withAttributes attributes ({ customAttributes } as tile) =
-    { tile
+withAttributes attributes ({ customAttributes } as t) =
+    { t
         | customAttributes = List.append customAttributes attributes
     }
 

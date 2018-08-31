@@ -1,4 +1,9 @@
-module PixelEngine.Graphics exposing (Area, Background, Options, colorBackground, heightOf, imageArea, imageBackground, options, render, tiledArea, usingScale)
+module PixelEngine.Graphics exposing
+    ( Options, options, render
+    , Area, tiledArea, imageArea, heightOf
+    , Background, imageBackground, colorBackground
+    , usingScale
+    )
 
 {-| A graphic engine for turn-based pixel games.
 
@@ -85,17 +90,17 @@ To get started, copy the following example:
 
 ## Main Function
 
-@docs Options,options,render
+@docs Options, options, render
 
 
 ## Area
 
-@docs Area,tiledArea,imageArea,heightOf
+@docs Area, tiledArea, imageArea, heightOf
 
 
 ## Background
 
-@docs Background,imageBackground,colorBackground
+@docs Background, imageBackground, colorBackground
 
 
 ## Advanced
@@ -105,7 +110,8 @@ To get started, copy the following example:
 -}
 
 import Css
-import Html.Styled exposing (Html)
+import Html.Styled as Styled
+import Html exposing (Html)
 import PixelEngine.Graphics.Abstract as Abstract
 import PixelEngine.Graphics.Image exposing (Image)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
@@ -120,6 +126,7 @@ You can find more information about the valid elements in the curresponding modu
 -}
 type alias Area msg =
     Abstract.Area msg
+
 
 
 {-| returns the height of a list of Areas
@@ -236,15 +243,15 @@ For the start use the following settings
 -}
 options : { width : Float, transitionSpeedInSec : Float } -> Options msg
 options { width, transitionSpeedInSec } =
-    Abstract.options { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
+    Abstract.newOptions { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
 
 
 {-| scale up EVERYTHING.
 it can not be used with PixelEngine.document.
 -}
 usingScale : Float -> Options msg -> Options msg
-usingScale scale (Abstract.Options { width, transitionSpeedInSec }) =
-    Abstract.options { width = width, scale = scale, transitionSpeedInSec = transitionSpeedInSec }
+usingScale scale (Abstract.Options o) =
+    Abstract.Options { o | scale = scale }
 
 
 {-| This functions displays the content of the game.
@@ -255,7 +262,8 @@ These Areas are then displayed vertically on top of eachother.
 
 -}
 render : Options msg -> List (Area msg) -> Html msg
-render options listOfArea =
+render o listOfArea =
     Abstract.render
-        options
+        o
         listOfArea
+    |> Styled.toUnstyled

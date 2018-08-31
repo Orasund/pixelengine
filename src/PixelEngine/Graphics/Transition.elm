@@ -1,4 +1,7 @@
-module PixelEngine.Graphics.Transition exposing (Transition, from, custom)
+module PixelEngine.Graphics.Transition exposing
+    ( from
+    , Transition, custom
+    )
 
 {-| adding Transitions between Screens.
 
@@ -26,12 +29,13 @@ To get started, copy the following example:
 
 ## Area
 
-@docs Transition,custom
+@docs Transition, custom
 
 -}
 
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Abstract as Abstract
+
 
 
 {-| a Transition between screens

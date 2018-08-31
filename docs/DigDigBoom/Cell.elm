@@ -8,8 +8,8 @@ module DigDigBoom.Cell
         , SolidType
         , composing
         , decomposing
+        , generator
         , getImage
-        , mapGenerator
         , resistancy
         , tutorial
         )
@@ -18,7 +18,7 @@ import Dict
 import DigDigBoom.Component.Map exposing (Direction(..), Location, Map)
 import DigDigBoom.Tileset as Tileset
 import PixelEngine.Graphics.Tile exposing (Tile)
-import Random
+import Random exposing (Generator)
 
 
 type ItemType
@@ -100,7 +100,7 @@ getImage : Cell -> Tile msg
 getImage cell =
     case cell of
         Player a ->
-            case a of
+            (case a of
                 Down ->
                     Tileset.player_down
 
@@ -112,60 +112,74 @@ getImage cell =
 
                 Right ->
                     Tileset.player_right
+            )
+                Tileset.colorWhite
 
         Solid (Placed Stone) ->
-            Tileset.placed_stone
+            Tileset.placed_stone Tileset.colorGray
 
         Solid (Placed Dirt) ->
-            Tileset.dirt_wall
+            Tileset.dirt_wall Tileset.colorBrown
 
         Solid StoneWall ->
-            Tileset.stone_wall
+            Tileset.stone_wall Tileset.colorGray
 
         Solid StoneBrickWall ->
-            Tileset.stone_brick_wall
+            Tileset.stone_brick_wall Tileset.colorGray
 
         Item Bombe ->
-            Tileset.bombe
+            Tileset.bombe Tileset.colorGreen
 
         Item HealthPotion ->
-            Tileset.health_potion
+            Tileset.health_potion Tileset.colorGreen
 
         Item (Material Dirt) ->
-            Tileset.dirt
+            Tileset.dirt_wall Tileset.colorBlue
 
         Item (Material Stone) ->
-            Tileset.stone
+            Tileset.stone Tileset.colorBlue
 
-        Enemy PlacedBombe id ->
-            Tileset.placed_bombe id
+        Enemy enemy id ->
+            (case enemy of
+                PlacedBombe ->
+                    Tileset.placed_bombe id
 
-        Enemy Oger id ->
-            Tileset.oger id
+                Oger ->
+                    Tileset.oger id
 
-        Enemy Goblin id ->
-            Tileset.goblin id
+                Goblin ->
+                    Tileset.goblin id
 
-        Enemy Rat id ->
-            Tileset.rat id
+                Rat ->
+                    Tileset.rat id
+            )
+                Tileset.colorRed
 
-        Stunned PlacedBombe id ->
-            Tileset.stunned_bombe id
+        Stunned enemy id ->
+            (case enemy of
+                PlacedBombe ->
+                    Tileset.placed_bombe id
 
-        Stunned Oger id ->
-            Tileset.stunned_oger id
+                Oger ->
+                    Tileset.oger id
 
-        Stunned Goblin id ->
-            Tileset.stunned_goblin id
+                Goblin ->
+                    Tileset.goblin id
 
-        Stunned Rat id ->
-            Tileset.stunned_rat id
+                Rat ->
+                    Tileset.rat id
+            )
+                Tileset.colorYellow
 
-        Effect Smoke ->
-            Tileset.smoke
+        Effect effect ->
+            (case effect of
+                Smoke ->
+                    Tileset.smoke
 
-        Effect Bone ->
-            Tileset.bone
+                Bone ->
+                    Tileset.bone
+            )
+                Tileset.colorWhite
 
 
 
@@ -259,70 +273,69 @@ tutorial num =
                 |> Dict.update ( 7, 8 ) (always <| Just <| Item <| Bombe)
 
 
-mapGenerator : Location -> ( Map Cell, Random.Seed ) -> ( Map Cell, Random.Seed )
-mapGenerator pos ( map, seed ) =
+generator : Generator (Location -> Maybe Cell)
+generator =
     let
-        ( r, new_seed ) =
-            Random.step (Random.int 0 500) seed
+        locationToMaybeCell : Maybe Cell -> Generator (Location -> Maybe Cell)
+        locationToMaybeCell maybeCell =
+            constant
+                (\pos ->
+                    case pos of
+                        ( 0, _ ) ->
+                            mapBorder
+
+                        ( 15, _ ) ->
+                            mapBorder
+
+                        ( _, 0 ) ->
+                            mapBorder
+
+                        ( _, 15 ) ->
+                            mapBorder
+
+                        _ ->
+                            maybeCell
+                )
+
+        mapBorder : Maybe Cell
+        mapBorder =
+            Just <| Solid StoneBrickWall
+
+        constant : a -> Generator a
+        constant a =
+            Random.int 0 0 |> Random.map (always a)
     in
-    if
-        (pos |> Tuple.first)
-            == 0
-            || (pos |> Tuple.second)
-            == 0
-            || (pos |> Tuple.first)
-            == 15
-            || (pos |> Tuple.second)
-            == 15
-    then
-        ( map |> Dict.insert pos (Solid StoneBrickWall)
-        , seed
-        )
-    else if r < 50 then
-        ( map |> Dict.insert pos (Solid (Placed Dirt))
-        , new_seed
-        )
-    else if r < 150 then
-        ( map |> Dict.insert pos (Solid StoneWall)
-        , new_seed
-        )
-    else if r < 200 then
-        ( map |> Dict.insert pos (Solid StoneBrickWall)
-        , new_seed
-        )
-    else if r < 225 then
-        ( map |> Dict.insert pos (Item Bombe)
-        , new_seed
-        )
-    else if r < 230 then
-        ( map |> Dict.insert pos (Item HealthPotion)
-        , new_seed
-        )
-    else if r < 235 then
-        let
-            ( id, _ ) =
-                Random.step (Random.float 0 1) new_seed
-        in
-        ( map |> Dict.insert pos (Enemy Rat ("Rat" ++ toString id))
-        , new_seed
-        )
-    else if r < 238 then
-        let
-            ( id, _ ) =
-                Random.step (Random.float 0 1) new_seed
-        in
-        ( map |> Dict.insert pos (Enemy Goblin ("Goblin" ++ toString id))
-        , new_seed
-        )
-    else if r < 239 then
-        let
-            ( id, _ ) =
-                Random.step (Random.float 0 1) new_seed
-        in
-        ( map |> Dict.insert pos (Enemy Oger ("Oger" ++ toString id))
-        , new_seed
-        )
-    else
-        ( map
-        , new_seed
-        )
+    Random.int 0 500
+        |> Random.andThen
+            (\r ->
+                if r < 50 then
+                    locationToMaybeCell <| Just <| Solid <| Placed Dirt
+                else if r < 150 then
+                    locationToMaybeCell <| Just <| Solid StoneWall
+                else if r < 200 then
+                    locationToMaybeCell <| Just <| Solid StoneBrickWall
+                else if r < 225 then
+                    locationToMaybeCell <| Just <| Item Bombe
+                else if r < 230 then
+                    locationToMaybeCell <| Just <| Item HealthPotion
+                else if r < 235 then
+                    Random.float 0 1
+                        |> Random.andThen
+                            (\id ->
+                                locationToMaybeCell <| Just <| Enemy Rat <| "Rat" ++ toString id
+                            )
+                else if r < 238 then
+                    Random.float 0 1
+                        |> Random.andThen
+                            (\id ->
+                                locationToMaybeCell <| Just <| Enemy Goblin <| "Goblin" ++ toString id
+                            )
+                else if r < 239 then
+                    Random.float 0 1
+                        |> Random.andThen
+                            (\id ->
+                                locationToMaybeCell <| Just <| Enemy Oger <| "Oger" ++ toString id
+                            )
+                else
+                    locationToMaybeCell <| Nothing
+            )

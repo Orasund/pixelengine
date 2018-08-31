@@ -15136,6 +15136,120 @@ var _rtfeldman$elm_css$Html_Styled_Attributes$style = function (_p0) {
 	return _rtfeldman$elm_css$Html_Styled_Attributes$fromUnstyled(
 		_elm_lang$virtual_dom$VirtualDom$style(_p0));
 };
+var _rtfeldman$elm_css$Html_Styled_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _rtfeldman$elm_css$Html_Styled_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _rtfeldman$elm_css$Html_Styled_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _rtfeldman$elm_css$Html_Styled_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _rtfeldman$elm_css$Html_Styled_Events$onWithOptions = _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions;
+var _rtfeldman$elm_css$Html_Styled_Events$on = _rtfeldman$elm_css$VirtualDom_Styled$on;
+var _rtfeldman$elm_css$Html_Styled_Events$onFocus = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onBlur = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_rtfeldman$elm_css$Html_Styled_Events$defaultOptions,
+	{preventDefault: true});
+var _rtfeldman$elm_css$Html_Styled_Events$onSubmit = function (msg) {
+	return A3(
+		_rtfeldman$elm_css$Html_Styled_Events$onWithOptions,
+		'submit',
+		_rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onCheck = function (tagger) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetChecked));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onInput = function (tagger) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetValue));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseOut = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseOver = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseLeave = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseUp = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onMouseDown = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onDoubleClick = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$onClick = function (msg) {
+	return A2(
+		_rtfeldman$elm_css$Html_Styled_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _rtfeldman$elm_css$Html_Styled_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
 var _rtfeldman$elm_css$Css_Media$unparameterizedFeature = function (key) {
 	return {feature: key, value: _elm_lang$core$Maybe$Nothing};
 };
@@ -15740,120 +15854,6 @@ var _rtfeldman$elm_css$Css_Foreign$global = function (snippets) {
 							_elm_lang$core$List$singleton(
 								_rtfeldman$elm_css$Css_Preprocess$stylesheet(snippets))))))));
 };
-var _rtfeldman$elm_css$Html_Styled_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
-var _rtfeldman$elm_css$Html_Styled_Events$targetChecked = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'checked',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$bool);
-var _rtfeldman$elm_css$Html_Styled_Events$targetValue = A2(
-	_elm_lang$core$Json_Decode$at,
-	{
-		ctor: '::',
-		_0: 'target',
-		_1: {
-			ctor: '::',
-			_0: 'value',
-			_1: {ctor: '[]'}
-		}
-	},
-	_elm_lang$core$Json_Decode$string);
-var _rtfeldman$elm_css$Html_Styled_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
-var _rtfeldman$elm_css$Html_Styled_Events$onWithOptions = _rtfeldman$elm_css$VirtualDom_Styled$onWithOptions;
-var _rtfeldman$elm_css$Html_Styled_Events$on = _rtfeldman$elm_css$VirtualDom_Styled$on;
-var _rtfeldman$elm_css$Html_Styled_Events$onFocus = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'focus',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onBlur = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'blur',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
-	_rtfeldman$elm_css$Html_Styled_Events$defaultOptions,
-	{preventDefault: true});
-var _rtfeldman$elm_css$Html_Styled_Events$onSubmit = function (msg) {
-	return A3(
-		_rtfeldman$elm_css$Html_Styled_Events$onWithOptions,
-		'submit',
-		_rtfeldman$elm_css$Html_Styled_Events$onSubmitOptions,
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onCheck = function (tagger) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'change',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetChecked));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onInput = function (tagger) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'input',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _rtfeldman$elm_css$Html_Styled_Events$targetValue));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseOut = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseout',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseOver = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseover',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseLeave = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseleave',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseEnter = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseenter',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseUp = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mouseup',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onMouseDown = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'mousedown',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onDoubleClick = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'dblclick',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$onClick = function (msg) {
-	return A2(
-		_rtfeldman$elm_css$Html_Styled_Events$on,
-		'click',
-		_elm_lang$core$Json_Decode$succeed(msg));
-};
-var _rtfeldman$elm_css$Html_Styled_Events$Options = F2(
-	function (a, b) {
-		return {stopPropagation: a, preventDefault: b};
-	});
 var _rtfeldman$elm_css$Html_Styled_Keyed$node = _rtfeldman$elm_css$VirtualDom_Styled$keyedNode;
 var _rtfeldman$elm_css$Html_Styled_Keyed$ol = _rtfeldman$elm_css$Html_Styled_Keyed$node('ol');
 var _rtfeldman$elm_css$Html_Styled_Keyed$ul = _rtfeldman$elm_css$Html_Styled_Keyed$node('ul');
@@ -17331,25 +17331,26 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$SingleSour
 	return {ctor: 'SingleSource', _0: a};
 };
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Compatible = {ctor: 'Compatible'};
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes = F2(
-	function (attributes, tile) {
-		return _elm_lang$core$Native_Utils.update(
-			tile,
-			{customAttributes: attributes});
-	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor = function (color) {
-	return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes(
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$onClick = function (msg) {
+	return _rtfeldman$elm_css$Html_Styled_Events$onClick(msg);
+};
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor = function (color) {
+	return _rtfeldman$elm_css$Html_Styled_Attributes$css(
 		{
 			ctor: '::',
-			_0: _rtfeldman$elm_css$Html_Styled_Attributes$css(
-				{
-					ctor: '::',
-					_0: _rtfeldman$elm_css$Css$backgroundColor(color),
-					_1: {ctor: '[]'}
-				}),
+			_0: _rtfeldman$elm_css$Css$backgroundColor(color),
 			_1: {ctor: '[]'}
 		});
 };
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes = F2(
+	function (attributes, _p0) {
+		var _p1 = _p0;
+		return _elm_lang$core$Native_Utils.update(
+			_p1,
+			{
+				customAttributes: A2(_elm_lang$core$List$append, _p1.customAttributes, attributes)
+			});
+	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable = F2(
 	function (id, tile) {
 		return _elm_lang$core$Native_Utils.update(
@@ -17359,22 +17360,22 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable = F2(
 			});
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$animated = F2(
-	function (steps, _p0) {
-		var _p1 = _p0;
+	function (steps, _p2) {
+		var _p3 = _p2;
 		return _elm_lang$core$Native_Utils.update(
-			_p1,
+			_p3,
 			{
 				info: _elm_lang$core$Native_Utils.update(
-					_p1.info,
+					_p3.info,
 					{
 						steps: (_elm_lang$core$Native_Utils.cmp(steps, 0) > 0) ? steps : 0
 					})
 			});
 	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile = function (_p2) {
-	var _p3 = _p2;
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile = function (_p4) {
+	var _p5 = _p4;
 	return {
-		info: {top: _p3._1, left: _p3._0, steps: 0},
+		info: {top: _p5._1, left: _p5._0, steps: 0},
 		uniqueId: _elm_lang$core$Maybe$Nothing,
 		customAttributes: {ctor: '[]'}
 	};
@@ -17383,8 +17384,12 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tileset = _elm
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_bombe = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17394,8 +17399,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_bombe = F2(
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_rat = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17405,8 +17414,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_rat = F2(
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_goblin = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17416,8 +17429,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_goblin = F2(
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_oger = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17426,23 +17443,35 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stunned_oger = F2(
 	});
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$heart = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 4, _1: 8}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$smoke = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 14, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$rat = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17455,8 +17484,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$rat = F2(
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$goblin = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17469,8 +17502,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$goblin = F2(
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$oger = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17483,8 +17520,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$oger = F2(
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$placed_bombe = F2(
 	function (id, color) {
 		return A2(
-			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-			color,
+			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+			{
+				ctor: '::',
+				_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+				_1: {ctor: '[]'}
+			},
 			A2(
 				_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 				id,
@@ -17496,78 +17537,122 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$placed_bombe = F2(
 	});
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$bone = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 10}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stone = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 8, _1: 6}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$dirt = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 8, _1: 7}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$health_potion = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 5, _1: 7}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$bombe = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 6, _1: 6}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stone_brick_wall = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 2, _1: 0}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$dirt_wall = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 2}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$stone_wall = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 1, _1: 0}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$placed_dirt = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 3}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$placed_stone = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 1, _1: 1}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_right = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		A2(
 			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 			'player',
@@ -17579,8 +17664,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_right = functi
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_left = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		A2(
 			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 			'player',
@@ -17592,8 +17681,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_left = functio
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_up = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		A2(
 			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 			'player',
@@ -17605,8 +17698,12 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_up = function 
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_down = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		A2(
 			_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$movable,
 			'player',
@@ -17618,337 +17715,529 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$player_down = functio
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$arrow_left = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 11, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$arrow_right = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 11, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$arrow_down = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 11, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$arrow_up = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 11, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_equals = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 7, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_minus = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 10, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_plus = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 10, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_colon = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 7, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_exclamation_mark = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 7, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_question_mark = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 7, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_comma = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 6, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_period = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 6, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_z = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 6, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_y = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 6, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_x = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 5, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_w = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 5, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_v = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 5, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_u = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 5, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_t = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 4, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_s = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 4, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_r = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 4, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_q = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 4, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_p = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 3, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_o = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 3, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_n = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 3, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_m = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 3, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_l = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 2, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_k = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 2, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_j = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 2, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_i = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 2, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_h = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 1, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_g = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 1, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_f = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 1, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_e = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 1, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_d = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_c = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_b = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$letter_a = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 0, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_9 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 10, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_8 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 10, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_7 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 9, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_6 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 9, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_5 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 9, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_4 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 9, _1: 12}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_3 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 8, _1: 15}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_2 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 8, _1: 14}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_1 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 8, _1: 13}));
 };
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Tileset$digit_0 = function (color) {
 	return A2(
-		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withBackgroundColor,
-		color,
+		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$withAttributes,
+		{
+			ctor: '::',
+			_0: _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$backgroundColor(color),
+			_1: {ctor: '[]'}
+		},
 		_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Tile$tile(
 			{ctor: '_Tuple2', _0: 8, _1: 12}));
 };
@@ -19948,21 +20237,27 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$render = F2(
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$usingScale = F2(
 	function (scale, _p0) {
 		var _p1 = _p0;
-		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options(
-			{width: _p1._0.width, scale: scale, transitionSpeedInSec: _p1._0.transitionSpeedInSec});
+		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Options(
+			_elm_lang$core$Native_Utils.update(
+				_p1._0,
+				{scale: scale}));
 	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$options = _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options;
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$options = function (_p2) {
+	var _p3 = _p2;
+	return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$options(
+		{width: _p3.width, scale: 1, transitionSpeedInSec: _p3.transitionSpeedInSec});
+};
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$tiledArea = F2(
-	function (_p2, content) {
-		var _p3 = _p2;
-		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Tiled(
-			{rows: _p3.rows, tileset: _p3.tileset, background: _p3.background, content: content});
-	});
-var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageArea = F2(
 	function (_p4, content) {
 		var _p5 = _p4;
+		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Tiled(
+			{rows: _p5.rows, tileset: _p5.tileset, background: _p5.background, content: content});
+	});
+var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageArea = F2(
+	function (_p6, content) {
+		var _p7 = _p6;
 		return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$Images(
-			{height: _p5.height, background: _p5.background, content: content});
+			{height: _p7.height, background: _p7.background, content: content});
 	});
 var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$imageBackground = function (image) {
 	return _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics_Abstract$ImageBackground(image);
@@ -19975,11 +20270,11 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$heightOf = function
 		A2(
 			_elm_lang$core$List$map,
 			function (area) {
-				var _p6 = area;
-				if (_p6.ctor === 'Tiled') {
-					return _elm_lang$core$Basics$toFloat(_p6._0.rows * _p6._0.tileset.spriteHeight);
+				var _p8 = area;
+				if (_p8.ctor === 'Tiled') {
+					return _elm_lang$core$Basics$toFloat(_p8._0.rows * _p8._0.tileset.spriteHeight);
 				} else {
-					return _p6._0.height;
+					return _p8._0.height;
 				}
 			},
 			listOfArea));
@@ -20163,10 +20458,23 @@ var _elm_lang$elm_architecture_tutorial$PixelEngine$viewFunction = F2(
 							},
 							A2(
 								_elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$usingScale,
-								A2(
-									_elm_lang$core$Basics$min,
-									_elm_lang$core$Basics$toFloat(_p13.height) / height,
-									_elm_lang$core$Basics$toFloat(_p13.width) / width),
+								_elm_lang$core$Basics$toFloat(
+									A2(
+										_elm_lang$core$Basics$min,
+										Math.pow(
+											2,
+											_elm_lang$core$Basics$floor(
+												A2(
+													_elm_lang$core$Basics$logBase,
+													2,
+													_elm_lang$core$Basics$toFloat(_p13.height) / height))),
+										Math.pow(
+											2,
+											_elm_lang$core$Basics$floor(
+												A2(
+													_elm_lang$core$Basics$logBase,
+													2,
+													_elm_lang$core$Basics$toFloat(_p13.width) / width))))),
 								options)),
 						listOfArea);
 				} else {
@@ -21317,10 +21625,8 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$worldScreen = F4(
 	});
 var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$view = function (model) {
 	var width = 16;
-	var scale = 1;
 	var options = _elm_lang$elm_architecture_tutorial$PixelEngine_Graphics$options(
 		{
-			scale: _elm_lang$core$Basics$toFloat(scale),
 			width: _elm_lang$core$Basics$toFloat(_elm_lang$elm_architecture_tutorial$DigDigBoom_Main$tileset.spriteWidth * width),
 			transitionSpeedInSec: 0.2
 		});
@@ -21344,20 +21650,10 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$view = function (model) 
 							'next_level',
 							{
 								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
-									_0: 0,
-									_1: A2(
-										_elm_lang$core$Basics_ops['++'],
-										'filter:saturate(200%) contrast(100%);overflow:hidden;width:',
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString((scale * _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$tileset.spriteWidth) * width),
-											'px;'))
-								},
+								_0: {ctor: '_Tuple2', _0: 0, _1: 'filter:saturate(200%) contrast(100%);overflow:hidden;width:100%'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 2, _1: 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0px;'},
+									_0: {ctor: '_Tuple2', _0: 2, _1: 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;'},
 									_1: {ctor: '[]'}
 								}
 							}),
@@ -21806,20 +22102,10 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$view = function (model) 
 							'next_level',
 							{
 								ctor: '::',
-								_0: {
-									ctor: '_Tuple2',
-									_0: 0,
-									_1: A2(
-										_elm_lang$core$Basics_ops['++'],
-										'filter:saturate(200%) contrast(100%);overflow:hidden;width:',
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString((scale * _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$tileset.spriteWidth) * width),
-											'px;'))
-								},
+								_0: {ctor: '_Tuple2', _0: 0, _1: 'filter:saturate(200%) contrast(100%);overflow:hidden;width:100%;'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 2, _1: 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0px;'},
+									_0: {ctor: '_Tuple2', _0: 2, _1: 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;'},
 									_1: {ctor: '[]'}
 								}
 							}),
@@ -21926,7 +22212,7 @@ var _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$newMap = function (world
 					_elm_lang$elm_architecture_tutorial$DigDigBoom_Cell$Player(_elm_lang$elm_architecture_tutorial$DigDigBoom_Component_Map$Down)))),
 		A2(
 			_elm_lang$core$Random$step,
-			A2(_elm_lang$elm_architecture_tutorial$DigDigBoom_Component_Map$generator, _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$worldSize - 1, _elm_lang$elm_architecture_tutorial$DigDigBoom_Cell$generator),
+			A2(_elm_lang$elm_architecture_tutorial$DigDigBoom_Component_Map$generator, _elm_lang$elm_architecture_tutorial$DigDigBoom_Main$worldSize, _elm_lang$elm_architecture_tutorial$DigDigBoom_Cell$generator),
 			_elm_lang$core$Random$initialSeed(worldSeed)));
 	var currentMap = _p15._0;
 	var currentSeed = _p15._1;
