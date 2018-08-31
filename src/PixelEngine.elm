@@ -1,7 +1,7 @@
 module PixelEngine exposing (PixelEngine, program, programWithCustomControls)
 
 {-| The Libary may support more then just simple rendering. This module exists to take care of everything else.
-It provides a document that is already set up.
+It provides a program that is already set up.
 
 @docs PixelEngine, program, programWithCustomControls
 
@@ -17,7 +17,7 @@ import PixelEngine.Graphics.Abstract as Abstract
 import Task
 
 
-{-| an alias for the specific document
+{-| an alias for the program
 -}
 type alias PixelEngine flag model msg =
     Program flag (Model model msg) (Msg msg)
@@ -121,7 +121,7 @@ initFunction controls init =
           }
         , Cmd.batch
             [ msg |> Cmd.map MsgContent
-            -- , Task.perform (\{viewport} -> let {width,height} = viewport in Resize { width = width, height = height }) Dom.getViewport
+            , Task.perform (\{viewport} -> let {width,height} = viewport in Resize { width = width, height = height }) Dom.getViewport
             ]
         )
 

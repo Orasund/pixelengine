@@ -246,7 +246,7 @@ options { width, transitionSpeedInSec } =
 
 
 {-| scale up EVERYTHING.
-it can not be used with PixelEngine.document.
+it can not be used with PixelEngine.program.
 -}
 usingScale : Float -> Options msg -> Options msg
 usingScale scale (Abstract.Options o) =
