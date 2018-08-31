@@ -48,7 +48,7 @@ type Input
 {-| adds mobile support to the options.
 It needs the window size.
 
-[PixelEngine](https://package.elm-lang.org/packages/Orasund/pixelengine/latest/PixelEngine) provides a fully wired document that takes care of everything.
+[PixelEngine](https://package.elm-lang.org/packages/Orasund/pixelengine/latest/PixelEngine) provides a fully wired program that takes care of everything.
 
 -}
 supportingMobile : { windowSize : {width:Float,height:Float}, controls : Input -> msg } -> Options msg -> Options msg

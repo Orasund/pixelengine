@@ -33,7 +33,7 @@ So i desided to try something different and to use HTML and CSS instead of WebGL
 ## Upgrading
   * First follow the error messages of the compiler
   * Next set the scale of your game to 1. In the new version the scale feature scales the entire game.
-  * If you want keyboard support use Graphics.document. It will also take care of the new way scaling works.
+  * If you want keyboard support use Graphics.program. It will also take care of the new way scaling works.
 
 ## Upcoming Features
   * MultipleTiles - Similar to MultipleImages but for Tiles.
