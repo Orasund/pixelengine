@@ -227,16 +227,13 @@ tiledArea { rows, tileset, background } content =
   - width - Width of the game.
     **Note:** all spatial values are given in _Pixels_.
 
-  - scale - This value scales up all content of the game.
-    **Default value:** 1 for original sized images
-
   - transitionSpeedInSec - The speed of animations.
     **Default value:** 0 for no animations
 
 For the start use the following settings
 
 ```
-{scale = 2,width = 800, transitionSpeedInSec = 0.2}
+{width = 800, transitionSpeedInSec = 0.2}
 ```
 
 -}
