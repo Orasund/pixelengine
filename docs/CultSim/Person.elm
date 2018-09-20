@@ -53,12 +53,13 @@ generateSkin =
             { head =
                 if isMale then
                     head
+
                 else
                     head + 50
             , body = body
             }
         )
-        Random.bool
+        (Random.uniform True [False])
         (Random.int 1 12)
         (Random.int 0 7)
 
@@ -83,7 +84,7 @@ generatePosition r =
 
 move : Person -> Random.Seed -> ( Person, Random.Seed )
 move person =
-    Random.step (generatePosition 150)
+    Random.step (generatePosition 75)
         >> Tuple.mapFirst
             (\position ->
                 { person
@@ -102,8 +103,10 @@ pray ({ praying_duration, skin } as person) =
             case praying_duration of
                 2 ->
                     { skin | body = 10 }
+
                 4 ->
                     { skin | body = 100, head = 100 }
+
                 _ ->
                     skin
     }
@@ -120,7 +123,7 @@ generate : Random.Generator ( String, Person )
 generate =
     Random.map3
         (\position float skin ->
-            ( "person_" ++ toString float
+            ( "person_" ++ String.fromFloat float
             , { position = position
               , action = None
               , skin = skin
@@ -128,6 +131,6 @@ generate =
               }
             )
         )
-        (generatePosition 275)
+        (generatePosition 135)
         (Random.float 0 1)
         generateSkin

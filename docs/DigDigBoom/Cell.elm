@@ -1,18 +1,17 @@
-module DigDigBoom.Cell
-    exposing
-        ( Cell(..)
-        , EffectType(..)
-        , EnemyType(..)
-        , ItemType(..)
-        , MaterialType(..)
-        , SolidType
-        , composing
-        , decomposing
-        , generator
-        , getImage
-        , resistancy
-        , tutorial
-        )
+module DigDigBoom.Cell exposing
+    ( Cell(..)
+    , EffectType(..)
+    , EnemyType(..)
+    , ItemType(..)
+    , MaterialType(..)
+    , SolidType
+    , composing
+    , decomposing
+    , generator
+    , getImage
+    , resistancy
+    , tutorial
+    )
 
 import Dict
 import DigDigBoom.Component.Map exposing (Direction(..), Location, Map)
@@ -94,7 +93,6 @@ composing tuple =
 
         ( Just _, _ ) ->
             Nothing
-
 
 getImage : Cell -> Tile msg
 getImage cell =
@@ -310,32 +308,40 @@ generator =
             (\r ->
                 if r < 50 then
                     locationToMaybeCell <| Just <| Solid <| Placed Dirt
+
                 else if r < 150 then
                     locationToMaybeCell <| Just <| Solid StoneWall
+
                 else if r < 200 then
                     locationToMaybeCell <| Just <| Solid StoneBrickWall
+
                 else if r < 225 then
                     locationToMaybeCell <| Just <| Item Bombe
+
                 else if r < 230 then
                     locationToMaybeCell <| Just <| Item HealthPotion
+
                 else if r < 235 then
                     Random.float 0 1
                         |> Random.andThen
                             (\id ->
-                                locationToMaybeCell <| Just <| Enemy Rat <| "Rat" ++ toString id
+                                locationToMaybeCell <| Just <| Enemy Rat <| "Rat" ++ String.fromFloat id
                             )
+
                 else if r < 238 then
                     Random.float 0 1
                         |> Random.andThen
                             (\id ->
-                                locationToMaybeCell <| Just <| Enemy Goblin <| "Goblin" ++ toString id
+                                locationToMaybeCell <| Just <| Enemy Goblin <| "Goblin" ++ String.fromFloat id
                             )
+
                 else if r < 239 then
                     Random.float 0 1
                         |> Random.andThen
                             (\id ->
-                                locationToMaybeCell <| Just <| Enemy Oger <| "Oger" ++ toString id
+                                locationToMaybeCell <| Just <| Enemy Oger <| "Oger" ++ String.fromFloat id
                             )
+
                 else
                     locationToMaybeCell <| Nothing
             )

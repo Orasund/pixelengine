@@ -1,14 +1,13 @@
-module DigDigBoom.Component.GroupedList
-    exposing
-        ( GroupedList
-        , add
-        , fromList
-        , head
-        , reduce
-        , rotateLeft
-        , rotateRight
-        , toList
-        )
+module DigDigBoom.Component.GroupedList exposing
+    ( GroupedList
+    , add
+    , fromList
+    , head
+    , reduce
+    , rotateLeft
+    , rotateRight
+    , toList
+    )
 
 import RollingList exposing (RollingList)
 
@@ -26,6 +25,7 @@ fromList list =
                     ( a, b ) :: c ->
                         if a == elem then
                             ( elem, b + 1 ) :: c
+
                         else
                             ( elem, 1 ) :: base_list
 
@@ -68,8 +68,10 @@ add target l =
                             |> List.append [ ( target, (elem |> Tuple.second) + 1 ) ]
                         , True
                         )
+
                     else
                         ( list |> List.append [ elem ], False )
+
                 else
                     ( list |> List.append [ elem ], True )
             )
@@ -77,6 +79,7 @@ add target l =
         |> (\( list, found ) ->
                 if found == False then
                     List.append list [ ( target, 1 ) ]
+
                 else
                     list
            )
@@ -93,13 +96,16 @@ reduce target l =
                     if (elem |> Tuple.first) == target then
                         if (elem |> Tuple.second) - 1 <= 0 then
                             ( list, True )
+
                         else
                             ( list
                                 |> List.append [ ( target, (elem |> Tuple.second) - 1 ) ]
                             , True
                             )
+
                     else
                         ( list |> List.append [ elem ], False )
+
                 else
                     ( list |> List.append [ elem ], True )
             )

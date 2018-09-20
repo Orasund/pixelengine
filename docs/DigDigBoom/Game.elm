@@ -9,12 +9,11 @@ import DigDigBoom.Cell as Cell
         , ItemType(..)
         , SolidType(..)
         )
-import DigDigBoom.Component.Map as Map exposing (Direction(..), Location)
-import DigDigBoom.Player as Player exposing (Game, PlayerCell)
-import Pair
+import DigDigBoom.Component.Map as Map exposing (Direction(..), Location,Actor)
+import DigDigBoom.Player as Player exposing (Game)
 
 
-applyDirection : Int -> Direction -> ( PlayerCell, Game ) -> ( PlayerCell, Game )
+applyDirection : Int -> Direction -> ( Actor, Game ) -> ( Actor, Game )
 applyDirection size dir (( ( location, direction ), _ ) as playerCellAndGame) =
     if direction == dir then
         playerCellAndGame
@@ -24,12 +23,13 @@ applyDirection size dir (( ( location, direction ), _ ) as playerCellAndGame) =
                     , updateGame newPlayerCell game
                     )
                )
+
     else
         playerCellAndGame
             |> Tuple.mapSecond (Tuple.mapSecond (Player.face location dir))
 
 
-updateGame : PlayerCell -> Game -> Game
+updateGame : Actor -> Game -> Game
 updateGame playerCell (( _, map ) as game) =
     map
         |> Dict.foldl
@@ -37,7 +37,7 @@ updateGame playerCell (( _, map ) as game) =
             game
 
 
-updateCell : PlayerCell -> Location -> Cell -> Game -> Game
+updateCell : Actor -> Location -> Cell -> Game -> Game
 updateCell playerCell location cell =
     case cell of
         Enemy enemy _ ->
@@ -53,23 +53,23 @@ updateCell playerCell location cell =
             identity
 
 
-updateEnemy : Location -> EnemyType -> PlayerCell -> Game -> Game
+updateEnemy : Location -> EnemyType -> Actor -> Game -> Game
 updateEnemy location enemyType playerCell =
     attackPlayer location playerCell
         >> specialBehaviour location enemyType playerCell
 
 
-attackPlayer : Location -> PlayerCell -> Game -> Game
+attackPlayer : Location -> Actor -> Game -> Game
 attackPlayer location (( playerLocation, _ ) as playerCell) ( playerData, map ) =
     [ Up, Down, Left, Right ]
         |> List.filter
-            ((==) (Pair.map2 (-) location playerLocation) << Map.dirCoordinates)
+            ((==) ((\(x1,y1) (x2,y2) -> (x1-x2,y1-y2)) location playerLocation) << Map.dirCoordinates)
         |> List.head
         |> Maybe.map (always (( playerData, map ) |> Player.attack playerCell))
         |> Maybe.withDefault ( playerData, map )
 
 
-specialBehaviour : Location -> EnemyType -> PlayerCell -> Game -> Game
+specialBehaviour : Location -> EnemyType -> Actor -> Game -> Game
 specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as game) =
     case enemyType of
         PlacedBombe ->
@@ -84,21 +84,24 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
             let
                 moveDirection : Direction
                 moveDirection =
-                    Pair.map2 (-) playerLocation currentLocation
+                    (\(x1,y1) (x2,y2) -> (x1-x2,y1-y2)) playerLocation currentLocation
                         --|> (\( x, y ) -> ( y, x ))
                         |> Map.approximateDirection
+                
+                actor : Actor
+                actor = (currentLocation,moveDirection)
 
                 newLocation : Location
-                newLocation =
-                    Pair.map2 (+) currentLocation (Map.dirCoordinates moveDirection)
+                newLocation = 
+                    actor |> Map.posFront 1
             in
             game
                 |> (case map |> Dict.get newLocation of
                         Nothing ->
-                            Tuple.mapSecond (Map.move currentLocation moveDirection)
+                            Tuple.mapSecond (Map.move actor)
 
                         Just (Item _) ->
-                            Tuple.mapSecond (Map.move currentLocation moveDirection)
+                            Tuple.mapSecond (Map.move actor)
 
                         Just (Solid solid) ->
                             if
@@ -120,6 +123,7 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                                 Tuple.mapSecond <|
                                     Dict.update newLocation <|
                                         always (Cell.decomposing solid |> Tuple.first |> Maybe.map Solid)
+
                             else
                                 identity
 
@@ -127,12 +131,11 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                             identity
                    )
 
-
 placedBombeBehavoiur : Location -> Direction -> Game -> Game
-placedBombeBehavoiur currentLocation dir game =
+placedBombeBehavoiur location direction game =
     let
         newLocation =
-            Map.dirCoordinates dir |> Pair.map2 (+) currentLocation
+            (location,direction) |> Map.posFront 1
     in
     game
         |> (case game |> Tuple.second |> Dict.get newLocation of

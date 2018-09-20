@@ -1,14 +1,13 @@
-module DigDigBoom.Component.GroupedOverflowList
-    exposing
-        ( GroupedOverflowList
-        , empty
-        , fromList
-        , getList
-        , getMaxLength
-        , getOverflow
-        , length
-        , setOverflow
-        )
+module DigDigBoom.Component.GroupedOverflowList exposing
+    ( GroupedOverflowList
+    , empty
+    , fromList
+    , getList
+    , getMaxLength
+    , getOverflow
+    , length
+    , setOverflow
+    )
 
 import DigDigBoom.Component.GroupedList as GroupedList exposing (GroupedList)
 import OverflowList exposing (OverflowList)
@@ -77,6 +76,7 @@ setOverflow item list =
                             |> getList
                             |> GroupedList.add a
                             |> fromList (list |> getMaxLength)
+
                     else
                         setAsOverflow item list
 

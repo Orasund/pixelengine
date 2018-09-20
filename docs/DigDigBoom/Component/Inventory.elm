@@ -1,16 +1,15 @@
-module DigDigBoom.Component.Inventory
-    exposing
-        ( Inventory
-        , add
-        , drop
-        , get
-        , ground
-        , init
-        , rotateLeft
-        , rotateRight
-        , selected
-        , take
-        )
+module DigDigBoom.Component.Inventory exposing
+    ( Inventory
+    , add
+    , drop
+    , get
+    , ground
+    , init
+    , rotateLeft
+    , rotateRight
+    , selected
+    , take
+    )
 
 import DigDigBoom.Component.GroupedList as GroupedList
 import DigDigBoom.Component.GroupedOverflowList as GroupedOverflowList exposing (GroupedOverflowList)
