@@ -225,7 +225,17 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
             ]
          , Html.node "meta"
             [ Attributes.name "viewport"
-            , Attributes.attribute "content" "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+            , Attributes.attribute "content" "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, user-scalable=0"
+            ]
+            []
+         , Html.node "meta"
+            [ Attributes.name "apple-mobile-web-app-capable"
+            , Attributes.attribute "content" "yes"
+            ]
+            []
+         , Html.node "meta"
+            [ Attributes.name "apple-mobile-web-app-status-bar-style"
+            , Attributes.attribute "content" "black-translucent"
             ]
             []
          , div
