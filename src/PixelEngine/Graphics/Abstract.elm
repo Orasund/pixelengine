@@ -289,11 +289,12 @@ renderControls { windowSize, controls } =
 
         circle : String -> AbstractInput -> Float -> List Css.Style -> Html msg
         circle char input size listOfCss =
-            div
+            Html.button
                 [ css
                     ([ Css.width <| Css.px <| size
                      , Css.height <| Css.px <| size
                      , Css.borderRadius <| Css.px <| size / 2
+                     , Css.borderStyle <| Css.none
                      , Css.backgroundColor <| Css.rgb 256 256 256
                      , Css.textAlign Css.center
                      , Css.fontFamily Css.sansSerif
@@ -304,7 +305,8 @@ renderControls { windowSize, controls } =
                     )
                 , Events.onClick <| controls <| input
                 ]
-                [ Html.text <| char ]
+                [    Html.text char 
+                ]
     in
     [ div
         [ css
