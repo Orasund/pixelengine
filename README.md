@@ -36,7 +36,6 @@ So i desided to try something different and to use HTML and CSS instead of WebGL
   * If you want keyboard support use Graphics.program. It will also take care of the new way scaling works.
 
 ## Room for Improvement
-  * There is a two second input delay on phones. This is actually a improvement to the 5 second delay from before, but i believe this can be further improved. - Maybe by **switching to Progressive Web App**.
   * The animations can sometimes be very janky. This is actually intended, but it might be better to give an alternative by **switching the animation off** for a few frames(to introduce clean skips or to let elm control the animation for a short period of ime.) 
 
 ## Upcoming Features
