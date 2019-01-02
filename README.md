@@ -40,4 +40,4 @@ So i desided to try something different and to use HTML and CSS instead of WebGL
 
 ## Upcoming Features
   * MultipleTiles - Similar to MultipleImages but for Tiles.
-  * Particles - Maybe using SVG?
+  * Particles - Maybe using [BrianHicks/elm-particle](https://github.com/BrianHicks/elm-particle)?
