@@ -305,7 +305,7 @@ renderControls { windowSize, controls } =
                     )
                 , Events.onClick <| controls <| input
                 ]
-                [    Html.text char 
+                [ Html.text char
                 ]
     in
     [ div
@@ -498,7 +498,7 @@ cssPositions { left, top } =
 
 
 displayElement : Options msg -> ( ( Float, Float ), ContentElement msg ) -> ( String, Html msg )
-displayElement ((Options { scale }) as options) ( ( left, top ), { elementType, uniqueId, customAttributes } ) =
+displayElement options ( ( left, top ), { elementType, uniqueId, customAttributes } ) =
     let
         pos =
             { left = left, top = top }
@@ -573,7 +573,7 @@ displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPos
 
 
 displayImage : Options msg -> ( Position, SingleImage ) -> Html msg
-displayImage (Options { scale, transitionSpeedInSec }) ( { top, left }, source ) =
+displayImage (Options { scale }) ( { top, left }, source ) =
     img
         [ src source
         , css
@@ -589,7 +589,7 @@ displayImage (Options { scale, transitionSpeedInSec }) ( { top, left }, source )
 
 
 displayTile : Options msg -> ( Position, TileWithTileset ) -> Html msg
-displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps, tileset } ) =
+displayTile (Options { scale }) ( pos, { left, top, steps, tileset } ) =
     let
         ( i, j ) =
             ( left, top )
@@ -640,7 +640,7 @@ displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps,
                         [ Css.property "object-fit" "none"
                         , Css.property
                             "object-position"
-                            (String.fromInt(-1 * spriteWidth * i) ++ "px " ++ String.fromInt (-1 * spriteHeight * j) ++ "px")
+                            (String.fromInt (-1 * spriteWidth * i) ++ "px " ++ String.fromInt (-1 * spriteHeight * j) ++ "px")
                         , Css.width <| px <| toFloat <| spriteWidth * (steps + 1)
                         , Css.height <| px <| toFloat <| spriteHeight
                         , Css.position Css.absolute
@@ -655,7 +655,6 @@ displayTile (Options { scale, transitionSpeedInSec }) ( pos, { left, top, steps,
                     []
                 ]
             ]
-
 
 
 pairMap : (a -> b) -> ( a, a ) -> ( b, b )

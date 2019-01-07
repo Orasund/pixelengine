@@ -8,9 +8,9 @@ It provides a program that is already set up.
 -}
 
 import Browser
-import Browser.Events as Events
 import Browser.Dom as Dom
-import Html exposing (Html)
+import Browser.Events as Events
+import Html
 import PixelEngine.Controls as Controls exposing (Input)
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Abstract as Abstract
@@ -24,7 +24,11 @@ type alias PixelEngine flag model msg =
 
 
 type alias Config msg =
-    { windowSize : Maybe { width : Float, height : Float }
+    { windowSize :
+        Maybe
+            { width : Float
+            , height : Float
+            }
     , controls : ( String -> Input, Input -> msg )
     }
 
@@ -63,7 +67,7 @@ updateFunction update msg ({ modelContent, config } as model) =
 
 
 subscriptionsFunction : (model -> Sub msg) -> Model model msg -> Sub (Msg msg)
-subscriptionsFunction subscriptions ({ modelContent, config } as model) =
+subscriptionsFunction subscriptions { modelContent, config } =
     Sub.batch
         [ subscriptions modelContent |> Sub.map MsgContent
         , Events.onResize <| \w h -> Resize { width = toFloat w, height = toFloat h }
@@ -72,7 +76,7 @@ subscriptionsFunction subscriptions ({ modelContent, config } as model) =
 
 
 viewFunction : (model -> { title : String, options : Options msg, body : List (Area msg) }) -> Model model msg -> Browser.Document (Msg msg)
-viewFunction view ({ modelContent, config } as model) =
+viewFunction view { modelContent, config } =
     let
         { windowSize, controls } =
             config
@@ -88,14 +92,14 @@ viewFunction view ({ modelContent, config } as model) =
     in
     { title = title
     , body =
-        [(case windowSize of
+        [ (case windowSize of
             Just wS ->
                 Graphics.render
                     (options
                         |> Graphics.usingScale
                             (toFloat <|
-                                min (2 ^ (floor <| logBase 2 <| ( wS.height) / height))
-                                    (2 ^ (floor <| logBase 2 <| ( wS.width) / width))
+                                min (2 ^ (floor <| logBase 2 <| wS.height / height))
+                                    (2 ^ (floor <| logBase 2 <| wS.width / width))
                             )
                         |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second }
                     )
@@ -103,7 +107,7 @@ viewFunction view ({ modelContent, config } as model) =
 
             Nothing ->
                 Graphics.render options []
-        )
+          )
             |> Html.map MsgContent
         ]
     }
@@ -121,7 +125,15 @@ initFunction controls init =
           }
         , Cmd.batch
             [ msg |> Cmd.map MsgContent
-            , Task.perform (\{viewport} -> let {width,height} = viewport in Resize { width = width, height = height }) Dom.getViewport
+            , Task.perform
+                (\{ viewport } ->
+                    let
+                        { width, height } =
+                            viewport
+                    in
+                    Resize { width = width, height = height }
+                )
+                Dom.getViewport
             ]
         )
 

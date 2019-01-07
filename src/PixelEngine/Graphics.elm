@@ -4,7 +4,7 @@ module PixelEngine.Graphics exposing
     , Background, imageBackground, colorBackground
     , usingScale
     )
-
+    
 {-| A graphic engine for turn-based pixel games.
 
 To get started, copy the following example:

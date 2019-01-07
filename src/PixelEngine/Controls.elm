@@ -24,12 +24,10 @@ Left (a key), Right (d key), Up (w key), Down (s key), A(Spacebar), B(x key), X(
 
 -}
 
-import Char
-import Browser
 import Browser.Events as Events
-import PixelEngine.Graphics as Graphics exposing (Options)
+import PixelEngine.Graphics exposing (Options)
 import PixelEngine.Graphics.Abstract as Abstract
-import Json.Decode as Decode exposing (Decoder)
+import Json.Decode as Decode
 
 {-| all possible Inputs
 -}

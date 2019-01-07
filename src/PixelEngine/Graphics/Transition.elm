@@ -33,7 +33,7 @@ To get started, copy the following example:
 
 -}
 
-import PixelEngine.Graphics as Graphics exposing (Area, Options)
+import PixelEngine.Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Abstract as Abstract
 
 
