@@ -45,9 +45,7 @@ type alias Tileset =
 
 For example the following defines the tileset that is used in the example.
 
-```
-{width: 16, height 16,source: "https://orasund.github.io/pixelengine/tileset.png"}
-```
+    {width: 16, height 16,source: "https://orasund.github.io/pixelengine/tileset.png"}
 
 -}
 tileset : { source : String, spriteWidth : Int, spriteHeight : Int } -> Tileset
@@ -60,9 +58,7 @@ The following functions are intended to be modular.
 
 A example for a tile could be:
 
-```
-tile (1,2) |> animated 1 |> movable "uniqueName"
-```
+    tile ( 1, 2 ) |> animated 1 |> movable "uniqueName"
 
 -}
 type alias Tile msg =
@@ -74,9 +70,7 @@ The two arguments is the position of the sprite in the tileset.
 
 As an example
 
-```
-tile (4,2)
-```
+    tile ( 4, 2 )
 
 is the 4 row in the second column of the tileset.
 
@@ -96,15 +90,11 @@ The sprites of the animation must be arranged horizontally in the tileset.
 
 The following code specifies a tile with 3+1 frames
 
-```
-tile (0,0) |> animated 3
-```
+    tile ( 0, 0 ) |> animated 3
 
 **Note:** Setting the steps to 0 describes a tile with no animation.
 
-```
-tile (0,0) |> animated 0 == tile (0,0)
-```
+    tile ( 0, 0 ) |> animated 0 == tile ( 0, 0 )
 
 **Note:** Negaive steps are not supported, in this case no animation will be played.
 
@@ -127,6 +117,8 @@ animated steps ({ info } as t) =
 {-| Makes a Tile transition between positions.
 This is useful for sprites that will change their position during the game.
 
+**Note:** Once a Tile has this property, it can **NOT** be removed during the game.
+
 **Note:** The string should be unique, if not the transition might fail every now and then.
 
 **Note:** The string will be a id Attribute in a html node, so be careful not to use names that might be already taken.
@@ -135,9 +127,25 @@ This is useful for sprites that will change their position during the game.
 movable : String -> Tile msg -> Tile msg
 movable id t =
     { t
-        | uniqueId = Just id
+        | uniqueId = Just ( id, True )
     }
 
+{-| Pauses a the transition of a `movable` tile.
+
+**Only use in combination with `movable`:**
+    
+    tile ( 0, 0 ) |> movable "name" |> jumping
+
+Use this function if a tile has the `movable`-property, but you would like to
+remove it without causing any unwanted side effects.
+-}
+jumping : Tile msg -> Tile msg
+jumping ({uniqueId} as t) =
+    case uniqueId of
+        Nothing ->
+            t
+        Just (id,_) ->
+            {t|uniqueId = Just (id,False)}
 
 {-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
 -}
@@ -152,11 +160,9 @@ withAttributes attributes ({ customAttributes } as t) =
 
 This can be used to simulate monochrome sprites or to implement team colors.
 
-```
-withAttributes [css [Css.backgroundColor <| Css.rgb 255 0 0]]
-=
-withAttributes [ backgroundColor <| Css.rgb 255 0 0]
-```
+    withAttributes [css [Css.backgroundColor <| Css.rgb 255 0 0]]
+    =
+    withAttributes [ backgroundColor <| Css.rgb 255 0 0]
 
 -}
 backgroundColor : Css.Color -> Attribute msg
@@ -166,11 +172,9 @@ backgroundColor color =
 
 {-| returns a Msg when it has been clicked.
 
-```
-withAttributes [Events.onClick msg]
-=
-withAttributes [ onClick msg]
-```
+    withAttributes [Events.onClick msg]
+    =
+    withAttributes [ onClick msg]
 
 -}
 onClick : msg -> Attribute msg

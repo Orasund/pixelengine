@@ -56,9 +56,25 @@ This is useful for images that will change their position during the game.
 movable : String -> Image msg -> Image msg
 movable transitionId contentElement =
     { contentElement
-        | uniqueId = Just transitionId
+        | uniqueId = Just (transitionId,True)
     }
 
+{-| Pauses a the transition of a `movable` image.
+
+**Only use in combination with `movable`:**
+    
+    image "face.png" |> movable "name" |> jumping
+
+Use this function if a tile has the `movable`-property, but you would like to
+remove it without causing any unwanted side effects.
+-}
+jumping : Image msg -> Image msg
+jumping ({uniqueId} as t) =
+    case uniqueId of
+        Nothing ->
+            t
+        Just (id,_) ->
+            {t|uniqueId = Just (id,False)}
 
 {-| Tiles are essentially also images,
 therefore this constructor transforms a tile and a tileset into an image.

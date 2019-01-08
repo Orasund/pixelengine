@@ -31,7 +31,7 @@ type AbstractInput
 type alias Tile msg =
     { info : TileInformation {}
     , customAttributes : List (Attribute msg)
-    , uniqueId : Maybe String
+    , uniqueId : Maybe (String,Bool)
     }
 
 
@@ -119,7 +119,7 @@ type ElementType
 type alias ContentElement msg =
     { elementType : ElementType
     , customAttributes : List (Attribute msg)
-    , uniqueId : Maybe String
+    , uniqueId : Maybe (String,Bool)
     }
 
 
@@ -504,31 +504,33 @@ displayElement options ( ( left, top ), { elementType, uniqueId, customAttribute
             { left = left, top = top }
     in
     case elementType of
-        {- SingleSource (TileSource tileSource) ->
-               displayTile options ( position, tileSource ) uniqueId customAttributes
-
-           SingleSource (ImageSource imageSource) ->
-               displayImage options ( position, imageSource ) uniqueId customAttributes
-        -}
         SingleSource singleSource ->
-            displayMultiple options ( pos, [ ( { top = 0, left = 0 }, singleSource ) ] ) uniqueId customAttributes
+            displayMultiple
+                options
+                ( pos, [ ( { top = 0, left = 0 }, singleSource ) ] )
+                uniqueId
+                customAttributes
 
         MultipleSources multipleSources ->
-            displayMultiple options ( pos, multipleSources ) uniqueId customAttributes
+            displayMultiple
+                options
+                ( pos, multipleSources )
+                uniqueId
+                customAttributes
 
 
-displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe String -> List (Attribute msg) -> ( String, Html msg )
+displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe (String,Bool) -> List (Attribute msg) -> ( String, Html msg )
 displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPosition, multipleSources ) transitionId attributes =
-    ( transitionId |> Maybe.withDefault ""
+    ( transitionId |> Maybe.map Tuple.first |> Maybe.withDefault ""
     , div
         ([ css
-            ((if transitionId == Nothing then
-                []
-
-              else
-                [ Css.property "transition" ("left " ++ String.fromFloat transitionSpeedInSec ++ "s,top " ++ String.fromFloat transitionSpeedInSec ++ "s;")
-                ]
-             )
+            ( (case transitionId of
+                Just (_,True) ->
+                    [ Css.property "transition" ("left " ++ String.fromFloat transitionSpeedInSec ++ "s,top " ++ String.fromFloat transitionSpeedInSec ++ "s;")
+                    ]
+                _ ->
+                    []
+               )
                 |> List.append
                     [ Css.position Css.absolute
                     , Css.left (Css.px <| scale * rootPosition.left)
