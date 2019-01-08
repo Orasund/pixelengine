@@ -2,6 +2,7 @@ module PixelEngine.Graphics.Tile exposing
     ( Tile, tile, movable, animated
     , withAttributes, onClick, backgroundColor
     , Tileset, tileset
+    , jumping
     )
 
 {-| This module contains functions for creating tiles.
@@ -130,22 +131,26 @@ movable id t =
         | uniqueId = Just ( id, True )
     }
 
+
 {-| Pauses a the transition of a `movable` tile.
 
 **Only use in combination with `movable`:**
-    
+
     tile ( 0, 0 ) |> movable "name" |> jumping
 
 Use this function if a tile has the `movable`-property, but you would like to
 remove it without causing any unwanted side effects.
+
 -}
 jumping : Tile msg -> Tile msg
-jumping ({uniqueId} as t) =
+jumping ({ uniqueId } as t) =
     case uniqueId of
         Nothing ->
             t
-        Just (id,_) ->
-            {t|uniqueId = Just (id,False)}
+
+        Just ( id, _ ) ->
+            { t | uniqueId = Just ( id, False ) }
+
 
 {-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
 -}

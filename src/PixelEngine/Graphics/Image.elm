@@ -1,4 +1,4 @@
-module PixelEngine.Graphics.Image exposing (Image, image, movable, fromTile, multipleImages, withAttributes)
+module PixelEngine.Graphics.Image exposing (Image, image, movable, fromTile, multipleImages, withAttributes, jumping)
 
 {-| This module contains functions for creating images.
 These Images can then be used for the _imageArea_ function from the main module
