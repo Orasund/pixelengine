@@ -33,12 +33,10 @@ So i desided to try something different and to use HTML and CSS instead of WebGL
 If you have created a game with this engine, please let me know.
 
 ## Upgrading
-  * First follow the error messages of the compiler
-  * Next set the scale of your game to 1. In the new version the scale feature scales the entire game.
-  * If you want keyboard support use Graphics.program. It will also take care of the new way scaling works.
-
-## Room for Improvement
-  * The animations can sometimes be very janky. This is actually intended, but it might be better to give an alternative by **switching the animation off** for a few frames(to introduce clean skips or to let elm control the animation for a short period of ime.) 
+  * To 3.0.0
+    * First follow the error messages of the compiler
+    * Next set the scale of your game to 1. In the new version the scale feature scales the entire game.
+    * If you want keyboard support use Graphics.program. It will also take care of the new way scaling works.
 
 ## Upcoming Features
   * MultipleTiles - Similar to MultipleImages but for Tiles.
