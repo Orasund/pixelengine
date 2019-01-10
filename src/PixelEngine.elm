@@ -96,7 +96,7 @@ viewFunction view { modelContent, config } =
             Just wS ->
                 Graphics.render
                     (options
-                        |> Graphics.usingScale
+                        |> Abstract.usingScale
                             (toFloat <|
                                 min (2 ^ (floor <| logBase 2 <| wS.height / height))
                                     (2 ^ (floor <| logBase 2 <| wS.width / width))

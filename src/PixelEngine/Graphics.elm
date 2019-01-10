@@ -2,7 +2,6 @@ module PixelEngine.Graphics exposing
     ( Options, options, render
     , Area, tiledArea, imageArea, heightOf
     , Background, imageBackground, colorBackground
-    , usingScale
     )
     
 {-| A graphic engine for turn-based pixel games.
@@ -100,11 +99,6 @@ To get started, copy the following example:
 ## Background
 
 @docs Background, imageBackground, colorBackground
-
-
-## Advanced
-
-@docs usingScale
 
 -}
 
@@ -242,16 +236,7 @@ options { width, transitionSpeedInSec } =
     Abstract.newOptions { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
 
 
-{-| scale up EVERYTHING.
-it can not be used with PixelEngine.program.
--}
-usingScale : Float -> Options msg -> Options msg
-usingScale scale (Abstract.Options o) =
-    Abstract.Options { o | scale = scale }
-
-
 {-| This functions displays the content of the game.
-It returns [elm-css Html](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled#Html).
 
 The main idea of this graphic engine is to arrage the content into so called _Areas_.
 These Areas are then displayed vertically on top of eachother.

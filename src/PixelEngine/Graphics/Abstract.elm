@@ -1,4 +1,4 @@
-module PixelEngine.Graphics.Abstract exposing (AbstractInput(..), Area(..), Background(..), Compatible(..), ContentElement, ControllerOptions, Dimensions, ElementType(..), ImageAreaContent, Location, MultipleSources, Options(..), Position, SingleImage, SingleSource(..), Tile, TileInformation, TileWithTileset, TiledAreaContent, Tileset, TilesetImage, Transition(..), cssArea, cssBackgroundImage, cssDimensions, cssPositions, displayElement, displayImage, displayMultiple, displayTile, newOptions, pairMap, render, renderControls, renderImageArea, renderScreen, renderTiledArea)
+module PixelEngine.Graphics.Abstract exposing (AbstractInput(..), usingScale, Area(..), Background(..), Compatible(..), ContentElement, ControllerOptions, Dimensions, ElementType(..), ImageAreaContent, Location, MultipleSources, Options(..), Position, SingleImage, SingleSource(..), Tile, TileInformation, TileWithTileset, TiledAreaContent, Tileset, TilesetImage, Transition(..), cssArea, cssBackgroundImage, cssDimensions, cssPositions, displayElement, displayImage, displayMultiple, displayTile, newOptions, pairMap, render, renderControls, renderImageArea, renderScreen, renderTiledArea)
 
 import Color exposing (Color)
 import Css exposing (px)
@@ -382,6 +382,13 @@ renderControls { windowSize, controls } =
             ]
         ]
     ]
+
+
+usingScale : Float -> Options msg -> Options msg
+usingScale scale (Options o) =
+    Options { o | scale = scale }
+
+
 
 
 renderTiledArea : Options msg -> TiledAreaContent msg -> Html msg
