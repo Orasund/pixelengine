@@ -3,11 +3,12 @@ module PixelEngine.Graphics.Image exposing (Image, image, movable, fromTile, mul
 {-| This module contains functions for creating images.
 These Images can then be used for the _imageArea_ function from the main module
 
-@docs Image, image, movable, fromTile, multipleImages, withAttributes
+@docs Image, image, movable, jumping, fromTile, multipleImages, withAttributes
 
 -}
 
-import Html.Styled exposing (Attribute)
+import Html exposing (Attribute)
+import Html.Styled.Attributes
 import PixelEngine.Graphics.Abstract as Abstract
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 
@@ -125,7 +126,7 @@ The motivation for this function was so that one can create [onClick](http://pac
 withAttributes : List (Attribute msg) -> Image msg -> Image msg
 withAttributes attributes i =
     { i
-        | customAttributes = attributes
+        | customAttributes = attributes |> List.map Html.Styled.Attributes.fromUnstyled
     }
 
 

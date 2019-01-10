@@ -11,7 +11,7 @@ These tiles are used for the _tiledArea_ function from the main module.
 
 ## Tile
 
-@docs Tile, tile, movable, animated
+@docs Tile, tile, movable, jumping ,animated
 
 
 ## Attributes
@@ -25,11 +25,14 @@ These tiles are used for the _tiledArea_ function from the main module.
 
 -}
 
-import Css
-import Html.Styled exposing (Attribute)
-import Html.Styled.Attributes exposing (css)
-import Html.Styled.Events as Events
+import Html exposing (Attribute)
+import Html.Attributes as Attributes
+import Html.Events as Events
+import Html.Styled
+import Html.Styled.Attributes
+import Html.Styled.Events
 import PixelEngine.Graphics.Abstract as Abstract
+import Color exposing (Color)
 
 
 {-| A Tileset contains the actuall image that a tile can reference.
@@ -157,7 +160,10 @@ jumping ({ uniqueId } as t) =
 withAttributes : List (Attribute msg) -> Tile msg -> Tile msg
 withAttributes attributes ({ customAttributes } as t) =
     { t
-        | customAttributes = List.append customAttributes attributes
+        | customAttributes =
+            attributes
+            |> List.map Html.Styled.Attributes.fromUnstyled
+            |> List.append customAttributes 
     }
 
 
@@ -170,9 +176,10 @@ This can be used to simulate monochrome sprites or to implement team colors.
     withAttributes [ backgroundColor <| Css.rgb 255 0 0]
 
 -}
-backgroundColor : Css.Color -> Attribute msg
-backgroundColor color =
-    css [ Css.backgroundColor <| color ]
+backgroundColor : Color -> Attribute msg
+backgroundColor =
+    Color.toCssString
+    >> Attributes.style "background-color"
 
 
 {-| returns a Msg when it has been clicked.

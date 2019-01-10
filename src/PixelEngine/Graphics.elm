@@ -108,9 +108,9 @@ To get started, copy the following example:
 
 -}
 
-import Css
-import Html.Styled as Styled
+import Color exposing (Color)
 import Html exposing (Html)
+import Html.Styled
 import PixelEngine.Graphics.Abstract as Abstract
 import PixelEngine.Graphics.Image exposing (Image)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
@@ -165,7 +165,7 @@ Color (Css.rgb 20 12 28)
 ```
 
 -}
-colorBackground : Css.Color -> Background
+colorBackground : Color -> Background
 colorBackground color =
     Abstract.ColorBackground color
 
@@ -262,4 +262,4 @@ render o listOfArea =
     Abstract.render
         o
         listOfArea
-    |> Styled.toUnstyled
+    |> Html.Styled.toUnstyled

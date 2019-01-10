@@ -1,5 +1,6 @@
 module PixelEngine.Graphics.Abstract exposing (AbstractInput(..), Area(..), Background(..), Compatible(..), ContentElement, ControllerOptions, Dimensions, ElementType(..), ImageAreaContent, Location, MultipleSources, Options(..), Position, SingleImage, SingleSource(..), Tile, TileInformation, TileWithTileset, TiledAreaContent, Tileset, TilesetImage, Transition(..), cssArea, cssBackgroundImage, cssDimensions, cssPositions, displayElement, displayImage, displayMultiple, displayTile, newOptions, pairMap, render, renderControls, renderImageArea, renderScreen, renderTiledArea)
 
+import Color exposing (Color)
 import Css exposing (px)
 import Css.Global as Global
 import Html.Styled as Html exposing (Attribute, Html, div, img)
@@ -31,7 +32,7 @@ type AbstractInput
 type alias Tile msg =
     { info : TileInformation {}
     , customAttributes : List (Attribute msg)
-    , uniqueId : Maybe (String,Bool)
+    , uniqueId : Maybe ( String, Bool )
     }
 
 
@@ -53,7 +54,7 @@ type Transition
 
 
 type Background
-    = ColorBackground Css.Color
+    = ColorBackground Color
     | ImageBackground { source : String, width : Float, height : Float }
 
 
@@ -119,7 +120,7 @@ type ElementType
 type alias ContentElement msg =
     { elementType : ElementType
     , customAttributes : List (Attribute msg)
-    , uniqueId : Maybe (String,Bool)
+    , uniqueId : Maybe ( String, Bool )
     }
 
 
@@ -458,7 +459,10 @@ cssArea scale background { width, height } =
     css
         ((case background of
             ColorBackground color ->
-                [ Css.backgroundColor color ]
+                [ color
+                    |> Color.toCssString
+                    |> Css.property "background-color"
+                ]
 
             ImageBackground imageBackground ->
                 cssBackgroundImage scale imageBackground.source { width = imageBackground.width, height = imageBackground.height }
@@ -519,18 +523,19 @@ displayElement options ( ( left, top ), { elementType, uniqueId, customAttribute
                 customAttributes
 
 
-displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe (String,Bool) -> List (Attribute msg) -> ( String, Html msg )
+displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe ( String, Bool ) -> List (Attribute msg) -> ( String, Html msg )
 displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPosition, multipleSources ) transitionId attributes =
     ( transitionId |> Maybe.map Tuple.first |> Maybe.withDefault ""
     , div
         ([ css
-            ( (case transitionId of
-                Just (_,True) ->
+            ((case transitionId of
+                Just ( _, True ) ->
                     [ Css.property "transition" ("left " ++ String.fromFloat transitionSpeedInSec ++ "s,top " ++ String.fromFloat transitionSpeedInSec ++ "s;")
                     ]
+
                 _ ->
                     []
-               )
+             )
                 |> List.append
                     [ Css.position Css.absolute
                     , Css.left (Css.px <| scale * rootPosition.left)
