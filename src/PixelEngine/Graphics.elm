@@ -1,5 +1,5 @@
 module PixelEngine.Graphics exposing
-    ( Options, options, render
+    ( Options, options, render, renderToScale
     , Area, tiledArea, imageArea, heightOf
     , Background, imageBackground, colorBackground
     )
@@ -88,7 +88,7 @@ To get started, copy the following example:
 
 ## Main Function
 
-@docs Options, options, render
+@docs Options, options, render, renderToScale
 
 
 ## Area
