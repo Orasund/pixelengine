@@ -243,8 +243,18 @@ These Areas are then displayed vertically on top of eachother.
 
 -}
 render : Options msg -> List (Area msg) -> Html msg
-render o listOfArea =
+render =
+    renderToScale 1
+
+{-| displays the scaled content of the game.
+
+**note:**  
+The first argument is the scale. Use only power of `2` as scale to ensure crisp
+pixels.
+-}
+renderToScale : Float -> Options msg -> List (Area msg) -> Html msg
+renderToScale scale o listOfArea =
     Abstract.render
-        o
+        (o |> Abstract.usingScale scale)
         listOfArea
     |> Html.Styled.toUnstyled

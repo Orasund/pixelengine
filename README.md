@@ -29,7 +29,7 @@ The graphics engines that I could choose of where
 
 Both used a loop to draw animations and therefore did not support time travelling and besides elmo-8 couldn't even render pixel graphics properly.
 
-So i desided to try something different and to use HTML and CSS instead of WebGL. This way i could let CSS handle the animations. I knew that my little project was not a universal game engine, but for very specific games it might be just right. 
+So I desided to try something different and to use HTML and CSS instead of WebGL. This way I could let CSS handle the animations. I knew that my little project was not a universal game engine, but for very specific games it might be just right. 
 ## Games made with this Engine
 
   * [Dig Dig Boom - Rogue-like Game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
@@ -42,6 +42,7 @@ If you have created a game with this engine, please let me know.
   * To 4.0.0
     * This package now uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest) for colors.
     * For styling use `Html.Attributes.style`.
+    * `usingScale` got removed.
   * To 3.0.0
     * First follow the error messages of the compiler
     * Next set the scale of your game to 1. In the new version the scale feature scales the entire game.
