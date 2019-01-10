@@ -28,9 +28,7 @@ These tiles are used for the _tiledArea_ function from the main module.
 import Html exposing (Attribute)
 import Html.Attributes as Attributes
 import Html.Events as Events
-import Html.Styled
 import Html.Styled.Attributes
-import Html.Styled.Events
 import PixelEngine.Graphics.Abstract as Abstract
 import Color exposing (Color)
 

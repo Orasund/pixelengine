@@ -1,8 +1,8 @@
 module TestExample exposing (main)
 
-import Css
-import Html.Styled exposing (toUnstyled)
-import Html.Styled.Attributes exposing (css)
+import Color
+import Html.Attributes as Attributes
+import PixelEngine exposing (program)
 import PixelEngine.Graphics as Graphics exposing (Background)
 import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages, withAttributes)
 import PixelEngine.Graphics.Tile as Tile
@@ -11,8 +11,11 @@ import PixelEngine.Graphics.Tile as Tile
         , tile
         )
 
+type alias Model = {}
 
-main =
+type alias Msg = {}
+
+view {} =
     let
         tileSize : Int
         tileSize =
@@ -32,12 +35,11 @@ main =
 
         background : Background
         background =
-            Graphics.colorBackground (Css.rgb 20 12 28)
+            Graphics.colorBackground (Color.rgb255 20 12 28)
     in
-    Graphics.render
-        (Graphics.options { width = width, transitionSpeedInSec = 0.2 }
-            |> Graphics.usingScale 2
-        )
+    { title = "Test"
+    , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
+    , body = 
         [ Graphics.imageArea
             { height = toFloat <| tileSize * 12
             , background = background
@@ -53,7 +55,30 @@ main =
                     , ( ( 0, 8 * 6 ), fromTile (tile ( 6, 0 ) |> Tile.animated 9) tileset )
                     , ( ( 0, 8 * 7 ), fromTile (tile ( 7, 0 ) |> Tile.animated 8) tileset )
                     ]
-                    |> withAttributes [ css [ Css.float Css.left ] ]
+                    |> withAttributes [ Attributes.style "float" "left"]
               )
             ]
         ]
+    }
+
+init : () -> ({},Cmd {})
+init _ = ({},Cmd.none)
+
+update : {} -> {} -> ({},Cmd {})
+update _ m = (m,Cmd.none)
+
+subscriptions : {} -> Sub {}
+subscriptions m = Sub.none
+
+controls _ = {}
+
+main =
+    program
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        , controls = controls
+        }
+
+    

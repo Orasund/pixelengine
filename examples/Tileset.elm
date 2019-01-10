@@ -73,4 +73,3 @@ main =
               )
             ]
         ]
-        |> toUnstyled
