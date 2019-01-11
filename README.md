@@ -40,6 +40,7 @@ If you have created a game with this engine, please let me know.
 
 ## Upgrading
   * To 4.0.0
+    * `program` and `programWithCustomControls` are now renamed to `game` and `gameWithCustomControls`.
     * This package now uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest) for colors.
     * For styling use `Html.Attributes.style`.
     * `renderToScale` replaced `usingScale`, but normally `Graphics.program` is the better option.
@@ -49,5 +50,7 @@ If you have created a game with this engine, please let me know.
     * If you want keyboard support use `Graphics.program`. It will also take care of the new way scaling works.
 
 ## Upcoming Features
+  * Console - It would be great if any game written with this Engine would have a common way how the interface looks like. I might want to provide different styles. I am Mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few more.
   * MultipleTiles - Similar to `MultipleImages` but for Tiles.
+  * Modular Transitions - For now I do not expect this will ever be done, just because its a very complex problem.
   * Particles - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?

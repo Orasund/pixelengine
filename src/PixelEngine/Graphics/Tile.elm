@@ -6,7 +6,7 @@ module PixelEngine.Graphics.Tile exposing
     )
 
 {-| This module contains functions for creating tiles.
-These tiles are used for the _tiledArea_ function from the main module.
+`Tile`s are used for the `tiledArea` function from the main module.
 
 
 ## Tile
@@ -33,19 +33,19 @@ import PixelEngine.Graphics.Abstract as Abstract
 import Color exposing (Color)
 
 
-{-| A Tileset contains the actuall image that a tile can reference.
+{-| A Tileset contains the actuall image that a `Tile` can reference.
 -}
 type alias Tileset =
     Abstract.Tileset
 
 
-{-| The tileset constructor has the following parameters:
+{-| The `Tileset` constructor has the following parameters:
 
-  - source - The adress to the file
-  - spriteWidth - The size of a single sprite in the tileset (in pixels)
-  - spriteHeight - The height of a single sprite (also in pixels)
+  - `source` - The adress to the file
+  - `spriteWidth` - The size of a single sprite in the tileset (in pixels)
+  - `spriteHeight` - The height of a single sprite (also in pixels)
 
-For example the following defines the tileset that is used in the example.
+For the following defines the `Tileset` used in the examples of this module.
 
     {width: 16, height 16,source: "https://orasund.github.io/pixelengine/tileset.png"}
 
@@ -55,7 +55,7 @@ tileset =
     identity
 
 
-{-| A tile defines a sprite in a tileset.
+{-| A `Tile` defines a sprite in a tileset.
 The following functions are intended to be modular.
 
 A example for a tile could be:
@@ -67,14 +67,15 @@ type alias Tile msg =
     Abstract.Tile msg
 
 
-{-| The basic tile constructor.
-The two arguments is the position of the sprite in the tileset.
+{-| The basic `Tile` constructor.
+
+The first argument is the position of the sprite in the tileset.
 
 As an example
 
     tile ( 4, 2 )
 
-is the 4 row in the second column of the tileset.
+is the 4 row in the second column of the `Tileset`.
 
 -}
 tile : ( Int, Int ) -> Tile msg
@@ -86,15 +87,15 @@ tile ( left, top ) =
 
 
 {-| Adds animations to a tile.
-The sprites of the animation must be arranged horizontally in the tileset.
+The sprites of the animation must be arranged horizontally in the `Tileset`.
 
-  - steps - Steps of the animation (one less then the number of sprites.)
+The first argument give the amount of steps of the animation (one less then the number of sprites.)
 
-The following code specifies a tile with 3+1 frames
+The following code specifies a `Tile` with 3+1 frames
 
     tile ( 0, 0 ) |> animated 3
 
-**Note:** Setting the steps to 0 describes a tile with no animation.
+**Note:** Setting the steps to `0` describes a tile with no animation.
 
     tile ( 0, 0 ) |> animated 0 == tile ( 0, 0 )
 
@@ -116,10 +117,10 @@ animated steps ({ info } as t) =
     }
 
 
-{-| Makes a Tile transition between positions.
+{-| Makes a `Tile` transition between positions.
 This is useful for sprites that will change their position during the game.
 
-**Note:** Once a Tile has this property, it can **NOT** be removed during the game.
+**Note:** Once a `Tile` has this property, it can **NOT** be removed during the game.
 
 **Note:** The string should be unique, if not the transition might fail every now and then.
 
@@ -139,9 +140,8 @@ movable id t =
 
     tile ( 0, 0 ) |> movable "name" |> jumping
 
-Use this function if a tile has the `movable`-property, but you would like to
-remove it without causing any unwanted side effects.
-
+Use this function if a `Tile` has the `movable`-property and you would like to
+remove it temporarily without causing any unwanted side effects.
 -}
 jumping : Tile msg -> Tile msg
 jumping ({ uniqueId } as t) =
@@ -153,7 +153,9 @@ jumping ({ uniqueId } as t) =
             { t | uniqueId = Just ( id, False ) }
 
 
-{-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
+{-| Adds custom attributes.
+
+use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
 -}
 withAttributes : List (Attribute msg) -> Tile msg -> Tile msg
 withAttributes attributes ({ customAttributes } as t) =

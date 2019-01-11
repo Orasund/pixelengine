@@ -2,7 +2,7 @@ module ControlsExample exposing (main)
 
 import Color
 import Html.Attributes as Attributes
-import PixelEngine exposing (program)
+import PixelEngine exposing (PixelEngine)
 import PixelEngine.Controls as Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
@@ -99,9 +99,9 @@ controls : Input -> Msg
 controls =
     Controls
 
-
+main : PixelEngine () Model Msg
 main =
-    program
+    PixelEngine.game
         { init = init
         , update = update
         , subscriptions = subscriptions

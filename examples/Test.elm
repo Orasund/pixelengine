@@ -1,21 +1,17 @@
 module TestExample exposing (main)
 
 import Color
-import Html.Attributes as Attributes
-import PixelEngine exposing (program)
+import Html
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages, withAttributes)
+import PixelEngine.Graphics.Image exposing (image)
 import PixelEngine.Graphics.Tile as Tile
     exposing
         ( Tileset
         , tile
         )
 
-type alias Model = {}
 
-type alias Msg = {}
-
-view {} =
+main =
     let
         tileSize : Int
         tileSize =
@@ -31,54 +27,50 @@ view {} =
 
         tileset : Tileset
         tileset =
-            { source = "blue_bar.png", spriteWidth = 16, spriteHeight = 4 }
+            { source = "https://orasund.github.io/pixelengine/DigDigBoom/tileset.png"
+            , spriteWidth = tileSize
+            , spriteHeight = tileSize
+            }
 
         background : Background
         background =
             Graphics.colorBackground (Color.rgb255 20 12 28)
+
+        goblin =
+            tile ( 2, 8 ) |> Tile.animated 1
+
+        letter_h =
+            tile ( 1, 15 )
+
+        letter_i =
+            tile ( 2, 12 )
+
+        heart =
+            tile ( 4, 8 )
     in
-    { title = "Test"
-    , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
-    , body = 
-        [ Graphics.imageArea
+    Graphics.render
+        2
+        (Graphics.options
+            { width = width
+            , transitionSpeedInSec = 0.2
+            }
+        )
+        [ Graphics.tiledArea
+            { rows = 4
+            , tileset = tileset
+            , background = background
+            }
+            [ ( ( 6, 2 ), goblin |> Tile.withAttributes [ Tile.backgroundColor (Color.rgb255 170 57 57) ] )
+            , ( ( 7, 2 ), letter_h |> Tile.withAttributes [ Tile.backgroundColor (Color.rgb255 97 81 146) ] )
+            , ( ( 8, 2 ), letter_i |> Tile.withAttributes [ Tile.backgroundColor (Color.rgb255 170 151 57) ] )
+            , ( ( 9, 2 ), heart |> Tile.withAttributes [ Tile.backgroundColor (Color.rgb255 45 134 51) ] )
+            ]
+        , Graphics.imageArea
             { height = toFloat <| tileSize * 12
             , background = background
             }
-            [ ( ( 0, 0 )
-              , multipleImages
-                    [ ( ( 0, 0 ), fromTile (tile ( 0, 0 ) |> Tile.animated 15) tileset )
-                    , ( ( 0, 8 * 1 ), fromTile (tile ( 1, 0 ) |> Tile.animated 14) tileset )
-                    , ( ( 0, 8 * 2 ), fromTile (tile ( 2, 0 ) |> Tile.animated 13) tileset )
-                    , ( ( 0, 8 * 3 ), fromTile (tile ( 3, 0 ) |> Tile.animated 12) tileset )
-                    , ( ( 0, 8 * 4 ), fromTile (tile ( 4, 0 ) |> Tile.animated 11) tileset )
-                    , ( ( 0, 8 * 5 ), fromTile (tile ( 5, 0 ) |> Tile.animated 10) tileset )
-                    , ( ( 0, 8 * 6 ), fromTile (tile ( 6, 0 ) |> Tile.animated 9) tileset )
-                    , ( ( 0, 8 * 7 ), fromTile (tile ( 7, 0 ) |> Tile.animated 8) tileset )
-                    ]
-                    |> withAttributes [ Attributes.style "float" "left"]
+            [ ( ( width / 2 - 80, 0 )
+              , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
               )
             ]
         ]
-    }
-
-init : () -> ({},Cmd {})
-init _ = ({},Cmd.none)
-
-update : {} -> {} -> ({},Cmd {})
-update _ m = (m,Cmd.none)
-
-subscriptions : {} -> Sub {}
-subscriptions m = Sub.none
-
-controls _ = {}
-
-main =
-    program
-        { init = init
-        , update = update
-        , subscriptions = subscriptions
-        , view = view
-        , controls = controls
-        }
-
-    

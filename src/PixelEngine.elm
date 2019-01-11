@@ -1,4 +1,4 @@
-module PixelEngine exposing (PixelEngine, program, programWithCustomControls)
+module PixelEngine exposing (PixelEngine, game, gameWithCustomControls)
 
 {-| This module takes case of all the wiring. If you are looking for the main module,
 head over to [PixelEngine.Graphics](/PixelEngine-Graphics).
@@ -11,7 +11,7 @@ To start, copy this example and expand upon it.
 
     import Color
     import Html.Attributes as Attributes
-    import PixelEngine exposing (program)
+    import PixelEngine exposing (PixelEngine)
     import PixelEngine.Controls as Controls exposing (Input(..))
     import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
     import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
@@ -45,7 +45,7 @@ To start, copy this example and expand upon it.
 
             tileset : Tileset
             tileset =
-                { source = "tileset.png", spriteWidth = 16, spriteHeight = 16 }
+                { source = "https://orasund.github.io/pixelengine/DigDigBoom/tileset.png", spriteWidth = 16, spriteHeight = 16 }
 
             background : Background
             background =
@@ -108,9 +108,10 @@ To start, copy this example and expand upon it.
     controls =
         Controls
 
-
+    
+    main : PixelEngine () Model Msg
     main =
-        program
+        PixelEngine.game
             { init = init
             , update = update
             , subscriptions = subscriptions
@@ -134,7 +135,9 @@ import PixelEngine.Graphics.Abstract as Abstract
 import Task
 
 
-{-| an alias for the program
+{-| An alias for a PixelEngine program.
+
+Your `main` function will have this type.
 -}
 type alias PixelEngine flag model msg =
     Program flag (Model model msg) (Msg msg)
@@ -212,18 +215,17 @@ viewFunction view { modelContent, config } =
         [ (case windowSize of
             Just wS ->
                 Graphics.render
+                    (toFloat <|
+                        min (2 ^ (floor <| logBase 2 <| wS.height / height))
+                            (2 ^ (floor <| logBase 2 <| wS.width / width))
+                    )
                     (options
-                        |> Abstract.usingScale
-                            (toFloat <|
-                                min (2 ^ (floor <| logBase 2 <| wS.height / height))
-                                    (2 ^ (floor <| logBase 2 <| wS.width / width))
-                            )
                         |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second }
                     )
                     body
 
             Nothing ->
-                Graphics.render options []
+                Graphics.render 1 options []
           )
             |> Html.map MsgContent
         ]
@@ -255,9 +257,13 @@ initFunction controls init =
         )
 
 
-{-| uses custom controls
+{-| A game using custom controls.
+
+The default controls should be enough to start,
+but maybe you want to write a spelling game,
+or its nessesary that very specifc keys are used?
 -}
-programWithCustomControls :
+gameWithCustomControls :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
@@ -265,7 +271,7 @@ programWithCustomControls :
     , controls : ( String -> Input, Input -> msg )
     }
     -> Program flags (Model model msg) (Msg msg)
-programWithCustomControls { init, update, subscriptions, view, controls } =
+gameWithCustomControls { init, update, subscriptions, view, controls } =
     Browser.document
         { init =
             initFunction controls init
@@ -278,9 +284,11 @@ programWithCustomControls { init, update, subscriptions, view, controls } =
         }
 
 
-{-| use this function as usual
+{-| A PixelEngine module.
+
+Use it just like `document` from [elm/browser](https://package.elm-lang.org/packages/elm/browser/latest/Browser).
 -}
-program :
+game :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
@@ -288,8 +296,8 @@ program :
     , controls : Input -> msg
     }
     -> Program flags (Model model msg) (Msg msg)
-program { init, update, subscriptions, view, controls } =
-    programWithCustomControls
+game { init, update, subscriptions, view, controls } =
+    gameWithCustomControls
         { init = init
         , update = update
         , subscriptions = subscriptions

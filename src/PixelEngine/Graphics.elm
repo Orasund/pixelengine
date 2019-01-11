@@ -1,104 +1,35 @@
 module PixelEngine.Graphics exposing
-    ( Options, options, render, renderToScale
+    ( Options, options, render
     , Area, tiledArea, imageArea, heightOf
     , Background, imageBackground, colorBackground
     )
     
-{-| A graphic engine for turn-based pixel games.
-
-To get started, copy the following example:
-
-    module TilesetExample exposing (main)
-
-    import Css
-    import Html.Styled exposing (toUnstyled)
-    import PixelEngine.Graphics as Graphics exposing (Background)
-    import PixelEngine.Graphics.Image exposing (image)
-    import PixelEngine.Graphics.Tile as Tile
-        exposing
-            ( Tileset
-            , tile
-            )
-
-
-    main =
-        let
-            tileSize : Int
-            tileSize =
-                16
-
-            windowWidth : Int
-            windowWidth =
-                16
-
-            width : Float
-            width =
-                toFloat <| windowWidth * tileSize
-
-            tileset : Tileset
-            tileset =
-                { source = "https://orasund.github.io/pixelengine/DigDigBoom/tileset.png"
-                , spriteWidth = tileSize
-                , spriteHeight = tileSize
-                }
-
-            background : Background
-            background =
-                Graphics.colorBackground (Css.rgb 20 12 28)
-
-            goblin =
-                tile ( 2, 8 ) |> Tile.animated 1
-
-            letter_h =
-                tile ( 1, 15 )
-
-            letter_i =
-                tile ( 2, 12 )
-
-            heart =
-                tile ( 4, 8 )
-        in
-        Graphics.render
-            (Graphics.options
-                { width = width
-                , transitionSpeedInSec = 0.2
-                }
-                |> Graphics.usingScale 2
-            )
-            [ Graphics.tiledArea
-                { rows = 4
-                , tileset = tileset
-                , background = background
-                }
-                [ ( ( 6, 2 ), goblin |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 170 57 57) ] )
-                , ( ( 7, 2 ), letter_h |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 97 81 146) ] )
-                , ( ( 8, 2 ), letter_i |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 170 151 57) ] )
-                , ( ( 9, 2 ), heart |> Tile.withAttributes [ Tile.backgroundColor (Css.rgb 45 134 51) ] )
-                ]
-            , Graphics.imageArea
-                { height = toFloat <| tileSize * 12
-                , background = background
-                }
-                [ ( ( width / 2 - 80, 0 )
-                , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
-                )
-                ]
-            ]
-
-
-## Main Function
-
-@docs Options, options, render, renderToScale
-
+{-| This module takes care of the Graphics.
+You will want to add [PixelEngine.Graphics.Image](/PixelEngine-Graphics-Image)
+or [PixelEngine.Graphics.Tile](/PixelEngine-Graphics-Tile) to
+actually draw something.
 
 ## Area
 
-@docs Area, tiledArea, imageArea, heightOf
+The main idea of this graphic engine is to arrage the content into so called `Area`s.
+These areas are then displayed vertically on top of eachother.
 
+@docs Area, tiledArea, imageArea, heightOf
 
 ## Background
 
 @docs Background, imageBackground, colorBackground
+
+## Options
+
+@docs Options, options
+
+## Advanced
+
+If one wants to use just use this module on its own, you can use `render` instead
+of the `game` function from the main module.
+
+@docs render
 
 -}
 
@@ -111,18 +42,19 @@ import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 
 
 {-| A horizontal area of the content.
-A area defines how the content should be displayed.
+A `Area` defines how the content should be displayed.
 
 **Note:** An area can only contain elements that are supported by the type of that area.
-You can find more information about the valid elements in the curresponding modules.
-
 -}
 type alias Area msg =
     Abstract.Area msg
 
 
 
-{-| returns the height of a list of Areas
+{-| Returns the height of a list of Areas
+
+This can be used to return the height of a `tiledArea`.
+For a `imageArea` this function is trivial. 
 -}
 heightOf : List (Area msg) -> Float
 heightOf listOfArea =
@@ -177,13 +109,16 @@ imageBackground image =
 
 
 {-| An area containing images that can be arranged freely.
+
 This is a complete contrast to the way how tiledArea is working.
 usefull applications are GUIs, menus or loading screens.
 
+Checkout [PixelEngine.Graphics.Image](/PixelEngine-Graphics-Image) for more information.
+
 This area has the following options:
 
-  - height - the height or the area in pixels
-  - background - the background of the area
+  - `height` - The height or the `Area` in pixels.
+  - `background` - The background of the `Area`.
 
 -}
 imageArea : { height : Float, background : Background } -> List ( ( Float, Float ), Image msg ) -> Area msg
@@ -195,15 +130,19 @@ imageArea { height, background } content =
         }
 
 
-{-| An area for using tilesets. It supports one tileset at a time,
+{-| An area for using tilesets.
+
+It supports one tileset at a time,
 that means all sprites must be of the same size and stored as a grid in one single file.
 This area is useful for displaying the playing field of a game.
 
+Checkout [PixelEngine.Graphics.Tile](/PixelEngine-Graphics-Image) for more information.
+
 This area has the following options:
 
-  - rows - The amount of rows of the grid. This value defines the height of the area.
-  - tileset - The tileset that will be used for all elements in the area.
-  - background - The background of the area.
+  - `rows` - The amount of rows of the grid. This value defines the height of the `Area`.
+  - `tileset` - The tileset that will be used for all elements in the `Area`.
+  - `background` - The background of the `Area`.
 
 -}
 tiledArea : { rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile msg ) -> Area msg
@@ -218,11 +157,11 @@ tiledArea { rows, tileset, background } content =
 
 {-| The engine comes with a set of options:
 
-  - width - Width of the game.
+  - `width` - Width of the game.
     **Note:** all spatial values are given in _Pixels_.
 
-  - transitionSpeedInSec - The speed of animations.
-    **Default value:** 0 for no animations
+  - `transitionSpeedInSec` - The speed of animations.
+    **Default value:** `0` for no animations
 
 For the start use the following settings
 
@@ -236,24 +175,14 @@ options { width, transitionSpeedInSec } =
     Abstract.newOptions { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
 
 
-{-| This functions displays the content of the game.
+{-| Displays content of the game.
 
-The main idea of this graphic engine is to arrage the content into so called _Areas_.
-These Areas are then displayed vertically on top of eachother.
-
--}
-render : Options msg -> List (Area msg) -> Html msg
-render =
-    renderToScale 1
-
-{-| displays the scaled content of the game.
-
-**note:**  
+**Note:**  
 The first argument is the scale. Use only power of `2` as scale to ensure crisp
 pixels.
 -}
-renderToScale : Float -> Options msg -> List (Area msg) -> Html msg
-renderToScale scale o listOfArea =
+render : Float -> Options msg -> List (Area msg) -> Html msg
+render scale o listOfArea =
     Abstract.render
         (o |> Abstract.usingScale scale)
         listOfArea
