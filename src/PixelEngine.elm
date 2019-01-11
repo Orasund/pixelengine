@@ -121,7 +121,7 @@ To start, copy this example and expand upon it.
 
 
 
-@docs PixelEngine, program, programWithCustomControls
+@docs PixelEngine, game, gameWithCustomControls
 
 -}
 
