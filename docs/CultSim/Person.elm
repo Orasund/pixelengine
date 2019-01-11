@@ -5,7 +5,9 @@ import Random
 
 
 type alias Position =
-    { x : Float, y : Float }
+    { x : Float
+    , y : Float
+    }
 
 
 type Action
@@ -17,7 +19,9 @@ type Action
 
 
 type alias Skin =
-    { head : Int, body : Int }
+    { head : Int
+    , body : Int
+    }
 
 
 type alias Person =
@@ -59,7 +63,7 @@ generateSkin =
             , body = body
             }
         )
-        (Random.uniform True [False])
+        (Random.uniform True [ False ])
         (Random.int 1 12)
         (Random.int 0 7)
 

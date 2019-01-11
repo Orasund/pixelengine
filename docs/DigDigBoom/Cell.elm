@@ -94,6 +94,7 @@ composing tuple =
         ( Just _, _ ) ->
             Nothing
 
+
 getImage : Cell -> Tile msg
 getImage cell =
     case cell of

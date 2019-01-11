@@ -9,7 +9,7 @@ import DigDigBoom.Cell as Cell
         , ItemType(..)
         , SolidType(..)
         )
-import DigDigBoom.Component.Map as Map exposing (Direction(..), Location,Actor)
+import DigDigBoom.Component.Map as Map exposing (Actor, Direction(..), Location)
 import DigDigBoom.Player as Player exposing (Game)
 
 
@@ -63,7 +63,7 @@ attackPlayer : Location -> Actor -> Game -> Game
 attackPlayer location (( playerLocation, _ ) as playerCell) ( playerData, map ) =
     [ Up, Down, Left, Right ]
         |> List.filter
-            ((==) ((\(x1,y1) (x2,y2) -> (x1-x2,y1-y2)) location playerLocation) << Map.dirCoordinates)
+            ((==) ((\( x1, y1 ) ( x2, y2 ) -> ( x1 - x2, y1 - y2 )) location playerLocation) << Map.dirCoordinates)
         |> List.head
         |> Maybe.map (always (( playerData, map ) |> Player.attack playerCell))
         |> Maybe.withDefault ( playerData, map )
@@ -84,15 +84,16 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
             let
                 moveDirection : Direction
                 moveDirection =
-                    (\(x1,y1) (x2,y2) -> (x1-x2,y1-y2)) playerLocation currentLocation
+                    (\( x1, y1 ) ( x2, y2 ) -> ( x1 - x2, y1 - y2 )) playerLocation currentLocation
                         --|> (\( x, y ) -> ( y, x ))
                         |> Map.approximateDirection
-                
+
                 actor : Actor
-                actor = (currentLocation,moveDirection)
+                actor =
+                    ( currentLocation, moveDirection )
 
                 newLocation : Location
-                newLocation = 
+                newLocation =
                     actor |> Map.posFront 1
             in
             game
@@ -131,11 +132,12 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                             identity
                    )
 
+
 placedBombeBehavoiur : Location -> Direction -> Game -> Game
 placedBombeBehavoiur location direction game =
     let
         newLocation =
-            (location,direction) |> Map.posFront 1
+            ( location, direction ) |> Map.posFront 1
     in
     game
         |> (case game |> Tuple.second |> Dict.get newLocation of

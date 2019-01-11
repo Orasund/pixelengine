@@ -1,20 +1,20 @@
 module RuinJump.Main exposing (main)
 
-import Css
-import Dict exposing (Dict)
+import Color
+import Dict
 import List.Zipper as Zipper exposing (Zipper)
-import PixelEngine exposing (PixelEngine, program)
+import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 import Process
-import Random exposing (Generator)
-import RuineJump.Config as Config
-import RuineJump.Map as Map exposing (Map)
-import RuineJump.MapElement as MapElement exposing (Block(..), MapElement(..))
-import RuineJump.MapSegment as MapSegment
-import RuineJump.MapSlice as MapSlice
-import RuineJump.Player as Player exposing (FaceingDirection(..), Player, PlayerAction(..))
+import Random
+import RuinJump.Config as Config
+import RuinJump.Map as Map exposing (Map)
+import RuinJump.MapElement as MapElement exposing (Block(..), MapElement(..))
+import RuinJump.MapSegment as MapSegment
+import RuinJump.MapSlice as MapSlice
+import RuinJump.Player as Player exposing (FaceingDirection(..), Player, PlayerAction(..))
 import Task
 import Time
 
@@ -145,28 +145,29 @@ removeOne ({ xSlice, lowestY, map } as rec) =
 removeN : Int -> Model -> Model
 removeN decaySpeed ({ seed } as model) =
     let
-       ( newModel, newSeed ) =
-           List.range 1 decaySpeed
-               |> List.foldl
-                   (always
-                       (\( m, s ) ->
-                           s
-                               |> Random.step
-                                   (m |> removeOne)
-                       )
-                   )
-                   ( model, seed )
-   in
-   { newModel
-       | seed = newSeed
-   }
+        ( newModel, newSeed ) =
+            List.range 1 decaySpeed
+                |> List.foldl
+                    (always
+                        (\( m, s ) ->
+                            s
+                                |> Random.step
+                                    (m |> removeOne)
+                        )
+                    )
+                    ( model, seed )
+    in
+    { newModel
+        | seed = newSeed
+    }
 
 
 applyAction : (Player -> Player) -> Model -> Model
-applyAction action ({ player, map, lowestY, xSlice, seed, decaySpeed } as model) =
+applyAction action ({ player } as model) =
     { model
         | player = player |> action
     }
+
 
 placeBlock : Model -> Model
 placeBlock ({ map, seed, decaySpeed, player } as model) =
@@ -174,16 +175,16 @@ placeBlock ({ map, seed, decaySpeed, player } as model) =
         ( x, y ) =
             player.pos
 
-        (pos1,pos2) =
+        ( pos1, pos2 ) =
             case player.faceing of
                 FaceingLeft ->
-                    (( x - 2, y )
-                    ,( x - 1, y + 1)
+                    ( ( x - 2, y )
+                    , ( x - 1, y + 1 )
                     )
 
                 FaceingRight ->
-                    (( x + 3, y )
-                    ,( x + 2, y + 1 )
+                    ( ( x + 3, y )
+                    , ( x + 2, y + 1 )
                     )
 
         ( elem, newSeed ) =
@@ -197,7 +198,7 @@ placeBlock ({ map, seed, decaySpeed, player } as model) =
 
 
 onInput : Input -> Model -> Maybe ( Model, Cmd Msg )
-onInput input ({ map,decaySpeed } as model) =
+onInput input ({ map, decaySpeed } as model) =
     (case input of
         InputUp ->
             Just <| (removeN decaySpeed << (applyAction <| Player.jump map))
@@ -395,7 +396,7 @@ view maybeModel =
     , options = options
     , body =
         [ Graphics.tiledArea
-            { background = Graphics.colorBackground <| Css.rgb 68 36 52
+            { background = Graphics.colorBackground <| Color.rgb255 68 36 52
             , rows = rows
             , tileset = tileset
             }
@@ -417,7 +418,7 @@ view maybeModel =
 
 main : PixelEngine {} (Maybe Model) Msg
 main =
-    program
+    game
         { init = always restart
         , view = view
         , update = update

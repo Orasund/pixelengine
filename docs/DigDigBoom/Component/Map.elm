@@ -34,19 +34,6 @@ type alias Map a =
     Dict Location a
 
 
-generate : Int -> (Location -> ( Map a, Random.Seed ) -> ( Map a, Random.Seed )) -> Random.Seed -> ( Map a, Random.Seed )
-generate size fun seed =
-    List.range 0 size
-        |> List.foldl
-            (\x out ->
-                List.range 0 size
-                    |> List.foldl
-                        (\y tuple -> fun ( x, y ) tuple)
-                        out
-            )
-            ( Dict.empty, seed )
-
-
 generator : Int -> Generator (Location -> Maybe a) -> Generator (Map a)
 generator size fun =
     Random.list (size * size) fun
