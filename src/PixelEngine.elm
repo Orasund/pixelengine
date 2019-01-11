@@ -1,10 +1,12 @@
 module PixelEngine exposing (PixelEngine, game, gameWithCustomControls)
 
-{-| This module takes case of all the wiring. If you are looking for the main module,
-head over to [PixelEngine.Graphics](/PixelEngine-Graphics).
+{-| This module takes care of all the wiring.
 
-PixelEngine need a lot of wiring in order for it to work as intended.
-Thats why this module gives different programs that do the wiring for you.
+**If you are looking for the main module,
+head over to [PixelEngine.Graphics](/PixelEngine-Graphics).**
+
+PixelEngine needs a lot of wiring in order for it to work as intended.
+Thats why this module gives different prewired frames.
 To start, copy this example and expand upon it.
 
     module ControlsExample exposing (main)
@@ -45,7 +47,10 @@ To start, copy this example and expand upon it.
 
             tileset : Tileset
             tileset =
-                { source = "https://orasund.github.io/pixelengine/DigDigBoom/tileset.png", spriteWidth = 16, spriteHeight = 16 }
+                { source = "https://orasund.github.io/pixelengine/DigDigBoom/tileset.png"
+                , spriteWidth = 16
+                , spriteHeight = 16
+                }
 
             background : Background
             background =
@@ -56,7 +61,10 @@ To start, copy this example and expand upon it.
                 tile ( 12, 12 )
         in
         { title = "Example"
-        , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
+        , options = Graphics.options
+            { width = width
+            , transitionSpeedInSec = 0.2
+            }
         , body =
             [ Graphics.tiledArea
                 { rows = windowWidth
@@ -73,7 +81,9 @@ To start, copy this example and expand upon it.
 
     init : () -> ( Model, Cmd Msg )
     init _ =
-        ( { x = windowWidth // 2, y = windowWidth // 2 }, Cmd.none )
+        ( { x = windowWidth // 2, y = windowWidth // 2 }
+        , Cmd.none
+        )
 
 
     update : Msg -> Model -> ( Model, Cmd Msg )
@@ -220,7 +230,10 @@ viewFunction view { modelContent, config } =
                             (2 ^ (floor <| logBase 2 <| wS.width / width))
                     )
                     (options
-                        |> Controls.supportingMobile { windowSize = wS, controls = controls |> Tuple.second }
+                        |> Controls.supportingMobile
+                            { windowSize = wS
+                            , controls = controls |> Tuple.second
+                            }
                     )
                     body
 
@@ -284,7 +297,7 @@ gameWithCustomControls { init, update, subscriptions, view, controls } =
         }
 
 
-{-| A PixelEngine module.
+{-| A prewired PixelEngine frame.
 
 Use it just like `document` from [elm/browser](https://package.elm-lang.org/packages/elm/browser/latest/Browser).
 -}

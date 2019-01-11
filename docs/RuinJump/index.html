@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>RuineJump.Main</title>
+  <title>RuinJump.Main</title>
 </head>
 
 <body>
@@ -9410,10 +9410,10 @@ var Orasund$pixelengine$PixelEngine$program = function (_n0) {
 			view: view
 		});
 };
-var author$project$RuineJump$Main$Input = function (a) {
+var author$project$RuinJump$Main$Input = function (a) {
 	return {$: 'Input', a: a};
 };
-var author$project$RuineJump$Main$Init = function (a) {
+var author$project$RuinJump$Main$Init = function (a) {
 	return {$: 'Init', a: a};
 };
 var elm$random$Random$Generate = function (a) {
@@ -9561,28 +9561,28 @@ var elm$random$Random$int = F2(
 	});
 var elm$random$Random$maxInt = 2147483647;
 var elm$random$Random$minInt = -2147483648;
-var author$project$RuineJump$Main$restart = _Utils_Tuple2(
+var author$project$RuinJump$Main$restart = _Utils_Tuple2(
 	elm$core$Maybe$Nothing,
 	A2(
 		elm$random$Random$generate,
-		author$project$RuineJump$Main$Init,
+		author$project$RuinJump$Main$Init,
 		A2(elm$random$Random$int, elm$random$Random$minInt, elm$random$Random$maxInt)));
 var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
-var author$project$RuineJump$Main$subscriptions = function (_n0) {
+var author$project$RuinJump$Main$subscriptions = function (_n0) {
 	return elm$core$Platform$Sub$none;
 };
-var author$project$RuineJump$Config$width = 16 * 2;
-var author$project$RuineJump$Main$Tick = {$: 'Tick'};
+var author$project$RuinJump$Config$width = 16 * 2;
+var author$project$RuinJump$Main$Tick = {$: 'Tick'};
 var elm$core$Basics$always = F2(
 	function (a, _n0) {
 		return a;
 	});
 var elm$core$Process$sleep = _Process_sleep;
-var author$project$RuineJump$Main$tickTask = function () {
+var author$project$RuinJump$Main$tickTask = function () {
 	var delay = 200;
 	return A2(
 		elm$core$Task$perform,
-		elm$core$Basics$always(author$project$RuineJump$Main$Tick),
+		elm$core$Basics$always(author$project$RuinJump$Main$Tick),
 		A2(
 			elm$core$Task$andThen,
 			function (_n0) {
@@ -9607,7 +9607,7 @@ var elm$random$Random$map2 = F3(
 					seed2);
 			});
 	});
-var author$project$RuineJump$MapSegment$append = elm$random$Random$map2(
+var author$project$RuinJump$MapSegment$append = elm$random$Random$map2(
 	F2(
 		function (map, segment) {
 			return A2(elm$core$Dict$union, segment, map);
@@ -9618,20 +9618,20 @@ var elm$random$Random$constant = function (value) {
 			return _Utils_Tuple2(value, seed);
 		});
 };
-var author$project$RuineJump$MapSegment$concat = function (list) {
+var author$project$RuinJump$MapSegment$concat = function (list) {
 	if (!list.b) {
 		return elm$random$Random$constant(elm$core$Dict$empty);
 	} else {
 		var a = list.a;
 		var tail = list.b;
-		return A3(elm$core$List$foldl, author$project$RuineJump$MapSegment$append, a, tail);
+		return A3(elm$core$List$foldl, author$project$RuinJump$MapSegment$append, a, tail);
 	}
 };
-var author$project$RuineJump$MapElement$Dirt = {$: 'Dirt'};
-var author$project$RuineJump$Config$sectionHeight = 8;
-var author$project$RuineJump$MapSegment$height = author$project$RuineJump$Config$sectionHeight;
-var author$project$RuineJump$MapElement$Stone = {$: 'Stone'};
-var author$project$RuineJump$MapSegment$piliar = F2(
+var author$project$RuinJump$MapElement$Dirt = {$: 'Dirt'};
+var author$project$RuinJump$Config$sectionHeight = 8;
+var author$project$RuinJump$MapSegment$height = author$project$RuinJump$Config$sectionHeight;
+var author$project$RuinJump$MapElement$Stone = {$: 'Stone'};
+var author$project$RuinJump$MapSegment$piliar = F2(
 	function (_n0, yOffset) {
 		var x = _n0.a;
 		var y = _n0.b;
@@ -9639,22 +9639,22 @@ var author$project$RuineJump$MapSegment$piliar = F2(
 			[
 				_Utils_Tuple2(
 				_Utils_Tuple2(x, (-y) - yOffset),
-				author$project$RuineJump$MapElement$Stone),
+				author$project$RuinJump$MapElement$Stone),
 				_Utils_Tuple2(
 				_Utils_Tuple2(x + 1, (-y) - yOffset),
-				author$project$RuineJump$MapElement$Stone),
+				author$project$RuinJump$MapElement$Stone),
 				_Utils_Tuple2(
 				_Utils_Tuple2(x + 2, (-y) - yOffset),
-				author$project$RuineJump$MapElement$Stone),
+				author$project$RuinJump$MapElement$Stone),
 				_Utils_Tuple2(
 				_Utils_Tuple2(x, ((-y) + 1) - yOffset),
-				author$project$RuineJump$MapElement$Stone),
+				author$project$RuinJump$MapElement$Stone),
 				_Utils_Tuple2(
 				_Utils_Tuple2(x + 2, ((-y) + 1) - yOffset),
-				author$project$RuineJump$MapElement$Stone)
+				author$project$RuinJump$MapElement$Stone)
 			]);
 	});
-var author$project$RuineJump$MapSegment$repeat = F3(
+var author$project$RuinJump$MapSegment$repeat = F3(
 	function (num, fun, dict) {
 		return A3(
 			elm$core$List$foldl,
@@ -10212,7 +10212,7 @@ var Orasund$elm_cellautomata$CellAutomata$noSymmetry = F3(
 		return (_Utils_eq(state, from) && compareLists(directions)) ? elm$core$Maybe$Just(to) : elm$core$Maybe$Nothing;
 	});
 var Orasund$elm_cellautomata$CellAutomata$automataWithoutSymmetry = Orasund$elm_cellautomata$CellAutomata$automata(Orasund$elm_cellautomata$CellAutomata$noSymmetry);
-var author$project$RuineJump$Automata$order = function (maybeBlock) {
+var author$project$RuinJump$Automata$order = function (maybeBlock) {
 	if (maybeBlock.$ === 'Nothing') {
 		return 0;
 	} else {
@@ -10235,8 +10235,8 @@ var author$project$RuineJump$Automata$order = function (maybeBlock) {
 		}
 	}
 };
-var author$project$RuineJump$Automata$automata = function (rules) {
-	return A2(Orasund$elm_cellautomata$CellAutomata$automataWithoutSymmetry, author$project$RuineJump$Automata$order, rules);
+var author$project$RuinJump$Automata$automata = function (rules) {
+	return A2(Orasund$elm_cellautomata$CellAutomata$automataWithoutSymmetry, author$project$RuinJump$Automata$order, rules);
 };
 var Orasund$elm_cellautomata$CellAutomata$General$step = F2(
 	function (_n0, field) {
@@ -10270,9 +10270,9 @@ var Orasund$elm_cellautomata$CellAutomata$General$step = F2(
 			});
 	});
 var Orasund$elm_cellautomata$CellAutomata$step = Orasund$elm_cellautomata$CellAutomata$General$step;
-var author$project$RuineJump$Automata$step = Orasund$elm_cellautomata$CellAutomata$step;
-var author$project$RuineJump$MapSegment$width = author$project$RuineJump$Config$width;
-var author$project$RuineJump$MapSegment$stepWithAutomata = F4(
+var author$project$RuinJump$Automata$step = Orasund$elm_cellautomata$CellAutomata$step;
+var author$project$RuinJump$MapSegment$width = author$project$RuinJump$Config$width;
+var author$project$RuinJump$MapSegment$stepWithAutomata = F4(
 	function (customAutomata, yOffset, rules, grid) {
 		return elm$core$Dict$fromList(
 			A3(
@@ -10286,7 +10286,7 @@ var author$project$RuineJump$MapSegment$stepWithAutomata = F4(
 									var pos = _Utils_Tuple2(x, y);
 									var elem = A2(elm$core$Dict$get, pos, grid);
 									var _n0 = A4(
-										author$project$RuineJump$Automata$step,
+										author$project$RuinJump$Automata$step,
 										customAutomata(rules),
 										grid,
 										pos,
@@ -10302,21 +10302,21 @@ var author$project$RuineJump$MapSegment$stepWithAutomata = F4(
 									}
 								}),
 							partList,
-							A2(elm$core$List$range, ((-1) * author$project$RuineJump$MapSegment$height) - yOffset, -yOffset));
+							A2(elm$core$List$range, ((-1) * author$project$RuinJump$MapSegment$height) - yOffset, -yOffset));
 					}),
 				_List_Nil,
-				A2(elm$core$List$range, 0, author$project$RuineJump$MapSegment$width)));
+				A2(elm$core$List$range, 0, author$project$RuinJump$MapSegment$width)));
 	});
-var author$project$RuineJump$MapSegment$step = author$project$RuineJump$MapSegment$stepWithAutomata(author$project$RuineJump$Automata$automata);
-var author$project$RuineJump$MapElement$BlockElement = F2(
+var author$project$RuinJump$MapSegment$step = author$project$RuinJump$MapSegment$stepWithAutomata(author$project$RuinJump$Automata$automata);
+var author$project$RuinJump$MapElement$BlockElement = F2(
 	function (a, b) {
 		return {$: 'BlockElement', a: a, b: b};
 	});
-var author$project$RuineJump$MapSegment$newSeed = F2(
+var author$project$RuinJump$MapSegment$newSeed = F2(
 	function (seed, _n0) {
 		var x = _n0.a;
 		var y = _n0.b;
-		return elm$random$Random$initialSeed((seed + (x * author$project$RuineJump$MapSegment$width)) + y);
+		return elm$random$Random$initialSeed((seed + (x * author$project$RuinJump$MapSegment$width)) + y);
 	});
 var elm$core$Dict$map = F2(
 	function (func, dict) {
@@ -10337,17 +10337,17 @@ var elm$core$Dict$map = F2(
 				A2(elm$core$Dict$map, func, right));
 		}
 	});
-var author$project$RuineJump$MapSegment$toSegment = function (seed) {
+var author$project$RuinJump$MapSegment$toSegment = function (seed) {
 	return elm$core$Dict$map(
 		F2(
 			function (pos, block) {
 				return A2(
-					author$project$RuineJump$MapElement$BlockElement,
+					author$project$RuinJump$MapElement$BlockElement,
 					block,
 					A2(
 						elm$random$Random$step,
 						A2(elm$random$Random$int, 0, elm$random$Random$maxInt),
-						A2(author$project$RuineJump$MapSegment$newSeed, seed, pos)).a);
+						A2(author$project$RuinJump$MapSegment$newSeed, seed, pos)).a);
 			}));
 };
 var Orasund$elm_cellautomata$CellAutomata$Exactly = function (a) {
@@ -10355,7 +10355,7 @@ var Orasund$elm_cellautomata$CellAutomata$Exactly = function (a) {
 };
 var Orasund$elm_cellautomata$CellAutomata$Anything = {$: 'Anything'};
 var Orasund$elm_cellautomata$CellAutomata$anyNeighborhood = {east: Orasund$elm_cellautomata$CellAutomata$Anything, north: Orasund$elm_cellautomata$CellAutomata$Anything, northEast: Orasund$elm_cellautomata$CellAutomata$Anything, northWest: Orasund$elm_cellautomata$CellAutomata$Anything, south: Orasund$elm_cellautomata$CellAutomata$Anything, southEast: Orasund$elm_cellautomata$CellAutomata$Anything, southWest: Orasund$elm_cellautomata$CellAutomata$Anything, west: Orasund$elm_cellautomata$CellAutomata$Anything};
-var author$project$RuineJump$Rules$placeDirt = _List_fromArray(
+var author$project$RuinJump$Rules$placeDirt = _List_fromArray(
 	[
 		{
 		from: elm$core$Maybe$Nothing,
@@ -10363,15 +10363,15 @@ var author$project$RuineJump$Rules$placeDirt = _List_fromArray(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				south: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				southEast: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				southWest: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				west: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt))
 			}),
 		to: elm$core$Maybe$Nothing
 	},
@@ -10381,98 +10381,98 @@ var author$project$RuineJump$Rules$placeDirt = _List_fromArray(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				south: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				southEast: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				southWest: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing),
 				south: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				southEast: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				southWest: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				west: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing)
 			}),
 		to: elm$core$Maybe$Nothing
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Stone),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Stone),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Stone),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Stone),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				west: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)
 	}
 	]);
-var author$project$RuineJump$MapElement$Grass = {$: 'Grass'};
-var author$project$RuineJump$Rules$placeGrass = _List_fromArray(
+var author$project$RuinJump$MapElement$Grass = {$: 'Grass'};
+var author$project$RuinJump$Rules$placeGrass = _List_fromArray(
 	[
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				north: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing)
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				north: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)),
 				northWest: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				north: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)),
 				northEast: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				north: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)),
 				northEast: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	}
 	]);
 var elm$core$List$repeatHelp = F3(
@@ -10586,8 +10586,8 @@ var elm$random$Random$weighted = F2(
 			A2(elm$random$Random$getByWeight, first, others),
 			A2(elm$random$Random$float, 0, total));
 	});
-var author$project$RuineJump$MapSegment$floorGenerator = function (level) {
-	var yOffset = level * author$project$RuineJump$MapSegment$height;
+var author$project$RuinJump$MapSegment$floorGenerator = function (level) {
+	var yOffset = level * author$project$RuinJump$MapSegment$height;
 	var build = A2(
 		elm$core$Basics$composeR,
 		elm$core$List$indexedMap(
@@ -10621,7 +10621,7 @@ var author$project$RuineJump$MapSegment$floorGenerator = function (level) {
 												_Utils_Tuple2(x, (-1) - yOffset),
 												elem);
 										}),
-									A2(elm$core$List$repeat, author$project$RuineJump$MapSegment$width, author$project$RuineJump$MapElement$Dirt)),
+									A2(elm$core$List$repeat, author$project$RuinJump$MapSegment$width, author$project$RuinJump$MapElement$Dirt)),
 									A2(
 									elm$core$List$indexedMap,
 									F2(
@@ -10630,14 +10630,14 @@ var author$project$RuineJump$MapSegment$floorGenerator = function (level) {
 												_Utils_Tuple2(x, 0 - yOffset),
 												elem);
 										}),
-									A2(elm$core$List$repeat, author$project$RuineJump$MapSegment$width, author$project$RuineJump$MapElement$Dirt)),
+									A2(elm$core$List$repeat, author$project$RuinJump$MapSegment$width, author$project$RuinJump$MapElement$Dirt)),
 									A2(
-									author$project$RuineJump$MapSegment$piliar,
-									_Utils_Tuple2(((author$project$RuineJump$MapSegment$width - 1) - 5) - 2, author$project$RuineJump$MapSegment$height - 1),
+									author$project$RuinJump$MapSegment$piliar,
+									_Utils_Tuple2(((author$project$RuinJump$MapSegment$width - 1) - 5) - 2, author$project$RuinJump$MapSegment$height - 1),
 									yOffset),
 									A2(
-									author$project$RuineJump$MapSegment$piliar,
-									_Utils_Tuple2(5, author$project$RuineJump$MapSegment$height - 1),
+									author$project$RuinJump$MapSegment$piliar,
+									_Utils_Tuple2(5, author$project$RuinJump$MapSegment$height - 1),
 									yOffset)
 								]));
 					},
@@ -10647,21 +10647,21 @@ var author$project$RuineJump$MapSegment$floorGenerator = function (level) {
 						A2(
 							elm$core$Basics$composeR,
 							A2(
-								author$project$RuineJump$MapSegment$repeat,
+								author$project$RuinJump$MapSegment$repeat,
 								2,
-								A2(author$project$RuineJump$MapSegment$step, yOffset, author$project$RuineJump$Rules$placeDirt)),
+								A2(author$project$RuinJump$MapSegment$step, yOffset, author$project$RuinJump$Rules$placeDirt)),
 							A2(
 								elm$core$Basics$composeR,
 								A2(
-									author$project$RuineJump$MapSegment$repeat,
+									author$project$RuinJump$MapSegment$repeat,
 									2,
-									A2(author$project$RuineJump$MapSegment$step, yOffset, author$project$RuineJump$Rules$placeGrass)),
-								author$project$RuineJump$MapSegment$toSegment(seed))))));
+									A2(author$project$RuinJump$MapSegment$step, yOffset, author$project$RuinJump$Rules$placeGrass)),
+								author$project$RuinJump$MapSegment$toSegment(seed))))));
 		},
 		A2(elm$random$Random$int, elm$random$Random$minInt, elm$random$Random$maxInt),
 		A2(
 			elm$random$Random$list,
-			author$project$RuineJump$MapSegment$width,
+			author$project$RuinJump$MapSegment$width,
 			A2(
 				elm$random$Random$weighted,
 				_Utils_Tuple2(3, elm$core$Maybe$Nothing),
@@ -10669,10 +10669,10 @@ var author$project$RuineJump$MapSegment$floorGenerator = function (level) {
 					[
 						_Utils_Tuple2(
 						10,
-						elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt))
+						elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt))
 					]))));
 };
-var author$project$RuineJump$MapSegment$horizontalLine = function (y) {
+var author$project$RuinJump$MapSegment$horizontalLine = function (y) {
 	return elm$core$List$concat(
 		_List_fromArray(
 			[
@@ -10684,7 +10684,7 @@ var author$project$RuineJump$MapSegment$horizontalLine = function (y) {
 							_Utils_Tuple2(1 + (x * 4), y),
 							elem);
 					}),
-				A2(elm$core$List$repeat, (author$project$RuineJump$MapSegment$width / 4) | 0, author$project$RuineJump$MapElement$Stone)),
+				A2(elm$core$List$repeat, (author$project$RuinJump$MapSegment$width / 4) | 0, author$project$RuinJump$MapElement$Stone)),
 				A2(
 				elm$core$List$indexedMap,
 				F2(
@@ -10693,10 +10693,10 @@ var author$project$RuineJump$MapSegment$horizontalLine = function (y) {
 							_Utils_Tuple2(2 + (x * 4), y),
 							elem);
 					}),
-				A2(elm$core$List$repeat, (author$project$RuineJump$MapSegment$width / 4) | 0, author$project$RuineJump$MapElement$Stone))
+				A2(elm$core$List$repeat, (author$project$RuinJump$MapSegment$width / 4) | 0, author$project$RuinJump$MapElement$Stone))
 			]));
 };
-var author$project$RuineJump$MapSegment$sparceHorLine = function (y) {
+var author$project$RuinJump$MapSegment$sparceHorLine = function (y) {
 	return elm$core$List$concat(
 		_List_fromArray(
 			[
@@ -10708,7 +10708,7 @@ var author$project$RuineJump$MapSegment$sparceHorLine = function (y) {
 							_Utils_Tuple2(3 + (x * 8), y),
 							elem);
 					}),
-				A2(elm$core$List$repeat, (author$project$RuineJump$MapSegment$width / 8) | 0, author$project$RuineJump$MapElement$Stone)),
+				A2(elm$core$List$repeat, (author$project$RuinJump$MapSegment$width / 8) | 0, author$project$RuinJump$MapElement$Stone)),
 				A2(
 				elm$core$List$indexedMap,
 				F2(
@@ -10717,10 +10717,10 @@ var author$project$RuineJump$MapSegment$sparceHorLine = function (y) {
 							_Utils_Tuple2(4 + (x * 8), y),
 							elem);
 					}),
-				A2(elm$core$List$repeat, (author$project$RuineJump$MapSegment$width / 8) | 0, author$project$RuineJump$MapElement$Stone))
+				A2(elm$core$List$repeat, (author$project$RuinJump$MapSegment$width / 8) | 0, author$project$RuinJump$MapElement$Stone))
 			]));
 };
-var author$project$RuineJump$MapSegment$walls = function (yOffset) {
+var author$project$RuinJump$MapSegment$walls = function (yOffset) {
 	return elm$core$List$concat(
 		_List_fromArray(
 			[
@@ -10732,34 +10732,34 @@ var author$project$RuineJump$MapSegment$walls = function (yOffset) {
 							_Utils_Tuple2(0, (-x) - yOffset),
 							elem);
 					}),
-				A2(elm$core$List$repeat, author$project$RuineJump$MapSegment$height, author$project$RuineJump$MapElement$Stone)),
+				A2(elm$core$List$repeat, author$project$RuinJump$MapSegment$height, author$project$RuinJump$MapElement$Stone)),
 				A2(
 				elm$core$List$indexedMap,
 				F2(
 					function (x, elem) {
 						return _Utils_Tuple2(
-							_Utils_Tuple2(author$project$RuineJump$MapSegment$width - 1, (-x) - yOffset),
+							_Utils_Tuple2(author$project$RuinJump$MapSegment$width - 1, (-x) - yOffset),
 							elem);
 					}),
-				A2(elm$core$List$repeat, author$project$RuineJump$MapSegment$height, author$project$RuineJump$MapElement$Stone)),
+				A2(elm$core$List$repeat, author$project$RuinJump$MapSegment$height, author$project$RuinJump$MapElement$Stone)),
 				_List_fromArray(
 				[
 					_Utils_Tuple2(
 					_Utils_Tuple2(1, -yOffset),
-					author$project$RuineJump$MapElement$Stone),
+					author$project$RuinJump$MapElement$Stone),
 					_Utils_Tuple2(
-					_Utils_Tuple2(author$project$RuineJump$MapSegment$width - 2, -yOffset),
-					author$project$RuineJump$MapElement$Stone)
+					_Utils_Tuple2(author$project$RuinJump$MapSegment$width - 2, -yOffset),
+					author$project$RuinJump$MapElement$Stone)
 				])
 			]));
 };
-var author$project$RuineJump$MapSegment$intersectionGenerator = function (level) {
-	var yOffset = level * author$project$RuineJump$MapSegment$height;
+var author$project$RuinJump$MapSegment$intersectionGenerator = function (level) {
+	var yOffset = level * author$project$RuinJump$MapSegment$height;
 	var segment = elm$core$Dict$fromList(
 		elm$core$List$concat(
 			_List_fromArray(
 				[
-					author$project$RuineJump$MapSegment$walls(yOffset),
+					author$project$RuinJump$MapSegment$walls(yOffset),
 					A2(
 					elm$core$List$indexedMap,
 					F2(
@@ -10768,56 +10768,56 @@ var author$project$RuineJump$MapSegment$intersectionGenerator = function (level)
 								_Utils_Tuple2(1, ((-y) * 4) - yOffset),
 								elem);
 						}),
-					A2(elm$core$List$repeat, (author$project$RuineJump$MapSegment$height / 4) | 0, author$project$RuineJump$MapElement$Stone)),
+					A2(elm$core$List$repeat, (author$project$RuinJump$MapSegment$height / 4) | 0, author$project$RuinJump$MapElement$Stone)),
 					A2(
 					elm$core$List$indexedMap,
 					F2(
 						function (y, elem) {
 							return _Utils_Tuple2(
-								_Utils_Tuple2(author$project$RuineJump$MapSegment$width - 2, ((-y) * 4) - yOffset),
+								_Utils_Tuple2(author$project$RuinJump$MapSegment$width - 2, ((-y) * 4) - yOffset),
 								elem);
 						}),
-					A2(elm$core$List$repeat, (author$project$RuineJump$MapSegment$height / 4) | 0, author$project$RuineJump$MapElement$Stone)),
-					author$project$RuineJump$MapSegment$horizontalLine(-yOffset),
-					author$project$RuineJump$MapSegment$sparceHorLine((-3) - yOffset),
-					author$project$RuineJump$MapSegment$sparceHorLine((-6) - yOffset),
+					A2(elm$core$List$repeat, (author$project$RuinJump$MapSegment$height / 4) | 0, author$project$RuinJump$MapElement$Stone)),
+					author$project$RuinJump$MapSegment$horizontalLine(-yOffset),
+					author$project$RuinJump$MapSegment$sparceHorLine((-3) - yOffset),
+					author$project$RuinJump$MapSegment$sparceHorLine((-6) - yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) + 1, 1),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) + 1, 1),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) - 4, 1),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) - 4, 1),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) + 1, 3),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) + 1, 3),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) - 4, 3),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) - 4, 3),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) + 1, 5),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) + 1, 5),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) - 4, 5),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) - 4, 5),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) + 1, 7),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) + 1, 7),
 					yOffset),
 					A2(
-					author$project$RuineJump$MapSegment$piliar,
-					_Utils_Tuple2(((author$project$RuineJump$MapSegment$width / 2) | 0) - 4, 7),
+					author$project$RuinJump$MapSegment$piliar,
+					_Utils_Tuple2(((author$project$RuinJump$MapSegment$width / 2) | 0) - 4, 7),
 					yOffset)
 				])));
 	return A2(
 		elm$random$Random$map,
 		function (seed) {
-			return A2(author$project$RuineJump$MapSegment$toSegment, seed, segment);
+			return A2(author$project$RuinJump$MapSegment$toSegment, seed, segment);
 		},
 		A2(elm$random$Random$int, elm$random$Random$minInt, elm$random$Random$maxInt));
 };
@@ -10913,15 +10913,15 @@ var Orasund$elm_cellautomata$CellAutomata$horMirrorSymmetry = F4(
 			mirrored)) ? elm$core$Maybe$Just(
 			A2(elm$core$Maybe$map, horMirrorState, to)) : elm$core$Maybe$Nothing);
 	});
-var author$project$RuineJump$Automata$mirroringAutomata = function (rules) {
+var author$project$RuinJump$Automata$mirroringAutomata = function (rules) {
 	return A3(
 		Orasund$elm_cellautomata$CellAutomata$automata,
 		Orasund$elm_cellautomata$CellAutomata$horMirrorSymmetry(elm$core$Basics$identity),
-		author$project$RuineJump$Automata$order,
+		author$project$RuinJump$Automata$order,
 		rules);
 };
-var author$project$RuineJump$MapSegment$mirroringStep = author$project$RuineJump$MapSegment$stepWithAutomata(author$project$RuineJump$Automata$mirroringAutomata);
-var author$project$RuineJump$Rules$parkour = _List_fromArray(
+var author$project$RuinJump$MapSegment$mirroringStep = author$project$RuinJump$MapSegment$stepWithAutomata(author$project$RuinJump$Automata$mirroringAutomata);
+var author$project$RuinJump$Rules$parkour = _List_fromArray(
 	[
 		{
 		from: elm$core$Maybe$Nothing,
@@ -10929,17 +10929,17 @@ var author$project$RuineJump$Rules$parkour = _List_fromArray(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Stone)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Stone)),
 				northEast: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing),
 				southEast: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing)
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Stone)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Stone)
 	}
 	]);
-var author$project$RuineJump$Rules$removeGrass = _List_fromArray(
+var author$project$RuinJump$Rules$removeGrass = _List_fromArray(
 	[
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
@@ -10951,42 +10951,42 @@ var author$project$RuineJump$Rules$removeGrass = _List_fromArray(
 		to: elm$core$Maybe$Nothing
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Stone)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Stone)),
 				south: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing)
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt)),
 				south: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing)
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
 				east: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)),
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)),
 				south: Orasund$elm_cellautomata$CellAutomata$Exactly(elm$core$Maybe$Nothing),
 				west: Orasund$elm_cellautomata$CellAutomata$Exactly(
-					elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass))
+					elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass))
 			}),
-		to: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass)
+		to: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass)
 	},
 		{
-		from: elm$core$Maybe$Just(author$project$RuineJump$MapElement$Grass),
+		from: elm$core$Maybe$Just(author$project$RuinJump$MapElement$Grass),
 		neighbors: _Utils_update(
 			Orasund$elm_cellautomata$CellAutomata$anyNeighborhood,
 			{
@@ -10995,8 +10995,8 @@ var author$project$RuineJump$Rules$removeGrass = _List_fromArray(
 		to: elm$core$Maybe$Nothing
 	}
 	]);
-var author$project$RuineJump$MapSegment$parkourGenerator = function (level) {
-	var yOffset = level * author$project$RuineJump$MapSegment$height;
+var author$project$RuinJump$MapSegment$parkourGenerator = function (level) {
+	var yOffset = level * author$project$RuinJump$MapSegment$height;
 	var build = A2(
 		elm$core$Basics$composeR,
 		elm$core$List$indexedMap(
@@ -11005,8 +11005,8 @@ var author$project$RuineJump$MapSegment$parkourGenerator = function (level) {
 					function (elem) {
 						return _Utils_Tuple2(
 							_Utils_Tuple2(
-								A2(elm$core$Basics$modBy, author$project$RuineJump$MapSegment$width, x),
-								((-1) - yOffset) - (2 * ((x / author$project$RuineJump$MapSegment$width) | 0))),
+								A2(elm$core$Basics$modBy, author$project$RuinJump$MapSegment$width, x),
+								((-1) - yOffset) - (2 * ((x / author$project$RuinJump$MapSegment$width) | 0))),
 							elem);
 					});
 			}),
@@ -11022,36 +11022,36 @@ var author$project$RuineJump$MapSegment$parkourGenerator = function (level) {
 					elm$core$Dict$fromList,
 					A2(
 						elm$core$Basics$composeR,
-						A2(author$project$RuineJump$MapSegment$step, yOffset, author$project$RuineJump$Rules$parkour),
+						A2(author$project$RuinJump$MapSegment$step, yOffset, author$project$RuinJump$Rules$parkour),
 						A2(
 							elm$core$Basics$composeR,
 							elm$core$Dict$union(
 								elm$core$Dict$fromList(
-									author$project$RuineJump$MapSegment$walls(yOffset))),
+									author$project$RuinJump$MapSegment$walls(yOffset))),
 							A2(
 								elm$core$Basics$composeR,
 								A2(
-									author$project$RuineJump$MapSegment$repeat,
+									author$project$RuinJump$MapSegment$repeat,
 									2,
-									A2(author$project$RuineJump$MapSegment$step, yOffset, author$project$RuineJump$Rules$placeDirt)),
+									A2(author$project$RuinJump$MapSegment$step, yOffset, author$project$RuinJump$Rules$placeDirt)),
 								A2(
 									elm$core$Basics$composeR,
 									A2(
-										author$project$RuineJump$MapSegment$repeat,
+										author$project$RuinJump$MapSegment$repeat,
 										2,
-										A2(author$project$RuineJump$MapSegment$step, yOffset, author$project$RuineJump$Rules$placeGrass)),
+										A2(author$project$RuinJump$MapSegment$step, yOffset, author$project$RuinJump$Rules$placeGrass)),
 									A2(
 										elm$core$Basics$composeR,
 										A2(
-											author$project$RuineJump$MapSegment$repeat,
+											author$project$RuinJump$MapSegment$repeat,
 											3,
-											A2(author$project$RuineJump$MapSegment$mirroringStep, yOffset, author$project$RuineJump$Rules$removeGrass)),
-										author$project$RuineJump$MapSegment$toSegment(seed))))))));
+											A2(author$project$RuinJump$MapSegment$mirroringStep, yOffset, author$project$RuinJump$Rules$removeGrass)),
+										author$project$RuinJump$MapSegment$toSegment(seed))))))));
 		},
 		A2(elm$random$Random$int, elm$random$Random$minInt, elm$random$Random$maxInt),
 		A2(
 			elm$random$Random$list,
-			author$project$RuineJump$MapSegment$width * ((author$project$RuineJump$MapSegment$height / 2) | 0),
+			author$project$RuinJump$MapSegment$width * ((author$project$RuinJump$MapSegment$height / 2) | 0),
 			A2(
 				elm$random$Random$weighted,
 				_Utils_Tuple2(2 + level, elm$core$Maybe$Nothing),
@@ -11059,13 +11059,13 @@ var author$project$RuineJump$MapSegment$parkourGenerator = function (level) {
 					[
 						_Utils_Tuple2(
 						1 + ((level / 4) | 0),
-						elm$core$Maybe$Just(author$project$RuineJump$MapElement$Stone)),
+						elm$core$Maybe$Just(author$project$RuinJump$MapElement$Stone)),
 						_Utils_Tuple2(
 						4,
-						elm$core$Maybe$Just(author$project$RuineJump$MapElement$Dirt))
+						elm$core$Maybe$Just(author$project$RuinJump$MapElement$Dirt))
 					]))));
 };
-var author$project$RuineJump$MapSlice$generateWeights = function (list) {
+var author$project$RuinJump$MapSlice$generateWeights = function (list) {
 	return A2(
 		elm$random$Random$list,
 		elm$core$List$length(list),
@@ -11103,7 +11103,7 @@ var wernerdegroot$listzipper$List$Zipper$withDefault = function (x) {
 	return elm$core$Maybe$withDefault(
 		wernerdegroot$listzipper$List$Zipper$singleton(x));
 };
-var author$project$RuineJump$MapSlice$generator = F2(
+var author$project$RuinJump$MapSlice$generator = F2(
 	function (lowestY, map) {
 		var shuffle = function (weights) {
 			return A2(
@@ -11142,10 +11142,10 @@ var author$project$RuineJump$MapSlice$generator = F2(
 			function (weights) {
 				return A2(shuffle, weights, orderedSlice);
 			},
-			author$project$RuineJump$MapSlice$generateWeights(orderedSlice));
+			author$project$RuinJump$MapSlice$generateWeights(orderedSlice));
 	});
-var author$project$RuineJump$Player$FaceingLeft = {$: 'FaceingLeft'};
-var author$project$RuineJump$Player$Standing = {$: 'Standing'};
+var author$project$RuinJump$Player$FaceingLeft = {$: 'FaceingLeft'};
+var author$project$RuinJump$Player$Standing = {$: 'Standing'};
 var elm$random$Random$andThen = F2(
 	function (callback, _n0) {
 		var genA = _n0.a;
@@ -11159,12 +11159,12 @@ var elm$random$Random$andThen = F2(
 				return genB(newSeed);
 			});
 	});
-var author$project$RuineJump$Main$init = function (_int) {
+var author$project$RuinJump$Main$init = function (_int) {
 	var lowestY = 0;
 	var decaySpeed = 1;
-	var pos = _Utils_Tuple2((author$project$RuineJump$Config$width / 2) | 0, -7);
+	var pos = _Utils_Tuple2((author$project$RuinJump$Config$width / 2) | 0, -7);
 	var y = pos.b;
-	var player = {action: author$project$RuineJump$Player$Standing, faceing: author$project$RuineJump$Player$FaceingLeft, pos: pos};
+	var player = {action: author$project$RuinJump$Player$Standing, faceing: author$project$RuinJump$Player$FaceingLeft, pos: pos};
 	var _n0 = A2(
 		elm$random$Random$step,
 		A2(
@@ -11175,33 +11175,29 @@ var author$project$RuineJump$Main$init = function (_int) {
 					function (newXSlice) {
 						return {map: newMap, xSlice: newXSlice};
 					},
-					A2(author$project$RuineJump$MapSlice$generator, lowestY, newMap));
+					A2(author$project$RuinJump$MapSlice$generator, lowestY, newMap));
 			},
-			author$project$RuineJump$MapSegment$concat(
-				_List_fromArray(
-					[
-						author$project$RuineJump$MapSegment$floorGenerator(0),
-						author$project$RuineJump$MapSegment$parkourGenerator(1),
-						author$project$RuineJump$MapSegment$parkourGenerator(2),
-						author$project$RuineJump$MapSegment$parkourGenerator(3),
-						author$project$RuineJump$MapSegment$parkourGenerator(4),
-						author$project$RuineJump$MapSegment$intersectionGenerator(5),
-						author$project$RuineJump$MapSegment$parkourGenerator(6),
-						author$project$RuineJump$MapSegment$parkourGenerator(7),
-						author$project$RuineJump$MapSegment$parkourGenerator(8),
-						author$project$RuineJump$MapSegment$parkourGenerator(9),
-						author$project$RuineJump$MapSegment$intersectionGenerator(10),
-						author$project$RuineJump$MapSegment$parkourGenerator(11),
-						author$project$RuineJump$MapSegment$parkourGenerator(12),
-						author$project$RuineJump$MapSegment$parkourGenerator(13),
-						author$project$RuineJump$MapSegment$parkourGenerator(14),
-						author$project$RuineJump$MapSegment$intersectionGenerator(15),
-						author$project$RuineJump$MapSegment$parkourGenerator(16),
-						author$project$RuineJump$MapSegment$parkourGenerator(17),
-						author$project$RuineJump$MapSegment$parkourGenerator(18),
-						author$project$RuineJump$MapSegment$parkourGenerator(19),
-						author$project$RuineJump$MapSegment$intersectionGenerator(20)
-					]))),
+			author$project$RuinJump$MapSegment$concat(
+				A2(
+					elm$core$List$append,
+					_List_fromArray(
+						[
+							author$project$RuinJump$MapSegment$floorGenerator(0)
+						]),
+					elm$core$List$concat(
+						A2(
+							elm$core$List$map,
+							function (i) {
+								return _List_fromArray(
+									[
+										author$project$RuinJump$MapSegment$parkourGenerator((i * 5) + 1),
+										author$project$RuinJump$MapSegment$parkourGenerator((i * 5) + 2),
+										author$project$RuinJump$MapSegment$parkourGenerator((i * 5) + 3),
+										author$project$RuinJump$MapSegment$parkourGenerator((i * 5) + 4),
+										author$project$RuinJump$MapSegment$intersectionGenerator((i * 5) + 5)
+									]);
+							},
+							A2(elm$core$List$range, 0, 10)))))),
 		elm$random$Random$initialSeed(_int));
 	var map = _n0.a.map;
 	var xSlice = _n0.a.xSlice;
@@ -11209,9 +11205,9 @@ var author$project$RuineJump$Main$init = function (_int) {
 	return _Utils_Tuple2(
 		elm$core$Maybe$Just(
 			{currentY: y, decaySpeed: decaySpeed, lowestY: lowestY, map: map, player: player, seed: seed, xSlice: xSlice}),
-		author$project$RuineJump$Main$tickTask);
+		author$project$RuinJump$Main$tickTask);
 };
-var author$project$RuineJump$Main$applyAction = F2(
+var author$project$RuinJump$Main$applyAction = F2(
 	function (action, model) {
 		var player = model.player;
 		var map = model.map;
@@ -11225,12 +11221,12 @@ var author$project$RuineJump$Main$applyAction = F2(
 				player: action(player)
 			});
 	});
-var author$project$RuineJump$MapElement$Wood = {$: 'Wood'};
-var author$project$RuineJump$MapElement$woodGenerator = A2(
+var author$project$RuinJump$MapElement$Wood = {$: 'Wood'};
+var author$project$RuinJump$MapElement$woodGenerator = A2(
 	elm$random$Random$map,
-	author$project$RuineJump$MapElement$BlockElement(author$project$RuineJump$MapElement$Wood),
+	author$project$RuinJump$MapElement$BlockElement(author$project$RuinJump$MapElement$Wood),
 	A2(elm$random$Random$int, 0, elm$random$Random$maxInt));
-var author$project$RuineJump$Main$placeBlock = function (model) {
+var author$project$RuinJump$Main$placeBlock = function (model) {
 	var map = model.map;
 	var seed = model.seed;
 	var decaySpeed = model.decaySpeed;
@@ -11252,7 +11248,7 @@ var author$project$RuineJump$Main$placeBlock = function (model) {
 	}();
 	var pos1 = _n1.a;
 	var pos2 = _n1.b;
-	var _n3 = A2(elm$random$Random$step, author$project$RuineJump$MapElement$woodGenerator, seed);
+	var _n3 = A2(elm$random$Random$step, author$project$RuinJump$MapElement$woodGenerator, seed);
 	var elem = _n3.a;
 	var newSeed = _n3.b;
 	return _Utils_update(
@@ -11267,20 +11263,20 @@ var author$project$RuineJump$Main$placeBlock = function (model) {
 			seed: newSeed
 		});
 };
-var author$project$RuineJump$MapElement$Air = {$: 'Air'};
-var author$project$RuineJump$MapElement$remove = function (element) {
+var author$project$RuinJump$MapElement$Air = {$: 'Air'};
+var author$project$RuinJump$MapElement$remove = function (element) {
 	if (element.$ === 'PlayerElement') {
-		return A2(author$project$RuineJump$MapElement$BlockElement, author$project$RuineJump$MapElement$Air, 0);
+		return A2(author$project$RuinJump$MapElement$BlockElement, author$project$RuinJump$MapElement$Air, 0);
 	} else {
 		var id = element.b;
-		return A2(author$project$RuineJump$MapElement$BlockElement, author$project$RuineJump$MapElement$Air, id);
+		return A2(author$project$RuinJump$MapElement$BlockElement, author$project$RuinJump$MapElement$Air, id);
 	}
 };
-var author$project$RuineJump$Map$remove = F2(
+var author$project$RuinJump$Map$remove = F2(
 	function (_n0, map) {
 		var x = _n0.a;
 		var lowestY = _n0.b;
-		return ((!A2(elm$core$Basics$modBy, author$project$RuineJump$Config$sectionHeight, lowestY)) ? elm$core$Dict$filter(
+		return ((!A2(elm$core$Basics$modBy, author$project$RuinJump$Config$sectionHeight, lowestY)) ? elm$core$Dict$filter(
 			F2(
 				function (_n1, _n2) {
 					var y = _n1.b;
@@ -11289,7 +11285,7 @@ var author$project$RuineJump$Map$remove = F2(
 			A3(
 				elm$core$Dict$update,
 				_Utils_Tuple2(x, lowestY),
-				elm$core$Maybe$map(author$project$RuineJump$MapElement$remove),
+				elm$core$Maybe$map(author$project$RuinJump$MapElement$remove),
 				map));
 	});
 var wernerdegroot$listzipper$List$Zipper$current = function (_n0) {
@@ -11313,7 +11309,7 @@ var wernerdegroot$listzipper$List$Zipper$next = function (_n0) {
 				ys));
 	}
 };
-var author$project$RuineJump$Main$removeOne = function (rec) {
+var author$project$RuinJump$Main$removeOne = function (rec) {
 	var xSlice = rec.xSlice;
 	var lowestY = rec.lowestY;
 	var map = rec.map;
@@ -11326,7 +11322,7 @@ var author$project$RuineJump$Main$removeOne = function (rec) {
 				rec,
 				{
 					map: A2(
-						author$project$RuineJump$Map$remove,
+						author$project$RuinJump$Map$remove,
 						_Utils_Tuple2(x, lowestY),
 						map),
 					xSlice: slice
@@ -11340,16 +11336,16 @@ var author$project$RuineJump$Main$removeOne = function (rec) {
 					{
 						lowestY: lowestY - 1,
 						map: A2(
-							author$project$RuineJump$Map$remove,
+							author$project$RuinJump$Map$remove,
 							_Utils_Tuple2(x, lowestY),
 							map),
 						xSlice: slice
 					});
 			},
-			A2(author$project$RuineJump$MapSlice$generator, lowestY - 1, map));
+			A2(author$project$RuinJump$MapSlice$generator, lowestY - 1, map));
 	}
 };
-var author$project$RuineJump$Main$removeN = F2(
+var author$project$RuinJump$Main$removeN = F2(
 	function (decaySpeed, model) {
 		var seed = model.seed;
 		var _n0 = A3(
@@ -11360,7 +11356,7 @@ var author$project$RuineJump$Main$removeN = F2(
 					var s = _n1.b;
 					return A2(
 						elm$random$Random$step,
-						author$project$RuineJump$Main$removeOne(m),
+						author$project$RuinJump$Main$removeOne(m),
 						s);
 				}),
 			_Utils_Tuple2(model, seed),
@@ -11371,8 +11367,8 @@ var author$project$RuineJump$Main$removeN = F2(
 			newModel,
 			{seed: newSeed});
 	});
-var author$project$RuineJump$Player$FaceingRight = {$: 'FaceingRight'};
-var author$project$RuineJump$Player$downByOne = F2(
+var author$project$RuinJump$Player$FaceingRight = {$: 'FaceingRight'};
+var author$project$RuinJump$Player$downByOne = F2(
 	function (map, player) {
 		var pos = player.pos;
 		var defaultCase = player;
@@ -11401,9 +11397,9 @@ var author$project$RuineJump$Player$downByOne = F2(
 			return defaultCase;
 		}
 	});
-var author$project$RuineJump$Player$drop = author$project$RuineJump$Player$downByOne;
-var author$project$RuineJump$Player$Falling = {$: 'Falling'};
-var author$project$RuineJump$Player$upwardsByOne = F2(
+var author$project$RuinJump$Player$drop = author$project$RuinJump$Player$downByOne;
+var author$project$RuinJump$Player$Falling = {$: 'Falling'};
+var author$project$RuinJump$Player$upwardsByOne = F2(
 	function (map, player) {
 		var pos = player.pos;
 		var defaultCase = player;
@@ -11432,34 +11428,34 @@ var author$project$RuineJump$Player$upwardsByOne = F2(
 			return defaultCase;
 		}
 	});
-var author$project$RuineJump$Player$jump = F2(
+var author$project$RuinJump$Player$jump = F2(
 	function (map, player) {
 		var action = player.action;
 		var defaultCase = player;
 		if (action.$ === 'Standing') {
 			return A2(
-				author$project$RuineJump$Player$upwardsByOne,
+				author$project$RuinJump$Player$upwardsByOne,
 				map,
 				A2(
-					author$project$RuineJump$Player$upwardsByOne,
+					author$project$RuinJump$Player$upwardsByOne,
 					map,
 					A2(
-						author$project$RuineJump$Player$upwardsByOne,
+						author$project$RuinJump$Player$upwardsByOne,
 						map,
 						A2(
-							author$project$RuineJump$Player$upwardsByOne,
+							author$project$RuinJump$Player$upwardsByOne,
 							map,
 							A2(
-								author$project$RuineJump$Player$upwardsByOne,
+								author$project$RuinJump$Player$upwardsByOne,
 								map,
 								_Utils_update(
 									player,
-									{action: author$project$RuineJump$Player$Falling}))))));
+									{action: author$project$RuinJump$Player$Falling}))))));
 		} else {
 			return defaultCase;
 		}
 	});
-var author$project$RuineJump$Player$forwardByOne = F2(
+var author$project$RuinJump$Player$forwardByOne = F2(
 	function (map, player) {
 		var pos = player.pos;
 		var faceing = player.faceing;
@@ -11536,7 +11532,7 @@ var author$project$RuineJump$Player$forwardByOne = F2(
 		}
 	});
 var elm$core$Basics$ge = _Utils_ge;
-var author$project$RuineJump$Player$move = F3(
+var author$project$RuinJump$Player$move = F3(
 	function (direction, map, player) {
 		var pos = player.pos;
 		var action = player.action;
@@ -11548,12 +11544,12 @@ var author$project$RuineJump$Player$move = F3(
 					if (direction.$ === 'FaceingLeft') {
 						return x <= 0;
 					} else {
-						return _Utils_cmp(x, author$project$RuineJump$Config$width - 2) > -1;
+						return _Utils_cmp(x, author$project$RuinJump$Config$width - 2) > -1;
 					}
 				}() ? defaultCase : A2(
 					elm$core$Basics$composeR,
-					author$project$RuineJump$Player$forwardByOne(map),
-					author$project$RuineJump$Player$forwardByOne(map));
+					author$project$RuinJump$Player$forwardByOne(map),
+					author$project$RuinJump$Player$forwardByOne(map));
 			} else {
 				return defaultCase;
 			}
@@ -11562,7 +11558,7 @@ var author$project$RuineJump$Player$move = F3(
 				player,
 				{faceing: direction}));
 	});
-var author$project$RuineJump$Main$onInput = F2(
+var author$project$RuinJump$Main$onInput = F2(
 	function (input, model) {
 		var map = model.map;
 		var decaySpeed = model.decaySpeed;
@@ -11570,7 +11566,7 @@ var author$project$RuineJump$Main$onInput = F2(
 			elm$core$Maybe$map,
 			function (_function) {
 				return function (newModel) {
-					return _Utils_Tuple2(newModel, author$project$RuineJump$Main$tickTask);
+					return _Utils_Tuple2(newModel, author$project$RuinJump$Main$tickTask);
 				}(
 					_function(model));
 			},
@@ -11580,29 +11576,29 @@ var author$project$RuineJump$Main$onInput = F2(
 						return elm$core$Maybe$Just(
 							A2(
 								elm$core$Basics$composeL,
-								author$project$RuineJump$Main$removeN(decaySpeed),
-								author$project$RuineJump$Main$applyAction(
-									author$project$RuineJump$Player$jump(map))));
+								author$project$RuinJump$Main$removeN(decaySpeed),
+								author$project$RuinJump$Main$applyAction(
+									author$project$RuinJump$Player$jump(map))));
 					case 'InputLeft':
 						return elm$core$Maybe$Just(
-							author$project$RuineJump$Main$applyAction(
-								A2(author$project$RuineJump$Player$move, author$project$RuineJump$Player$FaceingLeft, map)));
+							author$project$RuinJump$Main$applyAction(
+								A2(author$project$RuinJump$Player$move, author$project$RuinJump$Player$FaceingLeft, map)));
 					case 'InputDown':
 						return elm$core$Maybe$Just(
-							author$project$RuineJump$Main$applyAction(
-								author$project$RuineJump$Player$drop(map)));
+							author$project$RuinJump$Main$applyAction(
+								author$project$RuinJump$Player$drop(map)));
 					case 'InputRight':
 						return elm$core$Maybe$Just(
-							author$project$RuineJump$Main$applyAction(
-								A2(author$project$RuineJump$Player$move, author$project$RuineJump$Player$FaceingRight, map)));
+							author$project$RuinJump$Main$applyAction(
+								A2(author$project$RuinJump$Player$move, author$project$RuinJump$Player$FaceingRight, map)));
 					case 'InputA':
-						return elm$core$Maybe$Just(author$project$RuineJump$Main$placeBlock);
+						return elm$core$Maybe$Just(author$project$RuinJump$Main$placeBlock);
 					default:
 						return elm$core$Maybe$Nothing;
 				}
 			}());
 	});
-var author$project$RuineJump$Player$fall = F2(
+var author$project$RuinJump$Player$fall = F2(
 	function (map, player) {
 		var pos = player.pos;
 		var faceing = player.faceing;
@@ -11613,23 +11609,23 @@ var author$project$RuineJump$Player$fall = F2(
 			if (faceing.$ === 'FaceingLeft') {
 				return x <= 0;
 			} else {
-				return _Utils_cmp(x, author$project$RuineJump$Config$width - 2) > -1;
+				return _Utils_cmp(x, author$project$RuinJump$Config$width - 2) > -1;
 			}
-		}() ? elm$core$Basics$identity : author$project$RuineJump$Player$forwardByOne(map))(
+		}() ? elm$core$Basics$identity : author$project$RuinJump$Player$forwardByOne(map))(
 			_Utils_update(
 				player,
 				{
-					action: author$project$RuineJump$Player$Falling,
+					action: author$project$RuinJump$Player$Falling,
 					pos: _Utils_Tuple2(x, y + 1)
 				}));
 	});
-var author$project$RuineJump$Player$update = F3(
+var author$project$RuinJump$Player$update = F3(
 	function (player, map, isOccupied) {
 		var pos = player.pos;
 		var defaultCase = {
 			newPlayer: _Utils_update(
 				player,
-				{action: author$project$RuineJump$Player$Standing}),
+				{action: author$project$RuinJump$Player$Standing}),
 			nextTick: false
 		};
 		var _n0 = pos;
@@ -11644,21 +11640,21 @@ var author$project$RuineJump$Player$update = F3(
 				elm$core$Dict$get,
 				_Utils_Tuple2(x + 1, y + 2),
 				map))) ? defaultCase : {
-			newPlayer: A2(author$project$RuineJump$Player$fall, map, player),
+			newPlayer: A2(author$project$RuinJump$Player$fall, map, player),
 			nextTick: true
 		};
 	});
-var author$project$RuineJump$Main$onTick = function (model) {
+var author$project$RuinJump$Main$onTick = function (model) {
 	var map = model.map;
 	var player = model.player;
 	var lowestY = model.lowestY;
 	var _n0 = player.pos;
 	var playerY = _n0.b;
 	if (_Utils_cmp(lowestY, playerY) < 1) {
-		return author$project$RuineJump$Main$restart;
+		return author$project$RuinJump$Main$restart;
 	} else {
 		var _n1 = A3(
-			author$project$RuineJump$Player$update,
+			author$project$RuinJump$Player$update,
 			player,
 			map,
 			function (elem) {
@@ -11683,7 +11679,7 @@ var author$project$RuineJump$Main$onTick = function (model) {
 				_Utils_update(
 					model,
 					{player: newPlayer})),
-			author$project$RuineJump$Main$tickTask) : _Utils_Tuple2(
+			author$project$RuinJump$Main$tickTask) : _Utils_Tuple2(
 			elm$core$Maybe$Just(
 				_Utils_update(
 					model,
@@ -11691,13 +11687,13 @@ var author$project$RuineJump$Main$onTick = function (model) {
 			elm$core$Platform$Cmd$none);
 	}
 };
-var author$project$RuineJump$Main$update = F2(
+var author$project$RuinJump$Main$update = F2(
 	function (msg, maybeModel) {
 		var defaultCase = _Utils_Tuple2(maybeModel, elm$core$Platform$Cmd$none);
 		if (maybeModel.$ === 'Nothing') {
 			if (msg.$ === 'Init') {
 				var _int = msg.a;
-				return author$project$RuineJump$Main$init(_int);
+				return author$project$RuinJump$Main$init(_int);
 			} else {
 				return defaultCase;
 			}
@@ -11706,12 +11702,12 @@ var author$project$RuineJump$Main$update = F2(
 			switch (msg.$) {
 				case 'Init':
 					var _int = msg.a;
-					return author$project$RuineJump$Main$init(_int);
+					return author$project$RuinJump$Main$init(_int);
 				case 'Tick':
-					return author$project$RuineJump$Main$onTick(model);
+					return author$project$RuinJump$Main$onTick(model);
 				default:
 					var input = msg.a;
-					var _n3 = A2(author$project$RuineJump$Main$onInput, input, model);
+					var _n3 = A2(author$project$RuinJump$Main$onInput, input, model);
 					if (_n3.$ === 'Nothing') {
 						return defaultCase;
 					} else {
@@ -11789,14 +11785,14 @@ var Orasund$pixelengine$PixelEngine$Graphics$Tile$tile = function (_n0) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
-var author$project$RuineJump$Tileset$air = function (_n0) {
+var author$project$RuinJump$Tileset$air = function (_n0) {
 	return A2(
 		Orasund$pixelengine$PixelEngine$Graphics$Tile$movable,
 		'',
 		Orasund$pixelengine$PixelEngine$Graphics$Tile$tile(
 			_Utils_Tuple2(1, 0)));
 };
-var author$project$RuineJump$Tileset$variantTile = F2(
+var author$project$RuinJump$Tileset$variantTile = F2(
 	function (_int, _n0) {
 		var x = _n0.a;
 		var y = _n0.b;
@@ -11806,25 +11802,25 @@ var author$project$RuineJump$Tileset$variantTile = F2(
 				x + A2(elm$core$Basics$modBy, 4, variant),
 				y + ((variant / 4) | 0)));
 	});
-var author$project$RuineJump$Tileset$dirt = function (seed) {
+var author$project$RuinJump$Tileset$dirt = function (seed) {
 	return A2(
 		Orasund$pixelengine$PixelEngine$Graphics$Tile$movable,
 		'',
 		A2(
-			author$project$RuineJump$Tileset$variantTile,
+			author$project$RuinJump$Tileset$variantTile,
 			seed,
 			_Utils_Tuple2(4, 0)));
 };
-var author$project$RuineJump$Tileset$grass = function (seed) {
+var author$project$RuinJump$Tileset$grass = function (seed) {
 	return A2(
 		Orasund$pixelengine$PixelEngine$Graphics$Tile$movable,
 		'',
 		A2(
-			author$project$RuineJump$Tileset$variantTile,
+			author$project$RuinJump$Tileset$variantTile,
 			seed,
 			_Utils_Tuple2(4, 4)));
 };
-var author$project$RuineJump$Tileset$quadCoordinates = function (_n0) {
+var author$project$RuinJump$Tileset$quadCoordinates = function (_n0) {
 	var x = _n0.a;
 	var y = _n0.b;
 	return _List_fromArray(
@@ -11835,7 +11831,7 @@ var author$project$RuineJump$Tileset$quadCoordinates = function (_n0) {
 			_Utils_Tuple2(x + 1, y + 1)
 		]);
 };
-var author$project$RuineJump$Tileset$quadTile = function (_n0) {
+var author$project$RuinJump$Tileset$quadTile = function (_n0) {
 	var tilePos = _n0.tilePos;
 	var pos = _n0.pos;
 	return A3(
@@ -11844,11 +11840,11 @@ var author$project$RuineJump$Tileset$quadTile = function (_n0) {
 			function (p, t) {
 				return _Utils_Tuple2(p, t);
 			}),
-		author$project$RuineJump$Tileset$quadCoordinates(pos),
+		author$project$RuinJump$Tileset$quadCoordinates(pos),
 		A2(
 			elm$core$List$map,
 			Orasund$pixelengine$PixelEngine$Graphics$Tile$tile,
-			author$project$RuineJump$Tileset$quadCoordinates(tilePos)));
+			author$project$RuinJump$Tileset$quadCoordinates(tilePos)));
 };
 var elm$core$Tuple$mapSecond = F2(
 	function (func, _n0) {
@@ -11858,7 +11854,7 @@ var elm$core$Tuple$mapSecond = F2(
 			x,
 			func(y));
 	});
-var author$project$RuineJump$Tileset$player_jump_left = function (pos) {
+var author$project$RuinJump$Tileset$player_jump_left = function (pos) {
 	return A2(
 		elm$core$List$indexedMap,
 		function (i) {
@@ -11866,13 +11862,13 @@ var author$project$RuineJump$Tileset$player_jump_left = function (pos) {
 				Orasund$pixelengine$PixelEngine$Graphics$Tile$movable(
 					'player' + elm$core$String$fromInt(i)));
 		},
-		author$project$RuineJump$Tileset$quadTile(
+		author$project$RuinJump$Tileset$quadTile(
 			{
 				pos: pos,
 				tilePos: _Utils_Tuple2(0, 10)
 			}));
 };
-var author$project$RuineJump$Tileset$player_jump_right = function (pos) {
+var author$project$RuinJump$Tileset$player_jump_right = function (pos) {
 	return A2(
 		elm$core$List$indexedMap,
 		function (i) {
@@ -11880,13 +11876,13 @@ var author$project$RuineJump$Tileset$player_jump_right = function (pos) {
 				Orasund$pixelengine$PixelEngine$Graphics$Tile$movable(
 					'player' + elm$core$String$fromInt(i)));
 		},
-		author$project$RuineJump$Tileset$quadTile(
+		author$project$RuinJump$Tileset$quadTile(
 			{
 				pos: pos,
 				tilePos: _Utils_Tuple2(2, 10)
 			}));
 };
-var author$project$RuineJump$Tileset$player_left = function (pos) {
+var author$project$RuinJump$Tileset$player_left = function (pos) {
 	return A2(
 		elm$core$List$indexedMap,
 		function (i) {
@@ -11894,13 +11890,13 @@ var author$project$RuineJump$Tileset$player_left = function (pos) {
 				Orasund$pixelengine$PixelEngine$Graphics$Tile$movable(
 					'player' + elm$core$String$fromInt(i)));
 		},
-		author$project$RuineJump$Tileset$quadTile(
+		author$project$RuinJump$Tileset$quadTile(
 			{
 				pos: pos,
 				tilePos: _Utils_Tuple2(0, 8)
 			}));
 };
-var author$project$RuineJump$Tileset$player_right = function (pos) {
+var author$project$RuinJump$Tileset$player_right = function (pos) {
 	return A2(
 		elm$core$List$indexedMap,
 		function (i) {
@@ -11908,31 +11904,31 @@ var author$project$RuineJump$Tileset$player_right = function (pos) {
 				Orasund$pixelengine$PixelEngine$Graphics$Tile$movable(
 					'player' + elm$core$String$fromInt(i)));
 		},
-		author$project$RuineJump$Tileset$quadTile(
+		author$project$RuinJump$Tileset$quadTile(
 			{
 				pos: pos,
 				tilePos: _Utils_Tuple2(2, 8)
 			}));
 };
-var author$project$RuineJump$Tileset$stone = function (seed) {
+var author$project$RuinJump$Tileset$stone = function (seed) {
 	return A2(
 		Orasund$pixelengine$PixelEngine$Graphics$Tile$movable,
 		'',
 		A2(
-			author$project$RuineJump$Tileset$variantTile,
+			author$project$RuinJump$Tileset$variantTile,
 			seed,
 			_Utils_Tuple2(0, 4)));
 };
-var author$project$RuineJump$Tileset$wood = function (seed) {
+var author$project$RuinJump$Tileset$wood = function (seed) {
 	return A2(
 		Orasund$pixelengine$PixelEngine$Graphics$Tile$movable,
 		'',
 		A2(
-			author$project$RuineJump$Tileset$variantTile,
+			author$project$RuinJump$Tileset$variantTile,
 			seed,
 			_Utils_Tuple2(8, 0)));
 };
-var author$project$RuineJump$MapElement$toTiles = F2(
+var author$project$RuinJump$MapElement$toTiles = F2(
 	function (pos, mapElement) {
 		if (mapElement.$ === 'PlayerElement') {
 			var action = mapElement.a;
@@ -11940,17 +11936,17 @@ var author$project$RuineJump$MapElement$toTiles = F2(
 			if (action.$ === 'Standing') {
 				return function () {
 					if (faceingDirection.$ === 'FaceingLeft') {
-						return author$project$RuineJump$Tileset$player_left;
+						return author$project$RuinJump$Tileset$player_left;
 					} else {
-						return author$project$RuineJump$Tileset$player_right;
+						return author$project$RuinJump$Tileset$player_right;
 					}
 				}()(pos);
 			} else {
 				return function () {
 					if (faceingDirection.$ === 'FaceingLeft') {
-						return author$project$RuineJump$Tileset$player_jump_left;
+						return author$project$RuinJump$Tileset$player_jump_left;
 					} else {
-						return author$project$RuineJump$Tileset$player_jump_right;
+						return author$project$RuinJump$Tileset$player_jump_right;
 					}
 				}()(pos);
 			}
@@ -11963,54 +11959,54 @@ var author$project$RuineJump$MapElement$toTiles = F2(
 					function () {
 						switch (block.$) {
 							case 'Dirt':
-								return author$project$RuineJump$Tileset$dirt;
+								return author$project$RuinJump$Tileset$dirt;
 							case 'Grass':
-								return author$project$RuineJump$Tileset$grass;
+								return author$project$RuinJump$Tileset$grass;
 							case 'Stone':
-								return author$project$RuineJump$Tileset$stone;
+								return author$project$RuinJump$Tileset$stone;
 							case 'Wood':
-								return author$project$RuineJump$Tileset$wood;
+								return author$project$RuinJump$Tileset$wood;
 							default:
-								return author$project$RuineJump$Tileset$air;
+								return author$project$RuinJump$Tileset$air;
 						}
 					}()(id)));
 		}
 	});
-var author$project$RuineJump$Main$getTilesList = function (_n0) {
+var author$project$RuinJump$Main$getTilesList = function (_n0) {
 	var currentY = _n0.currentY;
 	var lowestY = _n0.lowestY;
 	return A2(
 		elm$core$Dict$foldl,
 		F3(
 			function (pos, elem, list) {
-				var lowestYModSection = author$project$RuineJump$Config$sectionHeight * ((lowestY / author$project$RuineJump$Config$sectionHeight) | 0);
+				var lowestYModSection = author$project$RuinJump$Config$sectionHeight * ((lowestY / author$project$RuinJump$Config$sectionHeight) | 0);
 				var _n1 = pos;
 				var posX = _n1.a;
 				var posY = _n1.b;
-				var _n2 = _Utils_Tuple2(((author$project$RuineJump$Config$width / 2) | 0) - 1, ((author$project$RuineJump$Config$width / 2) | 0) - 1);
+				var _n2 = _Utils_Tuple2(((author$project$RuinJump$Config$width / 2) | 0) - 1, ((author$project$RuinJump$Config$width / 2) | 0) - 1);
 				var centerY = _n2.b;
-				var heightModSection = ((author$project$RuineJump$Config$width / 2) | 0) * (((((currentY + centerY) + 2) / ((author$project$RuineJump$Config$width / 2) | 0)) | 0) - 1);
+				var heightModSection = ((author$project$RuinJump$Config$width / 2) | 0) * (((((currentY + centerY) + 2) / ((author$project$RuinJump$Config$width / 2) | 0)) | 0) - 1);
 				var _n3 = _Utils_Tuple2(
 					posX,
-					(_Utils_cmp(currentY, (((-1) * centerY) - 1) + lowestYModSection) > 0) ? (((posY + author$project$RuineJump$Config$width) - 1) - lowestYModSection) : (((posY + author$project$RuineJump$Config$width) - 1) - heightModSection));
+					(_Utils_cmp(currentY, (((-1) * centerY) - 1) + lowestYModSection) > 0) ? (((posY + author$project$RuinJump$Config$width) - 1) - lowestYModSection) : (((posY + author$project$RuinJump$Config$width) - 1) - heightModSection));
 				var x = _n3.a;
 				var y = _n3.b;
-				return (((x >= 0) && ((_Utils_cmp(x, author$project$RuineJump$Config$width) < 0) && ((y >= 0) && (_Utils_cmp(y, author$project$RuineJump$Config$width) < 0)))) ? elm$core$List$append(
+				return (((x >= 0) && ((_Utils_cmp(x, author$project$RuinJump$Config$width) < 0) && ((y >= 0) && (_Utils_cmp(y, author$project$RuinJump$Config$width) < 0)))) ? elm$core$List$append(
 					A2(
-						author$project$RuineJump$MapElement$toTiles,
+						author$project$RuinJump$MapElement$toTiles,
 						_Utils_Tuple2(x, y),
 						elem)) : elm$core$Basics$identity)(list);
 			}),
 		_List_Nil);
 };
-var author$project$RuineJump$MapElement$PlayerElement = F2(
+var author$project$RuinJump$MapElement$PlayerElement = F2(
 	function (a, b) {
 		return {$: 'PlayerElement', a: a, b: b};
 	});
-var author$project$RuineJump$Main$view = function (maybeModel) {
-	var width = 3 * author$project$RuineJump$Config$width;
+var author$project$RuinJump$Main$view = function (maybeModel) {
+	var width = 3 * author$project$RuinJump$Config$width;
 	var tileset = {source: 'tileset.png', spriteHeight: 3, spriteWidth: 3};
-	var rows = author$project$RuineJump$Config$width;
+	var rows = author$project$RuinJump$Config$width;
 	var options = Orasund$pixelengine$PixelEngine$Graphics$options(
 		{transitionSpeedInSec: 0.5, width: width});
 	return {
@@ -12031,12 +12027,12 @@ var author$project$RuineJump$Main$view = function (maybeModel) {
 						var currentY = maybeModel.a.currentY;
 						var lowestY = maybeModel.a.lowestY;
 						return A2(
-							author$project$RuineJump$Main$getTilesList,
+							author$project$RuinJump$Main$getTilesList,
 							{currentY: currentY, lowestY: lowestY},
 							A3(
 								elm$core$Dict$insert,
 								player.pos,
-								A2(author$project$RuineJump$MapElement$PlayerElement, player.action, player.faceing),
+								A2(author$project$RuinJump$MapElement$PlayerElement, player.action, player.faceing),
 								map));
 					} else {
 						return _List_Nil;
@@ -12047,19 +12043,19 @@ var author$project$RuineJump$Main$view = function (maybeModel) {
 		title: 'Ruine Jump'
 	};
 };
-var author$project$RuineJump$Main$main = Orasund$pixelengine$PixelEngine$program(
+var author$project$RuinJump$Main$main = Orasund$pixelengine$PixelEngine$program(
 	{
-		controls: author$project$RuineJump$Main$Input,
-		init: elm$core$Basics$always(author$project$RuineJump$Main$restart),
-		subscriptions: author$project$RuineJump$Main$subscriptions,
-		update: author$project$RuineJump$Main$update,
-		view: author$project$RuineJump$Main$view
+		controls: author$project$RuinJump$Main$Input,
+		init: elm$core$Basics$always(author$project$RuinJump$Main$restart),
+		subscriptions: author$project$RuinJump$Main$subscriptions,
+		update: author$project$RuinJump$Main$update,
+		view: author$project$RuinJump$Main$view
 	});
-_Platform_export({'RuineJump':{'Main':{'init':author$project$RuineJump$Main$main(
+_Platform_export({'RuinJump':{'Main':{'init':author$project$RuinJump$Main$main(
 	elm$json$Json$Decode$succeed(
 		{}))(0)}}});}(this));
 
-var app = Elm.RuineJump.Main.init({ node: document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49") });
+var app = Elm.RuinJump.Main.init({ node: document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49") });
 if (document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49"))
 {
   document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49").innerText = 'This is a headless program, meaning there is nothing to show here.\n\nI started the program anyway though, and you can access it as `app` in the developer console.';

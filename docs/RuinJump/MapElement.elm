@@ -1,9 +1,9 @@
-module RuineJump.MapElement exposing (Block(..), MapElement(..), woodGenerator, remove,dirtGenerator, toTiles)
+module RuinJump.MapElement exposing (Block(..), MapElement(..), woodGenerator, remove,dirtGenerator, toTiles)
 
 import PixelEngine.Graphics.Tile exposing (Tile)
 import Random exposing (Generator)
-import RuineJump.Player exposing (FaceingDirection(..),  PlayerAction(..))
-import RuineJump.Tileset as Tileset
+import RuinJump.Player exposing (FaceingDirection(..),  PlayerAction(..))
+import RuinJump.Tileset as Tileset
 
 
 type Block

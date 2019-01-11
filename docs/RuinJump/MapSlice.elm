@@ -1,4 +1,4 @@
-module RuineJump.MapSlice exposing (generator)
+module RuinJump.MapSlice exposing (generator)
 
 import Dict exposing (Dict)
 import List.Zipper as Zipper exposing (Zipper)

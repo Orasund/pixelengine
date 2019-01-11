@@ -1,4 +1,4 @@
-module RuineJump.Tileset exposing
+module RuinJump.Tileset exposing
     ( dirt
     , grass
     , player_jump_left

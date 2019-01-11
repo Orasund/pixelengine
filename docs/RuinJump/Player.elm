@@ -1,7 +1,7 @@
-module RuineJump.Player exposing (FaceingDirection(..), Player, drop,PlayerAction(..),update, fall, jump, move)
+module RuinJump.Player exposing (FaceingDirection(..), Player, drop,PlayerAction(..),update, fall, jump, move)
 
 import Dict exposing (Dict)
-import RuineJump.Config as Config
+import RuinJump.Config as Config
 
 
 type alias Map a =

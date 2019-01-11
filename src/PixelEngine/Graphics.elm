@@ -5,14 +5,15 @@ module PixelEngine.Graphics exposing
     )
     
 {-| This module takes care of the Graphics.
+
 You will want to add [PixelEngine.Graphics.Image](/PixelEngine-Graphics-Image)
 or [PixelEngine.Graphics.Tile](/PixelEngine-Graphics-Tile) to
 actually draw something.
 
 ## Area
 
-The main idea of this graphic engine is to arrage the content into so called `Area`s.
-These areas are then displayed vertically on top of eachother.
+The main idea of this graphic engine is to arrage the content into horizontal stripes,
+so called areas.
 
 @docs Area, tiledArea, imageArea, heightOf
 
@@ -24,10 +25,12 @@ These areas are then displayed vertically on top of eachother.
 
 @docs Options, options
 
-## Advanced
+# Advanced
 
 If one wants to use just use this module on its own, you can use `render` instead
 of the `game` function from the main module.
+
+## Render
 
 @docs render
 
@@ -44,7 +47,8 @@ import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 {-| A horizontal area of the content.
 A `Area` defines how the content should be displayed.
 
-**Note:** An area can only contain elements that are supported by the type of that area.
+**Note:** An area can only contain elements of the same type.
+So either you have tiles or images.
 -}
 type alias Area msg =
     Abstract.Area msg
@@ -84,10 +88,11 @@ type alias Options msg =
     Abstract.Options msg
 
 
-{-| A single color using the [elm-css colors](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Css#rgb)
+{-| A single color background.
+It uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest).
 
 ```
-Color (Css.rgb 20 12 28)
+colorBackground (Color.rgb255 20 12 28)
 ```
 
 -}
@@ -110,8 +115,8 @@ imageBackground image =
 
 {-| An area containing images that can be arranged freely.
 
-This is a complete contrast to the way how tiledArea is working.
-usefull applications are GUIs, menus or loading screens.
+This is a complete contrast to the way how `tiledArea` is working.
+Usefull applications are GUIs, menus or loading screens.
 
 Checkout [PixelEngine.Graphics.Image](/PixelEngine-Graphics-Image) for more information.
 
@@ -157,10 +162,10 @@ tiledArea { rows, tileset, background } content =
 
 {-| The engine comes with a set of options:
 
-  - `width` - Width of the game.
+  - `width` - Width of the game.  
     **Note:** all spatial values are given in _Pixels_.
 
-  - `transitionSpeedInSec` - The speed of animations.
+  - `transitionSpeedInSec` - The speed of animations.  
     **Default value:** `0` for no animations
 
 For the start use the following settings

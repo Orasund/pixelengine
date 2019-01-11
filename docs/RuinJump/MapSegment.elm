@@ -1,14 +1,14 @@
-module RuineJump.MapSegment exposing (append, concat, floorGenerator, intersectionGenerator, parkourGenerator)
+module RuinJump.MapSegment exposing (append, concat, floorGenerator, intersectionGenerator, parkourGenerator)
 
 import CellAutomata exposing (Automata, Location, Rule, RuleExpression(..))
 import Dict
 import Natural exposing (Natural16(..))
 import Random exposing (Generator)
-import RuineJump.Automata as Automata exposing (Grid, automata, mirroringAutomata)
-import RuineJump.Config as Config
-import RuineJump.Map exposing (Map)
-import RuineJump.MapElement exposing (Block(..), MapElement(..))
-import RuineJump.Rules as Rules
+import RuinJump.Automata as Automata exposing (Grid, automata, mirroringAutomata)
+import RuinJump.Config as Config
+import RuinJump.Map exposing (Map)
+import RuinJump.MapElement exposing (Block(..), MapElement(..))
+import RuinJump.Rules as Rules
 
 
 width : Int

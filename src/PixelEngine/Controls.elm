@@ -4,21 +4,18 @@ module PixelEngine.Controls exposing
     , basic, custom
     )
 
-{-| The graphic engine provides a touch-controller for mobile devices. The controllers has 8 buttons:
-Left (a key), Right (d key), Up (w key), Down (s key), A(Spacebar), B(x key), X(q key), Y(e key)
-
-## Main Function
-
-@docs supportingMobile
-
+{-| The graphic engine provides a touch-controller for mobile devices.
 
 ## Input
 
 @docs Input, defaultLayout
 
 # Advanced
-Normally the main module can be used to wire everything together.
-If you do want to do it yourself, there are the corresponding subscriptions.
+Normally everything is already predefined in [PixelEngine](/PixelEngine)
+
+## Mobile Support
+
+@docs supportingMobile
 
 ## Subscriptions
 
@@ -31,7 +28,7 @@ import PixelEngine.Graphics exposing (Options)
 import PixelEngine.Graphics.Abstract as Abstract
 import Json.Decode as Decode
 
-{-| all possible Inputs
+{-| all possible Inputs.
 -}
 type Input
     = InputLeft

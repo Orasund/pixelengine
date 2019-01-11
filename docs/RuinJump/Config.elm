@@ -1,4 +1,4 @@
-module RuineJump.Config exposing (sectionHeight, width)
+module RuinJump.Config exposing (sectionHeight, width)
 
 
 width : Int

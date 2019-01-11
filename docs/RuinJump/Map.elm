@@ -1,7 +1,7 @@
-module RuineJump.Map exposing (Map,remove)
+module RuinJump.Map exposing (Map,remove)
 
-import RuineJump.MapElement as MapElement exposing (Block(..), MapElement(..))
-import RuineJump.Config as Config
+import RuinJump.MapElement as MapElement exposing (Block(..), MapElement(..))
+import RuinJump.Config as Config
 import Dict exposing (Dict)
 import Random exposing (Generator)
 

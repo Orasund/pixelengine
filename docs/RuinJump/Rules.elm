@@ -1,7 +1,7 @@
-module RuineJump.Rules exposing (parkour, placeDirt, removeGrass, placeGrass)
+module RuinJump.Rules exposing (parkour, placeDirt, removeGrass, placeGrass)
 
 import CellAutomata exposing (Rule, RuleExpression(..),anyNeighborhood)
-import RuineJump.MapElement exposing (Block(..))
+import RuinJump.MapElement exposing (Block(..))
 
 
 parkour : List (Rule Block)

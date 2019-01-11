@@ -1,4 +1,4 @@
-module RuineJump.Main exposing (main)
+module RuinJump.Main exposing (main)
 
 import Css
 import Dict exposing (Dict)
@@ -62,28 +62,19 @@ init int =
             Random.initialSeed int
                 |> Random.step
                     (MapSegment.concat
-                        [ MapSegment.floorGenerator 0
-                        , MapSegment.parkourGenerator 1
-                        , MapSegment.parkourGenerator 2
-                        , MapSegment.parkourGenerator 3
-                        , MapSegment.parkourGenerator 4
-                        , MapSegment.intersectionGenerator 5
-                        , MapSegment.parkourGenerator 6
-                        , MapSegment.parkourGenerator 7
-                        , MapSegment.parkourGenerator 8
-                        , MapSegment.parkourGenerator 9
-                        , MapSegment.intersectionGenerator 10
-                        , MapSegment.parkourGenerator 11
-                        , MapSegment.parkourGenerator 12
-                        , MapSegment.parkourGenerator 13
-                        , MapSegment.parkourGenerator 14
-                        , MapSegment.intersectionGenerator 15
-                        , MapSegment.parkourGenerator 16
-                        , MapSegment.parkourGenerator 17
-                        , MapSegment.parkourGenerator 18
-                        , MapSegment.parkourGenerator 19
-                        , MapSegment.intersectionGenerator 20
-                        ]
+                        (List.range 0 10
+                            |> List.map
+                                (\i ->
+                                    [ MapSegment.parkourGenerator <| i * 5 + 1
+                                    , MapSegment.parkourGenerator <| i * 5 + 2
+                                    , MapSegment.parkourGenerator <| i * 5 + 3
+                                    , MapSegment.parkourGenerator <| i * 5 + 4
+                                    , MapSegment.intersectionGenerator <| i * 5 + 5
+                                    ]
+                                )
+                            |> List.concat
+                            |> List.append [ MapSegment.floorGenerator 0 ]
+                        )
                         |> Random.andThen
                             (\newMap ->
                                 (newMap |> MapSlice.generator lowestY)

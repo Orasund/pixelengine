@@ -1,9 +1,13 @@
-module PixelEngine.Graphics.Image exposing (Image, image, movable, fromTile, multipleImages, withAttributes, jumping)
+module PixelEngine.Graphics.Image exposing (Image, image, movable, onClick, fromTile, multipleImages, withAttributes, jumping)
 
 {-| This module contains functions for creating images.
-These Images can then be used for the _imageArea_ function from the main module
+These Images can then be used for the `imageArea` function from the [PixelEngine](/PixelEngine)
 
-@docs Image, image, movable, jumping, fromTile, multipleImages, withAttributes
+## Image
+@docs Image, image, movable, jumping, fromTile, multipleImages,
+
+## Attributes
+@docs withAttributes, onClick
 
 -}
 
@@ -13,26 +17,19 @@ import PixelEngine.Graphics.Abstract as Abstract
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 
 
-{-| A image is a very general object: as we will see later,
+{-| A `Image` is actually a very general type: As we will see later,
 even tiles are essentially images.
 The following functions are intended to be modular.
-
-A example of a image could be:
-
-```
-image "img.png" |> movable "uniqueName"
-```
-
 -}
 type alias Image msg =
     Abstract.ContentElement msg
 
 
 {-| The basic image constructor.
-the string contains the url to the image
+The string contains the url to the image
 
 ```
-image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
+image "aStone.png"
 ```
 
 -}
@@ -46,12 +43,18 @@ image source =
     }
 
 
-{-| Makes a image transition between positions.
+{-| Creates a image transition between positions.
 This is useful for images that will change their position during the game.
 
-**Note:** The string should be unique, if not the transition might fail every now and then.
+```
+image "enemy.png" |> movable "name"
+```
 
-**Note:** The string will be a id Attribute in a html node, so be careful not to use names that might be already taken.
+**Note:**  
+The string should be unique, if not the transition might fail every now and then.
+
+**Note:**  
+The string will be a id Attribute in a html node, so be careful not to use names that might be already taken.
 
 -}
 movable : String -> Image msg -> Image msg
@@ -64,7 +67,7 @@ movable transitionId contentElement =
 
 **Only use in combination with `movable`:**
     
-    image "face.png" |> movable "name" |> jumping
+    image "teleportingEnemy.png" |> movable "name" |> jumping
 
 Use this function if a tile has the `movable`-property, but you would like to
 remove it without causing any unwanted side effects.
@@ -77,18 +80,23 @@ jumping ({uniqueId} as t) =
         Just (id,_) ->
             {t|uniqueId = Just (id,False)}
 
-{-| Tiles are essentially also images,
-therefore this constructor transforms a tile and a tileset into an image.
+{-| `Tiles` are essentially also images,
+therefore this constructor transforms a `Tile` and a `Tileset` into an `Image`.
 
 ```
 fromTile (tile (0,0))
-    (tileset {source:"https://orasund.github.io/pixelengine/pixelengine-logo.png",width:80,height:80})
+    (tileset
+        {source:"tiles.png"
+        ,width:80
+        ,height:80
+        }
+    )
 ==
-image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
+image "tiles.png"
 ```
 
-**Note:** fromTile displays only the width and height of the image, that where given.
-This means setting width and height to 0 would not display the image at all.
+**Note:** `fromTile` displays only the `width` and `height` of the image, that where given.
+This means setting `width` and `height` to `0` would not display the image at all.
 
 ```
 fromTile (tile (0,0) |> movable "uniqueId")
@@ -96,7 +104,7 @@ fromTile (tile (0,0) |> movable "uniqueId")
 fromTile (tile (0,0)) |> movable "uniqueId"
 ```
 
-**Note:** If you want to animate an image use this function instead
+**Note:** If you want to animate an `Image` use this function instead.
 
 -}
 fromTile : Tile msg -> Tileset -> Image msg
@@ -118,10 +126,11 @@ fromTile { info, uniqueId, customAttributes } tileset =
     }
 
 
-{-| Adds custom attributes. use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Svg-Styled-Attributes).
+{-| Adds custom attributes.
 
-The motivation for this function was so that one can create [onClick](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Events#onClick) events.
+use the [Html.Attributes](https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes).
 
+Use this to create the `onClick` event from [Html.Events](https://package.elm-lang.org/packages/elm/html/latest/Html-Events#onClick).
 -}
 withAttributes : List (Attribute msg) -> Image msg -> Image msg
 withAttributes attributes i =
@@ -129,9 +138,19 @@ withAttributes attributes i =
         | customAttributes = attributes |> List.map Html.Styled.Attributes.fromUnstyled
     }
 
+{-| returns a Msg when it has been clicked.
 
-{-| it is possible to compose an image from a set of other images.
-the two Floats are realtive coordinates so
+    withAttributes [Events.onClick msg]
+    =
+    withAttributes [ onClick msg]
+
+-}
+onClick : msg -> Attribute msg
+onClick msg =
+    Events.onClick msg
+
+{-| It is possible to compose an `Image` from a set of other images.
+The two `Floats` are realtive coordinates.
 
 ```
 ((100,100),image "img.png")
@@ -139,7 +158,7 @@ the two Floats are realtive coordinates so
 ((20,50), multipleimages [((80,50),image "img.png")])
 ```
 
-sub-images loose the ability to be movable:
+Sub-images loose the ability to be movable:
 
 ```
 multipleimages [((x,y),image "img.png" |> movable "id")]
@@ -147,7 +166,7 @@ multipleimages [((x,y),image "img.png" |> movable "id")]
 multipleimages [((x,y),image "img.png")]
 ```
 
-instead use the following:
+Instead use the following:
 
 ```
 image "img.png" |> movable "id"

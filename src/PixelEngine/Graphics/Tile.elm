@@ -6,7 +6,7 @@ module PixelEngine.Graphics.Tile exposing
     )
 
 {-| This module contains functions for creating tiles.
-`Tile`s are used for the `tiledArea` function from the main module.
+Tiles are used for the `tiledArea` function from the main module.
 
 
 ## Tile
@@ -42,12 +42,15 @@ type alias Tileset =
 {-| The `Tileset` constructor has the following parameters:
 
   - `source` - The adress to the file
-  - `spriteWidth` - The size of a single sprite in the tileset (in pixels)
+  - `spriteWidth` - The size of a single sprite in the `Tileset` (in pixels)
   - `spriteHeight` - The height of a single sprite (also in pixels)
 
 For the following defines the `Tileset` used in the examples of this module.
 
-    {width: 16, height 16,source: "https://orasund.github.io/pixelengine/tileset.png"}
+    { width: 16
+    , height 16
+    , source: "https://orasund.github.io/pixelengine/tileset.png"
+    }
 
 -}
 tileset : { source : String, spriteWidth : Int, spriteHeight : Int } -> Tileset
@@ -55,10 +58,10 @@ tileset =
     identity
 
 
-{-| A `Tile` defines a sprite in a tileset.
+{-| A `Tile` defines a sprite in a `Tileset`.
 The following functions are intended to be modular.
 
-A example for a tile could be:
+A example for a `tile` could be:
 
     tile ( 1, 2 ) |> animated 1 |> movable "uniqueName"
 
@@ -69,14 +72,14 @@ type alias Tile msg =
 
 {-| The basic `Tile` constructor.
 
-The first argument is the position of the sprite in the tileset.
+The first argument is the position of the sprite in the `tileset`.
 
 As an example
 
-    tile ( 4, 2 )
+    tile ( 3, 2 )
 
-is the 4 row in the second column of the `Tileset`.
-
+is the 3 row in the second column of the `Tileset`.
+![a tileset](https://orasund.github.io/pixelengine/img3.png "a tileset")
 -}
 tile : ( Int, Int ) -> Tile msg
 tile ( left, top ) =
@@ -86,7 +89,7 @@ tile ( left, top ) =
     }
 
 
-{-| Adds animations to a tile.
+{-| Adds animations to a `Tile`.
 The sprites of the animation must be arranged horizontally in the `Tileset`.
 
 The first argument give the amount of steps of the animation (one less then the number of sprites.)
@@ -95,11 +98,15 @@ The following code specifies a `Tile` with 3+1 frames
 
     tile ( 0, 0 ) |> animated 3
 
-**Note:** Setting the steps to `0` describes a tile with no animation.
+**Note:**  
+Setting the steps to `0` describes a tile with no animation.
 
     tile ( 0, 0 ) |> animated 0 == tile ( 0, 0 )
 
-**Note:** Negaive steps are not supported, in this case no animation will be played.
+![animation](https://orasund.github.io/pixelengine/img2.png "animation")
+
+**Note:**  
+Negaive steps are not supported, in this case no animation will be played.
 
 -}
 animated : Int -> Tile msg -> Tile msg
@@ -120,11 +127,16 @@ animated steps ({ info } as t) =
 {-| Makes a `Tile` transition between positions.
 This is useful for sprites that will change their position during the game.
 
-**Note:** Once a `Tile` has this property, it can **NOT** be removed during the game.
+    tile ( 0, 0 ) |> movable "name"
 
-**Note:** The string should be unique, if not the transition might fail every now and then.
+**Note:**  
+Once a `Tile` has this property, it can **NOT** be removed during the game.
 
-**Note:** The string will be a id Attribute in a html node, so be careful not to use names that might be already taken.
+**Note:**  
+The string should be unique,. If not then the transition might fail every now and then.
+
+**Note:**  
+The string will be a id Attribute in a html node, so be careful not to use names that might be already taken.
 
 -}
 movable : String -> Tile msg -> Tile msg
@@ -134,7 +146,7 @@ movable id t =
     }
 
 
-{-| Pauses a the transition of a `movable` tile.
+{-| Pauses the transition of a `movable` tile.
 
 **Only use in combination with `movable`:**
 
@@ -155,7 +167,9 @@ jumping ({ uniqueId } as t) =
 
 {-| Adds custom attributes.
 
-use the [elm-css Attributes](http://package.elm-lang.org/packages/rtfeldman/elm-css/latest/Html-Styled-Attributes).
+use the [Html.Attributes](https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes).
+
+Use this to create the `onClick` event from [Html.Events](https://package.elm-lang.org/packages/elm/html/latest/Html-Events#onClick).
 -}
 withAttributes : List (Attribute msg) -> Tile msg -> Tile msg
 withAttributes attributes ({ customAttributes } as t) =
@@ -173,7 +187,7 @@ This can be used to simulate monochrome sprites or to implement team colors.
 
     withAttributes [css [Css.backgroundColor <| Css.rgb 255 0 0]]
     =
-    withAttributes [ backgroundColor <| Css.rgb 255 0 0]
+    withAttributes [ backgroundColor <| Color.rgb255 255 0 0]
 
 -}
 backgroundColor : Color -> Attribute msg
