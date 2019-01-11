@@ -42,12 +42,12 @@ If you have created a game with this engine, please let me know.
   * To 4.0.0
     * This package now uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest) for colors.
     * For styling use `Html.Attributes.style`.
-    * `usingScale` got removed.
+    * `renderToScale` replaced `usingScale`, but normally `Graphics.program` is the better option.
   * To 3.0.0
     * First follow the error messages of the compiler
-    * Next set the scale of your game to 1. In the new version the scale feature scales the entire game.
-    * If you want keyboard support use Graphics.program. It will also take care of the new way scaling works.
+    * Next set the `scale` of your game to `1`. In the new version the scale feature scales the entire game.
+    * If you want keyboard support use `Graphics.program`. It will also take care of the new way scaling works.
 
 ## Upcoming Features
-  * MultipleTiles - Similar to MultipleImages but for Tiles.
+  * MultipleTiles - Similar to `MultipleImages` but for Tiles.
   * Particles - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?

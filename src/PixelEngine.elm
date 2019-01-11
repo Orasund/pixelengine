@@ -1,7 +1,124 @@
 module PixelEngine exposing (PixelEngine, program, programWithCustomControls)
 
-{-| The Libary may support more then just simple rendering. This module exists to take care of everything else.
-It provides a program that is already set up.
+{-| This module takes case of all the wiring. If you are looking for the main module,
+head over to [PixelEngine.Graphics](/PixelEngine-Graphics).
+
+PixelEngine need a lot of wiring in order for it to work as intended.
+Thats why this module gives different programs that do the wiring for you.
+To start, copy this example and expand upon it.
+
+    module ControlsExample exposing (main)
+
+    import Color
+    import Html.Attributes as Attributes
+    import PixelEngine exposing (program)
+    import PixelEngine.Controls as Controls exposing (Input(..))
+    import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
+    import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
+
+
+    windowWidth : Int
+    windowWidth =
+        16
+
+
+    type alias Model =
+        { x : Int
+        , y : Int
+        }
+
+
+    type Msg
+        = Controls Input
+
+
+    view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
+    view ({ x, y } as model) =
+        let
+            tileSize : Int
+            tileSize =
+                16
+
+            width : Float
+            width =
+                toFloat <| windowWidth * tileSize
+
+            tileset : Tileset
+            tileset =
+                { source = "tileset.png", spriteWidth = 16, spriteHeight = 16 }
+
+            background : Background
+            background =
+                Graphics.colorBackground (Color.rgb255 20 12 28)
+
+            playerTile : Tile Msg
+            playerTile =
+                tile ( 12, 12 )
+        in
+        { title = "Example"
+        , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
+        , body =
+            [ Graphics.tiledArea
+                { rows = windowWidth
+                , background = background
+                , tileset = tileset
+                }
+                [ ( ( x, y )
+                , playerTile
+                )
+                ]
+            ]
+        }
+
+
+    init : () -> ( Model, Cmd Msg )
+    init _ =
+        ( { x = windowWidth // 2, y = windowWidth // 2 }, Cmd.none )
+
+
+    update : Msg -> Model -> ( Model, Cmd Msg )
+    update msg ({ x, y } as model) =
+        ( case msg of
+            Controls input ->
+                case input of
+                    InputUp ->
+                        { model | y = y - 1 }
+
+                    InputLeft ->
+                        { model | x = x - 1 }
+
+                    InputDown ->
+                        { model | y = y + 1 }
+
+                    InputRight ->
+                        { model | x = x + 1 }
+
+                    _ ->
+                        model
+        , Cmd.none
+        )
+
+
+    subscriptions : Model -> Sub Msg
+    subscriptions _ =
+        Sub.none
+
+
+    controls : Input -> Msg
+    controls =
+        Controls
+
+
+    main =
+        program
+            { init = init
+            , update = update
+            , subscriptions = subscriptions
+            , view = view
+            , controls = controls
+            }
+
+
 
 @docs PixelEngine, program, programWithCustomControls
 
