@@ -79,6 +79,7 @@ As an example
     tile ( 3, 2 )
 
 is the 3 row in the second column of the `Tileset`.
+
 ![a tileset](https://orasund.github.io/pixelengine/img3.png "a tileset")
 -}
 tile : ( Int, Int ) -> Tile msg

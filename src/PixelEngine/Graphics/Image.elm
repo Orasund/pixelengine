@@ -4,7 +4,7 @@ module PixelEngine.Graphics.Image exposing (Image, image, movable, onClick, from
 These Images can then be used for the `imageArea` function from the [PixelEngine](/PixelEngine)
 
 ## Image
-@docs Image, image, movable, jumping, fromTile, multipleImages,
+@docs Image, image, movable, jumping, fromTile, multipleImages
 
 ## Attributes
 @docs withAttributes, onClick
@@ -13,6 +13,7 @@ These Images can then be used for the `imageArea` function from the [PixelEngine
 
 import Html exposing (Attribute)
 import Html.Styled.Attributes
+import Html.Events as Events
 import PixelEngine.Graphics.Abstract as Abstract
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 

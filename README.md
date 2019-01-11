@@ -6,7 +6,7 @@ PixelEngine is a graphic engine for rendering turn-based pixel games.
 ## Games made with this Engine
 
   * [Dig Dig Boom - Rogue-like Game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
-  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the MultipleImages Type. *(Use the Mouse to play)*
+  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
   * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/RuinJump/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
 
 If you have created a game with this engine, please let me know.
@@ -16,7 +16,7 @@ If you have created a game with this engine, please let me know.
 This package follows a few philosophies:
   * **Let CSS handle all animations** - I feel like functional programming should describe *reactions* to some events. Animations are normally running all the time and not a reaction. Addionally by getting rid of an infinite game loop, we can use the **time-travel debugger**.
   * **Pixel games first** - There are a few optimizations to ensure crips pixels as well as good old low-frame animations.
-  * **demand driven features** - There is no roadmap. I intent to use this engine for all my games. If I feel like I can't make a game, because my engine is missing a feature, I will add it. (Please feel free to ask if you are missing a feature.)
+  * **Demand driven features** - There is no roadmap. I intent to use this engine for all my games. If I feel like I can't make a game, because my engine is missing a feature, I will add it. (Please feel free to ask if you are missing a feature.)
 
 When to use it:
 
@@ -42,10 +42,10 @@ Both used a loop to draw animations and therefore did not support time travellin
 So I desided to try something different and to use HTML and CSS instead of WebGL. This way I could let CSS handle the animations. I knew that my little project was not a universal game engine, but for very specific games it might be just right. 
 
 ## Upcoming Features
-  * Console - It would be great if any game written with this engine would have a common way how the interface looks like. I might want to provide different styles. I am Mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few more.
-  * MultipleTiles - Similar to `MultipleImages` but for Tiles.
-  * Modular Transitions - For now I do not expect this will ever be done, just because its a very complex problem.
-  * Particles - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?
+  * **Console** - It would be great if all games written with this engine would have a common way how the interface looks like. I am mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few different GUIs and Startscreen.
+  * **MultipleTiles** - Similar to `MultipleImages` but for Tiles.
+  * **Modular Transitions** - For now I do not expect this will ever be done, just because its a very complex problem.
+  * **Particles** - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?
 
 ## Upgrading
   * **To 4.0.0**
