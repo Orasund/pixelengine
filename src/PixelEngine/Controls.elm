@@ -11,7 +11,7 @@ module PixelEngine.Controls exposing
 @docs Input, defaultLayout
 
 # Advanced
-Normally everything is already predefined in [PixelEngine](/PixelEngine)
+Normally everything is already predefined in [PixelEngine](PixelEngine)
 
 ## Mobile Support
 
@@ -45,7 +45,7 @@ type Input
 {-| Adds mobile support to the options.
 It needs the window size.
 
-[PixelEngine](/PixelEngine) provides a fully wired program that takes care of everything.
+[PixelEngine](PixelEngine) provides a fully wired program that takes care of everything.
 
 -}
 supportingMobile : { windowSize : {width:Float,height:Float}, controls : Input -> msg } -> Options msg -> Options msg

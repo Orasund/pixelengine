@@ -3,7 +3,7 @@ module PixelEngine exposing (PixelEngine, game, gameWithCustomControls)
 {-| This module takes care of all the wiring.
 
 **If you are looking for the main module,
-head over to [PixelEngine.Graphics](/PixelEngine-Graphics).**
+head over to [PixelEngine.Graphics](PixelEngine-Graphics).**
 
 PixelEngine needs a lot of wiring in order for it to work as intended.
 Thats why this module gives different prewired frames.

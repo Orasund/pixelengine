@@ -6,8 +6,8 @@ module PixelEngine.Graphics exposing
     
 {-| This module takes care of the Graphics.
 
-You will want to add [PixelEngine.Graphics.Image](/PixelEngine-Graphics-Image)
-or [PixelEngine.Graphics.Tile](/PixelEngine-Graphics-Tile) to
+You will want to add [PixelEngine.Graphics.Image](PixelEngine-Graphics-Image)
+or [PixelEngine.Graphics.Tile](PixelEngine-Graphics-Tile) to
 actually draw something.
 
 ## Area
@@ -47,8 +47,11 @@ import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 {-| A horizontal area of the content.
 A `Area` defines how the content should be displayed.
 
-**Note:** An area can only contain elements of the same type.
+**Note:**  
+An area can only contain elements of the same type.
 So either you have tiles or images.
+
+![A typical game](https://orasund.github.io/pixelengine/img4.png "A typical game")
 -}
 type alias Area msg =
     Abstract.Area msg
@@ -118,7 +121,7 @@ imageBackground image =
 This is a complete contrast to the way how `tiledArea` is working.
 Usefull applications are GUIs, menus or loading screens.
 
-Checkout [PixelEngine.Graphics.Image](/PixelEngine-Graphics-Image) for more information.
+Checkout [PixelEngine.Graphics.Image](PixelEngine-Graphics-Image) for more information.
 
 This area has the following options:
 
@@ -141,7 +144,7 @@ It supports one tileset at a time,
 that means all sprites must be of the same size and stored as a grid in one single file.
 This area is useful for displaying the playing field of a game.
 
-Checkout [PixelEngine.Graphics.Tile](/PixelEngine-Graphics-Image) for more information.
+Checkout [PixelEngine.Graphics.Tile](PixelEngine-Graphics-Image) for more information.
 
 This area has the following options:
 
@@ -163,7 +166,8 @@ tiledArea { rows, tileset, background } content =
 {-| The engine comes with a set of options:
 
   - `width` - Width of the game.  
-    **Note:** all spatial values are given in _Pixels_.
+    **Note:**  
+    all spatial values are given in _Pixels_.
 
   - `transitionSpeedInSec` - The speed of animations.  
     **Default value:** `0` for no animations

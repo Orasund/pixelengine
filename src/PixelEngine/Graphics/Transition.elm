@@ -6,7 +6,7 @@ module PixelEngine.Graphics.Transition exposing
 {-| Adding a transitions between screens.
 
 The information for the transition will be written in the `Option` class from
-[PixelEngine.Graphics](/PixelEngine-Graphics).
+[PixelEngine.Graphics](PixelEngine-Graphics).
 
 To get started, copy the following example:
 
@@ -62,8 +62,7 @@ So the example will compile to something like this:
     25% {opacity:1;filter:grayscale(70%) blur(0px);}
     100% {opacity:0;filter:grayscale(70%) blur(5px);}
 
-**Note:**
-
+**Note:**  
 A screen will be automatically hidden after a transition,
 so the example would also work without the opacity-parameter.
 -}
@@ -73,6 +72,7 @@ custom name transitionList =
 
 
 {-| adds the `Transition` to the `Options`.
+
 The first argument is the List or Areas taken **before** the transition is applied.
 (e.g. the last state)
 -}

@@ -1,7 +1,7 @@
 module PixelEngine.Graphics.Image exposing (Image, image, movable, onClick, fromTile, multipleImages, withAttributes, jumping)
 
 {-| This module contains functions for creating images.
-These Images can then be used for the `imageArea` function from the [PixelEngine](/PixelEngine)
+These Images can then be used for the `imageArea` function from the [PixelEngine](PixelEngine)
 
 ## Image
 @docs Image, image, movable, jumping, fromTile, multipleImages
@@ -96,7 +96,8 @@ fromTile (tile (0,0))
 image "tiles.png"
 ```
 
-**Note:** `fromTile` displays only the `width` and `height` of the image, that where given.
+**Note:**  
+`fromTile` displays only the `width` and `height` of the image, that where given.
 This means setting `width` and `height` to `0` would not display the image at all.
 
 ```
@@ -105,7 +106,8 @@ fromTile (tile (0,0) |> movable "uniqueId")
 fromTile (tile (0,0)) |> movable "uniqueId"
 ```
 
-**Note:** If you want to animate an `Image` use this function instead.
+**Note:**  
+If you want to animate an `Image` use this function instead.
 
 -}
 fromTile : Tile msg -> Tileset -> Image msg
@@ -129,7 +131,7 @@ fromTile { info, uniqueId, customAttributes } tileset =
 
 {-| Adds custom attributes.
 
-use the [Html.Attributes](https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes).
+Use the [Html.Attributes](https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes).
 
 Use this to create the `onClick` event from [Html.Events](https://package.elm-lang.org/packages/elm/html/latest/Html-Events#onClick).
 -}
