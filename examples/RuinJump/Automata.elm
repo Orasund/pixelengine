@@ -1,4 +1,6 @@
-module RuinJump.Automata exposing (Grid, automata, mirroringAutomata, order, step)
+module RuinJump.Automata exposing (
+        Grid, automata, mirroringAutomata, order, step
+    )
 
 import CellAutomata as Automata exposing (Automata, Location, Rule)
 import RuinJump.MapElement exposing (Block(..))

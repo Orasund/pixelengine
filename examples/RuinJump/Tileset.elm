@@ -39,18 +39,18 @@ quadTile { tilePos, pos } =
 air : Int -> Tile msg
 air _ =
     tile (1,0)
-        |> movable ""
+        {- |> movable ""-}
 
 
 dirt : Int -> Tile msg
 dirt seed =
     variantTile seed ( 4, 0 )
-        |> movable ""
+        {- |> movable ""-}
 
 wood : Int -> Tile msg
 wood seed =
     variantTile seed ( 8, 0 )
-        |> movable ""
+        {- |> movable ""-}
 
 {- ("tile_" ++ (String.fromInt seed)) -}
 
@@ -58,7 +58,7 @@ wood seed =
 stone : Int -> Tile msg
 stone seed =
     variantTile seed ( 0, 4 )
-        |> movable ""
+        {- |> movable ""-}
 
 
 
@@ -68,7 +68,7 @@ stone seed =
 grass : Int -> Tile msg
 grass seed =
     variantTile seed ( 4, 4 )
-        |> movable ""
+        {- |> movable ""-}
 
 
 

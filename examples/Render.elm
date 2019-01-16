@@ -11,7 +11,6 @@ import PixelEngine.Graphics.Tile as Tile
         , tile
         )
 
-
 main =
     let
         tileSize : Int

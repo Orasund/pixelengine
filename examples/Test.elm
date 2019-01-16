@@ -1,7 +1,6 @@
 module TestExample exposing (main)
 
 import Color
-import Html
 import PixelEngine.Graphics as Graphics exposing (Background)
 import PixelEngine.Graphics.Image exposing (image)
 import PixelEngine.Graphics.Tile as Tile

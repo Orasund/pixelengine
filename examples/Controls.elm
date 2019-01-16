@@ -1,11 +1,10 @@
 module ControlsExample exposing (main)
 
 import Color
-import Html.Attributes as Attributes
 import PixelEngine exposing (PixelEngine)
-import PixelEngine.Controls as Controls exposing (Input(..))
+import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
+import PixelEngine.Graphics.Tile exposing (Tile, Tileset, tile)
 
 
 windowWidth : Int
@@ -24,7 +23,7 @@ type Msg
 
 
 view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
-view ({ x, y } as model) =
+view { x, y } =
     let
         tileSize : Int
         tileSize =
@@ -98,6 +97,7 @@ subscriptions _ =
 controls : Input -> Msg
 controls =
     Controls
+
 
 main : PixelEngine () Model Msg
 main =

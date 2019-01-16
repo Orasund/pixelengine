@@ -1,4 +1,7 @@
-module RuinJump.MapElement exposing (Block(..), MapElement(..), woodGenerator, remove,dirtGenerator, toTiles)
+module RuinJump.MapElement exposing (
+        Block(..), MapElement(..),
+        isOccupied, woodGenerator, remove,dirtGenerator, toTiles
+    )
 
 import PixelEngine.Graphics.Tile exposing (Tile)
 import Random exposing (Generator)
@@ -13,10 +16,21 @@ type Block
     | Wood
     | Air
 
-
 type MapElement
     = PlayerElement PlayerAction FaceingDirection
     | BlockElement Block Int
+
+isOccupied : Maybe MapElement -> Bool
+isOccupied elem =
+    case elem of
+        Nothing ->
+            False
+
+        Just (BlockElement Air _) ->
+            False
+
+        Just _ ->
+            True
 
 remove : MapElement -> MapElement
 remove element =

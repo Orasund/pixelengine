@@ -1,0 +1,37 @@
+{
+    "type": "application",
+    "source-directories": [
+        ".",
+        "../src",
+        "libs"
+    ],
+    "elm-version": "0.19.0",
+    "dependencies": {
+        "direct": {
+            "Orasund/elm-cellautomata": "1.0.1",
+            "avh4/elm-color": "1.0.0",
+            "elm/browser": "1.0.1",
+            "elm/core": "1.0.2",
+            "elm/html": "1.0.0",
+            "elm/json": "1.1.2",
+            "elm/random": "1.0.0",
+            "elm/time": "1.0.0",
+            "elm-community/random-extra": "3.0.0",
+            "lovasoa/elm-rolling-list": "1.1.4",
+            "rtfeldman/elm-css": "16.0.0",
+            "wernerdegroot/listzipper": "3.1.1"
+        },
+        "indirect": {
+            "Skinney/murmur3": "2.0.8",
+            "elm/url": "1.0.0",
+            "elm/virtual-dom": "1.0.2",
+            "rtfeldman/elm-hex": "1.0.0"
+        }
+    },
+    "test-dependencies": {
+        "direct": {},
+        "indirect": {
+            "avh4/elm-fifo": "1.0.4"
+        }
+    }
+}

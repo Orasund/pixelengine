@@ -2,32 +2,35 @@ module RuinJump.Main exposing (main)
 
 import Color
 import Dict
-import List.Zipper as Zipper exposing (Zipper)
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 import Process
-import Random
+import Random exposing (Generator, Seed)
 import RuinJump.Config as Config
-import RuinJump.Map as Map exposing (Map)
+import RuinJump.Map exposing (Map)
 import RuinJump.MapElement as MapElement exposing (Block(..), MapElement(..))
 import RuinJump.MapSegment as MapSegment
-import RuinJump.MapSlice as MapSlice
-import RuinJump.Player as Player exposing (FaceingDirection(..), Player, PlayerAction(..))
+import RuinJump.Player as Player
+    exposing
+        ( FaceingDirection(..)
+        , Player
+        , PlayerAction(..)
+        )
+import RuinJump.Stage as Stage exposing (Stage)
 import Task
 import Time
 
 
 type alias Model =
-    { map : Map
-    , lowestY : Int
-    , currentY : Int
-    , xSlice : Zipper Int
+    { stage : Stage
     , player : Player
-    , decaySpeed : Int
-    , seed : Random.Seed
     }
+
+
+type alias State =
+    ( Model, Seed )
 
 
 type Msg
@@ -48,118 +51,51 @@ tickTask =
         )
 
 
-restart : ( Maybe Model, Cmd Msg )
+restart : ( Maybe State, Cmd Msg )
 restart =
     ( Nothing
     , Random.generate Init <| Random.int Random.minInt Random.maxInt
     )
 
 
-init : Int -> ( Maybe Model, Cmd Msg )
+init : Int -> ( Maybe State, Cmd Msg )
 init int =
     let
-        ( { map, xSlice }, seed ) =
-            Random.initialSeed int
-                |> Random.step
-                    (MapSegment.concat
-                        (List.range 0 10
-                            |> List.map
-                                (\i ->
-                                    [ MapSegment.parkourGenerator <| i * 5 + 1
-                                    , MapSegment.parkourGenerator <| i * 5 + 2
-                                    , MapSegment.parkourGenerator <| i * 5 + 3
-                                    , MapSegment.parkourGenerator <| i * 5 + 4
-                                    , MapSegment.intersectionGenerator <| i * 5 + 5
-                                    ]
-                                )
-                            |> List.concat
-                            |> List.append [ MapSegment.floorGenerator 0 ]
-                        )
-                        |> Random.andThen
-                            (\newMap ->
-                                (newMap |> MapSlice.generator lowestY)
-                                    |> Random.map
-                                        (\newXSlice ->
-                                            { map = newMap
-                                            , xSlice = newXSlice
-                                            }
-                                        )
-                            )
-                    )
+        segments : Int -> List (Generator Map)
+        segments i =
+            [ MapSegment.parkourGenerator <| i * 5 + 1
+            , MapSegment.parkourGenerator <| i * 5 + 2
+            , MapSegment.parkourGenerator <| i * 5 + 3
+            , MapSegment.parkourGenerator <| i * 5 + 4
+            , MapSegment.intersectionGenerator <| i * 5 + 5
+            ]
 
         (( _, y ) as pos) =
             ( Config.width // 2, -7 )
 
-        lowestY : Int
-        lowestY =
-            0
-
-        decaySpeed : Int
-        decaySpeed =
-            1
+        ( stage, seed ) =
+            Random.initialSeed int
+                |> Random.step
+                    (Stage.generate
+                        { lowestY = 0
+                        , currentY = y
+                        , decaySpeed = 1
+                        }
+                        segments
+                    )
 
         player : Player
         player =
             { pos = pos, action = Standing, faceing = FaceingLeft }
     in
     ( Just
-        { seed = seed
-        , player = player
-        , map = map
-        , lowestY = lowestY
-        , currentY = y
-        , xSlice = xSlice
-        , decaySpeed = decaySpeed
-        }
+        ( { player = player
+          , stage = stage
+          }
+        , seed
+        )
     , tickTask
     )
-
-
-removeOne : { a | xSlice : Zipper Int, lowestY : Int, map : Map } -> Random.Generator { a | xSlice : Zipper Int, lowestY : Int, map : Map }
-removeOne ({ xSlice, lowestY, map } as rec) =
-    let
-        x : Int
-        x =
-            xSlice |> Zipper.current
-    in
-    case xSlice |> Zipper.next of
-        Just slice ->
-            Random.constant
-                { rec
-                    | xSlice = slice
-                    , map = map |> Map.remove ( x, lowestY )
-                }
-
-        Nothing ->
-            MapSlice.generator (lowestY - 1) map
-                |> Random.map
-                    (\slice ->
-                        { rec
-                            | xSlice = slice
-                            , lowestY = lowestY - 1
-                            , map = map |> Map.remove ( x, lowestY )
-                        }
-                    )
-
-
-removeN : Int -> Model -> Model
-removeN decaySpeed ({ seed } as model) =
-    let
-        ( newModel, newSeed ) =
-            List.range 1 decaySpeed
-                |> List.foldl
-                    (always
-                        (\( m, s ) ->
-                            s
-                                |> Random.step
-                                    (m |> removeOne)
-                        )
-                    )
-                    ( model, seed )
-    in
-    { newModel
-        | seed = newSeed
-    }
 
 
 applyAction : (Player -> Player) -> Model -> Model
@@ -169,8 +105,8 @@ applyAction action ({ player } as model) =
     }
 
 
-placeBlock : Model -> Model
-placeBlock ({ map, seed, decaySpeed, player } as model) =
+placeStairs : Model -> Generator Model
+placeStairs ({ player, stage } as model) =
     let
         ( x, y ) =
             player.pos
@@ -186,53 +122,73 @@ placeBlock ({ map, seed, decaySpeed, player } as model) =
                     ( ( x + 3, y )
                     , ( x + 2, y + 1 )
                     )
-
-        ( elem, newSeed ) =
-            Random.step MapElement.woodGenerator seed
     in
-    { model
-        | map = map |> Dict.insert pos2 elem |> Dict.insert pos1 elem
-        , decaySpeed = decaySpeed + 1
-        , seed = newSeed
-    }
+    Stage.placeStairs pos1 pos2 stage
+        |> Random.map
+            (\newStage ->
+                { model
+                    | stage = newStage
+                }
+            )
 
 
-onInput : Input -> Model -> Maybe ( Model, Cmd Msg )
-onInput input ({ map, decaySpeed } as model) =
+onInput : Input -> State -> Maybe ( State, Cmd Msg )
+onInput input (( model, _ ) as state) =
+    let
+        { map, decaySpeed } =
+            model.stage
+    in
     (case input of
         InputUp ->
-            Just <| (removeN decaySpeed << (applyAction <| Player.jump map))
+            Just
+                ((Player.jump map |> applyAction |> Tuple.mapFirst)
+                    >> (\( { stage } as m, seed ) ->
+                            seed
+                                |> Random.step
+                                    (Stage.removeN decaySpeed stage
+                                        |> Random.map
+                                            (\s -> { m | stage = s })
+                                    )
+                       )
+                )
 
         InputLeft ->
-            Just <| applyAction <| Player.move FaceingLeft map
+            Just
+                (Player.move FaceingLeft map |> applyAction |> Tuple.mapFirst)
 
         InputDown ->
-            Just <| applyAction <| Player.drop map
+            Just (Player.drop map |> applyAction |> Tuple.mapFirst)
 
         InputRight ->
-            Just <| applyAction <| Player.move FaceingRight map
+            Just (Player.move FaceingRight map |> applyAction |> Tuple.mapFirst)
 
         InputA ->
-            Just <| placeBlock
+            Just (\( m, s ) -> s |> Random.step (placeStairs m))
 
         _ ->
             Nothing
     )
         |> Maybe.map
             (\function ->
-                model
+                state
                     |> function
-                    |> (\newModel ->
-                            ( newModel
+                    |> (\newState ->
+                            ( newState
                             , tickTask
                             )
                        )
             )
 
 
-onTick : Model -> ( Maybe Model, Cmd Msg )
-onTick ({ map, player, lowestY } as model) =
+onTick : State -> ( Maybe State, Cmd Msg )
+onTick ( model, seed ) =
     let
+        { player, stage } =
+            model
+
+        { map, lowestY } =
+            stage
+
         ( _, playerY ) =
             player.pos
     in
@@ -242,46 +198,38 @@ onTick ({ map, player, lowestY } as model) =
     else
         let
             { newPlayer, nextTick } =
-                Player.update
-                    player
-                    map
-                    (\elem ->
-                        case elem of
-                            Nothing ->
-                                False
-
-                            Just (BlockElement Air _) ->
-                                False
-
-                            Just _ ->
-                                True
-                    )
+                Player.update player map MapElement.isOccupied
 
             ( _, y ) =
                 newPlayer.pos
         in
         if nextTick then
-            ( Just { model | player = newPlayer }
+            ( Just ( { model | player = newPlayer }, seed )
             , tickTask
             )
 
         else
             ( Just
-                { model
+                ( { model
                     | player = newPlayer
-                    , currentY = y
-                }
+                    , stage =
+                        { stage
+                            | currentY = y
+                        }
+                  }
+                , seed
+                )
             , Cmd.none
             )
 
 
-update : Msg -> Maybe Model -> ( Maybe Model, Cmd Msg )
-update msg maybeModel =
+update : Msg -> Maybe State -> ( Maybe State, Cmd Msg )
+update msg maybeState =
     let
         defaultCase =
-            ( maybeModel, Cmd.none )
+            ( maybeState, Cmd.none )
     in
-    case maybeModel of
+    case maybeState of
         Nothing ->
             case msg of
                 Init int ->
@@ -290,24 +238,24 @@ update msg maybeModel =
                 _ ->
                     defaultCase
 
-        Just model ->
+        Just state ->
             case msg of
                 Init int ->
                     init int
 
                 Tick ->
-                    model |> onTick
+                    state |> onTick
 
                 Input input ->
-                    case model |> onInput input of
+                    case state |> onInput input of
                         Nothing ->
                             defaultCase
 
-                        Just ( newModel, cmd ) ->
-                            ( Just newModel, cmd )
+                        Just ( newState, cmd ) ->
+                            ( Just newState, cmd )
 
 
-subscriptions : Maybe Model -> Sub Msg
+subscriptions : Maybe State -> Sub Msg
 subscriptions _ =
     Sub.none
 
@@ -368,8 +316,8 @@ getTilesList { currentY, lowestY } =
         []
 
 
-view : Maybe Model -> { title : String, options : Options Msg, body : List (Area Msg) }
-view maybeModel =
+view : Maybe State -> { title : String, options : Options Msg, body : List (Area Msg) }
+view maybeState =
     let
         width : Float
         width =
@@ -400,8 +348,12 @@ view maybeModel =
             , rows = rows
             , tileset = tileset
             }
-            (case maybeModel of
-                Just { map, player, currentY, lowestY } ->
+            (case maybeState of
+                Just ( { player, stage }, _ ) ->
+                    let
+                        { map, currentY, lowestY } =
+                            stage
+                    in
                     map
                         |> Dict.insert
                             player.pos
@@ -416,7 +368,7 @@ view maybeModel =
     }
 
 
-main : PixelEngine {} (Maybe Model) Msg
+main : PixelEngine {} (Maybe State) Msg
 main =
     game
         { init = always restart
