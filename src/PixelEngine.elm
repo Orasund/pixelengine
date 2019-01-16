@@ -269,7 +269,6 @@ initFunction controls init =
             ]
         )
 
-
 {-| A game using custom controls.
 
 The default controls should be enough to start,
@@ -295,7 +294,6 @@ gameWithCustomControls { init, update, subscriptions, view, controls } =
         , view =
             viewFunction view
         }
-
 
 {-| A prewired PixelEngine frame.
 
