@@ -1,20 +1,16 @@
 module TicTacToe exposing (main)
 
-import Color
 import Dict exposing (Dict)
-import Html exposing (Html)
-import Html.Attributes as Attributes
-import PixelEngine exposing (game)
-import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image exposing (image)
-import PixelEngine.Graphics.Tile as Tile
-    exposing
-        ( Tile
-        , Tileset
-        , onClick
-        , tile
-        , withAttributes
-        )
+import PixelEngine exposing (PixelEngine,game)
+import PixelEngine.Controls exposing (Input(..))
+import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
+import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
+
+
+
+{------------------------
+   TYPES
+------------------------}
 
 
 type Mark
@@ -37,11 +33,19 @@ type Msg
     | Reset
     | None --having a "Do nothing" Msg is often quite a cheap fix.
 
+
+
+{------------------------
+   INIT
+------------------------}
+
+
 newGame : Model
 newGame =
     { grid = Dict.empty
     , nextMark = Cross
     }
+
 
 init : () -> ( Model, Cmd Msg )
 init _ =
@@ -50,22 +54,25 @@ init _ =
     )
 
 
+
+{------------------------
+   UPDATE
+------------------------}
+
+
+flip : Mark -> Mark
+flip mark =
+    case mark of
+        Nought ->
+            Cross
+
+        Cross ->
+            Nought
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg ({ grid, nextMark } as model) =
     let
-        flip : Mark -> Mark
-        flip mark =
-            case mark of
-                Nought ->
-                    Cross
-
-                Cross ->
-                    Nought
-
-        setMark : ( Int, Int ) -> Mark -> Grid -> Grid
-        setMark pos =
-            Dict.insert pos
-
         defaultCase : ( Model, Cmd Msg )
         defaultCase =
             ( model, Cmd.none )
@@ -91,9 +98,9 @@ update msg ({ grid, nextMark } as model) =
                    impossible states are bad.
                 -}
                 defaultCase
-        
+
         Reset ->
-            (newGame,Cmd.none)
+            ( newGame, Cmd.none )
 
         None ->
             {- This fires whenever a Keyboard input was made. In our case we
@@ -102,20 +109,41 @@ update msg ({ grid, nextMark } as model) =
             defaultCase
 
 
+
+{------------------------
+   SUBSCRIPTIONS
+------------------------}
+
+
 subscriptions : Model -> Sub Msg
-subscriptions m =
+subscriptions _ =
     Sub.none
 
 
+
+{------------------------
+   CONTROLS
+------------------------}
+
+
+controls : Input -> Msg
 controls _ =
     None
 
-getTile : (Int,Int) -> Grid -> Tile Msg
-getTile (x,y) grid =
+
+
+{------------------------
+   VIEW
+------------------------}
+
+
+getTile : ( Int, Int ) -> Grid -> Tile Msg
+getTile ( x, y ) grid =
     let
         none : ( Int, Int ) -> Tile Msg
         none pos =
-            tile ( 0, 0 ) |> withAttributes [ onClick (SetMark pos) ]
+            tile ( 0, 0 )
+                |> Tile.withAttributes [ Tile.onClick (SetMark pos) ]
 
         nought : Tile Msg
         nought =
@@ -133,8 +161,23 @@ getTile (x,y) grid =
             cross
 
         Nothing ->
-            none (x,y)
+            none ( x, y )
 
+
+foldOverGrid : { width : Int, height : Int } -> (( Int, Int ) -> a) -> List a
+foldOverGrid { width, height } function =
+    List.range 0 (width - 1)
+        |> List.foldl
+            (\x list ->
+                List.range 0 (height - 1)
+                    |> List.foldl
+                        (\y -> List.append [ function ( x, y ) ])
+                        list
+            )
+            []
+
+
+view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
 view { grid } =
     let
         tileSize : Int
@@ -166,7 +209,7 @@ view { grid } =
 
         reset : Tile Msg
         reset =
-            tile (1,0) |> withAttributes [ onClick (Reset) ]
+            tile ( 1, 0 ) |> Tile.withAttributes [ Tile.onClick Reset ]
     in
     { title = "Tic Tac Toe"
     , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
@@ -176,24 +219,26 @@ view { grid } =
             , tileset = tileset
             , background = background
             }
-            (List.range 0 2
-                |> List.foldl
-                    (\x l ->
-                        List.range 0 2
-                            |> List.foldl
-                                (\y list ->
-                                    ( ( 1 + x, 1 + y ), grid |> getTile (x,y) ) :: list
-                                )
-                                l
+            (foldOverGrid
+                { width = 2, height = 2 }
+                (\(( x, y ) as pos) ->
+                    ( ( 1 + x, 1 + y )
+                    , grid |> getTile pos
                     )
-                    []
-            |> List.append
-                [ ((2,0),reset)]
+                )
+                |> List.append
+                    [ ( ( 2, 0 ), reset ) ]
             )
         ]
     }
 
 
+
+{------------------------
+   MAIN
+------------------------}
+
+main : PixelEngine () Model Msg
 main =
     game
         { init = init
