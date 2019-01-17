@@ -220,7 +220,7 @@ view { grid } =
             , background = background
             }
             (foldOverGrid
-                { width = 2, height = 2 }
+                { width = 3, height = 3 }
                 (\(( x, y ) as pos) ->
                     ( ( 1 + x, 1 + y )
                     , grid |> getTile pos
