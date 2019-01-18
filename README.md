@@ -3,11 +3,15 @@ PixelEngine is a graphic engine for rendering turn-based pixel games.
 
 ![Games made with pixelEngine](https://orasund.github.io/pixelengine/img1.png "Games made with pixelEngine")
 
+## Tutorials
+* [Tic Tac Toe](https://github.com/Orasund/pixelengine/wiki/Tutorial:-Tic-Tac-Toe) Beginner Tutorial,
+uses clickable Tiles.
+
 ## Games made with this Engine
 
-  * [Dig Dig Boom - Rogue-like Game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
-  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
-  * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/RuinJump/) ([src](https://github.com/Orasund/pixelengine/tree/master/docs/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
+  * [Dig Dig Boom - Rogue-like Game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
+  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
+  * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/RuinJump/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
 
 If you have created a game with this engine, please let me know.
 

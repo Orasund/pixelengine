@@ -29,7 +29,7 @@ type alias Model =
 
 
 type Msg
-    = SetMark ( Int, Int )
+    = PlaceMark ( Int, Int )
     | Reset
     | None --having a "Do nothing" Msg is often quite a cheap fix.
 
@@ -78,7 +78,7 @@ update msg ({ grid, nextMark } as model) =
             ( model, Cmd.none )
     in
     case msg of
-        SetMark ( x, y ) ->
+        PlaceMark ( x, y ) ->
             if x >= 0 && x < 3 && y >= 0 && y < 3 then
                 case grid |> Dict.get ( x, y ) of
                     Nothing ->
@@ -135,24 +135,25 @@ controls _ =
 {------------------------
    VIEW
 ------------------------}
+none : ( Int, Int ) -> Tile Msg
+none pos =
+    tile ( 0, 0 )
+        |> Tile.withAttributes [ Tile.onClick (PlaceMark pos) ]
 
+nought : Tile Msg
+nought =
+    tile ( 0, 1 )
+
+cross : Tile Msg
+cross =
+    tile ( 1, 1 )
+
+reset : Tile Msg
+reset =
+    tile ( 1, 0 ) |> Tile.withAttributes [ Tile.onClick Reset ]
 
 getTile : ( Int, Int ) -> Grid -> Tile Msg
 getTile ( x, y ) grid =
-    let
-        none : ( Int, Int ) -> Tile Msg
-        none pos =
-            tile ( 0, 0 )
-                |> Tile.withAttributes [ Tile.onClick (SetMark pos) ]
-
-        nought : Tile Msg
-        nought =
-            tile ( 0, 1 )
-
-        cross : Tile Msg
-        cross =
-            tile ( 1, 1 )
-    in
     case grid |> Dict.get ( x, y ) of
         Just Nought ->
             nought
@@ -206,10 +207,6 @@ view { grid } =
                 , width = 80
                 , source = "background.png"
                 }
-
-        reset : Tile Msg
-        reset =
-            tile ( 1, 0 ) |> Tile.withAttributes [ Tile.onClick Reset ]
     in
     { title = "Tic Tac Toe"
     , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
