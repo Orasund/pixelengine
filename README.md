@@ -37,7 +37,7 @@ When not to use it:
 ## Motivation
 I had just watched a talk about the **time-travel debugger** of Elm. So I wanted to test it out for my next project: [A little game](https://orasund.itch.io/dig-dig-boom).
 
-The graphics engines that I could choose of where
+The graphics engines that I could choose from where
   * [elm-2d-game](https://package.elm-lang.org/packages/Zinggi/elm-2d-game/latest)
   * [elmo-8](https://package.elm-lang.org/packages/micktwomey/elmo-8/latest) (currently outdated)
 
