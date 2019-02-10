@@ -183,7 +183,6 @@ options : { width : Float, transitionSpeedInSec : Float } -> Options msg
 options { width, transitionSpeedInSec } =
     Abstract.newOptions { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
 
-
 {-| Displays content of the game.
 
 **Note:**  

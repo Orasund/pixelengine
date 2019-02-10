@@ -47,6 +47,7 @@ So I desided to try something different and to use HTML and CSS instead of WebGL
 
 ## Upcoming Features
   * **Console** - It would be great if all games written with this engine would have a common way how the interface looks like. I am mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few different GUIs and Startscreen.
+  * **Font Support** - displaying text is currently really difficult. There is already [kuzminadya/mogeefont](https://package.elm-lang.org/packages/kuzminadya/mogeefont/latest/) out there, but its not compatible with this package. I'm thinking of supporting full ASCII, this way people can easily add there own font if they want.
   * **MultipleTiles** - Similar to `MultipleImages` but for Tiles.
   * **Modular Transitions** - For now I do not expect this will ever be done, just because its a very complex problem.
   * **Particles** - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?
