@@ -20,7 +20,7 @@ usedMarkerImage : Image msg
 usedMarkerImage =
   Image.fromTile
     (tile (0,1))
-    { source = "unusedMaker.png"
+    { source = "unusedMarker.png"
     , spriteWidth = 16
     , spriteHeight = 16
     }
