@@ -1,4 +1,4 @@
-module MiniWorldWar.View.Card exposing (watch,card,submit,exit)
+module MiniWorldWar.View.Image.Card exposing (watch,card,submit,exit)
 
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
 import PixelEngine.Graphics.Tile exposing (Tile, tile, Tileset)

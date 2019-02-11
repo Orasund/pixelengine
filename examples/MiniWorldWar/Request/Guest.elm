@@ -36,6 +36,7 @@ type GuestMsg
     | JoinGame String
     | CloseGame String
     | FindOpenGame
+    | HostGame Seed
 
 
 type alias GuestResponse =

@@ -1,6 +1,5 @@
 module MiniWorldWar.View.Image.SelectGui exposing
-    ( SelectGui
-    , addUnitButton
+    ( addUnitButton
     , cardButton
     , centerCardButton
     , removeUnitButton
@@ -11,10 +10,6 @@ module MiniWorldWar.View.Image.SelectGui exposing
 
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, tile)
-
-
-type alias SelectGui =
-    { selected : Int, remaining : Int }
 
 
 tileset : Tileset
@@ -69,7 +64,7 @@ swapUnitsButton =
     Image.fromTile (tile ( 4, 1 )) tileset
 
 
-selectGui : SelectGui -> Image msg
+selectGui : { selected : Int, remaining : Int } -> Image msg
 selectGui { selected, remaining } =
     Image.multipleImages
         [ ( ( 0, 0 ), image "bigMarker.png" )
