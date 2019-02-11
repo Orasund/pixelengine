@@ -18,12 +18,7 @@ unusedMarkerImage color =
 
 usedMarkerImage : Image msg
 usedMarkerImage =
-  Image.fromTile
-    (tile (0,1))
-    { source = "unusedMarker.png"
-    , spriteWidth = 16
-    , spriteHeight = 16
-    }
+  image "unusedMarker.png"
 
 unitImage : Unit -> {used:Bool}-> Image msg
 unitImage unit {used} =
