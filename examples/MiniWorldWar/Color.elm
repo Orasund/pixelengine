@@ -2,12 +2,19 @@ module MiniWorldWar.Color exposing(
     Color(..),
     isBlue,
     fromBool,
-    toInt
+    toInt,
+    flip
   )
 
 type Color
     = Blue
     | Red
+
+flip : Color -> Color
+flip color =
+    case color of
+        Blue -> Red
+        Red -> Blue
 
 isBlue : Color -> Bool
 isBlue color =

@@ -1,97 +1,100 @@
-module MiniWorldWar.Server.WaitingHost exposing (
-    WaitingHostResponse(..),
-    hostGame,checkForOpponent,stopWaitingForOpponent)
+module MiniWorldWar.Server.WaitingHost exposing
+    ( WaitingHostMsg(..)
+    , checkForOpponent
+    , exit
+    , hostGame
+    )
 
 import Http exposing (Error(..), Expect)
-import Json.Encode as E exposing (Value)
 import Json.Decode as D exposing (Decoder)
+import Json.Encode as E exposing (Value)
 import MiniWorldWar.Game as Game exposing (Game)
-import MiniWorldWar.Server as Server exposing (httpDelete, openGameRoute, runningGameRoute)
+import MiniWorldWar.Server as Server exposing (Response(..), httpDelete, openGameRoute, runningGameRoute)
 import Time exposing (Posix)
 
 
-type WaitingHostResponse
+type WaitingHostMsg
     = WaitForOpponent
-    | StopWaitingForOpponent
     | CreateBoard Game
-    | FailedToHost
-    | UpdateAsWaitingHost Posix
-    | IdleAsWaitingHost
+
+
+type alias WaitingHostResponse =
+    Response WaitingHostMsg
+
+
+exit : String -> Cmd (Response Never)
+exit id =
+    let
+        response : Result Error () -> Response Never
+        response result =
+            Reset
+    in
+    httpDelete
+        { url = runningGameRoute ++ "/" ++ id
+        , expect = Http.expectWhatever response
+        }
+
+
 
 {------------------------
    RunningGame
 ------------------------}
 
-stopWaitingForOpponent : String -> Cmd WaitingHostResponse
-stopWaitingForOpponent id =
-    let
-        response : Result Error () -> WaitingHostResponse
-        response result =
-            FailedToHost
-    in
-    httpDelete
-      { url = runningGameRoute ++ "/" ++ id
-      , expect = Http.expectWhatever response
-      }
-
 checkForOpponent : String -> Cmd WaitingHostResponse
 checkForOpponent id =
-  let
-      response : Result Error (Maybe Game) -> WaitingHostResponse
-      response result =
-          case result of
-              Ok maybeGame ->
-                case maybeGame of
-                    Nothing ->
-                        IdleAsWaitingHost
-                    Just game ->
-                        CreateBoard game
+    let
+        response : Result Error (Maybe Game) -> WaitingHostResponse
+        response result =
+            case result of
+                Ok maybeGame ->
+                    case maybeGame of
+                        Nothing ->
+                            Idle
 
-              Err error ->
+                        Just game ->
+                            Please <| CreateBoard game
+
+                Err error ->
                     case error of
                         BadBody _ ->
                             (error |> Debug.log "badBodyError:")
-                            |> always StopWaitingForOpponent
+                                |> always Exit
+
                         _ ->
                             (error |> Debug.log "error:")
-                            |> always StopWaitingForOpponent
-  in
-  Http.get
-    { url = runningGameRoute ++ "/" ++ id
-    , expect = Http.expectJson response (D.field "result" <| D.nullable <| Game.decoder)
-    }
+                                |> always Exit
+    in
+    Http.get
+        { url = runningGameRoute ++ "/" ++ id
+        , expect = Http.expectJson response (D.field "result" <| D.nullable <| Game.decoder)
+        }
 
 {------------------------
    OpenGame
 ------------------------}
-
-encodeOpenGame : { date : Int } -> Value
-encodeOpenGame { date } =
-    E.object
-        [ ( "date", E.int date )
-        ]
 
 hostGame : String -> Posix -> Cmd WaitingHostResponse
 hostGame id time =
     let
         value : Value
         value =
-            encodeOpenGame { date = time |> Time.posixToMillis }
+            Server.openGameEncoder { date = time |> Time.posixToMillis }
 
         response : Result Error () -> WaitingHostResponse
         response result =
             case result of
                 Ok () ->
-                    WaitForOpponent
+                    Please WaitForOpponent
 
                 Err error ->
                     case error of
-                        BadBody _->
+                        BadBody _ ->
                             (error |> Debug.log "badBodyError:")
-                            |> always FailedToHost
+                                |> always Reset
+
                         _ ->
                             (error |> Debug.log "error:")
-                            |> always FailedToHost
+                                |> always Reset
     in
     Http.post
         { url = openGameRoute ++ "/" ++ id

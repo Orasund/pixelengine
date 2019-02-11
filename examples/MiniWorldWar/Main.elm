@@ -1,16 +1,21 @@
 module MiniWorldWar.Main exposing (main)
 
-import MiniWorldWar.Board as Board exposing (Unit)
+import MiniWorldWar.Board as Board exposing (Move, Unit)
 import MiniWorldWar.Card as Card
 import MiniWorldWar.Color as Color exposing (Color(..))
 import MiniWorldWar.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Game as Game exposing (Game)
+import MiniWorldWar.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Gui as Gui exposing (SelectGui)
-import MiniWorldWar.Server.Client as ClientServer exposing (ClientResponse(..))
-import MiniWorldWar.Server.Guest as GuestServer exposing (GuestResponse(..))
-import MiniWorldWar.Server.Host as HostServer exposing (HostResponse(..))
-import MiniWorldWar.Server.WaitingHost as WaitingHostServer exposing (WaitingHostResponse(..))
+import MiniWorldWar.Server as Server exposing (Response(..))
+import MiniWorldWar.Server.Client as ClientServer exposing (ClientMsg(..))
+import MiniWorldWar.Server.Guest as GuestServer exposing (GuestMsg(..))
+import MiniWorldWar.Server.Host as HostServer exposing (HostMsg(..))
+import MiniWorldWar.Server.WaitingHost as WaitingHostServer exposing (WaitingHostMsg(..))
 import MiniWorldWar.Unit as Unit
+import MiniWorldWar.View as View
+import MiniWorldWar.View.TitleScreen as TitleScreenView
+import MiniWorldWar.View.Unit as UnitView
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
@@ -26,6 +31,7 @@ type alias Model =
     , time : Posix
     , playerColor : Color
     , select : Maybe ( Continent, SelectGui )
+    , ready : Bool
     , id : String
     }
 
@@ -47,6 +53,8 @@ type BoardEvent
     | AddUnit
     | RemoveUnit
     | SwapUnits
+    | ResetMove
+    | SetMove Direction
 
 
 type SpecificMsg response event
@@ -54,19 +62,37 @@ type SpecificMsg response event
     | Event event
 
 
-type alias GuestMsg =
-    SpecificMsg GuestResponse GuestEvent
-
-
 type Msg
-    = GuestSpecific GuestMsg
-    | HostSpecific HostResponse
-    | WaitingHostSpecific WaitingHostResponse
-    | ClientSpecific ClientResponse
+    = GuestSpecific (SpecificMsg GuestMsg GuestEvent)
+    | HostSpecific HostMsg
+    | WaitingHostSpecific WaitingHostMsg
+    | ClientSpecific ClientMsg
     | BoardSpecific BoardEvent
-    | Reset Posix
+    | ServerSpecific (Response Never)
     | Update Posix
     | None
+
+
+responseToMsg : (specificMsg -> Msg) -> Response specificMsg -> Msg
+responseToMsg fun response =
+    case response of
+        Please msg ->
+            fun msg
+
+        Exit ->
+            ServerSpecific Exit
+
+        Reset ->
+            ServerSpecific Reset
+
+        Idle ->
+            ServerSpecific Idle
+
+        DropOpenGameTable ->
+            ServerSpecific DropOpenGameTable
+
+        DropRunningGameTable ->
+            ServerSpecific DropRunningGameTable
 
 
 
@@ -88,7 +114,173 @@ init _ =
 ------------------------}
 
 
-guestUpdate : GuestMsg -> Posix -> ( State, Cmd Msg )
+clientUpdate : ClientMsg -> Model -> ( State, Cmd Msg )
+clientUpdate msg ({ time, id, game } as model) =
+    let
+        state : State
+        state =
+            Client model
+    in
+    case msg of
+        WaitingForHost ->
+            ( state
+            , ClientServer.waitingForHost id game.lastUpdated
+                |> Cmd.map (responseToMsg ClientSpecific)
+            )
+
+        UpdateGame ({ moveBoard } as newGame) ->
+            case newGame.state of
+                Running ->
+                    ( Client
+                        { model
+                            | ready = False
+                            , game = newGame
+                        }
+                    , Cmd.none
+                    )
+
+                HostReady ->
+                    let
+                        newerGame =
+                            { game
+                                | lastUpdated = time |> Time.posixToMillis
+                                , state = BothReady
+                            }
+                    in
+                    ( Client
+                        { model
+                            | game =
+                                game
+                                    --outdated Game -we wait for a newer one
+                                    |> Game.addMoveBoard moveBoard
+                                    |> (\g ->
+                                            { g
+                                                | state = BothReady
+                                                , lastUpdated = time |> Time.posixToMillis
+                                            }
+                                       )
+                        }
+                    , ClientServer.submitMoveBoard newerGame id
+                        |> Cmd.map (responseToMsg ClientSpecific)
+                    )
+
+                _ ->
+                    ( Client { model | game = newGame, ready = False }
+                    , ClientServer.endGame id time
+                        |> Cmd.map (responseToMsg ClientSpecific)
+                    )
+
+        EndGame ->
+            ( state
+            , ClientServer.endGame id time
+                |> Cmd.map (responseToMsg ClientSpecific)
+            )
+
+        UpdateGameTable table ->
+            ( state
+            , ClientServer.updateGameTable table
+                |> Cmd.map (responseToMsg ClientSpecific)
+            )
+
+        Ready ->
+            ( Client
+                { model
+                    | ready = True
+                }
+            , Cmd.none
+            )
+
+
+hostUpdate : HostMsg -> ( Model, Seed ) -> ( State, Cmd Msg )
+hostUpdate msg (( { game, id, time } as model, seed ) as modelAndSeed) =
+    let
+        state : State
+        state =
+            Host modelAndSeed
+    in
+    case msg of
+        Submit ->
+            let
+                newGame =
+                    { game
+                        | lastUpdated = time |> Time.posixToMillis
+                        , state = HostReady
+                    }
+            in
+            ( Host
+                ( { model
+                    | ready = True
+                    , game = newGame
+                  }
+                , seed
+                )
+            , HostServer.submit id newGame
+                |> Cmd.map (responseToMsg HostSpecific)
+            )
+
+        UpdateMoveBoard moveBoard ->
+            ( Host
+                ( { model
+                    | game =
+                        game
+                            --outdated Game -we wait for a newer one
+                            |> Game.addMoveBoard moveBoard
+                            |> (\g -> { g | state = BothReady })
+                  }
+                , seed
+                )
+            , Cmd.none
+            )
+
+        WaitingForClient ->
+            ( state
+            , HostServer.waitingForClient id game.lastUpdated
+                |> Cmd.map (responseToMsg HostSpecific)
+            )
+
+
+waitingHostUpdate : WaitingHostMsg -> ( { time : Posix, id : String }, Seed ) -> ( State, Cmd Msg )
+waitingHostUpdate msg (( { time, id }, seed ) as timeAndSeed) =
+    let
+        state : State
+        state =
+            WaitingHost timeAndSeed
+
+        defaultCase : ( State, Cmd Msg )
+        defaultCase =
+            ( state, Cmd.none )
+    in
+    case msg of
+        WaitForOpponent ->
+            ( state
+            , WaitingHostServer.checkForOpponent id
+                |> Cmd.map (responseToMsg WaitingHostSpecific)
+            )
+
+        CreateBoard game ->
+            let
+                ( newGame, newSeed ) =
+                    seed
+                        |> Random.step
+                            (game |> Game.nextRound time)
+            in
+            ( Host
+                ( { time = time
+                  , id = id
+                  , game = newGame
+                  , select = Nothing
+                  , playerColor = Red
+                  , ready = False
+                  }
+                , newSeed
+                )
+            , newGame
+                |> HostServer.submit id
+                |> Cmd.map (responseToMsg HostSpecific)
+            )
+
+
+guestUpdate : SpecificMsg GuestMsg GuestEvent -> Posix -> ( State, Cmd Msg )
 guestUpdate msg time =
     let
         state : State
@@ -101,7 +293,7 @@ guestUpdate msg time =
 
         game : Game
         game =
-            time |> Time.posixToMillis |> Game.empty
+            time |> Time.posixToMillis |> Game.new
     in
     case msg of
         Response response ->
@@ -113,48 +305,34 @@ guestUpdate msg time =
                         , id = id
                         , select = Nothing
                         , playerColor = Blue
+                        , ready = True
                         }
                     , ClientServer.joinGame id game
-                        |> Cmd.map ClientSpecific
+                        |> Cmd.map (responseToMsg ClientSpecific)
                     )
-
-                DropOpenGameTable ->
-                    ( state
-                    , GuestServer.dropOpenGameTable
-                        |> Cmd.map (GuestSpecific << Response)
-                    )
-
-                DropRunningGameTable ->
-                    ( state
-                    , GuestServer.dropRunningGameTable
-                        |> Cmd.map (GuestSpecific << Response)
-                    )
-
-                GameNotFound ->
-                    defaultCase
 
                 JoinOpenGame id ->
                     ( state
                     , GuestServer.joinOpenGame id
-                        |> Cmd.map (GuestSpecific << Response)
+                        |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 CloseGame id ->
                     ( state
                     , GuestServer.closeGame id
-                        |> Cmd.map (GuestSpecific << Response)
+                        |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 ReopenGame id ->
                     ( state
                     , GuestServer.reopenGame id
-                        |> Cmd.map (GuestSpecific << Response)
+                        |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 FindOldGame ->
                     ( state
                     , GuestServer.findOldGame time
-                        |> Cmd.map (GuestSpecific << Response)
+                        |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 CreateNewGame ->
@@ -167,7 +345,7 @@ guestUpdate msg time =
                 FindOpenGame ->
                     ( state
                     , GuestServer.findOpenGame time
-                        |> Cmd.map (GuestSpecific << Response)
+                        |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
         Event event ->
@@ -188,159 +366,19 @@ guestUpdate msg time =
                         , newSeed
                         )
                     , WaitingHostServer.hostGame id time
-                        |> Cmd.map WaitingHostSpecific
+                        |> Cmd.map (responseToMsg WaitingHostSpecific)
                     )
-
-
-hostUpdate : HostResponse -> ( Model, Seed ) -> ( State, Cmd Msg )
-hostUpdate msg (( { game, id, time } as model, seed ) as modelAndSeed) =
-    let
-        state : State
-        state =
-            Host modelAndSeed
-
-        defaultCase : ( State, Cmd Msg )
-        defaultCase =
-            ( state, Cmd.none )
-    in
-    case msg of
-        NewRound ->
-            let
-                ( newGame, newSeed ) =
-                    seed
-                        |> Random.step (game  |> Game.newRound time )
-            in
-            ( Host ( { model | game = newGame }, newSeed )
-            , HostServer.newRound id newGame
-                |> Cmd.map HostSpecific
-            )
-
-        IdleAsHost ->
-            defaultCase
-
-        EndGame ->
-            ( state
-            , HostServer.endGame id time
-                |> Cmd.map HostSpecific
-            )
-
-        UpdateGameTable table ->
-            ( state
-            , HostServer.updateGameTable table
-                |> Cmd.map HostSpecific
-            )
-
-        DropGameTable ->
-            ( state
-            , HostServer.dropGameTable
-                |> Cmd.map HostSpecific
-            )
-
-        StopHosting ->
-            init ()
-
-
-waitingHostUpdate : WaitingHostResponse -> ( { time : Posix, id : String }, Seed ) -> ( State, Cmd Msg )
-waitingHostUpdate msg (( { time, id }, seed ) as timeAndSeed) =
-    let
-        state : State
-        state =
-            WaitingHost timeAndSeed
-
-        defaultCase : ( State, Cmd Msg )
-        defaultCase =
-            ( state, Cmd.none )
-    in
-    case msg of
-        StopWaitingForOpponent ->
-            ( state
-            , WaitingHostServer.stopWaitingForOpponent id
-                |> Cmd.map WaitingHostSpecific
-            )
-
-        WaitForOpponent ->
-            ( state
-            , WaitingHostServer.checkForOpponent id
-                |> Cmd.map WaitingHostSpecific
-            )
-
-        FailedToHost ->
-            init ()
-
-        CreateBoard ({ board } as game) ->
-            let
-                ( newGame, newSeed ) =
-                    seed
-                        |> Random.step
-                            ((Game.new time) |> Random.andThen (Game.newRound time)
-                            )
-            in
-            ( Host
-                ( { time = time
-                  , id = id
-                  , game = newGame
-                  , select = Nothing
-                  , playerColor = Red
-                  }
-                , newSeed
-                )
-            , HostServer.newRound id newGame
-                |> Cmd.map HostSpecific
-            )
-
-
-clientUpdate : ClientResponse -> Model -> ( State, Cmd Msg )
-clientUpdate msg ({time,id,game} as model) =
-    let
-        state : State
-        state =
-            Client model
-
-        defaultCase : ( State, Cmd Msg )
-        defaultCase =
-            ( state, Cmd.none )
-    in
-    case msg of
-        WaitingForHost ->
-            ( state
-            , ClientServer.waitingForHost id game.lastUpdated 
-                |> Cmd.map ClientSpecific
-            )
-
-        UpdateGame newGame ->
-            defaultCase --TODO
-        
-        UpdateAsClient newTime ->
-            defaultCase --TODO
-        
-        ExitGame ->
-            ( state
-            , ClientServer.exitGame id
-                |> Cmd.map ClientSpecific
-            )
-        
-        DropRunningGameTableAsClient ->
-            ( state
-            , ClientServer.dropRunningGameTableAsClient id
-                |> Cmd.map ClientSpecific
-            )
-        
-        IdleAsClient ->
-            defaultCase
-
-        ResetAsClient ->
-            init ()
 
 
 updateBoard : BoardEvent -> Model -> Model
 updateBoard msg ({ game, select } as model) =
     let
-        { board } =
+        { unitBoard, moveBoard } =
             game
     in
     case msg of
         OpenSelectGui continent ->
-            case board |> Board.get continent of
+            case unitBoard |> Board.get continent of
                 Just { amount } ->
                     { model
                         | select =
@@ -398,7 +436,7 @@ updateBoard msg ({ game, select } as model) =
         SwapUnits ->
             case select of
                 Just ( continent, { selected, remaining } ) ->
-                    if selected > 1 then
+                    if selected > 0 then
                         { model
                             | select =
                                 Just
@@ -415,6 +453,44 @@ updateBoard msg ({ game, select } as model) =
                 Nothing ->
                     model
 
+        ResetMove ->
+            case select of
+                Just ( continent, _ ) ->
+                    { model
+                        | game =
+                            { game
+                                | moveBoard =
+                                    moveBoard
+                                        |> Board.set continent Nothing
+                            }
+                        , select = Nothing
+                    }
+
+                Nothing ->
+                    model
+
+        SetMove direction ->
+            case select of
+                Just ( continent, { selected, remaining } ) ->
+                    { model
+                        | game =
+                            { game
+                                | moveBoard =
+                                    moveBoard
+                                        |> Board.set
+                                            continent
+                                            (Just
+                                                { amount = selected
+                                                , direction = direction
+                                                }
+                                            )
+                            }
+                        , select = Nothing
+                    }
+
+                Nothing ->
+                    model
+
 
 update : Msg -> State -> ( State, Cmd Msg )
 update msg state =
@@ -422,57 +498,165 @@ update msg state =
         defaultCase : ( State, Cmd Msg )
         defaultCase =
             ( state, Cmd.none )
-
-        resetCase : Posix -> ( State, Cmd Msg )
-        resetCase time =
-            ( Guest time, Cmd.none )
     in
-    case state of
-        Client model ->
-            case msg of
-                ClientSpecific clientMsg ->
+    case msg of
+        ClientSpecific clientMsg ->
+            case state of
+                Client model ->
                     clientUpdate clientMsg model
 
-                BoardSpecific boardMsg ->
-                    ( Client <| updateBoard boardMsg model, Cmd.none )
-
                 _ ->
                     defaultCase
 
-        Host (( model, seed ) as modelAndSeed) ->
-            case msg of
-                HostSpecific hostMsg ->
+        HostSpecific hostMsg ->
+            case state of
+                Host (( model, seed ) as modelAndSeed) ->
                     hostUpdate hostMsg modelAndSeed
 
-                BoardSpecific boardMsg ->
-                    ( Host <| ( updateBoard boardMsg model, seed ), Cmd.none )
-
                 _ ->
                     defaultCase
 
-        WaitingHost timeAndSeed ->
-            case msg of
-                WaitingHostSpecific waitingHostMsg ->
+        WaitingHostSpecific waitingHostMsg ->
+            case state of
+                WaitingHost timeAndSeed ->
                     waitingHostUpdate waitingHostMsg timeAndSeed
 
                 _ ->
                     defaultCase
 
-        Guest time ->
-            case msg of
-                GuestSpecific guestMsg ->
+        GuestSpecific guestMsg ->
+            case state of
+                Guest time ->
                     guestUpdate guestMsg time
 
                 _ ->
                     defaultCase
 
-        FetchingTime ->
-            case msg of
-                Reset time ->
-                    resetCase time
+        BoardSpecific boardMsg ->
+            case state of
+                Client ({ ready } as model) ->
+                    if ready then
+                        defaultCase
+
+                    else
+                        ( Client <| updateBoard boardMsg model, Cmd.none )
+
+                Host ( { ready } as model, seed ) ->
+                    if ready then
+                        defaultCase
+
+                    else
+                        ( Host <| ( updateBoard boardMsg model, seed ), Cmd.none )
 
                 _ ->
                     defaultCase
+
+        ServerSpecific serverMsg ->
+            case serverMsg of
+                DropOpenGameTable ->
+                    ( state
+                    , Server.dropOpenGameTable |> Cmd.map ServerSpecific
+                    )
+
+                DropRunningGameTable ->
+                    ( state
+                    , Server.dropRunningGameTable |> Cmd.map ServerSpecific
+                    )
+
+                Exit ->
+                    ( state
+                    , (case state of
+                        Client { id } ->
+                            ClientServer.exit id
+
+                        Host ( { id }, _ ) ->
+                            HostServer.exit id
+
+                        WaitingHost ( { id }, _ ) ->
+                            WaitingHostServer.exit id
+
+                        Guest _ ->
+                            GuestServer.exit
+
+                        FetchingTime ->
+                            GuestServer.exit
+                      )
+                        |> Cmd.map ServerSpecific
+                    )
+
+                Reset ->
+                    init ()
+
+                Please _ ->
+                    defaultCase
+
+                Idle ->
+                    defaultCase
+
+        Update time ->
+            case state of
+                Client ({ ready, id, game } as model) ->
+                    ( Client { model | time = time }
+                    , let
+                        { lastUpdated } =
+                            game
+                      in
+                      if ready then
+                        ClientServer.waitingForHost id lastUpdated
+                            |> Cmd.map (responseToMsg ClientSpecific)
+
+                      else
+                        Cmd.none
+                    )
+
+                Host ( { ready, id, game } as model, seed ) ->
+                    let
+                        { lastUpdated, moveBoard } =
+                            game
+                    in
+                    if ready then
+                        case game.state of
+                            BothReady ->
+                                let
+                                    ( newGame, newSeed ) =
+                                        seed
+                                            |> Random.step (game |> Game.nextRound time)
+                                in
+                                ( Host
+                                    ( { model
+                                        | game = newGame
+                                        , time = time
+                                        , ready = False
+                                      }
+                                    , newSeed
+                                    )
+                                , HostServer.submit id newGame
+                                    |> Cmd.map (responseToMsg HostSpecific)
+                                )
+
+                            _ ->
+                                ( Host ( { model | time = time }, seed )
+                                , HostServer.waitingForClient id lastUpdated
+                                    |> Cmd.map (responseToMsg HostSpecific)
+                                )
+
+                    else
+                        ( Host ( { model | time = time }, seed ), Cmd.none )
+
+                WaitingHost ( { id }, seed ) ->
+                    ( WaitingHost ( { id = id, time = time }, seed )
+                    , WaitingHostServer.checkForOpponent id
+                        |> Cmd.map (responseToMsg WaitingHostSpecific)
+                    )
+
+                Guest _ ->
+                    ( Guest time, Cmd.none )
+
+                FetchingTime ->
+                    ( Guest time, Cmd.none )
+
+        None ->
+            defaultCase
 
 
 
@@ -484,20 +668,25 @@ update msg state =
 subscriptions : State -> Sub Msg
 subscriptions state =
     let
-        updateRate : Float
-        updateRate = (5*1000)
+        updateSub : Sub Msg
+        updateSub =
+            Time.every (1 * 1000) Update
     in
     case state of
-        FetchingTime -> 
-            Time.every updateRate Reset
+        FetchingTime ->
+            updateSub
+
         Guest _ ->
             Sub.none
+
         WaitingHost _ ->
-            Time.every updateRate (WaitingHostSpecific << UpdateAsWaitingHost)
+            updateSub
+
         Host _ ->
-            Time.every updateRate (HostSpecific << UpdateAsHost)
+            updateSub
+
         Client _ ->
-            Time.every updateRate (ClientSpecific << UpdateAsClient)
+            updateSub
 
 
 
@@ -517,32 +706,330 @@ controls _ =
 ------------------------}
 
 
-tileSize : Float
-tileSize =
-    16
+drawCard : Continent -> Maybe Unit -> Maybe ( ( Float, Float ), Image msg )
+drawCard continent maybeUnit =
+    maybeUnit
+        |> Maybe.map
+            (\{ color } ->
+                ( View.continentToPosition continent
+                , Card.card continent color
+                )
+            )
 
 
-logoImage : ( ( Float, Float ), Image Msg )
-logoImage =
-    ( ( 0, tileSize * 1 ), image "logo.png" )
+drawSelectGui : Continent -> SelectGui -> List ( ( Float, Float ), Image Msg )
+drawSelectGui continent ({ selected, remaining } as selectGui) =
+    let
+        ( x, y ) =
+            continent |> View.continentToPosition
+
+        relativeCoord : ( Float, Float ) -> ( Float, Float )
+        relativeCoord ( x1, y1 ) =
+            ( x + 8 * x1, y + 3 + 8 * y1 )
+
+        addUnitButton : List ( ( Float, Float ), Image Msg )
+        addUnitButton =
+            case remaining of
+                1 ->
+                    []
+
+                _ ->
+                    [ ( relativeCoord ( 3, 0 )
+                      , Gui.addUnitButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific AddUnit
+                                ]
+                      )
+                    ]
+
+        swapUnitsButton : List ( ( Float, Float ), Image Msg )
+        swapUnitsButton =
+            [ ( relativeCoord ( 3, 1 )
+              , Gui.swapUnitsButton
+                    |> Image.withAttributes
+                        [ Image.onClick <|
+                            BoardSpecific SwapUnits
+                        ]
+              )
+            ]
+
+        removeUnitButton : List ( ( Float, Float ), Image Msg )
+        removeUnitButton =
+            case selected of
+                1 ->
+                    []
+
+                _ ->
+                    [ ( relativeCoord ( 3, 2 )
+                      , Gui.removeUnitButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific RemoveUnit
+                                ]
+                      )
+                    ]
+
+        locationButtons : List ( ( Float, Float ), Image Msg )
+        locationButtons =
+            case continent of
+                Asia ->
+                    [ ( relativeCoord ( 1, 1 )
+                      , Gui.centerCardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        ResetMove
+                                ]
+                      )
+                    , ( relativeCoord ( 0, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Left
+                                ]
+                      )
+                    , ( relativeCoord ( 2, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Right
+                                ]
+                      )
+                    ]
+
+                Africa ->
+                    [ ( relativeCoord ( 1, 2 )
+                      , Gui.centerCardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        ResetMove
+                                ]
+                      )
+                    , ( relativeCoord ( 1, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Up
+                                ]
+                      )
+                    , ( relativeCoord ( 0, 2 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Left
+                                ]
+                      )
+                    ]
+
+                SouthAmerica ->
+                    [ ( relativeCoord ( 1, 2 )
+                      , Gui.centerCardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        ResetMove
+                                ]
+                      )
+                    , ( relativeCoord ( 1, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Up
+                                ]
+                      )
+                    , ( relativeCoord ( 2, 2 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Right
+                                ]
+                      )
+                    ]
+
+                Europe ->
+                    [ ( relativeCoord ( 1, 1 )
+                      , Gui.centerCardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        ResetMove
+                                ]
+                      )
+                    , ( relativeCoord ( 0, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Left
+                                ]
+                      )
+                    , ( relativeCoord ( 2, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Right
+                                ]
+                      )
+                    , ( relativeCoord ( 1, 2 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Down
+                                ]
+                      )
+                    ]
+
+                NorthAmerica ->
+                    [ ( relativeCoord ( 1, 1 )
+                      , Gui.centerCardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        ResetMove
+                                ]
+                      )
+                    , ( relativeCoord ( 0, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Left
+                                ]
+                      )
+                    , ( relativeCoord ( 2, 1 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Right
+                                ]
+                      )
+                    , ( relativeCoord ( 1, 2 )
+                      , Gui.cardButton
+                            |> Image.withAttributes
+                                [ Image.onClick <|
+                                    BoardSpecific <|
+                                        SetMove Down
+                                ]
+                      )
+                    ]
+    in
+    List.concat
+        [ [ ( ( x, y ), Gui.selectGui selectGui ) ]
+        , addUnitButton
+        , swapUnitsButton
+        , removeUnitButton
+        , locationButtons
+        ]
 
 
-waitingScreen : List ( ( Float, Float ), Image Msg )
-waitingScreen =
-    [ logoImage
-    , ( ( tileSize * 2, tileSize * 5 ), image "findingOpponent.png" )
-    ]
+drawModel : Msg -> Model -> List ( ( Float, Float ), Image Msg )
+drawModel submitMsg { game, select, playerColor, ready } =
+    let
+        { europe, asia, africa, northAmerica, southAmerica } =
+            game.unitBoard
 
+        drawUnits : Continent -> Maybe Unit -> Maybe Move -> List ( ( Float, Float ), Image Msg )
+        drawUnits continent maybeUnit maybeMove =
+            case maybeUnit of
+                Just ({ color } as unit) ->
+                    case maybeMove of
+                        Just ({ direction } as move) ->
+                            let
+                                amount =
+                                    unit.amount - move.amount
+                            in
+                            [ { amount = amount, color = color }
+                                |> UnitView.drawCenter
+                                    continent
+                                    { used = True }
+                                    (BoardSpecific << OpenSelectGui)
+                                    playerColor
+                            , { amount = move.amount, color = color }
+                                |> UnitView.draw
+                                    direction
+                                    continent
+                            ]
 
-titleScreen : List ( ( Float, Float ), Image Msg )
-titleScreen =
-    [ logoImage
-    , ( ( tileSize * 2, tileSize * 5 )
-      , image "newGame.png"
-            |> Image.withAttributes
-                [ Image.onClick (GuestSpecific <| Response FindOpenGame) ]
-      )
-    ]
+                        Nothing ->
+                            [ unit
+                                |> UnitView.drawCenter
+                                    continent
+                                    { used =
+                                        unit.amount
+                                            <= 1
+                                            || (playerColor /= color)
+                                            || ready
+                                            || (game.state /= Running)
+                                    }
+                                    (BoardSpecific << OpenSelectGui)
+                                    playerColor
+                            ]
+
+                Nothing ->
+                    []
+    in
+    List.concat
+        [ Continent.list
+            |> List.map
+                (\continent ->
+                    game.unitBoard
+                        |> Board.get continent
+                        |> drawCard continent
+                )
+            |> List.filterMap identity
+        , Continent.list
+            |> List.map
+                (\continent ->
+                    let
+                        maybeMove =
+                            game.moveBoard
+                                |> Board.get continent
+
+                        maybeUnit =
+                            game.unitBoard
+                                |> Board.get continent
+                    in
+                    maybeMove
+                        |> drawUnits continent maybeUnit
+                )
+            |> List.concat
+        , case select of
+            Nothing ->
+                []
+
+            Just ( continent, selectGui ) ->
+                drawSelectGui continent selectGui
+        , [ ( ( View.tileSize * 3, View.tileSize * 4 )
+            , case game.state of
+                Win _ ->
+                    Card.exit
+                        |> Image.withAttributes [ Image.onClick <| ServerSpecific Reset ]
+
+                Draw ->
+                    Card.exit
+                        |> Image.withAttributes [ Image.onClick <| ServerSpecific Reset ]
+
+                _ ->
+                    if ready then
+                        Card.watch
+
+                    else
+                        Card.submit
+                            |> Image.withAttributes [ Image.onClick submitMsg ]
+            )
+          ]
+        ]
 
 
 view : State -> { title : String, options : Options Msg, body : List (Area Msg) }
@@ -550,7 +1037,7 @@ view state =
     let
         size : Float
         size =
-            tileSize * 8
+            View.tileSize * 8
 
         background : Background
         background =
@@ -560,169 +1047,6 @@ view state =
                 , source = "background.png"
                 }
 
-        drawUnit : ( Float, Float ) -> Unit -> ( ( Float, Float ), Image Msg )
-        drawUnit pos unit =
-            ( pos
-            , Unit.unitImage unit { used = True }
-            )
-
-        drawUnitCenter : Continent -> { used : Bool } -> Unit -> ( ( Float, Float ), Image Msg )
-        drawUnitCenter continent ({ used } as config) unit =
-            let
-                ( x, y ) =
-                    continent |> continentToPosition
-            in
-            if used then
-                unit |> drawUnit ( x + tileSize / 2, y + tileSize * 1 )
-
-            else
-                ( ( x + tileSize / 2, y + tileSize * 1 )
-                , Unit.unitImage unit config
-                    |> Image.withAttributes
-                        [ Image.onClick (BoardSpecific <| OpenSelectGui continent) ]
-                )
-
-        drawUnitLeft : Continent -> Unit -> ( ( Float, Float ), Image Msg )
-        drawUnitLeft continent =
-            let
-                ( x, y ) =
-                    continent |> continentToPosition
-            in
-            drawUnit ( x - tileSize / 2, y + tileSize / 2 )
-
-        drawUnitRight : Continent -> Unit -> ( ( Float, Float ), Image Msg )
-        drawUnitRight continent =
-            let
-                ( x, y ) =
-                    continent |> continentToPosition
-            in
-            drawUnit ( x + (3 * tileSize) / 2, y + (3 * tileSize) / 2 )
-
-        drawUnitUp : Continent -> Unit -> ( ( Float, Float ), Image Msg )
-        drawUnitUp continent =
-            let
-                ( x, y ) =
-                    continent |> continentToPosition
-            in
-            drawUnit ( x, y - tileSize / 2 )
-
-        drawUnitDown : Continent -> Unit -> ( ( Float, Float ), Image Msg )
-        drawUnitDown continent =
-            let
-                ( x, y ) =
-                    continent |> continentToPosition
-            in
-            drawUnit ( x + tileSize * 1, y + (5 * tileSize) / 2 )
-
-        drawCard : Continent -> Maybe Unit -> Maybe ( ( Float, Float ), Image msg )
-        drawCard continent maybeUnit =
-            maybeUnit
-                |> Maybe.map
-                    (\{ color } ->
-                        ( continentToPosition continent
-                        , Card.card continent color
-                        )
-                    )
-
-        continentToPosition : Continent -> ( Float, Float )
-        continentToPosition continent =
-            case continent of
-                Europe ->
-                    ( tileSize * 1, tileSize * 1 )
-
-                NorthAmerica ->
-                    ( tileSize * 5, tileSize * 1 )
-
-                SouthAmerica ->
-                    ( tileSize * 5, tileSize * 4 )
-
-                Asia ->
-                    ( tileSize * 3, tileSize * 1 )
-
-                Africa ->
-                    ( tileSize * 1, tileSize * 4 )
-
-        drawModel : Model -> List ( ( Float, Float ), Image Msg )
-        drawModel { game, select, playerColor } =
-            let
-                { europe, asia, africa, northAmerica, southAmerica } =
-                    game.board
-            in
-            List.concat
-                [ Continent.list
-                    |> List.map
-                        (\continent ->
-                            game.board
-                                |> Board.get continent
-                                |> drawCard continent
-                        )
-                    |> List.filterMap identity
-                , Continent.list
-                    |> List.map
-                        (\continent ->
-                            game.board
-                                |> Board.get continent
-                                |> Maybe.map
-                                    (\({ amount, color } as unit) ->
-                                        unit
-                                            |> drawUnitCenter
-                                                continent
-                                                { used = amount <= 1 || playerColor /= color }
-                                    )
-                        )
-                    |> List.filterMap identity
-                , case select of
-                    Nothing ->
-                        []
-
-                    Just ( continent, { selected, remaining } as selectGui ) ->
-                        let
-                            ( x, y ) =
-                                continent |> continentToPosition
-                        in
-                        List.concat
-                            [ [ ( ( x, y )
-                                , Gui.selectGui selectGui
-                                )
-                              ]
-                            , case remaining of
-                                1 ->
-                                    []
-
-                                _ ->
-                                    [ ( ( x + 8 * 3, y + 3 + 8 * 0 )
-                                      , Gui.addUnitButton
-                                            |> Image.withAttributes
-                                                [ Image.onClick <|
-                                                    BoardSpecific AddUnit
-                                                ]
-                                      )
-                                    ]
-                            , 
-                                    [ ( ( x + 8 * 3, y + 3 + 8 * 1 )
-                                      , Gui.swapUnitsButton
-                                            |> Image.withAttributes
-                                                [ Image.onClick <|
-                                                    BoardSpecific SwapUnits
-                                                ]
-                                      )
-                                    ]
-                            , case selected of
-                                1 ->
-                                    []
-
-                                _ ->
-                                    [ ( ( x + 8 * 3, y + 3 + 8 * 2 )
-                                      , Gui.removeUnitButton
-                                            |> Image.withAttributes
-                                                [ Image.onClick <|
-                                                    BoardSpecific RemoveUnit
-                                                ]
-                                      )
-                                    ]
-                            ]
-                ]
-
         body : List (Area Msg)
         body =
             [ Graphics.imageArea
@@ -731,24 +1055,24 @@ view state =
                 }
                 (case state of
                     Client model ->
-                        model |> drawModel
+                        model |> drawModel (ClientSpecific Ready)
 
                     Host ( model, _ ) ->
-                        model |> drawModel
+                        model |> drawModel (HostSpecific Submit)
 
                     WaitingHost _ ->
-                        waitingScreen
+                        TitleScreenView.waiting
 
                     Guest _ ->
-                        titleScreen
+                        TitleScreenView.normal (GuestSpecific <| Response FindOpenGame)
 
                     FetchingTime ->
-                        titleScreen
+                        TitleScreenView.normal None
                 )
             ]
     in
     { title = "Mini World War"
-    , options = Graphics.options { width = size, transitionSpeedInSec = 0.025 }
+    , options = Graphics.options { width = size, transitionSpeedInSec = 0.012 }
     , body = body
     }
 

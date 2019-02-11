@@ -1,4 +1,4 @@
-module MiniWorldWar.Card exposing (card)
+module MiniWorldWar.Card exposing (watch,card,submit,exit)
 
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
 import PixelEngine.Graphics.Tile exposing (Tile, tile, Tileset)
@@ -30,3 +30,15 @@ card continent color =
       )
     )
     tileset
+
+watch : Image msg
+watch =
+  image "watch.png"
+
+submit : Image msg
+submit =
+  image "submit.png"
+
+exit : Image msg
+exit =
+  image "exit.png"
