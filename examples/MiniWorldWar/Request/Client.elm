@@ -1,4 +1,4 @@
-module MiniWorldWar.Server.Client exposing
+module MiniWorldWar.Request.Client exposing
     ( ClientMsg(..)
     , endGame
     , exit
@@ -12,8 +12,8 @@ import Dict
 import Http exposing (Error(..), Expect)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import MiniWorldWar.Game as Game exposing (Game)
-import MiniWorldWar.Server as Server
+import MiniWorldWar.Data.Game as Game exposing (Game)
+import MiniWorldWar.Request as Request
     exposing
         ( Response(..)
         , RunningGameTable
@@ -195,5 +195,5 @@ endGame currentId now =
     in
     Http.get
         { url = runningGameRoute
-        , expect = Http.expectJson response Server.runningGameTableDecoder
+        , expect = Http.expectJson response Request.runningGameTableDecoder
         }

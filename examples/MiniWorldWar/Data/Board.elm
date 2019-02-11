@@ -1,4 +1,4 @@
-module MiniWorldWar.Board exposing
+module MiniWorldWar.Data.Board exposing
     ( Board
     , Move
     , MoveBoard
@@ -24,9 +24,9 @@ module MiniWorldWar.Board exposing
 
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import MiniWorldWar.Color as Color exposing (Color(..))
-import MiniWorldWar.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.Data.Color as Color exposing (Color(..))
+import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
+import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
 
 
 type alias Unit =

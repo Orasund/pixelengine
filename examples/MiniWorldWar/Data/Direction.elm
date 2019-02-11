@@ -1,4 +1,4 @@
-module MiniWorldWar.Direction exposing (Direction(..),fromString,toString)
+module MiniWorldWar.Data.Direction exposing (Direction(..),fromString,toString)
 
 type Direction
     = Up

@@ -1,21 +1,21 @@
 module MiniWorldWar.Main exposing (main)
 
-import MiniWorldWar.Board as Board exposing (Move, Unit)
-import MiniWorldWar.Card as Card
-import MiniWorldWar.Color as Color exposing (Color(..))
-import MiniWorldWar.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Direction as Direction exposing (Direction(..))
-import MiniWorldWar.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Gui as Gui exposing (SelectGui)
-import MiniWorldWar.Server as Server exposing (Response(..))
-import MiniWorldWar.Server.Client as ClientServer exposing (ClientMsg(..))
-import MiniWorldWar.Server.Guest as GuestServer exposing (GuestMsg(..))
-import MiniWorldWar.Server.Host as HostServer exposing (HostMsg(..))
-import MiniWorldWar.Server.WaitingHost as WaitingHostServer exposing (WaitingHostMsg(..))
-import MiniWorldWar.Unit as Unit
+import MiniWorldWar.Data.Board as Board exposing (Move, Supply, Unit)
+import MiniWorldWar.Data.Color as Color exposing (Color(..))
+import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
+import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
+import MiniWorldWar.Request as Request exposing (Response(..))
+import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
+import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
+import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
+import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
 import MiniWorldWar.View as View
+import MiniWorldWar.View.Card as Card
+import MiniWorldWar.View.Image.SelectGui as Gui exposing (SelectGui)
 import MiniWorldWar.View.TitleScreen as TitleScreenView
 import MiniWorldWar.View.Unit as UnitView
+import MiniWorldWar.View.Image.Unit as Unit
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
@@ -68,7 +68,7 @@ type Msg
     | WaitingHostSpecific WaitingHostMsg
     | ClientSpecific ClientMsg
     | BoardSpecific BoardEvent
-    | ServerSpecific (Response Never)
+    | RequestSpecific (Response Never)
     | Update Posix
     | None
 
@@ -80,19 +80,19 @@ responseToMsg fun response =
             fun msg
 
         Exit ->
-            ServerSpecific Exit
+            RequestSpecific Exit
 
         Reset ->
-            ServerSpecific Reset
+            RequestSpecific Reset
 
         Idle ->
-            ServerSpecific Idle
+            RequestSpecific Idle
 
         DropOpenGameTable ->
-            ServerSpecific DropOpenGameTable
+            RequestSpecific DropOpenGameTable
 
         DropRunningGameTable ->
-            ServerSpecific DropRunningGameTable
+            RequestSpecific DropRunningGameTable
 
 
 
@@ -124,7 +124,7 @@ clientUpdate msg ({ time, id, game } as model) =
     case msg of
         WaitingForHost ->
             ( state
-            , ClientServer.waitingForHost id game.lastUpdated
+            , ClientRequest.waitingForHost id game.lastUpdated
                 |> Cmd.map (responseToMsg ClientSpecific)
             )
 
@@ -160,25 +160,25 @@ clientUpdate msg ({ time, id, game } as model) =
                                             }
                                        )
                         }
-                    , ClientServer.submitMoveBoard newerGame id
+                    , ClientRequest.submitMoveBoard newerGame id
                         |> Cmd.map (responseToMsg ClientSpecific)
                     )
 
                 _ ->
                     ( Client { model | game = newGame, ready = False }
-                    , ClientServer.endGame id time
+                    , ClientRequest.endGame id time
                         |> Cmd.map (responseToMsg ClientSpecific)
                     )
 
         EndGame ->
             ( state
-            , ClientServer.endGame id time
+            , ClientRequest.endGame id time
                 |> Cmd.map (responseToMsg ClientSpecific)
             )
 
         UpdateGameTable table ->
             ( state
-            , ClientServer.updateGameTable table
+            , ClientRequest.updateGameTable table
                 |> Cmd.map (responseToMsg ClientSpecific)
             )
 
@@ -214,7 +214,7 @@ hostUpdate msg (( { game, id, time } as model, seed ) as modelAndSeed) =
                   }
                 , seed
                 )
-            , HostServer.submit id newGame
+            , HostRequest.submit id newGame
                 |> Cmd.map (responseToMsg HostSpecific)
             )
 
@@ -234,7 +234,7 @@ hostUpdate msg (( { game, id, time } as model, seed ) as modelAndSeed) =
 
         WaitingForClient ->
             ( state
-            , HostServer.waitingForClient id game.lastUpdated
+            , HostRequest.waitingForClient id game.lastUpdated
                 |> Cmd.map (responseToMsg HostSpecific)
             )
 
@@ -253,7 +253,7 @@ waitingHostUpdate msg (( { time, id }, seed ) as timeAndSeed) =
     case msg of
         WaitForOpponent ->
             ( state
-            , WaitingHostServer.checkForOpponent id
+            , WaitingHostRequest.checkForOpponent id
                 |> Cmd.map (responseToMsg WaitingHostSpecific)
             )
 
@@ -275,7 +275,7 @@ waitingHostUpdate msg (( { time, id }, seed ) as timeAndSeed) =
                 , newSeed
                 )
             , newGame
-                |> HostServer.submit id
+                |> HostRequest.submit id
                 |> Cmd.map (responseToMsg HostSpecific)
             )
 
@@ -307,31 +307,31 @@ guestUpdate msg time =
                         , playerColor = Blue
                         , ready = True
                         }
-                    , ClientServer.joinGame id game
+                    , ClientRequest.joinGame id game
                         |> Cmd.map (responseToMsg ClientSpecific)
                     )
 
                 JoinOpenGame id ->
                     ( state
-                    , GuestServer.joinOpenGame id
+                    , GuestRequest.joinOpenGame id
                         |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 CloseGame id ->
                     ( state
-                    , GuestServer.closeGame id
+                    , GuestRequest.closeGame id
                         |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 ReopenGame id ->
                     ( state
-                    , GuestServer.reopenGame id
+                    , GuestRequest.reopenGame id
                         |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
                 FindOldGame ->
                     ( state
-                    , GuestServer.findOldGame time
+                    , GuestRequest.findOldGame time
                         |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
@@ -344,7 +344,7 @@ guestUpdate msg time =
 
                 FindOpenGame ->
                     ( state
-                    , GuestServer.findOpenGame time
+                    , GuestRequest.findOpenGame time
                         |> Cmd.map (responseToMsg (GuestSpecific << Response))
                     )
 
@@ -365,7 +365,7 @@ guestUpdate msg time =
                           }
                         , newSeed
                         )
-                    , WaitingHostServer.hostGame id time
+                    , WaitingHostRequest.hostGame id time
                         |> Cmd.map (responseToMsg WaitingHostSpecific)
                     )
 
@@ -551,37 +551,37 @@ update msg state =
                 _ ->
                     defaultCase
 
-        ServerSpecific serverMsg ->
-            case serverMsg of
+        RequestSpecific requestMsg ->
+            case requestMsg of
                 DropOpenGameTable ->
                     ( state
-                    , Server.dropOpenGameTable |> Cmd.map ServerSpecific
+                    , Request.dropOpenGameTable |> Cmd.map RequestSpecific
                     )
 
                 DropRunningGameTable ->
                     ( state
-                    , Server.dropRunningGameTable |> Cmd.map ServerSpecific
+                    , Request.dropRunningGameTable |> Cmd.map RequestSpecific
                     )
 
                 Exit ->
                     ( state
                     , (case state of
                         Client { id } ->
-                            ClientServer.exit id
+                            ClientRequest.exit id
 
                         Host ( { id }, _ ) ->
-                            HostServer.exit id
+                            HostRequest.exit id
 
                         WaitingHost ( { id }, _ ) ->
-                            WaitingHostServer.exit id
+                            WaitingHostRequest.exit id
 
                         Guest _ ->
-                            GuestServer.exit
+                            GuestRequest.exit
 
                         FetchingTime ->
-                            GuestServer.exit
+                            GuestRequest.exit
                       )
-                        |> Cmd.map ServerSpecific
+                        |> Cmd.map RequestSpecific
                     )
 
                 Reset ->
@@ -602,7 +602,7 @@ update msg state =
                             game
                       in
                       if ready then
-                        ClientServer.waitingForHost id lastUpdated
+                        ClientRequest.waitingForHost id lastUpdated
                             |> Cmd.map (responseToMsg ClientSpecific)
 
                       else
@@ -630,13 +630,13 @@ update msg state =
                                       }
                                     , newSeed
                                     )
-                                , HostServer.submit id newGame
+                                , HostRequest.submit id newGame
                                     |> Cmd.map (responseToMsg HostSpecific)
                                 )
 
                             _ ->
                                 ( Host ( { model | time = time }, seed )
-                                , HostServer.waitingForClient id lastUpdated
+                                , HostRequest.waitingForClient id lastUpdated
                                     |> Cmd.map (responseToMsg HostSpecific)
                                 )
 
@@ -645,7 +645,7 @@ update msg state =
 
                 WaitingHost ( { id }, seed ) ->
                     ( WaitingHost ( { id = id, time = time }, seed )
-                    , WaitingHostServer.checkForOpponent id
+                    , WaitingHostRequest.checkForOpponent id
                         |> Cmd.map (responseToMsg WaitingHostSpecific)
                     )
 
@@ -704,6 +704,21 @@ controls _ =
 {------------------------
    VIEW
 ------------------------}
+
+
+drawSupply : Continent -> ( Float, Float ) -> Maybe Supply -> Maybe ( ( Float, Float ), Image msg )
+drawSupply continent ( x1, y1 ) maybeSupply =
+    maybeSupply
+        |> Maybe.map
+            (\_ ->
+                let
+                    ( x, y ) =
+                        continent |> View.continentToPosition
+                in
+                ( ( x + x1, y + y1 )
+                , Gui.supply
+                )
+            )
 
 
 drawCard : Continent -> Maybe Unit -> Maybe ( ( Float, Float ), Image msg )
@@ -981,13 +996,12 @@ drawModel submitMsg { game, select, playerColor, ready } =
     in
     List.concat
         [ Continent.list
-            |> List.map
+            |> List.filterMap
                 (\continent ->
                     game.unitBoard
                         |> Board.get continent
                         |> drawCard continent
                 )
-            |> List.filterMap identity
         , Continent.list
             |> List.map
                 (\continent ->
@@ -1004,6 +1018,38 @@ drawModel submitMsg { game, select, playerColor, ready } =
                         |> drawUnits continent maybeUnit
                 )
             |> List.concat
+        , [ Europe, Asia, NorthAmerica ]
+            |> List.filterMap
+                (\continent ->
+                    game.unitBoard
+                        |> Board.get continent
+                        |> Maybe.andThen
+                            (always
+                                (game.supplyBoard
+                                    |> Board.get continent
+                                    |> drawSupply continent
+                                        ( View.tileSize * 1 - 4
+                                        , -8
+                                        )
+                                )
+                            )
+                )
+        , [ Africa, SouthAmerica ]
+            |> List.filterMap
+                (\continent ->
+                    game.unitBoard
+                        |> Board.get continent
+                        |> Maybe.andThen
+                            (always
+                                (game.supplyBoard
+                                    |> Board.get continent
+                                    |> drawSupply continent
+                                        ( View.tileSize * 1 - 4
+                                        , View.tileSize * 3
+                                        )
+                                )
+                            )
+                )
         , case select of
             Nothing ->
                 []
@@ -1014,11 +1060,11 @@ drawModel submitMsg { game, select, playerColor, ready } =
             , case game.state of
                 Win _ ->
                     Card.exit
-                        |> Image.withAttributes [ Image.onClick <| ServerSpecific Reset ]
+                        |> Image.withAttributes [ Image.onClick <| RequestSpecific Reset ]
 
                 Draw ->
                     Card.exit
-                        |> Image.withAttributes [ Image.onClick <| ServerSpecific Reset ]
+                        |> Image.withAttributes [ Image.onClick <| RequestSpecific Reset ]
 
                 _ ->
                     if ready then

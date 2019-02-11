@@ -1,4 +1,4 @@
-module MiniWorldWar.Server.Guest exposing
+module MiniWorldWar.Request.Guest exposing
     ( GuestMsg(..)
     , dropOpenGameTable
     , dropRunningGameTable
@@ -13,8 +13,8 @@ module MiniWorldWar.Server.Guest exposing
 import Dict exposing (Dict)
 import Http exposing (Error(..), Expect)
 import Json.Decode as D exposing (Decoder)
-import MiniWorldWar.Game as Game exposing (Game)
-import MiniWorldWar.Server as Server
+import MiniWorldWar.Data.Game as Game exposing (Game)
+import MiniWorldWar.Request as Request
     exposing
         ( OpenGameTable
         , Response(..)
@@ -114,7 +114,7 @@ findOldGame now =
     in
     Http.get
         { url = runningGameRoute
-        , expect = Http.expectJson response Server.runningGameTableDecoder
+        , expect = Http.expectJson response Request.runningGameTableDecoder
         }
 
 
@@ -126,7 +126,7 @@ findOldGame now =
 
 openGameTableDecoder : Decoder OpenGameTable
 openGameTableDecoder =
-    Server.tableDecoder <| Server.openGameDecoder
+    Request.tableDecoder <| Request.openGameDecoder
 
 
 closeGame : String -> Cmd GuestResponse

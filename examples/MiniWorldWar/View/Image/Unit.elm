@@ -1,9 +1,9 @@
-module MiniWorldWar.Unit exposing (unitImage)
+module MiniWorldWar.View.Image.Unit exposing (unitImage)
 
 import PixelEngine.Graphics.Tile exposing (Tile, tile, Tileset, animated)
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import MiniWorldWar.Board as Board exposing (Unit)
-import MiniWorldWar.Color as Color exposing (Color(..))
+import MiniWorldWar.Data.Board as Board exposing (Unit)
+import MiniWorldWar.Data.Color as Color exposing (Color(..))
 
 
 

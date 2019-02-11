@@ -1,4 +1,4 @@
-module MiniWorldWar.Server.Host exposing
+module MiniWorldWar.Request.Host exposing
     ( HostMsg(..)
     , exit
     , submit
@@ -9,9 +9,9 @@ import Dict exposing (Dict)
 import Http exposing (Error(..), Expect)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import MiniWorldWar.Board as Board exposing (MoveBoard, Unit, UnitBoard)
-import MiniWorldWar.Game as Game exposing (Game)
-import MiniWorldWar.Server as Server
+import MiniWorldWar.Data.Board as Board exposing (MoveBoard, Unit, UnitBoard)
+import MiniWorldWar.Data.Game as Game exposing (Game)
+import MiniWorldWar.Request as Request
     exposing
         ( Response(..)
         , RunningGameTable

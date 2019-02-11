@@ -1,4 +1,4 @@
-module MiniWorldWar.Game exposing
+module MiniWorldWar.Data.Game exposing
     ( Game
     , GameState(..)
     , addMoveBoard
@@ -10,13 +10,12 @@ module MiniWorldWar.Game exposing
 
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import MiniWorldWar.Board as Board exposing (Board, Move, MoveBoard, Supply(..), SupplyBoard, Unit, UnitBoard)
-import MiniWorldWar.Color as Color exposing (Color(..))
-import MiniWorldWar.Continent as Continent exposing (Continent(..), list)
-import MiniWorldWar.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.Data.Board as Board exposing (Board, Move, MoveBoard, Supply(..), SupplyBoard, Unit, UnitBoard)
+import MiniWorldWar.Data.Color as Color exposing (Color(..))
+import MiniWorldWar.Data.Continent as Continent exposing (Continent(..), list)
+import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
 import Random exposing (Generator, Seed)
 import Time exposing (Posix)
-
 
 
 type GameState
@@ -128,6 +127,7 @@ applyNewUnits newUnitBoard unitBoard =
             )
             unitBoard
 
+
 nextRound : Posix -> Game -> Generator Game
 nextRound time ({ moveBoard } as game) =
     let
@@ -151,8 +151,6 @@ nextRound time ({ moveBoard } as game) =
                 maybeSupplyGenerator
                 maybeSupplyGenerator
                 maybeSupplyGenerator
-
-
 
         state : UnitBoard -> GameState
         state unitBoard =
@@ -178,14 +176,14 @@ nextRound time ({ moveBoard } as game) =
         (\supplyBoard ->
             let
                 unitBoard : UnitBoard
-                unitBoard = 
+                unitBoard =
                     Continent.list
-                    |> List.foldl
-                        (\continent ->
-                            applyMove continent (moveBoard |> Board.get continent)
-                        )
-                        game.unitBoard
-                    |> applyNewUnits supplyBoard
+                        |> List.foldl
+                            (\continent ->
+                                applyMove continent (moveBoard |> Board.get continent)
+                            )
+                            game.unitBoard
+                        |> applyNewUnits supplyBoard
             in
             { lastUpdated = time |> Time.posixToMillis
             , unitBoard = unitBoard

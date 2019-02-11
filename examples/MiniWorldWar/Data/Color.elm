@@ -1,4 +1,4 @@
-module MiniWorldWar.Color exposing(
+module MiniWorldWar.Data.Color exposing(
     Color(..),
     isBlue,
     fromBool,

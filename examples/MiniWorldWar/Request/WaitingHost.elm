@@ -1,4 +1,4 @@
-module MiniWorldWar.Server.WaitingHost exposing
+module MiniWorldWar.Request.WaitingHost exposing
     ( WaitingHostMsg(..)
     , checkForOpponent
     , exit
@@ -8,8 +8,8 @@ module MiniWorldWar.Server.WaitingHost exposing
 import Http exposing (Error(..), Expect)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import MiniWorldWar.Game as Game exposing (Game)
-import MiniWorldWar.Server as Server exposing (Response(..), httpDelete, openGameRoute, runningGameRoute)
+import MiniWorldWar.Data.Game as Game exposing (Game)
+import MiniWorldWar.Request as Request exposing (Response(..), httpDelete, openGameRoute, runningGameRoute)
 import Time exposing (Posix)
 
 
@@ -78,7 +78,7 @@ hostGame id time =
     let
         value : Value
         value =
-            Server.openGameEncoder { date = time |> Time.posixToMillis }
+            Request.openGameEncoder { date = time |> Time.posixToMillis }
 
         response : Result Error () -> WaitingHostResponse
         response result =

@@ -1,4 +1,4 @@
-module MiniWorldWar.Server exposing( RunningGameTable
+module MiniWorldWar.Request exposing( RunningGameTable
     , OpenGameTable
     , OpenGame
     , Response(..)
@@ -15,7 +15,7 @@ module MiniWorldWar.Server exposing( RunningGameTable
     )
 
 import Http exposing (Body, Error, Expect)
-import MiniWorldWar.Game as Game exposing (Game)
+import MiniWorldWar.Data.Game as Game exposing (Game)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
 import Dict exposing (Dict)

@@ -1,15 +1,15 @@
 module MiniWorldWar.View.Unit exposing
-    ( drawCenter
-    , draw
+    ( draw
+    , drawCenter
     )
 
-import MiniWorldWar.Board as Board exposing (Unit)
+import MiniWorldWar.Data.Board as Board exposing (Unit)
+import MiniWorldWar.Data.Color as Color exposing (Color)
+import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
+import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.View as View exposing (continentToPosition, tileSize)
+import MiniWorldWar.View.Image.Unit as Unit
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import MiniWorldWar.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Direction as Direction exposing (Direction(..))
-import MiniWorldWar.Color as Color exposing (Color)
-import MiniWorldWar.View as View exposing (tileSize,continentToPosition)
-import MiniWorldWar.Unit as Unit
 
 
 drawUnit : ( Float, Float ) -> Unit -> ( ( Float, Float ), Image msg )
@@ -25,15 +25,16 @@ drawCenter continent ({ used } as config) toMsg color unit =
         ( x, y ) =
             continent |> continentToPosition
     in
-    
-        ( ( x + tileSize / 2, y + tileSize * 1 )
-        , Unit.unitImage unit config
-            |> if color == unit.color then
+    ( ( x + tileSize / 2, y + tileSize * 1 )
+    , Unit.unitImage unit config
+        |> (if color == unit.color then
                 Image.withAttributes
                     [ Image.onClick (toMsg continent) ]
-                else
-                    identity
-        )
+
+            else
+                identity
+           )
+    )
 
 
 drawUnitLeft : Continent -> Unit -> ( ( Float, Float ), Image msg )
@@ -71,14 +72,18 @@ drawUnitDown continent =
     in
     drawUnit ( x + tileSize * 1, y + (5 * tileSize) / 2 )
 
+
 draw : Direction -> Continent -> Unit -> ( ( Float, Float ), Image msg )
 draw direction =
-  case direction of
-    Up ->
-      drawUnitUp
-    Down ->
-      drawUnitDown
-    Left ->
-      drawUnitLeft
-    Right ->
-      drawUnitRight
+    case direction of
+        Up ->
+            drawUnitUp
+
+        Down ->
+            drawUnitDown
+
+        Left ->
+            drawUnitLeft
+
+        Right ->
+            drawUnitRight
