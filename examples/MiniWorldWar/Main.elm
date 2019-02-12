@@ -1,10 +1,10 @@
 module MiniWorldWar.Main exposing (main)
 
-import MiniWorldWar.Data.Board as Board exposing (Move, Supply, SupplyBoard, Unit, UnitBoard)
-import MiniWorldWar.Data.Color as Color exposing (Color(..))
+import MiniWorldWar.Data.Board as Board exposing (Unit)
+import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
-import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
+import MiniWorldWar.Data.Direction exposing (Direction(..))
+import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.Request as Request exposing (Response(..))
 import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
@@ -12,12 +12,12 @@ import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
 import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
 import MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
 import MiniWorldWar.Role.Client as Client
+import MiniWorldWar.Role.Guest as Guest
 import MiniWorldWar.Role.Host as Host
 import MiniWorldWar.Role.WaitingHost as WaitingHost
-import MiniWorldWar.Role.Guest as Guest
 import MiniWorldWar.View as View
+import MiniWorldWar.View.Error as Error
 import MiniWorldWar.View.Image.Card as Card
-import MiniWorldWar.View.Image.SelectGui as Gui
 import MiniWorldWar.View.SelectGui as SelectGuiView
 import MiniWorldWar.View.Supplys as SupplysView
 import MiniWorldWar.View.TitleScreen as TitleScreenView
@@ -25,10 +25,7 @@ import MiniWorldWar.View.Units as UnitsView
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
-import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
-import Random exposing (Generator, Seed)
-import Task
+import PixelEngine.Graphics.Image as Image exposing (Image)
 import Time exposing (Posix)
 
 
@@ -75,11 +72,17 @@ responseToMsg fun response =
         Idle ->
             RequestSpecific Idle
 
-        DropOpenGameTable ->
-            RequestSpecific DropOpenGameTable
+        ExitWithError error ->
+            RequestSpecific <| ExitWithError error
 
-        DropRunningGameTable ->
-            RequestSpecific DropRunningGameTable
+        ResetWithError error ->
+            RequestSpecific <| ResetWithError error
+
+        DropOpenGameTable error ->
+            RequestSpecific <| DropOpenGameTable error
+
+        DropRunningGameTable error ->
+            RequestSpecific <| DropRunningGameTable error
 
 
 
@@ -202,7 +205,7 @@ updateBoard msg ({ game, select } as model) =
 
         SetMove direction ->
             case select of
-                Just ( continent, { selected, remaining } ) ->
+                Just ( continent, { selected } ) ->
                     { model
                         | game =
                             { game
@@ -229,6 +232,32 @@ update msg state =
         defaultCase : ( State, Cmd Msg )
         defaultCase =
             ( state, Cmd.none )
+
+        resetCase : ( State, Cmd Msg )
+        resetCase =
+            init ()
+
+        exitCase : ( State, Cmd Msg )
+        exitCase =
+            ( state
+            , (case state of
+                Client { id } ->
+                    ClientRequest.exit id
+
+                Host ( { id }, _ ) ->
+                    HostRequest.exit id
+
+                WaitingHost ( { id }, _ ) ->
+                    WaitingHostRequest.exit id
+
+                Guest _ ->
+                    GuestRequest.exit
+
+                FetchingTime ->
+                    GuestRequest.exit
+              )
+                |> Cmd.map RequestSpecific
+            )
     in
     case msg of
         ClientSpecific clientMsg ->
@@ -242,7 +271,7 @@ update msg state =
 
         HostSpecific hostMsg ->
             case state of
-                Host (( model, seed ) as modelAndSeed) ->
+                Host modelAndSeed ->
                     Host.update hostMsg modelAndSeed (responseToMsg HostSpecific)
                         |> Tuple.mapFirst Host
 
@@ -300,39 +329,27 @@ update msg state =
 
         RequestSpecific requestMsg ->
             case requestMsg of
-                DropOpenGameTable ->
-                    ( state
+                DropOpenGameTable error ->
+                    ( state |> Error.log error
                     , Request.dropOpenGameTable |> Cmd.map RequestSpecific
                     )
 
-                DropRunningGameTable ->
-                    ( state
+                DropRunningGameTable error ->
+                    ( state |> Error.log error
                     , Request.dropRunningGameTable |> Cmd.map RequestSpecific
                     )
 
                 Exit ->
-                    ( state
-                    , (case state of
-                        Client { id } ->
-                            ClientRequest.exit id
+                    exitCase
 
-                        Host ( { id }, _ ) ->
-                            HostRequest.exit id
-
-                        WaitingHost ( { id }, _ ) ->
-                            WaitingHostRequest.exit id
-
-                        Guest _ ->
-                            GuestRequest.exit
-
-                        FetchingTime ->
-                            GuestRequest.exit
-                      )
-                        |> Cmd.map RequestSpecific
-                    )
+                ExitWithError error ->
+                    exitCase |> Error.log error
 
                 Reset ->
-                    init ()
+                    resetCase
+
+                ResetWithError error ->
+                    resetCase |> Error.log error
 
                 Please _ ->
                     defaultCase
@@ -427,10 +444,6 @@ drawCard continent maybeUnit =
 
 drawModel : Msg -> ClientModel -> List ( ( Float, Float ), Image Msg )
 drawModel submitMsg { game, select, playerColor, ready } =
-    let
-        { europe, asia, africa, northAmerica, southAmerica } =
-            game.unitBoard
-    in
     List.concat
         [ Continent.list
             |> List.filterMap

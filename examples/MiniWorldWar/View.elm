@@ -1,10 +1,12 @@
-module MiniWorldWar.View exposing (tileSize,continentToPosition)
+module MiniWorldWar.View exposing (continentToPosition, tileSize)
 
-import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
+import MiniWorldWar.Data.Continent exposing (Continent(..))
+
 
 tileSize : Float
 tileSize =
     16
+
 
 continentToPosition : Continent -> ( Float, Float )
 continentToPosition continent =

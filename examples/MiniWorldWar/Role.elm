@@ -1,23 +1,36 @@
-module MiniWorldWar.Role exposing (HostModel,ClientModel,WaitingHostModel)
+module MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
 
-import Random exposing (Generator, Seed)
+import MiniWorldWar.Data.Color exposing (Color(..))
+import MiniWorldWar.Data.Continent exposing (Continent(..))
+import MiniWorldWar.Data.Game exposing (Game, GameState(..))
+import MiniWorldWar.Request exposing (Response(..))
+import Random exposing (Seed)
 import Time exposing (Posix)
-import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Data.Color as Color exposing (Color(..))
-import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Request as Request exposing (Response(..))
+
 
 type alias HostModel =
-  (ClientModel,Seed)
+    ( ClientModel, Seed )
+
 
 type alias WaitingHostModel =
-  ({ time : Posix, id : String},Seed)
+    ( { time : Posix
+      , id : String
+      }
+    , Seed
+    )
+
 
 type alias ClientModel =
     { game : Game
     , time : Posix
     , playerColor : Color
-    , select : Maybe ( Continent, { selected : Int, remaining : Int } )
+    , select :
+        Maybe
+            ( Continent
+            , { selected : Int
+              , remaining : Int
+              }
+            )
     , ready : Bool
     , id : String
     }

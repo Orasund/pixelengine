@@ -10,11 +10,11 @@ module MiniWorldWar.Data.Game exposing
 
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import MiniWorldWar.Data.Board as Board exposing (Board, Move, MoveBoard, Supply(..), SupplyBoard, Unit, UnitBoard)
+import MiniWorldWar.Data.Board as Board exposing (Move, MoveBoard, Supply(..), SupplyBoard, Unit, UnitBoard)
 import MiniWorldWar.Data.Color as Color exposing (Color(..))
 import MiniWorldWar.Data.Continent as Continent exposing (Continent(..), list)
-import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
-import Random exposing (Generator, Seed)
+import MiniWorldWar.Data.Direction exposing (Direction(..))
+import Random exposing (Generator)
 import Time exposing (Posix)
 
 
@@ -76,7 +76,7 @@ applyMove continent maybeMove board =
     in
     board
         |> (case maybeMove of
-                Just ({ direction, amount } as move) ->
+                Just { direction, amount } ->
                     let
                         targetContinent =
                             continent |> Continent.neighbour direction

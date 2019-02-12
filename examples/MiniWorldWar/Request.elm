@@ -1,39 +1,44 @@
-module MiniWorldWar.Request exposing( RunningGameTable
+module MiniWorldWar.Request exposing
+    ( OpenGame
     , OpenGameTable
-    , OpenGame
     , Response(..)
+    , RunningGameTable
+    , dropOpenGameTable
+    , dropRunningGameTable
     , httpDelete
     , httpPut
-    , openGameRoute
     , openGameDecoder
+    , openGameEncoder
+    , openGameRoute
     , runningGameRoute
     , runningGameTableDecoder
     , tableDecoder
-    , openGameEncoder
-    , dropRunningGameTable
-    , dropOpenGameTable
     )
 
+import Dict exposing (Dict)
 import Http exposing (Body, Error, Expect)
-import MiniWorldWar.Data.Game as Game exposing (Game)
 import Json.Decode as D exposing (Decoder)
 import Json.Encode as E exposing (Value)
-import Dict exposing (Dict)
+import MiniWorldWar.Data.Game as Game exposing (Game)
+
 
 url : String
 url =
     "https://www.jsonstore.io/1f14b82b88eb39f996d8273444d16c26ad25a14b4cae764b3015b48d9e905a75"
 
-type Response msg =
-  Please msg
-  | Exit --Savely Close current progess -> Then Reset
-  | Reset --Restart Everything
-  | Idle  --Do Nothing
-  | DropRunningGameTable -- -> Reset
-  | DropOpenGameTable -- -> Reset
+type Response msg
+    = Please msg
+    | Exit --Savely Close current progess -> Then Reset
+    | Reset --Restart Everything
+    | Idle --Do Nothing
+    | ResetWithError Error -- -> Restart
+    | ExitWithError Error -- -> Close Process -> Then Reset
+    | DropRunningGameTable Error -- -> Reset
+    | DropOpenGameTable Error -- -> Reset
 
 type alias ServerResponse =
-  Response Never
+    Response Never
+
 
 openGameRoute : String
 openGameRoute =
@@ -70,54 +75,66 @@ httpPut record =
         , tracker = Nothing
         }
 
+
 tableDecoder : Decoder a -> Decoder (Dict String a)
 tableDecoder decoder =
     D.field "result" <|
-      D.map (Maybe.withDefault Dict.empty) <|
-       D.nullable <|
-        D.dict <|
-            decoder
+        D.map (Maybe.withDefault Dict.empty) <|
+            D.nullable <|
+                D.dict <|
+                    decoder
+
+
 
 {------------------------
    RunningGame
 ------------------------}
 
+
 type alias RunningGameTable =
     Dict String Game
+
 
 runningGameTableDecoder : Decoder RunningGameTable
 runningGameTableDecoder =
     tableDecoder <| Game.decoder
 
+
 dropRunningGameTable : Cmd ServerResponse
 dropRunningGameTable =
     let
         response : Result Error () -> ServerResponse
-        response result =
-            Reset
+        response =
+            always Reset
     in
     httpDelete
         { url = runningGameRoute
         , expect = Http.expectWhatever response
         }
 
+
+
 {------------------------
    OpenGame
 ------------------------}
 
+
 type alias OpenGame =
-    { date : Int}
+    { date : Int }
+
 
 type alias OpenGameTable =
     Dict String OpenGame
 
+
 openGameDecoder : Decoder OpenGame
-openGameDecoder  =
-     D.map
+openGameDecoder =
+    D.map
         (\date ->
             { date = date }
         )
         (D.field "date" D.int)
+
 
 openGameEncoder : OpenGame -> Value
 openGameEncoder { date } =
@@ -125,12 +142,13 @@ openGameEncoder { date } =
         [ ( "date", E.int date )
         ]
 
+
 dropOpenGameTable : Cmd ServerResponse
 dropOpenGameTable =
     let
         response : Result Error () -> ServerResponse
-        response result =
-            Reset
+        response =
+            always Reset
     in
     httpDelete
         { url = openGameRoute

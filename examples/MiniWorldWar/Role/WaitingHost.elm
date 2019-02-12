@@ -1,20 +1,21 @@
-module MiniWorldWar.Role.WaitingHost exposing (tick,update)
+module MiniWorldWar.Role.WaitingHost exposing (tick, update)
 
-import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
-import MiniWorldWar.Request as Request exposing (Response(..))
+import MiniWorldWar.Data.Color exposing (Color(..))
+import MiniWorldWar.Data.Game as Game exposing (GameState(..))
+import MiniWorldWar.Request exposing (Response(..))
 import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
 import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
+import MiniWorldWar.Role exposing (HostModel, WaitingHostModel)
+import Random exposing (Seed)
 import Time exposing (Posix)
-import Random exposing (Generator, Seed)
-import MiniWorldWar.Data.Color as Color exposing (Color(..))
+
 
 tick : WaitingHostModel -> (Response WaitingHostMsg -> msg) -> Posix -> ( WaitingHostModel, Cmd msg )
 tick ( { id }, seed ) msgMap time =
-  ( ( { id = id, time = time }, seed )
-  , WaitingHostRequest.checkForOpponent id
-      |> Cmd.map msgMap
-  )
+    ( ( { id = id, time = time }, seed )
+    , WaitingHostRequest.checkForOpponent id
+        |> Cmd.map msgMap
+    )
 
 
 update :

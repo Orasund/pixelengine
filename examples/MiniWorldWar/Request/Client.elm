@@ -9,8 +9,8 @@ module MiniWorldWar.Request.Client exposing
     )
 
 import Dict
-import Http exposing (Error(..), Expect)
-import Json.Decode as D exposing (Decoder)
+import Http exposing (Error(..))
+import Json.Decode as D
 import Json.Encode as E exposing (Value)
 import MiniWorldWar.Data.Game as Game exposing (Game)
 import MiniWorldWar.Request as Request
@@ -19,7 +19,6 @@ import MiniWorldWar.Request as Request
         , RunningGameTable
         , httpDelete
         , httpPut
-        , openGameRoute
         , runningGameRoute
         )
 import Time exposing (Posix)
@@ -41,8 +40,8 @@ exit : String -> Cmd (Response Never)
 exit id =
     let
         response : Result Error () -> Response Never
-        response result =
-            Reset
+        response =
+            always Reset
     in
     httpDelete
         { url = runningGameRoute ++ "/" ++ id
@@ -72,8 +71,7 @@ submitMoveBoard game id =
                 Err error ->
                     case error of
                         BadBody _ ->
-                            (error |> Debug.log "badBodyError")
-                                |> always DropRunningGameTable
+                            error |> DropRunningGameTable
 
                         _ ->
                             (error |> Debug.log "error")
@@ -92,7 +90,7 @@ waitingForHost id oldTime =
         response : Result Error Game -> ClientResponse
         response result =
             case result of
-                Ok ({ lastUpdated, moveBoard } as game) ->
+                Ok ({ lastUpdated } as game) ->
                     if lastUpdated > oldTime then
                         Please <| UpdateGame game
 
@@ -106,8 +104,7 @@ waitingForHost id oldTime =
                                 |> always (Please EndGame)
 
                         _ ->
-                            (error |> Debug.log "error")
-                                |> always DropRunningGameTable
+                            error |> DropRunningGameTable
     in
     Http.get
         { url = runningGameRoute ++ "/" ++ id
@@ -129,8 +126,8 @@ joinGame id game =
                     (id |> Debug.log "id")
                         |> always (Please WaitingForHost)
 
-                Err _ ->
-                    Reset
+                Err error ->
+                    error |> ResetWithError
     in
     Http.post
         { url = runningGameRoute ++ "/" ++ id
@@ -153,7 +150,7 @@ updateGameTable table =
                     Idle
 
                 Err error ->
-                    DropRunningGameTable
+                    error |> DropRunningGameTable
     in
     httpPut
         { url = runningGameRoute
@@ -186,12 +183,10 @@ endGame currentId now =
                 Err error ->
                     case error of
                         BadBody _ ->
-                            (error |> Debug.log "badBodyError")
-                                |> always DropRunningGameTable
+                            error |> DropRunningGameTable
 
                         _ ->
-                            (error |> Debug.log "error")
-                                |> always Reset
+                            error |> ResetWithError
     in
     Http.get
         { url = runningGameRoute

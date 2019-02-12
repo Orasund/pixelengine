@@ -5,9 +5,9 @@ module MiniWorldWar.Request.WaitingHost exposing
     , hostGame
     )
 
-import Http exposing (Error(..), Expect)
-import Json.Decode as D exposing (Decoder)
-import Json.Encode as E exposing (Value)
+import Http exposing (Error(..))
+import Json.Decode as D
+import Json.Encode exposing (Value)
 import MiniWorldWar.Data.Game as Game exposing (Game)
 import MiniWorldWar.Request as Request exposing (Response(..), httpDelete, openGameRoute, runningGameRoute)
 import Time exposing (Posix)
@@ -27,7 +27,11 @@ exit id =
     let
         response : Result Error () -> Response Never
         response result =
-            Reset
+            case result of
+                Ok () ->
+                    Reset
+                Err error ->
+                    error |> ResetWithError
     in
     httpDelete
         { url = runningGameRoute ++ "/" ++ id
@@ -39,6 +43,7 @@ exit id =
 {------------------------
    RunningGame
 ------------------------}
+
 
 checkForOpponent : String -> Cmd WaitingHostResponse
 checkForOpponent id =
@@ -55,23 +60,19 @@ checkForOpponent id =
                             Please <| CreateBoard game
 
                 Err error ->
-                    case error of
-                        BadBody _ ->
-                            (error |> Debug.log "badBodyError:")
-                                |> always Exit
-
-                        _ ->
-                            (error |> Debug.log "error:")
-                                |> always Exit
+                    error |> ExitWithError
     in
     Http.get
         { url = runningGameRoute ++ "/" ++ id
         , expect = Http.expectJson response (D.field "result" <| D.nullable <| Game.decoder)
         }
 
+
+
 {------------------------
    OpenGame
 ------------------------}
+
 
 hostGame : String -> Posix -> Cmd WaitingHostResponse
 hostGame id time =
@@ -87,14 +88,7 @@ hostGame id time =
                     Please WaitForOpponent
 
                 Err error ->
-                    case error of
-                        BadBody _ ->
-                            (error |> Debug.log "badBodyError:")
-                                |> always Reset
-
-                        _ ->
-                            (error |> Debug.log "error:")
-                                |> always Reset
+                    error |> ResetWithError
     in
     Http.post
         { url = openGameRoute ++ "/" ++ id

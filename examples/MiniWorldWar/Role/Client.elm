@@ -1,9 +1,9 @@
 module MiniWorldWar.Role.Client exposing (tick, update)
 
-import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Request as Request exposing (Response(..))
+import MiniWorldWar.Data.Game as Game exposing (GameState(..))
+import MiniWorldWar.Request exposing (Response(..))
 import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
-import MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
+import MiniWorldWar.Role exposing (ClientModel)
 import Time exposing (Posix)
 
 

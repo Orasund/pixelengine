@@ -5,23 +5,12 @@ module MiniWorldWar.Request.Host exposing
     , waitingForClient
     )
 
-import Dict exposing (Dict)
-import Http exposing (Error(..), Expect)
-import Json.Decode as D exposing (Decoder)
-import Json.Encode as E exposing (Value)
-import MiniWorldWar.Data.Board as Board exposing (MoveBoard, Unit, UnitBoard)
+import Http exposing (Error(..))
+import Json.Decode as D
+import Json.Encode exposing (Value)
+import MiniWorldWar.Data.Board exposing (MoveBoard)
 import MiniWorldWar.Data.Game as Game exposing (Game)
-import MiniWorldWar.Request as Request
-    exposing
-        ( Response(..)
-        , RunningGameTable
-        , httpDelete
-        , httpPut
-        , openGameRoute
-        , runningGameRoute
-        )
-import Task
-import Time exposing (Posix)
+import MiniWorldWar.Request exposing (Response(..), httpDelete, httpPut, runningGameRoute)
 
 
 type HostMsg
@@ -39,7 +28,12 @@ exit id =
     let
         response : Result Error () -> Response Never
         response result =
-            Reset
+            case result of
+                Ok () ->
+                    Reset
+
+                Err error ->
+                    error |> ResetWithError
     in
     httpDelete
         { url = runningGameRoute ++ "/" ++ id
@@ -59,7 +53,7 @@ waitingForClient id oldTime =
         response : Result Error Game -> HostResponse
         response result =
             case result of
-                Ok ({ lastUpdated, moveBoard } as game) ->
+                Ok { lastUpdated, moveBoard } ->
                     if lastUpdated > oldTime then
                         Please <| UpdateMoveBoard moveBoard
 
@@ -69,17 +63,16 @@ waitingForClient id oldTime =
                 Err error ->
                     case error of
                         BadBody _ ->
-                            (error |> Debug.log "badBodyError")
-                                |> always Exit
+                            error |> ExitWithError
 
                         _ ->
-                            (error |> Debug.log "error")
-                                |> always DropRunningGameTable
+                            error |> DropRunningGameTable
     in
     Http.get
         { url = runningGameRoute ++ "/" ++ id
         , expect = Http.expectJson response (D.field "result" <| Game.decoder)
         }
+
 
 submit : String -> Game -> Cmd HostResponse
 submit id game =
@@ -97,12 +90,10 @@ submit id game =
                 Err error ->
                     case error of
                         BadBody _ ->
-                            (error |> Debug.log "badBodyError")
-                                |> always DropRunningGameTable
+                            error |> DropRunningGameTable
 
                         _ ->
-                            (error |> Debug.log "error")
-                                |> always Exit
+                            error |> ExitWithError
     in
     httpPut
         { url = runningGameRoute ++ "/" ++ id

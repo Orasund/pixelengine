@@ -1,25 +1,39 @@
-module MiniWorldWar.Data.Continent exposing (Continent(..),list,neighbour,toInt)
+module MiniWorldWar.Data.Continent exposing (Continent(..), list, neighbour, toInt)
 
-import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.Data.Direction exposing (Direction(..))
+
 
 list : List Continent
-list = [Europe,Asia,NorthAmerica,SouthAmerica,Africa]
+list =
+    [ Europe, Asia, NorthAmerica, SouthAmerica, Africa ]
 
-type Continent =
-    Europe
+
+type Continent
+    = Europe
     | Asia
     | NorthAmerica
     | SouthAmerica
     | Africa
 
+
 toInt : Continent -> Int
 toInt continent =
-  case continent of
-    SouthAmerica -> 0
-    NorthAmerica -> 1
-    Asia -> 2
-    Europe -> 3
-    Africa -> 4
+    case continent of
+        SouthAmerica ->
+            0
+
+        NorthAmerica ->
+            1
+
+        Asia ->
+            2
+
+        Europe ->
+            3
+
+        Africa ->
+            4
+
 
 neighbour : Direction -> Continent -> Continent
 neighbour direction continent =

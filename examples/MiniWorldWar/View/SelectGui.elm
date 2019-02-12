@@ -1,10 +1,11 @@
 module MiniWorldWar.View.SelectGui exposing (view)
 
-import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import MiniWorldWar.View.Image.SelectGui as Gui
-import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
+import MiniWorldWar.Data.Continent exposing (Continent(..))
+import MiniWorldWar.Data.Direction exposing (Direction(..))
 import MiniWorldWar.View as View
+import MiniWorldWar.View.Image.SelectGui as Gui
+import PixelEngine.Graphics.Image as Image exposing (Image)
+
 
 relativeCoord : ( Int, Int ) -> ( Float, Float ) -> ( Float, Float )
 relativeCoord ( x1, y1 ) ( x, y ) =
@@ -33,7 +34,7 @@ removeUnitButton : msg -> ( Float, Float ) -> List ( ( Float, Float ), Image msg
 removeUnitButton msg pos =
     [ ( pos |> relativeCoord ( 3, 2 )
       , Gui.removeUnitButton
-            |> Image.withAttributes [ Image.onClick msg]
+            |> Image.withAttributes [ Image.onClick msg ]
       )
     ]
 
@@ -59,7 +60,7 @@ centerCardButton relPos msg pos =
 
 
 locationButtons : Continent -> msg -> (Direction -> msg) -> ( Float, Float ) -> List ( ( Float, Float ), Image msg )
-locationButtons continent centerMsg dirMsg  pos=
+locationButtons continent centerMsg dirMsg pos =
     case continent of
         Asia ->
             [ pos |> centerCardButton ( 1, 1 ) centerMsg
@@ -93,8 +94,9 @@ locationButtons continent centerMsg dirMsg  pos=
             , pos |> centerCardButton ( 1, 2 ) (dirMsg Down)
             ]
 
-view : {addUnit:msg,swapUnits:msg,removeUnit:msg,resetMove:msg,setMove:(Direction -> msg)} -> Continent -> { selected : Int, remaining : Int } -> List ( ( Float, Float ), Image msg )
-view {addUnit,swapUnits,removeUnit,resetMove,setMove} continent ({ selected, remaining } as selectGui) =
+
+view : { addUnit : msg, swapUnits : msg, removeUnit : msg, resetMove : msg, setMove : Direction -> msg } -> Continent -> { selected : Int, remaining : Int } -> List ( ( Float, Float ), Image msg )
+view { addUnit, swapUnits, removeUnit, resetMove, setMove } continent ({ selected, remaining } as selectGui) =
     let
         pos : ( Float, Float )
         pos =

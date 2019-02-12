@@ -1,6 +1,6 @@
-module MiniWorldWar.View.TitleScreen exposing (waiting, normal)
+module MiniWorldWar.View.TitleScreen exposing (normal, waiting)
 
-import MiniWorldWar.View as View exposing (tileSize)
+import MiniWorldWar.View exposing (tileSize)
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
 
 

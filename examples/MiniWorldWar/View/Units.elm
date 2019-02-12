@@ -1,14 +1,13 @@
-module MiniWorldWar.View.Units exposing( view )
+module MiniWorldWar.View.Units exposing (view)
 
-import MiniWorldWar.Data.Board as Board exposing (Unit)
-import MiniWorldWar.Data.Color as Color exposing (Color)
+import MiniWorldWar.Data.Board exposing (Move, Unit)
+import MiniWorldWar.Data.Color exposing (Color)
 import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
-import MiniWorldWar.Data.Direction as Direction exposing (Direction(..))
-import MiniWorldWar.View as View exposing (continentToPosition, tileSize)
+import MiniWorldWar.Data.Direction exposing (Direction(..))
+import MiniWorldWar.Data.Game exposing (GameState(..))
+import MiniWorldWar.View exposing (continentToPosition, tileSize)
 import MiniWorldWar.View.Image.Unit as Unit
-import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Data.Board as Board exposing (Move, Supply, Unit)
+import PixelEngine.Graphics.Image as Image exposing (Image)
 
 
 drawUnit : ( Float, Float ) -> Unit -> ( ( Float, Float ), Image msg )
@@ -19,7 +18,7 @@ drawUnit pos unit =
 
 
 drawCenter : Continent -> { used : Bool } -> (Continent -> msg) -> Color -> Unit -> ( ( Float, Float ), Image msg )
-drawCenter continent ({ used } as config) toMsg color unit =
+drawCenter continent config toMsg color unit =
     let
         ( x, y ) =
             continent |> continentToPosition
@@ -87,12 +86,13 @@ drawDirectional direction =
         Right ->
             drawUnitRight
 
-view : Color -> {ready:Bool} -> GameState -> (Continent -> msg)-> (Continent -> Maybe Unit) -> (Continent -> Maybe Move) -> List ( ( Float, Float ), Image msg )
-view playerColor {ready} state msg maybeUnit maybeMove =
+
+view : Color -> { ready : Bool } -> GameState -> (Continent -> msg) -> (Continent -> Maybe Unit) -> (Continent -> Maybe Move) -> List ( ( Float, Float ), Image msg )
+view playerColor { ready } state msg maybeUnit maybeMove =
     Continent.list
-            |> List.map
-                (\continent ->
-                    case continent |> maybeUnit of
+        |> List.map
+            (\continent ->
+                case continent |> maybeUnit of
                     Just ({ color } as unit) ->
                         case continent |> maybeMove of
                             Just ({ direction } as move) ->
@@ -129,6 +129,5 @@ view playerColor {ready} state msg maybeUnit maybeMove =
 
                     Nothing ->
                         []
-
-                )
-    |> List.concat
+            )
+        |> List.concat

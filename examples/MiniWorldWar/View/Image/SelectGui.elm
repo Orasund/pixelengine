@@ -9,7 +9,7 @@ module MiniWorldWar.View.Image.SelectGui exposing
     )
 
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import PixelEngine.Graphics.Tile exposing (Tile, Tileset, animated, tile)
+import PixelEngine.Graphics.Tile exposing (Tile, Tileset, tile)
 
 
 tileset : Tileset

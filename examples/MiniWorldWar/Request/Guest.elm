@@ -1,19 +1,16 @@
 module MiniWorldWar.Request.Guest exposing
     ( GuestMsg(..)
-    , dropOpenGameTable
-    , dropRunningGameTable
+    , closeGame
+    , exit
     , findOldGame
     , findOpenGame
     , joinOpenGame
     , reopenGame
-    , closeGame
-    , exit
     )
 
-import Dict exposing (Dict)
-import Http exposing (Error(..), Expect)
-import Json.Decode as D exposing (Decoder)
-import MiniWorldWar.Data.Game as Game exposing (Game)
+import Dict
+import Http exposing (Error(..))
+import Json.Decode exposing (Decoder)
 import MiniWorldWar.Request as Request
     exposing
         ( OpenGameTable
@@ -24,8 +21,8 @@ import MiniWorldWar.Request as Request
         , runningGameRoute
         )
 import Random exposing (Seed)
-import Time exposing (Posix)
 import Task
+import Time exposing (Posix)
 
 
 type GuestMsg
@@ -42,10 +39,13 @@ type GuestMsg
 type alias GuestResponse =
     Response GuestMsg
 
+
 exit : Cmd (Response Never)
 exit =
     Reset
-    |> (Task.perform identity << Task.succeed)
+        |> (Task.perform identity << Task.succeed)
+
+
 
 {------------------------
    RunningGame
@@ -57,23 +57,15 @@ reopenGame id =
     let
         response : Result Error () -> GuestResponse
         response result =
-            Please CreateNewGame
+            case result of
+                Ok () ->
+                    Please CreateNewGame
+
+                Err error ->
+                    error |> ExitWithError
     in
     httpDelete
         { url = runningGameRoute ++ "/" ++ id
-        , expect = Http.expectWhatever response
-        }
-
-
-dropRunningGameTable : Cmd GuestResponse
-dropRunningGameTable =
-    let
-        response : Result Error () -> GuestResponse
-        response result =
-            Please CreateNewGame
-    in
-    httpDelete
-        { url = runningGameRoute
         , expect = Http.expectWhatever response
         }
 
@@ -98,20 +90,19 @@ findOldGame now =
                             |> Dict.toList
                     of
                         ( id, _ ) :: _ ->
-                            Please<|ReopenGame id
+                            Please <| ReopenGame id
 
                         [] ->
-                            Please<|CreateNewGame
+                            Please <| CreateNewGame
 
                 Err error ->
                     case error of
                         BadBody _ ->
-                            (error |> Debug.log "badBodyError:")
-                                |> always DropRunningGameTable
+                            error |> DropRunningGameTable
 
                         _ ->
                             (error |> Debug.log "error:")
-                                |> always (Please<|CreateNewGame)
+                                |> always (Please <| CreateNewGame)
     in
     Http.get
         { url = runningGameRoute
@@ -135,7 +126,11 @@ closeGame id =
     let
         response : Result Error () -> GuestResponse
         response result =
-            Please <| FindOpenGame
+            case result of
+                Ok () ->
+                    Please <| FindOpenGame
+                Err error ->
+                    error |> ResetWithError
     in
     httpDelete
         { url = openGameRoute ++ "/" ++ id
@@ -150,36 +145,15 @@ joinOpenGame id =
         response result =
             case result of
                 Ok () ->
-                    Please<|JoinGame id
+                    Please <| JoinGame id
 
                 Err error ->
-                    case error of
-                        BadBody _ ->
-                            (error |> Debug.log "BadBodyError:")
-                                |> always Reset
-
-                        _ ->
-                            (error |> Debug.log "error:")
-                                |> always Reset
+                    error |> ResetWithError
     in
     httpDelete
         { url = openGameRoute ++ "/" ++ id
         , expect = Http.expectWhatever response
         }
-
-
-dropOpenGameTable : Cmd GuestResponse
-dropOpenGameTable =
-    let
-        response : Result Error () -> GuestResponse
-        response result =
-            Please<|FindOldGame
-    in
-    httpDelete
-        { url = openGameRoute
-        , expect = Http.expectWhatever response
-        }
-
 
 findOpenGame : Posix -> Cmd GuestResponse
 findOpenGame now =
@@ -195,19 +169,18 @@ findOpenGame now =
                     case dict |> Dict.toList of
                         ( id, { date } ) :: _ ->
                             if date + oneHour > (now |> Time.posixToMillis) then
-                                Please<|JoinOpenGame id
+                                Please <| JoinOpenGame id
 
                             else
-                                Please<|CloseGame id
+                                Please <| CloseGame id
 
                         [] ->
-                            Please<|FindOldGame
+                            Please <| FindOldGame
 
                 Err error ->
                     case error of
                         BadBody _ ->
-                            (error |> Debug.log "badBodyError:")
-                                |> always DropOpenGameTable
+                            error |> DropOpenGameTable
 
                         _ ->
                             (error |> Debug.log "error:")
