@@ -1,4 +1,4 @@
-module PixelEngine exposing (PixelEngine, game, gameWithCustomControls)
+module PixelEngine exposing (PixelEngine, game, gameWithNoControls, gameWithCustomControls)
 
 {-| This module takes care of all the wiring.
 
@@ -118,7 +118,7 @@ To start, copy this example and expand upon it.
     controls =
         Controls
 
-    
+
     main : PixelEngine () Model Msg
     main =
         PixelEngine.game
@@ -129,9 +129,7 @@ To start, copy this example and expand upon it.
             , controls = controls
             }
 
-
-
-@docs PixelEngine, game, gameWithCustomControls
+@docs PixelEngine, game, gameWithNoControls, gameWithCustomControls
 
 -}
 
@@ -148,6 +146,7 @@ import Task
 {-| An alias for a PixelEngine program.
 
 Your `main` function will have this type.
+
 -}
 type alias PixelEngine flag model msg =
     Program flag (Model model msg) (Msg msg)
@@ -159,7 +158,7 @@ type alias Config msg =
             { width : Float
             , height : Float
             }
-    , controls : ( String -> Input, Input -> msg )
+    , controls : Maybe ( String -> Input, Input -> msg )
     }
 
 
@@ -199,10 +198,17 @@ updateFunction update msg ({ modelContent, config } as model) =
 subscriptionsFunction : (model -> Sub msg) -> Model model msg -> Sub (Msg msg)
 subscriptionsFunction subscriptions { modelContent, config } =
     Sub.batch
-        [ subscriptions modelContent |> Sub.map MsgContent
+        ([ subscriptions modelContent |> Sub.map MsgContent
         , Events.onResize <| \w h -> Resize { width = toFloat w, height = toFloat h }
-        , Controls.basic (config.controls |> Tuple.second) |> Sub.map MsgContent
         ]
+        |> List.append
+            (case config.controls of
+                Just (_,controlsToMsg)->
+                    [Controls.basic controlsToMsg |> Sub.map MsgContent]
+                Nothing ->
+                    []
+            )
+        )
 
 
 viewFunction : (model -> { title : String, options : Options msg, body : List (Area msg) }) -> Model model msg -> Browser.Document (Msg msg)
@@ -230,10 +236,16 @@ viewFunction view { modelContent, config } =
                             (2 ^ (floor <| logBase 2 <| wS.width / width))
                     )
                     (options
-                        |> Controls.supportingMobile
-                            { windowSize = wS
-                            , controls = controls |> Tuple.second
-                            }
+                        |>
+                            (case controls of
+                            Just (_,controlsToMsg) ->
+                                Controls.supportingMobile
+                                { windowSize = wS
+                                , controls = controlsToMsg
+                                }
+                            Nothing ->
+                                identity 
+                            )
                     )
                     body
 
@@ -245,7 +257,7 @@ viewFunction view { modelContent, config } =
     }
 
 
-initFunction : ( String -> Input, Input -> msg ) -> (flags -> ( model, Cmd msg )) -> (flags -> ( Model model msg, Cmd (Msg msg) ))
+initFunction : Maybe ( String -> Input, Input -> msg ) -> (flags -> ( model, Cmd msg )) -> (flags -> ( Model model msg, Cmd (Msg msg) ))
 initFunction controls init =
     \flag ->
         let
@@ -269,21 +281,15 @@ initFunction controls init =
             ]
         )
 
-{-| A game using custom controls.
-
-The default controls should be enough to start,
-but maybe you want to write a spelling game,
-or its nessesary that very specifc keys are used?
--}
-gameWithCustomControls :
+gameMaybeWithCustomControls :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
     , view : model -> { title : String, options : Options msg, body : List (Area msg) }
-    , controls : ( String -> Input, Input -> msg )
+    , controls : Maybe ( String -> Input, Input -> msg )
     }
     -> Program flags (Model model msg) (Msg msg)
-gameWithCustomControls { init, update, subscriptions, view, controls } =
+gameMaybeWithCustomControls { init, update, subscriptions, view, controls } =
     Browser.document
         { init =
             initFunction controls init
@@ -295,9 +301,58 @@ gameWithCustomControls { init, update, subscriptions, view, controls } =
             viewFunction view
         }
 
+{-| A game using custom controls.
+
+The default controls should be enough to start,
+but maybe you want to write a spelling game,
+or its nessesary that very specifc keys are used?
+
+-}
+gameWithCustomControls :
+    { init : flags -> ( model, Cmd msg )
+    , update : msg -> model -> ( model, Cmd msg )
+    , subscriptions : model -> Sub msg
+    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
+    , controls : ( String -> Input, Input -> msg )
+    }
+    -> Program flags (Model model msg) (Msg msg)
+gameWithCustomControls { init, update, subscriptions, view, controls } =
+    gameMaybeWithCustomControls
+        { init = init
+        , update= update
+        , subscriptions =subscriptions
+        , view = view
+        , controls = Just controls
+        }
+
+
+{-| A game with no controls.
+
+
+Use it just like `document` from [elm/browser](https://package.elm-lang.org/packages/elm/browser/latest/Browser).
+
+-}
+gameWithNoControls :
+    { init : flags -> ( model, Cmd msg )
+    , update : msg -> model -> ( model, Cmd msg )
+    , subscriptions : model -> Sub msg
+    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
+    }
+    -> Program flags (Model model msg) (Msg msg)
+gameWithNoControls { init, update, subscriptions, view} =
+    gameMaybeWithCustomControls
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        , controls = Nothing
+        }
+
+
 {-| A prewired PixelEngine frame.
 
 Use it just like `document` from [elm/browser](https://package.elm-lang.org/packages/elm/browser/latest/Browser).
+
 -}
 game :
     { init : flags -> ( model, Cmd msg )
@@ -308,10 +363,10 @@ game :
     }
     -> Program flags (Model model msg) (Msg msg)
 game { init, update, subscriptions, view, controls } =
-    gameWithCustomControls
+    gameMaybeWithCustomControls
         { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
-        , controls = ( Controls.defaultLayout, controls )
+        , controls = Just ( Controls.defaultLayout, controls )
         }

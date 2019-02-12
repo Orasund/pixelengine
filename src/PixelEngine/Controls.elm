@@ -41,7 +41,6 @@ type Input
     | InputY
     | InputNone
 
-
 {-| Adds mobile support to the options.
 It needs the window size.
 

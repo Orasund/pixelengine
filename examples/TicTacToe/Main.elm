@@ -1,7 +1,7 @@
 module TicTacToe exposing (main)
 
 import Dict exposing (Dict)
-import PixelEngine exposing (PixelEngine,game)
+import PixelEngine exposing (PixelEngine,gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
@@ -31,7 +31,6 @@ type alias Model =
 type Msg
     = PlaceMark ( Int, Int )
     | Reset
-    | None --having a "Do nothing" Msg is often quite a cheap fix.
 
 
 
@@ -102,12 +101,6 @@ update msg ({ grid, nextMark } as model) =
         Reset ->
             ( newGame, Cmd.none )
 
-        None ->
-            {- This fires whenever a Keyboard input was made. In our case we
-               just ignore it.
-            -}
-            defaultCase
-
 
 
 {------------------------
@@ -118,18 +111,6 @@ update msg ({ grid, nextMark } as model) =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
-
-
-
-{------------------------
-   CONTROLS
-------------------------}
-
-
-controls : Input -> Msg
-controls _ =
-    None
-
 
 
 {------------------------
@@ -237,10 +218,9 @@ view { grid } =
 
 main : PixelEngine () Model Msg
 main =
-    game
+    gameWithNoControls
         { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
-        , controls = controls
         }

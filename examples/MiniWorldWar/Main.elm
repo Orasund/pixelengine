@@ -22,7 +22,7 @@ import MiniWorldWar.View.SelectGui as SelectGuiView
 import MiniWorldWar.View.Supplys as SupplysView
 import MiniWorldWar.View.TitleScreen as TitleScreenView
 import MiniWorldWar.View.Units as UnitsView
-import PixelEngine exposing (PixelEngine, game)
+import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Image as Image exposing (Image)
@@ -554,10 +554,9 @@ view state =
 
 main : PixelEngine () State Msg
 main =
-    game
+    gameWithNoControls
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , controls = controls
         }

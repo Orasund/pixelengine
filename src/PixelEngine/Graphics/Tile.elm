@@ -1,8 +1,8 @@
 module PixelEngine.Graphics.Tile exposing
-    ( Tile, tile, movable, animated
-    , withAttributes, onClick, backgroundColor
+    ( Tile, tile, movable, jumping, animated, monochrome, withAttributes
     , Tileset, tileset
-    , jumping
+    , onClick, backgroundColor
+    , clickable
     )
 
 {-| This module contains functions for creating tiles.
@@ -11,26 +11,26 @@ Tiles are used for the `tiledArea` function from the main module.
 
 ## Tile
 
-@docs Tile, tile, movable, jumping ,animated
-
-
-## Attributes
-
-@docs withAttributes, onClick, backgroundColor
+@docs Tile, tile, movable, jumping, animated, clickable, monochrome, withAttributes
 
 
 ## Tileset
 
 @docs Tileset, tileset
 
+
+## DEPRECATED
+
+@docs onClick, backgroundColor
+
 -}
 
+import Color exposing (Color)
 import Html exposing (Attribute)
 import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
 import PixelEngine.Graphics.Abstract as Abstract
-import Color exposing (Color)
 
 
 {-| A Tileset contains the actuall image that a `Tile` can reference.
@@ -81,6 +81,7 @@ As an example
 is the 3 row in the second column of the `Tileset`.
 
 ![a tileset](https://orasund.github.io/pixelengine/img3.png "a tileset")
+
 -}
 tile : ( Int, Int ) -> Tile msg
 tile ( left, top ) =
@@ -99,14 +100,14 @@ The following code specifies a `Tile` with 3+1 frames
 
     tile ( 0, 0 ) |> animated 3
 
-**Note:**  
+**Note:**
 Setting the steps to `0` describes a tile with no animation.
 
     tile ( 0, 0 ) |> animated 0 == tile ( 0, 0 )
 
 ![animation](https://orasund.github.io/pixelengine/img2.png "animation")
 
-**Note:**  
+**Note:**
 Negaive steps are not supported, in this case no animation will be played.
 
 -}
@@ -130,13 +131,13 @@ This is useful for sprites that will change their position during the game.
 
     tile ( 0, 0 ) |> movable "name"
 
-**Note:**  
+**Note:**
 Once a `Tile` has this property, it can **NOT** be removed during the game.
 
-**Note:**  
+**Note:**
 The string should be unique,. If not then the transition might fail every now and then.
 
-**Note:**  
+**Note:**
 The string will be a id Attribute in a html node, so be careful not to use names that might be already taken.
 
 -}
@@ -155,6 +156,7 @@ movable id t =
 
 Use this function if a `Tile` has the `movable`-property and you would like to
 remove it temporarily without causing any unwanted side effects.
+
 -}
 jumping : Tile msg -> Tile msg
 jumping ({ uniqueId } as t) =
@@ -166,42 +168,61 @@ jumping ({ uniqueId } as t) =
             { t | uniqueId = Just ( id, False ) }
 
 
+{-| Makes an `Tile` clickable
+
+Use this to create the `onClick` event from [Html.Events](https://package.elm-lang.org/packages/elm/html/latest/Html-Events#onClick).
+
+-}
+clickable : msg -> Tile msg -> Tile msg
+clickable msg =
+    withAttributes [ Events.onClick msg ]
+
+
+{-| Adds a background color.
+
+\*\* This makes the the Tile non-transparent \*\*
+
+This can be used to simulate monochrome sprites or to implement team colors.
+
+-}
+monochrome : Color -> Tile msg -> Tile msg
+monochrome color =
+    withAttributes
+        [ color
+            |> Color.toCssString
+            |> Attributes.style "background-color"
+        ]
+
+
 {-| Adds custom attributes.
 
 use the [Html.Attributes](https://package.elm-lang.org/packages/elm/html/latest/Html-Attributes).
 
-Use this to create the `onClick` event from [Html.Events](https://package.elm-lang.org/packages/elm/html/latest/Html-Events#onClick).
 -}
 withAttributes : List (Attribute msg) -> Tile msg -> Tile msg
 withAttributes attributes ({ customAttributes } as t) =
     { t
         | customAttributes =
             attributes
-            |> List.map Html.Styled.Attributes.fromUnstyled
-            |> List.append customAttributes 
+                |> List.map Html.Styled.Attributes.fromUnstyled
+                |> List.append customAttributes
     }
 
 
-{-| Adds a background color.
+{-| [DEPRECATED]
 
-This can be used to simulate monochrome sprites or to implement team colors.
-
-    withAttributes [css [Css.backgroundColor <| Css.rgb 255 0 0]]
-    =
-    withAttributes [ backgroundColor <| Color.rgb255 255 0 0]
+Use `monochrome` instead.
 
 -}
 backgroundColor : Color -> Attribute msg
 backgroundColor =
     Color.toCssString
-    >> Attributes.style "background-color"
+        >> Attributes.style "background-color"
 
 
-{-| returns a Msg when it has been clicked.
+{-| [DEPRECATED]
 
-    withAttributes [Events.onClick msg]
-    =
-    withAttributes [ onClick msg]
+Use `clickable` instead.
 
 -}
 onClick : msg -> Attribute msg

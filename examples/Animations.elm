@@ -2,7 +2,7 @@ module AnimationsExample exposing (main)
 
 import Color
 import Html.Attributes as Attributes
-import PixelEngine exposing (game)
+import PixelEngine exposing (gameWithNoControls)
 import PixelEngine.Graphics as Graphics exposing (Background)
 import PixelEngine.Graphics.Image exposing (fromTile, image, multipleImages, withAttributes)
 import PixelEngine.Graphics.Tile as Tile
@@ -70,15 +70,12 @@ update _ m = (m,Cmd.none)
 subscriptions : {} -> Sub {}
 subscriptions m = Sub.none
 
-controls _ = {}
-
 main =
-    game
+    gameWithNoControls
         { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
-        , controls = controls
         }
 
     
