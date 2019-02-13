@@ -24,7 +24,7 @@ import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
 import PixelEngine.Graphics.Abstract as Abstract
-import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
+import PixelEngine.Graphics.Tile exposing ( Tile, Tileset)
 
 
 {-| A `Image` is actually a very general type: As we will see later,

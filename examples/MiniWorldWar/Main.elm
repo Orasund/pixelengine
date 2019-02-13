@@ -9,7 +9,7 @@ import MiniWorldWar.Request as Request exposing (Response(..))
 import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
 import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
-import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
+import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing ( WaitingHostMsg(..))
 import MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
 import MiniWorldWar.Role.Client as Client
 import MiniWorldWar.Role.Guest as Guest
