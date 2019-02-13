@@ -1,10 +1,13 @@
---NAME                --LICENSE   --AUTHOR
-Romulus8x8            CC-BY-SA    Modified. Original by Pix3M. (https://www.deviantart.com/pix3m/art/Bitmap-font-Romulus-380739406)
-Alagard16x16          CC-BY-SA    Original by Pix3M. (https://www.deviantart.com/pix3m/art/Bitmap-font-Alagard-381110713)
-Lunaboy8x8            CC-BY-SA    Modified. Original by Pix3M. (https://opengameart.org/content/lunaboy-bitmap-font-v1)
-RetroDeco8x16         CC-BY-SA    Original by Pix3M. (https://opengameart.org/content/retro-deco-bitmap-font)
-BoxyBoldFontPlus8x8   CC0         Modified. Original by usr_share and Clint Bellanger. (https://opengameart.org/content/boxy-bold-font-0)
-Grafx2mono4x8         CC0         Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
-Grafx2Berlin8x8       CC0         Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
-Grafx2Techno8x8       CC0         Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
-ScrollOFont8x8        CC-BY       Original by Quale (Search for Scroll-O-Sprites or Sebastiaan van Hijfte)
+N A M E            L I C E N S E    A U T H O R
+------------------|----------------|-----------------
+Alagard            CC-BY-SA         Original by Pix3M. (https://www.deviantart.com/pix3m/art/Bitmap-font-Alagard-381110713)
+BoxyBoldFontPlus   CC0              Modified. Original by usr_share and Clint Bellanger. (https://opengameart.org/content/boxy-bold-font-0)
+Berlin             CC0              Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
+Formula            CC0              Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
+Japan              CC0              Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
+Mono               CC0              Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
+Techno             CC0              Original by usr_share (https://opengameart.org/content/new-original-grafx2-font-collection)
+Lunaboy            CC-BY-SA         Modified. Original by Pix3M. (https://opengameart.org/content/lunaboy-bitmap-font-v1)
+RetroDeco          CC-BY-SA         Original by Pix3M. (https://opengameart.org/content/retro-deco-bitmap-font)
+Romulus            CC-BY-SA         Modified. Original by Pix3M. (https://www.deviantart.com/pix3m/art/Bitmap-font-Romulus-380739406)
+ScrollOFont        CC-BY            Original by Quale (https://www.reddit.com/r/roguelikedev/comments/1dmbxr/art_scrollosprites)
