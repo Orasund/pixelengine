@@ -1,0 +1,60 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Render Example</title><style media="screen">body{font-family:Helvetica,sans-serif;display:flex}main{order:1}aside{width:300px}aside ul{padding:0}aside li{list-style-type:none;margin:10px}aside li.active a{text-decoration:none}iframe{border:1px solid #000}hr:first-of-type{display:none}.hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;background:#fafafa}.hljs-comment,.hljs-quote{color:#a0a1a7;font-style:italic}.hljs-doctag,.hljs-formula,.hljs-keyword{color:#a626a4}.hljs-deletion,.hljs-name,.hljs-section,.hljs-selector-tag,.hljs-subst{color:#e45649}.hljs-literal{color:#0184bb}.hljs-addition,.hljs-attribute,.hljs-meta-string,.hljs-regexp,.hljs-string{color:#50a14f}.hljs-built_in,.hljs-class .hljs-title{color:#c18401}.hljs-attr,.hljs-number,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-pseudo,.hljs-template-variable,.hljs-type,.hljs-variable{color:#986801}.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-symbol,.hljs-title{color:#4078f2}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}.hljs-link{text-decoration:underline}</style></head><body><main><h1>Render</h1><iframe frameborder="1" height="504" src="iframe.html" width="990"></iframe><hr><h3>Render</h3><div class="description"></div><pre><code class="elm"><span class="hljs-keyword">module</span> RenderExample <span class="hljs-keyword">exposing</span> (main)
+
+<span class="hljs-keyword">import</span> Color
+<span class="hljs-keyword">import</span> Html
+<span class="hljs-keyword">import</span> Html.Attributes <span class="hljs-keyword">as</span> Attributes
+<span class="hljs-keyword">import</span> PixelEngine.Graphics <span class="hljs-keyword">as</span> Graphics <span class="hljs-keyword">exposing</span> (<span class="hljs-type">Background</span>)
+<span class="hljs-keyword">import</span> PixelEngine.Graphics.Image <span class="hljs-keyword">as</span> Image <span class="hljs-keyword">exposing</span> (image, multipleImages)
+<span class="hljs-keyword">import</span> PixelEngine.Graphics.Tile <span class="hljs-keyword">as</span> Tile <span class="hljs-keyword">exposing</span> (<span class="hljs-type">Tileset</span>)
+
+
+<span class="hljs-title">main</span> =
+    <span class="hljs-keyword">let</span>
+        tileSize : <span class="hljs-type">Int</span>
+        tileSize =
+            <span class="hljs-number">16</span>
+
+        windowWidth : <span class="hljs-type">Int</span>
+        windowWidth =
+            <span class="hljs-number">16</span>
+
+        width : <span class="hljs-type">Float</span>
+        width =
+            toFloat &lt;| windowWidth * tileSize
+
+        font : <span class="hljs-type">Tileset</span>
+        font =
+            { source = <span class="hljs-string">"https://orasund.github.io/pixelengine/fonts/RetroDeco8x16.png"</span>
+            , spriteWidth = <span class="hljs-number">8</span>
+            , spriteHeight = <span class="hljs-number">16</span>
+            }
+
+        background : <span class="hljs-type">Background</span>
+        background =
+            <span class="hljs-type">Graphics</span>.colorBackground (<span class="hljs-type">Color</span>.rgb255 <span class="hljs-number">222</span> <span class="hljs-number">238</span> <span class="hljs-number">214</span>)
+    <span class="hljs-keyword">in</span>
+    <span class="hljs-type">Html</span>.div []
+        [ <span class="hljs-type">Html</span>.text <span class="hljs-string">"Games can be included in websides."</span>
+        , <span class="hljs-type">Html</span>.div [ <span class="hljs-type">Attributes</span>.style <span class="hljs-string">"width"</span> &lt;| (<span class="hljs-type">String</span>.fromFloat &lt;| width) ++ <span class="hljs-string">"px"</span> ]
+            [ <span class="hljs-type">Graphics</span>.render
+                <span class="hljs-number">2</span>
+                (<span class="hljs-type">Graphics</span>.options
+                    { width = width
+                    , transitionSpeedInSec = <span class="hljs-number">0.2</span>
+                    }
+                )
+                [ <span class="hljs-type">Graphics</span>.imageArea
+                    { height = <span class="hljs-number">64</span>
+                    , background = background
+                    }
+                    [ ( ( <span class="hljs-number">32</span>, <span class="hljs-number">0</span> )
+                      , image <span class="hljs-string">"https://orasund.github.io/pixelengine/pixelengine-logo.png"</span>
+                      )
+                    , ( ( width / <span class="hljs-number">2</span>+<span class="hljs-number">16</span>, <span class="hljs-number">8</span> ), <span class="hljs-type">Image</span>.fromTextWithSpacing <span class="hljs-number">-1</span> <span class="hljs-string">"powered by"</span> font )
+                    , ( ( width / <span class="hljs-number">2</span>, <span class="hljs-number">32</span> ), <span class="hljs-type">Image</span>.fromText <span class="hljs-string">"PixelEngine"</span> font )
+                    ]
+                ]
+            ]
+        , <span class="hljs-type">Html</span>.text <span class="hljs-string">"Use a div and set a width using CSS, to remove the black sidebars of the game."</span>
+        ]
+</code></pre></main><aside><h2>Examples</h2><ul><li><a href="../Animations">Animations</a></li><li><a href="../Controls">Controls</a></li><li class="active"><a href="../Render">Render</a></li><li><a href="../TicTacToe">TicTacToe</a></li></ul></aside><script type="application/javascript">("serviceWorker"in navigator&&"localhost"!==location.hostname||"127.0.0.1"!==location.hostname)&&navigator.serviceWorker.register("../service-worker.js")</script></body></html>

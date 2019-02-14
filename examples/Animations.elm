@@ -11,11 +11,16 @@ import PixelEngine.Graphics.Tile as Tile
         , tile
         )
 
-type alias Model = {}
 
-type alias Msg = {}
+type alias Model =
+    ()
 
-view {} =
+
+type alias Msg =
+    Never
+
+
+view () =
     let
         tileSize : Int
         tileSize =
@@ -27,48 +32,47 @@ view {} =
 
         width : Float
         width =
-            toFloat <| windowWidth * tileSize
+            toFloat <| 2 * tileSize
 
         tileset : Tileset
         tileset =
-            { source = "blue_bar.png", spriteWidth = 16, spriteHeight = 4 }
+            { source = "https://orasund.github.io/pixelengine/Animations/tileset.png"
+            , spriteWidth = 16, spriteHeight = 16 }
 
         background : Background
         background =
-            Graphics.colorBackground (Color.rgb255 20 12 28)
+            Graphics.colorBackground (Color.rgb255 222 238 214)
     in
     { title = "Example for Animations"
     , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
-    , body = 
+    , body =
         [ Graphics.imageArea
-            { height = toFloat <| tileSize * 12
+            { height = width
             , background = background
             }
-            [ ( ( 0, 0 )
-              , multipleImages
-                    [ ( ( 0, 0 ), fromTile (tile ( 0, 0 ) |> Tile.animated 15) tileset )
-                    , ( ( 0, 8 * 1 ), fromTile (tile ( 1, 0 ) |> Tile.animated 14) tileset )
-                    , ( ( 0, 8 * 2 ), fromTile (tile ( 2, 0 ) |> Tile.animated 13) tileset )
-                    , ( ( 0, 8 * 3 ), fromTile (tile ( 3, 0 ) |> Tile.animated 12) tileset )
-                    , ( ( 0, 8 * 4 ), fromTile (tile ( 4, 0 ) |> Tile.animated 11) tileset )
-                    , ( ( 0, 8 * 5 ), fromTile (tile ( 5, 0 ) |> Tile.animated 10) tileset )
-                    , ( ( 0, 8 * 6 ), fromTile (tile ( 6, 0 ) |> Tile.animated 9) tileset )
-                    , ( ( 0, 8 * 7 ), fromTile (tile ( 7, 0 ) |> Tile.animated 8) tileset )
-                    ]
-                    |> withAttributes [ Attributes.style "float" "left"]
+            [ ( ( 8, 8 )
+              , fromTile (tile ( 0, 0 ) |> Tile.animated 3) tileset
+                {- |> withAttributes [ Attributes.style "float" "left"] -}
               )
             ]
         ]
     }
 
-init : () -> ({},Cmd {})
-init _ = ({},Cmd.none)
 
-update : {} -> {} -> ({},Cmd {})
-update _ m = (m,Cmd.none)
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( (), Cmd.none )
 
-subscriptions : {} -> Sub {}
-subscriptions m = Sub.none
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update _ m =
+    ( m, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions m =
+    Sub.none
+
 
 main =
     gameWithNoControls
@@ -77,5 +81,3 @@ main =
         , subscriptions = subscriptions
         , view = view
         }
-
-    
