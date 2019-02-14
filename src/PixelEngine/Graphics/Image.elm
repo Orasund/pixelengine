@@ -1,5 +1,5 @@
 module PixelEngine.Graphics.Image exposing
-    ( Image, image, movable, jumping, fromTile, multipleImages, clickable, monochrome, withAttributes
+    ( Image, image, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
     , onClick
     )
 
@@ -9,7 +9,7 @@ These Images can then be used for the `imageArea` function from the <PixelEngine
 
 ## Image
 
-@docs Image, image, movable, jumping, fromTile, multipleImages, clickable, monochrome, withAttributes
+@docs Image, image, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
 
 
 ## DEPRECATED
@@ -24,7 +24,7 @@ import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
 import PixelEngine.Graphics.Abstract as Abstract
-import PixelEngine.Graphics.Tile exposing ( Tile, Tileset)
+import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
 
 
 {-| A `Image` is actually a very general type: As we will see later,
@@ -131,6 +131,49 @@ fromTile { info, uniqueId, customAttributes } tileset =
     , customAttributes = customAttributes
     , uniqueId = uniqueId
     }
+
+
+{-| Created an Image from a text-string and the Tileset of the font.
+
+It only supports Ascii characters.
+
+This package comes with a [collection of Fonts](https://github.com/Orasund/pixelengine/wiki/Collection-of-Fonts)
+that are free to use.
+
+-}
+fromText : String -> Tileset -> Image msg
+fromText text ({ spriteWidth } as tileset) =
+    text
+        |> Tile.fromText ( 0, 0 )
+        |> List.indexedMap
+            (\i tile ->
+                ( ( toFloat <| i * spriteWidth, 0 ), fromTile tile tileset )
+            )
+        |> multipleImages
+
+
+{-| Created an Image from a text-string and the Tileset of the font.
+
+It only supports Ascii characters.
+
+The first argument is the spaceing between letters. Use negative values to place
+the letters nearer to echother.
+
+This package comes with a [collection of Fonts](https://github.com/Orasund/pixelengine/wiki/Collection-of-Fonts)
+that are free to use.
+
+-}
+fromTextWithSpacing : Float -> String -> Tileset -> Image msg
+fromTextWithSpacing space text ({ spriteWidth } as tileset) =
+    text
+        |> Tile.fromText ( 0, 0 )
+        |> List.indexedMap
+            (\i tile ->
+                ( ( toFloat i * (toFloat spriteWidth + space), 0 )
+                , fromTile tile tileset
+                )
+            )
+        |> multipleImages
 
 
 {-| Makes an `Image` clickable

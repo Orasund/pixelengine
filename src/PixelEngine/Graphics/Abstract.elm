@@ -155,7 +155,6 @@ type alias Dimensions =
 type Compatible
     = Compatible
 
-
 renderScreen : Options msg -> List (Area msg) -> Html msg
 renderScreen options listOfArea =
     div [ css [ Css.backgroundColor (Css.rgb 0 0 0) ] ]

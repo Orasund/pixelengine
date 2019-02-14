@@ -1,6 +1,6 @@
 module PixelEngine.Graphics.Tile exposing
     ( Tile, tile, movable, jumping, animated, monochrome, withAttributes
-    , Tileset, tileset
+    , Tileset, tileset, fromText
     , onClick, backgroundColor
     , clickable
     )
@@ -11,7 +11,7 @@ Tiles are used for the `tiledArea` function from the main module.
 
 ## Tile
 
-@docs Tile, tile, movable, jumping, animated, clickable, monochrome, withAttributes
+@docs Tile, tile, fromText, movable, jumping, animated, clickable, monochrome, withAttributes
 
 
 ## Tileset
@@ -31,7 +31,21 @@ import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
 import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Text as Text
 
+{-| Created a List of Tiles from a String and a Offset.
+
+It only supports ASCII characters.
+
+The Offset `(Int,Int` should point to the sprite repesenting the space-character.
+
+This package comes with a [collection of Fonts](https://github.com/Orasund/pixelengine/wiki/Collection-of-Fonts)
+that are free to use.
+-}
+fromText : (Int,Int) -> String -> List (Tile msg)
+fromText (x,y) =
+    Text.fromString
+    >> List.map (\(x1,y1)-> tile (x+x1,y+y1) )
 
 {-| A Tileset contains the actuall image that a `Tile` can reference.
 -}
