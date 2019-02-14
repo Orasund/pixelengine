@@ -2,10 +2,10 @@ module CultSim.Main exposing (main)
 
 import Browser exposing (Document, document)
 import Color
-import Html
-import Html.Attributes as Attributes
 import CultSim.Person as Person exposing (Action(..), Person)
 import Dict exposing (Dict)
+import Html
+import Html.Attributes as Attributes
 import PixelEngine.Graphics as Graphics
 import PixelEngine.Graphics.Image as Image exposing (image)
 import PixelEngine.Graphics.Tile as Tile
@@ -257,115 +257,136 @@ view maybeModel =
     in
     { title = "CultSim"
     , body =
-        [ Html.h1 [Attributes.style "text-align" "center"]
-            [Html.text "Cult Simulator"]
-        , Html.h3 [Attributes.style "text-align" "center"]
-            [Html.text "Start a Cult. Pray to Cuthulu. Die."]
-        , Graphics.render 2 options
+        [ Html.h1 [ Attributes.style "text-align" "center" ]
+            [ Html.text "Cult Simulator" ]
+        , Html.h3 [ Attributes.style "text-align" "center" ]
+            [ Html.text "Start a Cult. Pray to Cuthulu. Die." ]
+        , Graphics.render 2
+            options
             [ Graphics.imageArea
                 { height = height
                 , background = Graphics.colorBackground <| Color.rgb255 255 255 255
                 }
                 (case maybeModel of
                     Just { people, hunger, newPerson } ->
-                        people
-                            |> Dict.toList
-                            |> List.append [ newPerson ]
-                            |> List.map
-                                (\( id, { position, action, skin, praying_duration } ) ->
-                                    let
-                                        { x, y } =
-                                            position
+                        List.concat
+                            [ people
+                                |> Dict.toList
+                                |> List.append [ newPerson ]
+                                |> List.map
+                                    (\( id, { position, action, skin, praying_duration } ) ->
+                                        let
+                                            { x, y } =
+                                                position
 
-                                        image =
-                                            Image.fromTile (Person.tile action)
-                                                (Tile.tileset
-                                                    { source = "bodys/" ++ String.fromInt body ++ ".png"
-                                                    , spriteWidth = 16
-                                                    , spriteHeight = 16
-                                                    }
-                                                )
-
-                                        { head, body } =
-                                            skin
-                                    in
-                                    ( ( width / 2 + x, height / 2 + y )
-                                    , Image.multipleImages
-                                        (if action == Dying then
-                                            [ ( ( 0, 0 )
-                                              , Image.fromTile
-                                                    (Tile.tile ( 0, 0 ) |> Tile.animated 7)
+                                            image =
+                                                Image.fromTile (Person.tile action)
                                                     (Tile.tileset
-                                                        { source = "burning.png", spriteWidth = 16, spriteHeight = 16 }
+                                                        { source = "bodys/" ++ String.fromInt body ++ ".png"
+                                                        , spriteWidth = 16
+                                                        , spriteHeight = 16
+                                                        }
                                                     )
-                                              )
-                                            ]
 
-                                         else if action == None then
-                                            [ ( ( 0, 0 ), Image.image "empty.png" ) ]
+                                            { head, body } =
+                                                skin
+                                        in
+                                        ( ( width / 2 + x, height / 2 + y )
+                                        , Image.multipleImages
+                                            (if action == Dying then
+                                                [ ( ( 0, 0 )
+                                                  , Image.fromTile
+                                                        (Tile.tile ( 0, 0 ) |> Tile.animated 7)
+                                                        (Tile.tileset
+                                                            { source = "burning.png", spriteWidth = 16, spriteHeight = 16 }
+                                                        )
+                                                  )
+                                                ]
 
-                                         else
-                                            [ ( ( 0, 0 ), image )
-                                            , ( case action of
-                                                    Praying _ ->
-                                                        ( 0, 2 )
+                                             else if action == None then
+                                                [ ( ( 0, 0 ), Image.image "empty.png" ) ]
 
-                                                    _ ->
-                                                        ( 0, 0 )
-                                              , Image.image <| "heads/" ++ String.fromInt head ++ ".png"
-                                              )
-                                            ]
-                                                |> (case action of
-                                                        Praying int ->
-                                                            List.append
-                                                                [ ( ( 0, 17 )
-                                                                  , Image.fromTile
-                                                                        (Person.tile_bar
-                                                                            ((16 // (praying_duration + 1) * (int + 1)) - 1)
-                                                                            (16 // (praying_duration + 1) - 1)
-                                                                            |> Tile.animated 7
-                                                                        )
-                                                                        (Tile.tileset
-                                                                            { source = "blue_bar.png"
-                                                                            , spriteWidth = 16
-                                                                            , spriteHeight = 4
-                                                                            }
-                                                                        )
-                                                                  )
-                                                                ]
+                                             else
+                                                [ ( ( 0, 0 ), image )
+                                                , ( case action of
+                                                        Praying _ ->
+                                                            ( 0, 2 )
 
                                                         _ ->
-                                                            identity
-                                                   )
+                                                            ( 0, 0 )
+                                                  , Image.image <| "heads/" ++ String.fromInt head ++ ".png"
+                                                  )
+                                                ]
+                                                    |> (case action of
+                                                            Praying int ->
+                                                                List.append
+                                                                    [ ( ( 0, 17 )
+                                                                      , Image.fromTile
+                                                                            (Person.tile_bar
+                                                                                ((16 // (praying_duration + 1) * (int + 1)) - 1)
+                                                                                (16 // (praying_duration + 1) - 1)
+                                                                                |> Tile.animated 7
+                                                                            )
+                                                                            (Tile.tileset
+                                                                                { source = "blue_bar.png"
+                                                                                , spriteWidth = 16
+                                                                                , spriteHeight = 4
+                                                                                }
+                                                                            )
+                                                                      )
+                                                                    ]
+
+                                                            _ ->
+                                                                identity
+                                                       )
+                                            )
+                                            |> Image.movable id
+                                            |> (case action of
+                                                    Walking ->
+                                                        Image.withAttributes [ Image.onClick (Pray id) ]
+
+                                                    _ ->
+                                                        identity
+                                               )
                                         )
-                                        |> Image.movable id
-                                        |> (case action of
-                                                Walking ->
-                                                    Image.withAttributes [ Image.onClick (Pray id) ]
-
-                                                _ ->
-                                                    identity
-                                           )
                                     )
+                            ,  if hunger < 1 then
+                                    [ ( ( width / 2 - 32, height / 2 - 48 )
+                                        , Image.image "temple.png"
+                                    )
+                                    ]
+                                  else
+                                    [ ( ( width / 2 - 32, height / 2 - 48 )
+                                        , Image.image "devil_temple.png"
+                                    )
+                                    
+                                        , ( ( width / 2 - 80, height / 2 - 90 )
+                                        
+                                , Image.fromTextWithSpacing -4 "Cuthulhu asks"
+                                    { source = "Berlin16x16.png"
+                                    , spriteWidth = 16
+                                    , spriteHeight = 16
+                                    }
                                 )
-                            |> List.append
-                                [ ( ( width / 2 - 32, height / 2 - 48 )
-                                  , if hunger < 1 then
-                                        Image.image "temple.png"
-
-                                    else
-                                        Image.image "devil_temple.png"
-                                  )
-                                ]
+                              , ( ( width / 2 - 85, height / 2 - 70 )
+                                , Image.fromTextWithSpacing -5 "for a sacrifice..."
+                                    { source = "Berlin16x16.png"
+                                    , spriteWidth = 16
+                                    , spriteHeight = 16
+                                    }
+                                )
+                                    ]
+                              
+                            ]
 
                     Nothing ->
                         []
                 )
             ]
-        , Html.p [Attributes.style "text-align" "center"]
-            [Html.text "Click on people to let them pray. If your cult members stop praying, eventually Cuthulu will come out and ask for a sacrifice."]
-        ,  Html.p [Attributes.style "text-align" "center"]
-            [Html.text "The game is won, once you have 10 or more cult members."]
+        , Html.p [ Attributes.style "text-align" "center" ]
+            [ Html.text "Click on people to let them pray. If your cult members stop praying, eventually Cuthulu will come out and ask for a sacrifice." ]
+        , Html.p [ Attributes.style "text-align" "center" ]
+            [ Html.text "The game is won, once you have 10 or more cult members." ]
         ]
     }
 

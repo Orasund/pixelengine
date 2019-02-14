@@ -1,4 +1,4 @@
-module TicTacToe exposing (main)
+module TicTacToe exposing ( main )
 
 import Dict exposing (Dict)
 import PixelEngine exposing (PixelEngine,gameWithNoControls)

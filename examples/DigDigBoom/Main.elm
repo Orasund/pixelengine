@@ -1,7 +1,7 @@
 module DigDigBoom.Main exposing (main)
 
-import Dict
 import Color
+import Dict
 import DigDigBoom.Cell as Cell
     exposing
         ( Cell(..)
@@ -137,7 +137,7 @@ nextLevel { gameType, map, player } =
 
 
 updateGame : (Player.Game -> Player.Game) -> ModelContent -> ( Model, Cmd Msg )
-updateGame fun ({ player, map} as modelContent) =
+updateGame fun ({ player, map } as modelContent) =
     ( player, map )
         |> fun
         |> (\( playerData, newMap ) ->
@@ -360,18 +360,10 @@ deathScreen =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        [ ( ( 4, 0 ), Tileset.letter_y Tileset.colorWhite )
-        , ( ( 5, 0 ), Tileset.letter_o Tileset.colorWhite )
-        , ( ( 6, 0 ), Tileset.letter_u Tileset.colorWhite )
-        , ( ( 8, 0 ), Tileset.letter_h Tileset.colorWhite )
-        , ( ( 9, 0 ), Tileset.letter_a Tileset.colorWhite )
-        , ( ( 10, 0 ), Tileset.letter_v Tileset.colorWhite )
-        , ( ( 11, 0 ), Tileset.letter_e Tileset.colorWhite )
-        , ( ( 6, 1 ), Tileset.letter_d Tileset.colorWhite )
-        , ( ( 7, 1 ), Tileset.letter_i Tileset.colorWhite )
-        , ( ( 8, 1 ), Tileset.letter_e Tileset.colorWhite )
-        , ( ( 9, 1 ), Tileset.letter_d Tileset.colorWhite )
-        ]
+        ( List.concat
+            [( 4, 0 ) |> Tileset.text "You have" Tileset.colorWhite
+            ,(( 6, 1 ) |> Tileset.text "died" Tileset.colorWhite)]
+        )
     , Graphics.imageArea
         { height = toFloat <| 12 * 16
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
@@ -383,21 +375,11 @@ deathScreen =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        [ ( ( 4, 0 ), Tileset.letter_p Tileset.colorWhite )
-        , ( ( 5, 0 ), Tileset.letter_r Tileset.colorWhite )
-        , ( ( 6, 0 ), Tileset.letter_e Tileset.colorWhite )
-        , ( ( 7, 0 ), Tileset.letter_s Tileset.colorWhite )
-        , ( ( 8, 0 ), Tileset.letter_s Tileset.colorWhite )
-        , ( ( 10, 0 ), Tileset.letter_a Tileset.colorWhite )
-        , ( ( 11, 0 ), Tileset.letter_n Tileset.colorWhite )
-        , ( ( 12, 0 ), Tileset.letter_y Tileset.colorWhite )
-        , ( ( 6, 1 ), Tileset.letter_b Tileset.colorWhite )
-        , ( ( 7, 1 ), Tileset.letter_u Tileset.colorWhite )
-        , ( ( 8, 1 ), Tileset.letter_t Tileset.colorWhite )
-        , ( ( 9, 1 ), Tileset.letter_t Tileset.colorWhite )
-        , ( ( 10, 1 ), Tileset.letter_o Tileset.colorWhite )
-        , ( ( 11, 1 ), Tileset.letter_n Tileset.colorWhite )
-        ]
+        ( List.concat
+            [ (4,0) |> Tileset.text "Press any" Tileset.colorWhite
+            , ( 6, 1 ) |> Tileset.text "button" Tileset.colorWhite
+            ]
+        )
     , Graphics.tiledArea
         { rows = 2
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
@@ -429,17 +411,12 @@ menuScreen =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        [ ( ( 5, 0 ), Tileset.letter_d Tileset.colorWhite )
-        , ( ( 6, 0 ), Tileset.letter_i Tileset.colorWhite )
-        , ( ( 7, 0 ), Tileset.letter_g Tileset.colorWhite )
-        , ( ( 6, 1 ), Tileset.letter_d Tileset.colorWhite )
-        , ( ( 7, 1 ), Tileset.letter_i Tileset.colorWhite )
-        , ( ( 8, 1 ), Tileset.letter_g Tileset.colorWhite )
-        , ( ( 6, 2 ), Tileset.letter_b Tileset.colorWhite )
-        , ( ( 7, 2 ), Tileset.letter_o Tileset.colorWhite )
-        , ( ( 8, 2 ), Tileset.letter_o Tileset.colorWhite )
-        , ( ( 9, 2 ), Tileset.letter_m Tileset.colorWhite )
-        ]
+        (List.concat
+            [ ( 5, 0 ) |> Tileset.text "DIG" Tileset.colorWhite
+            , ( 6, 1 ) |> Tileset.text "DIG" Tileset.colorWhite
+            , ( 6, 2 ) |> Tileset.text "BOOM" Tileset.colorWhite
+            ]
+        )
     , Graphics.imageArea
         { height = toFloat <| 9 * 16
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
@@ -451,34 +428,20 @@ menuScreen =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        [ ( ( 1, 0 ), Tileset.letter_a Tileset.colorWhite )
-        , ( ( 2, 0 ), Tileset.arrow_left Tileset.colorWhite )
-        , ( ( 3, 0 ), Tileset.arrow_right Tileset.colorWhite )
-        , ( ( 4, 0 ), Tileset.letter_d Tileset.colorWhite )
-        , ( ( 6, 0 ), Tileset.letter_minus Tileset.colorWhite )
-        , ( ( 7, 0 ), Tileset.letter_s Tileset.colorWhite )
-        , ( ( 8, 0 ), Tileset.letter_t Tileset.colorWhite )
-        , ( ( 9, 0 ), Tileset.letter_a Tileset.colorWhite )
-        , ( ( 10, 0 ), Tileset.letter_r Tileset.colorWhite )
-        , ( ( 11, 0 ), Tileset.letter_t Tileset.colorWhite )
-        , ( ( 8, 1 ), Tileset.letter_g Tileset.colorWhite )
-        , ( ( 9, 1 ), Tileset.letter_a Tileset.colorWhite )
-        , ( ( 10, 1 ), Tileset.letter_m Tileset.colorWhite )
-        , ( ( 11, 1 ), Tileset.letter_e Tileset.colorWhite )
-        , ( ( 1, 3 ), Tileset.letter_w Tileset.colorWhite )
-        , ( ( 2, 3 ), Tileset.arrow_up Tileset.colorWhite )
-        , ( ( 3, 3 ), Tileset.arrow_down Tileset.colorWhite )
-        , ( ( 4, 3 ), Tileset.letter_s Tileset.colorWhite )
-        , ( ( 6, 3 ), Tileset.letter_minus Tileset.colorWhite )
-        , ( ( 7, 3 ), Tileset.letter_t Tileset.colorWhite )
-        , ( ( 8, 3 ), Tileset.letter_u Tileset.colorWhite )
-        , ( ( 9, 3 ), Tileset.letter_t Tileset.colorWhite )
-        , ( ( 10, 3 ), Tileset.letter_o Tileset.colorWhite )
-        , ( ( 11, 3 ), Tileset.letter_r Tileset.colorWhite )
-        , ( ( 12, 3 ), Tileset.letter_i Tileset.colorWhite )
-        , ( ( 13, 3 ), Tileset.letter_a Tileset.colorWhite )
-        , ( ( 14, 3 ), Tileset.letter_l Tileset.colorWhite )
-        ]
+        (List.concat
+            [ ( 1, 0 ) |> Tileset.text "a" Tileset.colorWhite
+            , [ ( ( 2, 0 ), Tileset.arrow_left Tileset.colorWhite )
+              , ( ( 3, 0 ), Tileset.arrow_right Tileset.colorWhite )
+              ]
+            , ( 4, 0 ) |> Tileset.text "d -Start" Tileset.colorWhite
+            , ( 8, 1 ) |> Tileset.text "Game" Tileset.colorWhite
+            , ( 1, 3 ) |> Tileset.text "w" Tileset.colorWhite
+            , [ ( ( 2, 3 ), Tileset.arrow_up Tileset.colorWhite )
+              , ( ( 3, 3 ), Tileset.arrow_down Tileset.colorWhite )
+              ]
+            , ( 4, 3 ) |> Tileset.text "s -Tutorial" Tileset.colorWhite
+            ]
+        )
     , Graphics.tiledArea
         { rows = 2
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
@@ -495,27 +458,19 @@ worldScreen worldSeed map player hints =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        ([ ( ( 0, 0 ), Tileset.letter_x Tileset.colorWhite )
-         , ( ( 1, 0 ), Tileset.letter_minus Tileset.colorWhite )
-         , ( ( 2, 0 ), Tileset.letter_e Tileset.colorWhite )
-         , ( ( 3, 0 ), Tileset.letter_x Tileset.colorWhite )
-         , ( ( 4, 0 ), Tileset.letter_i Tileset.colorWhite )
-         , ( ( 5, 0 ), Tileset.letter_t Tileset.colorWhite )
-         , ( ( 7, 0 ), Tileset.letter_s Tileset.colorWhite )
-         , ( ( 8, 0 ), Tileset.letter_c Tileset.colorWhite )
-         , ( ( 9, 0 ), Tileset.letter_o Tileset.colorWhite )
-         , ( ( 10, 0 ), Tileset.letter_r Tileset.colorWhite )
-         , ( ( 11, 0 ), Tileset.letter_e Tileset.colorWhite )
-         , ( ( 12, 0 ), Tileset.letter_colon Tileset.colorWhite )
-         , ( ( 14, 0 ), Tileset.numberToTile (modBy 100 (abs worldSeed) // 10) Tileset.colorWhite )
-         , ( ( 15, 0 ), Tileset.numberToTile (modBy 10 (abs worldSeed)) Tileset.colorWhite )
-         ]
-            |> (if (worldSeed // abs worldSeed) == -1 then
-                    List.append [ ( ( 13, 0 ), Tileset.letter_minus Tileset.colorWhite ) ]
+        (( 0, 0 )
+            |> Tileset.text
+                ("X-exit score:"
+                    ++ (if (worldSeed // abs worldSeed) == -1 then
+                        "-"
 
-                else
-                    List.append []
-               )
+                       else
+                        " "
+                      )
+                    ++ (String.fromInt (modBy 100 (abs worldSeed) // 10))
+                    ++ (String.fromInt (modBy 10 (abs worldSeed)))
+                )
+                Tileset.colorWhite
         )
     , Graphics.tiledArea
         { rows = 16
@@ -540,49 +495,30 @@ worldScreen worldSeed map player hints =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        ([ ( ( 4, 2 ), Tileset.arrow_up Tileset.colorWhite )
-         , ( ( 5, 2 ), Tileset.letter_s Tileset.colorWhite )
-         , ( ( 6, 2 ), Tileset.letter_p Tileset.colorWhite )
-         , ( ( 7, 2 ), Tileset.letter_a Tileset.colorWhite )
-         , ( ( 8, 2 ), Tileset.letter_c Tileset.colorWhite )
-         , ( ( 9, 2 ), Tileset.letter_e Tileset.colorWhite )
-         , ( ( 10, 2 ), Tileset.letter_minus Tileset.colorWhite )
-         , ( ( 11, 2 ), Tileset.letter_u Tileset.colorWhite )
-         , ( ( 12, 2 ), Tileset.letter_s Tileset.colorWhite )
-         , ( ( 13, 2 ), Tileset.letter_e Tileset.colorWhite )
+        (List.concat
+            [ [ ( ( 4, 2 ), Tileset.arrow_up Tileset.colorWhite ) ]
+            , ( 5, 2 ) |> Tileset.text "SPACE-use" Tileset.colorWhite
+            , [ ( ( 0, 0 ), Tileset.arrow_down Tileset.colorWhite ) ]
+            , ( 1, 0 ) |> Tileset.text "floor" Tileset.colorWhite
+            , ( 2, 1 ) |> Tileset.text "Q" Tileset.colorWhite
+            , [ ( ( 3, 1 ), Tileset.arrow_left Tileset.colorWhite ) ]
+            , [ ( ( 12, 1 ), Tileset.arrow_right Tileset.colorWhite ) ]
+            , ( 13, 1 ) |> Tileset.text "E" Tileset.colorWhite
+            , case player.inventory |> Inventory.ground of
+                Just a ->
+                    [ ( ( 0, 1 ), Cell.getImage (Item a) ) ]
 
-         --
-         , ( ( 0, 0 ), Tileset.arrow_down Tileset.colorWhite )
-         , ( ( 1, 0 ), Tileset.letter_f Tileset.colorWhite )
-         , ( ( 2, 0 ), Tileset.letter_l Tileset.colorWhite )
-         , ( ( 3, 0 ), Tileset.letter_o Tileset.colorWhite )
-         , ( ( 4, 0 ), Tileset.letter_o Tileset.colorWhite )
-         , ( ( 5, 0 ), Tileset.letter_r Tileset.colorWhite )
-         , ( ( 2, 1 ), Tileset.letter_q Tileset.colorWhite )
-         , ( ( 3, 1 ), Tileset.arrow_left Tileset.colorWhite )
-         , ( ( 12, 1 ), Tileset.arrow_right Tileset.colorWhite )
-         , ( ( 13, 1 ), Tileset.letter_e Tileset.colorWhite )
-         ]
-            |> List.append
-                (case player.inventory |> Inventory.ground of
-                    Just a ->
-                        [ ( ( 0, 1 ), Cell.getImage (Item a) ) ]
-
-                    Nothing ->
-                        []
-                )
-            |> List.append
-                (List.range 0 (player.lifes - 1)
-                    |> List.map (\i -> ( ( 15 - i, 0 ), Tileset.heart Tileset.colorRed ))
-                )
-            |> List.append
-                (player.inventory
-                    |> Inventory.get
-                    |> List.indexedMap
-                        (\i a ->
-                            ( ( 4 + i, 1 ), Cell.getImage (Item a) )
-                        )
-                )
+                Nothing ->
+                    []
+            , List.range 0 (player.lifes - 1)
+                |> List.map (\i -> ( ( 15 - i, 0 ), Tileset.heart Tileset.colorRed ))
+            , player.inventory
+                |> Inventory.get
+                |> List.indexedMap
+                    (\i a ->
+                        ( ( 4 + i, 1 ), Cell.getImage (Item a) )
+                    )
+            ]
         )
     ]
 
@@ -657,68 +593,77 @@ view model =
                             worldScreen num
                                 map
                                 player
-                                ([ ( ( 2, 4 ), Tileset.letter_h Tileset.colorWhite )
-                                 , ( ( 3, 4 ), Tileset.letter_i Tileset.colorWhite )
-                                 , ( ( 4, 4 ), Tileset.letter_n Tileset.colorWhite )
-                                 , ( ( 5, 4 ), Tileset.letter_t Tileset.colorWhite )
-                                 , ( ( 6, 4 ), Tileset.letter_colon Tileset.colorWhite )
-                                 ]
+                                (( 2, 4 )
+                                    |> Tileset.text "hint:" Tileset.colorWhite
                                     |> List.append
                                         (case num of
                                             5 ->
-                                                [ ( ( 2, 5 ), Tileset.arrow_left Tileset.colorWhite )
-                                                , ( ( 3, 5 ), Tileset.arrow_left Tileset.colorWhite )
-                                                , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 6, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                , ( ( 7, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 8, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 9, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 10, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                , ( ( 11, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                ]
+                                                List.concat
+                                                    [ [ ( ( 2, 5 ), Tileset.arrow_left Tileset.colorWhite )
+                                                      , ( ( 3, 5 ), Tileset.arrow_left Tileset.colorWhite )
+                                                      , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 6, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    , [ ( ( 7, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 8, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 9, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 10, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    , [ ( ( 11, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    ]
 
                                             4 ->
-                                                [ ( ( 2, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 5, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                , ( ( 6, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 7, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 8, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 9, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                , ( ( 10, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                ]
+                                                List.concat
+                                                    [ [ ( ( 2, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 5, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    , [ ( ( 6, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 7, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 8, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 9, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    , [ ( ( 10, 5 ), Tileset.arrow_right Tileset.colorWhite ) ]
+                                                    ]
 
                                             3 ->
-                                                [ ( ( 2, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 6, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 7, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 8, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 9, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 10, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 11, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                ]
+                                                List.concat
+                                                    [ [ ( ( 2, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 6, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 7, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 8, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 9, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 10, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 11, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    ]
 
                                             2 ->
-                                                [ ( ( 2, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 6, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 7, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                ]
+                                                List.concat
+                                                    [ [ ( ( 2, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 6, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 7, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    ]
 
                                             _ ->
-                                                [ ( ( 2, 5 ), Tileset.arrow_down Tileset.colorWhite )
-                                                , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
-                                                , ( ( 6, 5 ), Tileset.letter_exclamation_mark Tileset.colorWhite )
-                                                ]
+                                                List.concat
+                                                    [ [ ( ( 2, 5 ), Tileset.arrow_down Tileset.colorWhite )
+                                                      , ( ( 3, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 4, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      , ( ( 5, 5 ), Tileset.arrow_right Tileset.colorWhite )
+                                                      ]
+                                                    , ( 6, 5 ) |> Tileset.text "!" Tileset.colorWhite
+                                                    ]
                                         )
                                 )
                     in

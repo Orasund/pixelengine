@@ -1,5 +1,6 @@
 module RuinJump.Main exposing (main)
 
+
 import Color
 import Dict
 import PixelEngine exposing (PixelEngine, game)
