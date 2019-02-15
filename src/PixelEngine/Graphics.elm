@@ -40,6 +40,9 @@ import Color exposing (Color)
 import Html exposing (Html)
 import Html.Styled
 import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Options as OptionsData
+import PixelEngine.Graphics.Data as Data
+import PixelEngine.Graphics.Data.Area as AreaData
 import PixelEngine.Graphics.Image exposing (Image)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 
@@ -54,7 +57,7 @@ So either you have tiles or images.
 ![A typical game](https://orasund.github.io/pixelengine/img4.png "A typical game")
 -}
 type alias Area msg =
-    Abstract.Area msg
+    AreaData.Area msg
 
 
 
@@ -70,10 +73,10 @@ heightOf listOfArea =
             |> List.map
                 (\area ->
                     case area of
-                        Abstract.Tiled { rows, tileset } ->
+                        AreaData.Tiled { rows, tileset } ->
                             toFloat <| rows * tileset.spriteHeight
 
-                        Abstract.Images { height } ->
+                        AreaData.Images { height } ->
                             height
                 )
         )
@@ -82,13 +85,13 @@ heightOf listOfArea =
 {-| Every area has a background.
 -}
 type alias Background =
-    Abstract.Background
+    Data.Background
 
 
 {-| Options for the render function
 -}
 type alias Options msg =
-    Abstract.Options msg
+    OptionsData.Options msg
 
 
 {-| A single color background.
@@ -101,7 +104,7 @@ colorBackground (Color.rgb255 20 12 28)
 -}
 colorBackground : Color -> Background
 colorBackground color =
-    Abstract.ColorBackground color
+    Data.ColorBackground color
 
 
 {-| An image that gets repeated.
@@ -113,7 +116,7 @@ Image "groundTile.png"
 -}
 imageBackground : { source : String, width : Float, height : Float } -> Background
 imageBackground image =
-    Abstract.ImageBackground image
+    Data.ImageBackground image
 
 
 {-| An area containing images that can be arranged freely.
@@ -131,7 +134,7 @@ This area has the following options:
 -}
 imageArea : { height : Float, background : Background } -> List ( ( Float, Float ), Image msg ) -> Area msg
 imageArea { height, background } content =
-    Abstract.Images
+    AreaData.Images
         { height = height
         , background = background
         , content = content
@@ -155,7 +158,7 @@ This area has the following options:
 -}
 tiledArea : { rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile msg ) -> Area msg
 tiledArea { rows, tileset, background } content =
-    Abstract.Tiled
+    AreaData.Tiled
         { rows = rows
         , tileset = tileset
         , background = background
@@ -181,7 +184,7 @@ For the start use the following settings
 -}
 options : { width : Float, transitionSpeedInSec : Float } -> Options msg
 options { width, transitionSpeedInSec } =
-    Abstract.newOptions { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
+    OptionsData.new { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
 
 {-| Displays content of the game.
 
@@ -192,6 +195,6 @@ pixels.
 render : Float -> Options msg -> List (Area msg) -> Html msg
 render scale o listOfArea =
     Abstract.render
-        (o |> Abstract.usingScale scale)
+        (o |> OptionsData.usingScale scale)
         listOfArea
     |> Html.Styled.toUnstyled

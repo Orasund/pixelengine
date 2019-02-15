@@ -23,8 +23,10 @@ import Html exposing (Attribute)
 import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
-import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Area as AreaData
+import PixelEngine.Graphics.Data.Element as ElementData
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
+
 
 
 {-| A `Image` is actually a very general type: As we will see later,
@@ -32,7 +34,7 @@ even tiles are essentially images.
 The following functions are intended to be modular.
 -}
 type alias Image msg =
-    Abstract.ContentElement msg
+    AreaData.ContentElement msg
 
 
 {-| The basic image constructor.
@@ -44,8 +46,8 @@ The string contains the url to the image
 image : String -> Image msg
 image source =
     { elementType =
-        Abstract.SingleSource <|
-            Abstract.ImageSource source
+        ElementData.SingleSource <|
+            ElementData.ImageSource source
     , customAttributes = []
     , uniqueId = Nothing
     }
@@ -121,8 +123,8 @@ fromTile { info, uniqueId, customAttributes } tileset =
             info
     in
     { elementType =
-        Abstract.SingleSource <|
-            Abstract.TileSource
+        ElementData.SingleSource <|
+            ElementData.TileSource
                 { left = left
                 , top = top
                 , steps = steps
@@ -250,22 +252,22 @@ Instead use the following:
 multipleImages : List ( ( Float, Float ), Image msg ) -> Image msg
 multipleImages list =
     let
-        images : Abstract.MultipleSources
+        images : ElementData.MultipleSources
         images =
             list
                 |> List.foldr
                     (\( ( left, top ), contentElement ) ->
                         case contentElement.elementType of
-                            Abstract.SingleSource singleSource ->
+                            ElementData.SingleSource singleSource ->
                                 (::) ( { left = left, top = top }, singleSource )
 
-                            Abstract.MultipleSources _ ->
+                            ElementData.MultipleSources _ ->
                                 identity
                     )
                     []
     in
     { elementType =
-        Abstract.MultipleSources images
+        ElementData.MultipleSources images
     , customAttributes = []
     , uniqueId = Nothing
     }

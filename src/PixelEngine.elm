@@ -139,6 +139,7 @@ import Browser.Events as Events
 import Html
 import PixelEngine.Controls as Controls exposing (Input)
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
+import PixelEngine.Graphics.Data.Options as OptionsData
 import PixelEngine.Graphics.Abstract as Abstract
 import Task
 
@@ -220,7 +221,7 @@ viewFunction view { modelContent, config } =
         { title, options, body } =
             view modelContent
 
-        (Abstract.Options { width, scale }) =
+        (OptionsData.Options { width, scale }) =
             options
 
         height =

@@ -30,7 +30,7 @@ import Html exposing (Attribute)
 import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
-import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Tile as TileData
 import PixelEngine.Graphics.Data.Text as Text
 
 {-| Created a List of Tiles from a String and a Offset.
@@ -50,7 +50,7 @@ fromText (x,y) =
 {-| A Tileset contains the actuall image that a `Tile` can reference.
 -}
 type alias Tileset =
-    Abstract.Tileset
+    TileData.Tileset
 
 
 {-| The `Tileset` constructor has the following parameters:
@@ -81,7 +81,7 @@ A example for a `tile` could be:
 
 -}
 type alias Tile msg =
-    Abstract.Tile msg
+    TileData.Tile msg
 
 
 {-| The basic `Tile` constructor.

@@ -25,7 +25,8 @@ Normally everything is already predefined in [PixelEngine](PixelEngine)
 
 import Browser.Events as Events
 import PixelEngine.Graphics exposing (Options)
-import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Options as OptionsData
+import PixelEngine.Graphics.Data.Controller as ControllerData
 import Json.Decode as Decode
 
 {-| all possible Inputs.
@@ -48,41 +49,41 @@ It needs the window size.
 
 -}
 supportingMobile : { windowSize : {width:Float,height:Float}, controls : Input -> msg } -> Options msg -> Options msg
-supportingMobile { windowSize, controls } (Abstract.Options options) =
+supportingMobile { windowSize, controls } (OptionsData.Options options) =
     let
         {width,height} = windowSize
 
-        convert : Abstract.AbstractInput -> Input
+        convert : ControllerData.AbstractInput -> Input
         convert input =
             case input of
-                Abstract.AbstractInputA ->
+                ControllerData.AbstractInputA ->
                     InputA
 
-                Abstract.AbstractInputB ->
+                ControllerData.AbstractInputB ->
                     InputB
 
-                Abstract.AbstractInputX ->
+                ControllerData.AbstractInputX ->
                     InputX
 
-                Abstract.AbstractInputY ->
+                ControllerData.AbstractInputY ->
                     InputY
 
-                Abstract.AbstractInputUp ->
+                ControllerData.AbstractInputUp ->
                     InputUp
 
-                Abstract.AbstractInputLeft ->
+                ControllerData.AbstractInputLeft ->
                     InputLeft
 
-                Abstract.AbstractInputRight ->
+                ControllerData.AbstractInputRight ->
                     InputRight
 
-                Abstract.AbstractInputDown ->
+                ControllerData.AbstractInputDown ->
                     InputDown
 
-                Abstract.AbstractInputNone ->
+                ControllerData.AbstractInputNone ->
                     InputNone
     in
-    Abstract.Options { options | controllerOptions = Just { windowSize = {width= width,height= height}, controls = convert >> controls } }
+    OptionsData.Options { options | controllerOptions = Just { windowSize = {width= width,height= height}, controls = convert >> controls } }
 
 
 {-| The default layout:
