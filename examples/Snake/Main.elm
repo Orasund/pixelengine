@@ -17,11 +17,6 @@ import Time
 ------------------------}
 
 
-boardSize : Int
-boardSize =
-    4
-
-
 type Direction
     = Up
     | Down
@@ -45,6 +40,17 @@ type Msg
     | PlaceChicken ( Int, Int )
     | Move
     | None
+
+
+
+{------------------------
+   GLOBAL VARIABLES
+------------------------}
+
+
+boardSize : Int
+boardSize =
+    4
 
 
 
@@ -202,7 +208,28 @@ subscriptions _ =
     in
     Time.every (second * 1) (always Move)
 
+{------------------------
+   Controls
+------------------------}
 
+
+controls : Input -> Msg
+controls input =
+    case input of
+        InputUp ->
+            Look Up
+
+        InputDown ->
+            Look Down
+
+        InputLeft ->
+            Look Left
+
+        InputRight ->
+            Look Right
+
+        _ ->
+            None
 
 {------------------------
    VIEW
@@ -298,28 +325,7 @@ view { snake, direction, chicken } =
 
 
 
-{------------------------
-   Controls
-------------------------}
 
-
-controls : Input -> Msg
-controls input =
-    case input of
-        InputUp ->
-            Look Up
-
-        InputDown ->
-            Look Down
-
-        InputLeft ->
-            Look Left
-
-        InputRight ->
-            Look Right
-
-        _ ->
-            None
 
 
 

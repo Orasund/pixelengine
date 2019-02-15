@@ -1,4 +1,4 @@
-module RenderExample exposing (main)
+module Page exposing (main)
 
 import Color
 import Element exposing (Element)
@@ -6,6 +6,7 @@ import Element.Background as Background
 import Framework.Button as Button
 import Framework.Card as Card
 import Framework.Modifier exposing (Modifier(..))
+import Framework.Typography as Typography
 import Html
 import Html.Attributes as Attributes
 import PixelEngine.Graphics as Graphics exposing (Background)
@@ -72,11 +73,11 @@ main =
             Graphics.colorBackground (Color.rgb255 222 238 214)
     in
     Element.layout
-        [ Background.color <| Element.rgb255 222 238 214
-        , Element.centerX ]
+        [ Background.color <| Element.rgb255 222 238 214 ]
     <|
         Element.column
-            [ Element.spacing 10
+            [ Element.spacing 50
+            , Element.centerX
             ]
             [ Element.el
                 [ Element.height <| Element.px <| 64 * 4
@@ -102,8 +103,18 @@ main =
                             , ( ( width / 2, 32 ), Image.fromTextWithSpacing -3 "with Elm" font )
                             ]
                         ]
-            , Element.wrappedRow [ Element.spacing 10 ]
-                ([ "Animations", "TicTacToe","Snake", "DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
-                    |> List.map card
-                )
+            , Element.column [Element.spacing 10, Element.centerX]
+                [ Typography.h1 [Element.centerX ] <| Element.text "Examples"
+                , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
+                    ([ "Animations", "TicTacToe","Snake"]
+                        |> List.map card
+                    )
+                ]
+            , Element.column [Element.spacing 10, Element.centerX]
+                [ Typography.h1 [Element.centerX ] <| Element.text "Finished Games"
+                , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
+                    ([ "DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
+                        |> List.map card
+                    )
+                ]
             ]
