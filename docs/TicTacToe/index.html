@@ -4357,52 +4357,6 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
-
-
-
-function _Time_now(millisToPosix)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(millisToPosix(Date.now())));
-	});
-}
-
-var _Time_setInterval = F2(function(interval, task)
-{
-	return _Scheduler_binding(function(callback)
-	{
-		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
-		return function() { clearInterval(id); };
-	});
-});
-
-function _Time_here()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		callback(_Scheduler_succeed(
-			A2(elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
-		));
-	});
-}
-
-
-function _Time_getZoneName()
-{
-	return _Scheduler_binding(function(callback)
-	{
-		try
-		{
-			var name = elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
-		}
-		catch (e)
-		{
-			var name = elm$time$Time$Offset(new Date().getTimezoneOffset());
-		}
-		callback(_Scheduler_succeed(name));
-	});
-}
 var author$project$PixelEngine$MsgContent = function (a) {
 	return {$: 'MsgContent', a: a};
 };
@@ -5803,7 +5757,7 @@ var author$project$PixelEngine$updateFunction = F3(
 				model);
 		}
 	});
-var author$project$PixelEngine$Graphics$Abstract$Options = function (a) {
+var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
 	return {$: 'Options', a: a};
 };
 var elm$core$Basics$composeR = F3(
@@ -5841,7 +5795,7 @@ var author$project$PixelEngine$Controls$supportingMobile = F2(
 		var _n2 = windowSize;
 		var width = _n2.width;
 		var height = _n2.height;
-		return author$project$PixelEngine$Graphics$Abstract$Options(
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
 			_Utils_update(
 				options,
 				{
@@ -5871,18 +5825,6 @@ var author$project$PixelEngine$Graphics$heightOf = function (listOfArea) {
 			},
 			listOfArea));
 };
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputA = {$: 'AbstractInputA'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputB = {$: 'AbstractInputB'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputDown = {$: 'AbstractInputDown'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputLeft = {$: 'AbstractInputLeft'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputRight = {$: 'AbstractInputRight'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputUp = {$: 'AbstractInputUp'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputX = {$: 'AbstractInputX'};
-var author$project$PixelEngine$Graphics$Abstract$AbstractInputY = {$: 'AbstractInputY'};
-var elm$core$Basics$pow = _Basics_pow;
-var elm$core$Basics$sqrt = _Basics_sqrt;
-var rtfeldman$elm_css$Css$Structure$Compatible = {$: 'Compatible'};
-var rtfeldman$elm_css$Css$absolute = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'absolute'};
 var rtfeldman$elm_css$Css$Preprocess$AppendProperty = function (a) {
 	return {$: 'AppendProperty', a: a};
 };
@@ -5890,38 +5832,27 @@ var rtfeldman$elm_css$Css$property = F2(
 	function (key, value) {
 		return rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
 	});
-var rtfeldman$elm_css$Css$backgroundColor = function (c) {
-	return A2(rtfeldman$elm_css$Css$property, 'background-color', c.value);
-};
 var rtfeldman$elm_css$Css$prop1 = F2(
 	function (key, arg) {
 		return A2(rtfeldman$elm_css$Css$property, key, arg.value);
 	});
-var rtfeldman$elm_css$Css$borderRadius = rtfeldman$elm_css$Css$prop1('border-radius');
-var rtfeldman$elm_css$Css$borderStyle = rtfeldman$elm_css$Css$prop1('border-style');
-var rtfeldman$elm_css$Css$center = rtfeldman$elm_css$Css$prop1('center');
-var rtfeldman$elm_css$Css$fontFamily = rtfeldman$elm_css$Css$prop1('font-family');
-var rtfeldman$elm_css$Css$fontSize = rtfeldman$elm_css$Css$prop1('font-size');
-var rtfeldman$elm_css$Css$height = rtfeldman$elm_css$Css$prop1('height');
-var rtfeldman$elm_css$Css$left = rtfeldman$elm_css$Css$prop1('left');
-var rtfeldman$elm_css$Css$none = {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, display: rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, keyframes: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: rtfeldman$elm_css$Css$Structure$Compatible, none: rtfeldman$elm_css$Css$Structure$Compatible, outline: rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, resize: rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: rtfeldman$elm_css$Css$Structure$Compatible, textTransform: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, transform: rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
-var elm$core$String$fromFloat = _String_fromNumber;
-var rtfeldman$elm_css$Css$UnitlessFloat = {$: 'UnitlessFloat'};
-var rtfeldman$elm_css$Css$num = function (val) {
-	return {
-		lengthOrNumber: rtfeldman$elm_css$Css$Structure$Compatible,
-		lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible,
-		number: rtfeldman$elm_css$Css$Structure$Compatible,
-		numberOrInfinite: rtfeldman$elm_css$Css$Structure$Compatible,
-		numericValue: val,
-		unitLabel: '',
-		units: rtfeldman$elm_css$Css$UnitlessFloat,
-		value: elm$core$String$fromFloat(val)
-	};
-};
-var rtfeldman$elm_css$Css$opacity = rtfeldman$elm_css$Css$prop1('opacity');
-var rtfeldman$elm_css$Css$position = rtfeldman$elm_css$Css$prop1('position');
+var rtfeldman$elm_css$Css$backgroundImage = rtfeldman$elm_css$Css$prop1('background-image');
+var rtfeldman$elm_css$Css$backgroundRepeat = rtfeldman$elm_css$Css$prop1('background-repeat');
+var rtfeldman$elm_css$Css$prop2 = F3(
+	function (key, argA, argB) {
+		return A2(
+			rtfeldman$elm_css$Css$property,
+			key,
+			A2(
+				elm$core$String$join,
+				' ',
+				_List_fromArray(
+					[argA.value, argB.value])));
+	});
+var rtfeldman$elm_css$Css$backgroundSize2 = rtfeldman$elm_css$Css$prop2('background-size');
 var rtfeldman$elm_css$Css$PxUnits = {$: 'PxUnits'};
+var elm$core$String$fromFloat = _String_fromNumber;
+var rtfeldman$elm_css$Css$Structure$Compatible = {$: 'Compatible'};
 var rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
 	function (units, unitLabel, numericValue) {
 		return {
@@ -5947,139 +5878,65 @@ var rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
 		};
 	});
 var rtfeldman$elm_css$Css$px = A2(rtfeldman$elm_css$Css$Internal$lengthConverter, rtfeldman$elm_css$Css$PxUnits, 'px');
-var rtfeldman$elm_css$Css$cssFunction = F2(
-	function (funcName, args) {
-		return funcName + ('(' + (A2(elm$core$String$join, ', ', args) + ')'));
-	});
-var rtfeldman$elm_css$Css$rgb = F3(
-	function (r, g, b) {
-		return {
-			alpha: 1,
-			blue: b,
-			color: rtfeldman$elm_css$Css$Structure$Compatible,
-			green: g,
-			red: r,
-			value: A2(
-				rtfeldman$elm_css$Css$cssFunction,
-				'rgb',
+var rtfeldman$elm_css$Css$repeat = {backgroundRepeat: rtfeldman$elm_css$Css$Structure$Compatible, backgroundRepeatShorthand: rtfeldman$elm_css$Css$Structure$Compatible, value: 'repeat'};
+var rtfeldman$elm_css$Css$url = function (urlValue) {
+	return {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, value: 'url(' + (urlValue + ')')};
+};
+var author$project$PixelEngine$Graphics$Abstract$cssBackgroundImage = F3(
+	function (scale, image, _n0) {
+		var width = _n0.width;
+		var height = _n0.height;
+		return _List_fromArray(
+			[
+				rtfeldman$elm_css$Css$backgroundImage(
+				rtfeldman$elm_css$Css$url(image)),
+				rtfeldman$elm_css$Css$backgroundRepeat(rtfeldman$elm_css$Css$repeat),
 				A2(
-					elm$core$List$map,
-					elm$core$String$fromInt,
-					_List_fromArray(
-						[r, g, b])))
-		};
+				rtfeldman$elm_css$Css$backgroundSize2,
+				rtfeldman$elm_css$Css$px(width * scale),
+				rtfeldman$elm_css$Css$px(height * scale)),
+				A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated')
+			]);
 	});
-var rtfeldman$elm_css$Css$right = rtfeldman$elm_css$Css$prop1('right');
-var rtfeldman$elm_css$Css$sansSerif = {fontFamily: rtfeldman$elm_css$Css$Structure$Compatible, value: 'sans-serif'};
-var elm$core$List$head = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return elm$core$Maybe$Just(x);
-	} else {
-		return elm$core$Maybe$Nothing;
-	}
+var elm$core$Basics$round = _Basics_round;
+var elm$core$String$concat = function (strings) {
+	return A2(elm$core$String$join, '', strings);
 };
-var elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
-var rtfeldman$elm_css$Css$Internal$property = F2(
-	function (key, value) {
-		return rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
-	});
-var rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
-	return {$: 'ApplyStyles', a: a};
+var avh4$elm_color$Color$toCssString = function (_n0) {
+	var r = _n0.a;
+	var g = _n0.b;
+	var b = _n0.c;
+	var a = _n0.d;
+	var roundTo = function (x) {
+		return elm$core$Basics$round(x * 1000) / 1000;
+	};
+	var pct = function (x) {
+		return elm$core$Basics$round(x * 10000) / 100;
+	};
+	return elm$core$String$concat(
+		_List_fromArray(
+			[
+				'rgba(',
+				elm$core$String$fromFloat(
+				pct(r)),
+				'%,',
+				elm$core$String$fromFloat(
+				pct(g)),
+				'%,',
+				elm$core$String$fromFloat(
+				pct(b)),
+				'%,',
+				elm$core$String$fromFloat(
+				roundTo(a)),
+				')'
+			]));
 };
-var rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
-	function (functionName, desiredKey, style) {
-		getOverloadedProperty:
-		while (true) {
-			switch (style.$) {
-				case 'AppendProperty':
-					var str = style.a;
-					var key = A2(
-						elm$core$Maybe$withDefault,
-						'',
-						elm$core$List$head(
-							A2(elm$core$String$split, ':', str)));
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
-				case 'ExtendSelector':
-					var selector = style.a;
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
-				case 'NestSnippet':
-					var combinator = style.a;
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
-				case 'WithPseudoElement':
-					var pseudoElement = style.a;
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
-				case 'WithMedia':
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
-				case 'WithKeyframes':
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
-				default:
-					if (!style.a.b) {
-						return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
-					} else {
-						if (!style.a.b.b) {
-							var _n1 = style.a;
-							var only = _n1.a;
-							var $temp$functionName = functionName,
-								$temp$desiredKey = desiredKey,
-								$temp$style = only;
-							functionName = $temp$functionName;
-							desiredKey = $temp$desiredKey;
-							style = $temp$style;
-							continue getOverloadedProperty;
-						} else {
-							var _n2 = style.a;
-							var first = _n2.a;
-							var rest = _n2.b;
-							var $temp$functionName = functionName,
-								$temp$desiredKey = desiredKey,
-								$temp$style = rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
-							functionName = $temp$functionName;
-							desiredKey = $temp$desiredKey;
-							style = $temp$style;
-							continue getOverloadedProperty;
-						}
-					}
-			}
-		}
-	});
-var rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
-var rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3(rtfeldman$elm_css$Css$Internal$lengthConverter, rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
-var rtfeldman$elm_css$Css$textAlign = function (fn) {
-	return A3(
-		rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
-		'textAlign',
-		'text-align',
-		fn(rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
-};
-var rtfeldman$elm_css$Css$top = rtfeldman$elm_css$Css$prop1('top');
+var rtfeldman$elm_css$Css$auto = {alignItemsOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, flexBasis: rtfeldman$elm_css$Css$Structure$Compatible, intOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, justifyContentOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAutoOrCoverOrContain: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, overflow: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, tableLayout: rtfeldman$elm_css$Css$Structure$Compatible, textRendering: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, value: 'auto'};
+var rtfeldman$elm_css$Css$height = rtfeldman$elm_css$Css$prop1('height');
+var rtfeldman$elm_css$Css$margin = rtfeldman$elm_css$Css$prop1('margin');
+var rtfeldman$elm_css$Css$position = rtfeldman$elm_css$Css$prop1('position');
+var rtfeldman$elm_css$Css$relative = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'relative'};
 var rtfeldman$elm_css$Css$width = rtfeldman$elm_css$Css$prop1('width');
-var rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
-	function (a, b, c) {
-		return {$: 'Node', a: a, b: b, c: c};
-	});
-var rtfeldman$elm_css$VirtualDom$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$Node;
-var rtfeldman$elm_css$Html$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$node;
-var rtfeldman$elm_css$Html$Styled$button = rtfeldman$elm_css$Html$Styled$node('button');
-var rtfeldman$elm_css$Html$Styled$div = rtfeldman$elm_css$Html$Styled$node('div');
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
-	return {$: 'Unstyled', a: a};
-};
-var rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
-	return rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
-		elm$virtual_dom$VirtualDom$text(str));
-};
-var rtfeldman$elm_css$Html$Styled$text = rtfeldman$elm_css$VirtualDom$Styled$text;
 var elm$json$Json$Encode$string = _Json_wrap;
 var elm$virtual_dom$VirtualDom$property = F2(
 	function (key, value) {
@@ -6192,6 +6049,15 @@ var elm$core$List$concatMap = F2(
 var rtfeldman$elm_css$Css$Preprocess$unwrapSnippet = function (_n0) {
 	var declarations = _n0.a;
 	return declarations;
+};
+var elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return elm$core$Maybe$Just(x);
+	} else {
+		return elm$core$Maybe$Nothing;
+	}
 };
 var elm$core$List$tail = function (list) {
 	if (list.b) {
@@ -6336,6 +6202,15 @@ var elm$core$Maybe$map = F2(
 				f(value));
 		} else {
 			return elm$core$Maybe$Nothing;
+		}
+	});
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
 		}
 	});
 var rtfeldman$elm_css$Css$Preprocess$Resolve$collectSelectors = function (declarations) {
@@ -7824,303 +7699,6 @@ var rtfeldman$elm_css$Html$Styled$Internal$css = function (styles) {
 	return A3(rtfeldman$elm_css$VirtualDom$Styled$Attribute, classProperty, styles, classname);
 };
 var rtfeldman$elm_css$Html$Styled$Attributes$css = rtfeldman$elm_css$Html$Styled$Internal$css;
-var elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var rtfeldman$elm_css$VirtualDom$Styled$on = F2(
-	function (eventName, handler) {
-		return A3(
-			rtfeldman$elm_css$VirtualDom$Styled$Attribute,
-			A2(elm$virtual_dom$VirtualDom$on, eventName, handler),
-			_List_Nil,
-			'');
-	});
-var rtfeldman$elm_css$Html$Styled$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			rtfeldman$elm_css$VirtualDom$Styled$on,
-			event,
-			elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
-	return A2(
-		rtfeldman$elm_css$Html$Styled$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
-var author$project$PixelEngine$Graphics$Abstract$renderControls = function (_n0) {
-	var windowSize = _n0.windowSize;
-	var controls = _n0.controls;
-	var diameter = windowSize.height / 4;
-	var circle = F4(
-		function (_char, input, size, listOfCss) {
-			return A2(
-				rtfeldman$elm_css$Html$Styled$button,
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$Attributes$css(
-						A2(
-							elm$core$List$append,
-							listOfCss,
-							_List_fromArray(
-								[
-									rtfeldman$elm_css$Css$width(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$height(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$borderRadius(
-									rtfeldman$elm_css$Css$px(size / 2)),
-									rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
-									rtfeldman$elm_css$Css$backgroundColor(
-									A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
-									rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
-									rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
-									rtfeldman$elm_css$Css$fontSize(
-									rtfeldman$elm_css$Css$px(size * 0.9)),
-									rtfeldman$elm_css$Css$opacity(
-									rtfeldman$elm_css$Css$num(0.5))
-								]))),
-						rtfeldman$elm_css$Html$Styled$Events$onClick(
-						controls(input))
-					]),
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$text(_char)
-					]));
-		});
-	return _List_fromArray(
-		[
-			A2(
-			rtfeldman$elm_css$Html$Styled$div,
-			_List_fromArray(
-				[
-					rtfeldman$elm_css$Html$Styled$Attributes$css(
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(0)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(0))
-						]))
-				]),
-			_List_fromArray(
-				[
-					A4(
-					circle,
-					'◀',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputLeft,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(0))
-						])),
-					A4(
-					circle,
-					'▶',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputRight,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(
-								diameter + (elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
-						])),
-					A4(
-					circle,
-					'▲',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputUp,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 1.0) - ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						])),
-					A4(
-					circle,
-					'▼',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputDown,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 2.0) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						]))
-				])),
-			A2(
-			rtfeldman$elm_css$Html$Styled$div,
-			_List_fromArray(
-				[
-					rtfeldman$elm_css$Html$Styled$Attributes$css(
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(0)),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(0))
-						]))
-				]),
-			_List_fromArray(
-				[
-					A4(
-					circle,
-					'A',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputA,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(0))
-						])),
-					A4(
-					circle,
-					'X',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputX,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(
-								diameter + (elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
-						])),
-					A4(
-					circle,
-					'Y',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputY,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 1.0) - ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						])),
-					A4(
-					circle,
-					'B',
-					author$project$PixelEngine$Graphics$Abstract$AbstractInputB,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 2.0) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						]))
-				]))
-		]);
-};
-var rtfeldman$elm_css$Css$backgroundImage = rtfeldman$elm_css$Css$prop1('background-image');
-var rtfeldman$elm_css$Css$backgroundRepeat = rtfeldman$elm_css$Css$prop1('background-repeat');
-var rtfeldman$elm_css$Css$prop2 = F3(
-	function (key, argA, argB) {
-		return A2(
-			rtfeldman$elm_css$Css$property,
-			key,
-			A2(
-				elm$core$String$join,
-				' ',
-				_List_fromArray(
-					[argA.value, argB.value])));
-	});
-var rtfeldman$elm_css$Css$backgroundSize2 = rtfeldman$elm_css$Css$prop2('background-size');
-var rtfeldman$elm_css$Css$repeat = {backgroundRepeat: rtfeldman$elm_css$Css$Structure$Compatible, backgroundRepeatShorthand: rtfeldman$elm_css$Css$Structure$Compatible, value: 'repeat'};
-var rtfeldman$elm_css$Css$url = function (urlValue) {
-	return {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, value: 'url(' + (urlValue + ')')};
-};
-var author$project$PixelEngine$Graphics$Abstract$cssBackgroundImage = F3(
-	function (scale, image, _n0) {
-		var width = _n0.width;
-		var height = _n0.height;
-		return _List_fromArray(
-			[
-				rtfeldman$elm_css$Css$backgroundImage(
-				rtfeldman$elm_css$Css$url(image)),
-				rtfeldman$elm_css$Css$backgroundRepeat(rtfeldman$elm_css$Css$repeat),
-				A2(
-				rtfeldman$elm_css$Css$backgroundSize2,
-				rtfeldman$elm_css$Css$px(width * scale),
-				rtfeldman$elm_css$Css$px(height * scale)),
-				A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated')
-			]);
-	});
-var elm$core$Basics$round = _Basics_round;
-var elm$core$String$concat = function (strings) {
-	return A2(elm$core$String$join, '', strings);
-};
-var avh4$elm_color$Color$toCssString = function (_n0) {
-	var r = _n0.a;
-	var g = _n0.b;
-	var b = _n0.c;
-	var a = _n0.d;
-	var roundTo = function (x) {
-		return elm$core$Basics$round(x * 1000) / 1000;
-	};
-	var pct = function (x) {
-		return elm$core$Basics$round(x * 10000) / 100;
-	};
-	return elm$core$String$concat(
-		_List_fromArray(
-			[
-				'rgba(',
-				elm$core$String$fromFloat(
-				pct(r)),
-				'%,',
-				elm$core$String$fromFloat(
-				pct(g)),
-				'%,',
-				elm$core$String$fromFloat(
-				pct(b)),
-				'%,',
-				elm$core$String$fromFloat(
-				roundTo(a)),
-				')'
-			]));
-};
-var rtfeldman$elm_css$Css$auto = {alignItemsOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, flexBasis: rtfeldman$elm_css$Css$Structure$Compatible, intOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, justifyContentOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAutoOrCoverOrContain: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, overflow: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, tableLayout: rtfeldman$elm_css$Css$Structure$Compatible, textRendering: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, value: 'auto'};
-var rtfeldman$elm_css$Css$margin = rtfeldman$elm_css$Css$prop1('margin');
-var rtfeldman$elm_css$Css$relative = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'relative'};
 var author$project$PixelEngine$Graphics$Abstract$cssArea = F3(
 	function (scale, background, _n0) {
 		var width = _n0.width;
@@ -8162,6 +7740,20 @@ var author$project$PixelEngine$Graphics$Abstract$cssArea = F3(
 						}
 					}())));
 	});
+var author$project$PixelEngine$Graphics$Abstract$pairMap = F2(
+	function (fun, _n0) {
+		var a = _n0.a;
+		var b = _n0.b;
+		return _Utils_Tuple2(
+			fun(a),
+			fun(b));
+	});
+var rtfeldman$elm_css$Css$absolute = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'absolute'};
+var rtfeldman$elm_css$Css$left = rtfeldman$elm_css$Css$prop1('left');
+var rtfeldman$elm_css$Css$cssFunction = F2(
+	function (funcName, args) {
+		return funcName + ('(' + (A2(elm$core$String$join, ', ', args) + ')'));
+	});
 var rtfeldman$elm_css$Css$scale2 = F2(
 	function (x, y) {
 		return {
@@ -8176,6 +7768,7 @@ var rtfeldman$elm_css$Css$scale2 = F2(
 						[x, y])))
 		};
 	});
+var rtfeldman$elm_css$Css$top = rtfeldman$elm_css$Css$prop1('top');
 var rtfeldman$elm_css$Css$valuesOrNone = function (list) {
 	return elm$core$List$isEmpty(list) ? {value: 'none'} : {
 		value: A2(
@@ -8198,6 +7791,12 @@ var rtfeldman$elm_css$Css$transform = function (only) {
 		_List_fromArray(
 			[only]));
 };
+var rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
+	function (a, b, c) {
+		return {$: 'Node', a: a, b: b, c: c};
+	});
+var rtfeldman$elm_css$VirtualDom$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$Node;
+var rtfeldman$elm_css$Html$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$node;
 var rtfeldman$elm_css$Html$Styled$img = rtfeldman$elm_css$Html$Styled$node('img');
 var rtfeldman$elm_css$VirtualDom$Styled$property = F2(
 	function (key, value) {
@@ -8217,7 +7816,7 @@ var rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
 var rtfeldman$elm_css$Html$Styled$Attributes$src = function (url) {
 	return A2(rtfeldman$elm_css$Html$Styled$Attributes$stringProperty, 'src', url);
 };
-var author$project$PixelEngine$Graphics$Abstract$displayImage = F2(
+var author$project$PixelEngine$Graphics$View$Element$displayImage = F2(
 	function (_n0, _n1) {
 		var scale = _n0.a.scale;
 		var top = _n1.a.top;
@@ -8244,6 +7843,71 @@ var author$project$PixelEngine$Graphics$Abstract$displayImage = F2(
 				]),
 			_List_Nil);
 	});
+var rtfeldman$elm_css$Css$Internal$property = F2(
+	function (key, value) {
+		return rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
+	});
+var rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
+	return {$: 'ApplyStyles', a: a};
+};
+var rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
+	function (functionName, desiredKey, style) {
+		getOverloadedProperty:
+		while (true) {
+			switch (style.$) {
+				case 'AppendProperty':
+					var str = style.a;
+					var key = A2(
+						elm$core$Maybe$withDefault,
+						'',
+						elm$core$List$head(
+							A2(elm$core$String$split, ':', str)));
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
+				case 'ExtendSelector':
+					var selector = style.a;
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
+				case 'NestSnippet':
+					var combinator = style.a;
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
+				case 'WithPseudoElement':
+					var pseudoElement = style.a;
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
+				case 'WithMedia':
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
+				case 'WithKeyframes':
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
+				default:
+					if (!style.a.b) {
+						return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
+					} else {
+						if (!style.a.b.b) {
+							var _n1 = style.a;
+							var only = _n1.a;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = only;
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						} else {
+							var _n2 = style.a;
+							var first = _n2.a;
+							var rest = _n2.b;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						}
+					}
+			}
+		}
+	});
+var rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
+var rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3(rtfeldman$elm_css$Css$Internal$lengthConverter, rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
 var rtfeldman$elm_css$Css$float = function (fn) {
 	return A3(
 		rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
@@ -8253,50 +7917,18 @@ var rtfeldman$elm_css$Css$float = function (fn) {
 };
 var rtfeldman$elm_css$Css$hidden = {borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, overflow: rtfeldman$elm_css$Css$Structure$Compatible, value: 'hidden', visibility: rtfeldman$elm_css$Css$Structure$Compatible};
 var rtfeldman$elm_css$Css$overflow = rtfeldman$elm_css$Css$prop1('overflow');
-var author$project$PixelEngine$Graphics$Abstract$displayTile = F2(
-	function (_n0, _n1) {
-		var scale = _n0.a.scale;
-		var pos = _n1.a;
-		var left = _n1.b.left;
-		var top = _n1.b.top;
-		var steps = _n1.b.steps;
-		var tileset = _n1.b.tileset;
-		var _n2 = tileset;
+var rtfeldman$elm_css$Css$right = rtfeldman$elm_css$Css$prop1('right');
+var rtfeldman$elm_css$Html$Styled$div = rtfeldman$elm_css$Html$Styled$node('div');
+var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
+	function (pos, _n0, _n1, _n2) {
+		var spriteLeft = _n0.a;
+		var spriteTop = _n0.b;
+		var scale = _n1.scale;
+		var steps = _n1.steps;
 		var spriteWidth = _n2.spriteWidth;
 		var spriteHeight = _n2.spriteHeight;
 		var source = _n2.source;
-		var _n3 = _Utils_Tuple2(left, top);
-		var i = _n3.a;
-		var j = _n3.b;
-		return (!steps) ? A2(
-			rtfeldman$elm_css$Html$Styled$img,
-			_List_fromArray(
-				[
-					rtfeldman$elm_css$Html$Styled$Attributes$src(source),
-					rtfeldman$elm_css$Html$Styled$Attributes$css(
-					_List_fromArray(
-						[
-							A2(rtfeldman$elm_css$Css$property, 'object-fit', 'none'),
-							A2(
-							rtfeldman$elm_css$Css$property,
-							'object-position',
-							elm$core$String$fromInt(((-1) * spriteWidth) * i) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * j) + 'px'))),
-							rtfeldman$elm_css$Css$width(
-							rtfeldman$elm_css$Css$px(spriteWidth)),
-							rtfeldman$elm_css$Css$height(
-							rtfeldman$elm_css$Css$px(spriteHeight)),
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(pos.top)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(pos.left)),
-							A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
-							A2(rtfeldman$elm_css$Css$property, 'transform-origin', 'top left'),
-							rtfeldman$elm_css$Css$transform(
-							A2(rtfeldman$elm_css$Css$scale2, scale, scale))
-						]))
-				]),
-			_List_Nil) : A2(
+		return A2(
 			rtfeldman$elm_css$Html$Styled$div,
 			_List_fromArray(
 				[
@@ -8343,7 +7975,7 @@ var author$project$PixelEngine$Graphics$Abstract$displayTile = F2(
 											A2(
 											rtfeldman$elm_css$Css$property,
 											'object-position',
-											elm$core$String$fromInt(((-1) * spriteWidth) * i) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * j) + 'px'))),
+											elm$core$String$fromInt(((-1) * spriteWidth) * spriteLeft) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * spriteTop) + 'px'))),
 											rtfeldman$elm_css$Css$width(
 											rtfeldman$elm_css$Css$px(spriteWidth * (steps + 1))),
 											rtfeldman$elm_css$Css$height(
@@ -8366,7 +7998,71 @@ var author$project$PixelEngine$Graphics$Abstract$displayTile = F2(
 						]))
 				]));
 	});
-var author$project$PixelEngine$Graphics$Abstract$displayMultiple = F4(
+var author$project$PixelEngine$Graphics$View$Element$displayStaticTile = F4(
+	function (pos, _n0, scale, _n1) {
+		var spriteLeft = _n0.a;
+		var spriteTop = _n0.b;
+		var spriteWidth = _n1.spriteWidth;
+		var spriteHeight = _n1.spriteHeight;
+		var source = _n1.source;
+		return A2(
+			rtfeldman$elm_css$Html$Styled$img,
+			_List_fromArray(
+				[
+					rtfeldman$elm_css$Html$Styled$Attributes$src(source),
+					rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							A2(rtfeldman$elm_css$Css$property, 'object-fit', 'none'),
+							A2(
+							rtfeldman$elm_css$Css$property,
+							'object-position',
+							elm$core$String$fromInt(((-1) * spriteWidth) * spriteLeft) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * spriteTop) + 'px'))),
+							rtfeldman$elm_css$Css$width(
+							rtfeldman$elm_css$Css$px(spriteWidth)),
+							rtfeldman$elm_css$Css$height(
+							rtfeldman$elm_css$Css$px(spriteHeight)),
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(pos.top)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(pos.left)),
+							A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
+							A2(rtfeldman$elm_css$Css$property, 'transform-origin', 'top left'),
+							rtfeldman$elm_css$Css$transform(
+							A2(rtfeldman$elm_css$Css$scale2, scale, scale))
+						]))
+				]),
+			_List_Nil);
+	});
+var author$project$PixelEngine$Graphics$View$Element$displayTile = F2(
+	function (_n0, _n1) {
+		var scale = _n0.a.scale;
+		var pos = _n1.a;
+		var left = _n1.b.left;
+		var top = _n1.b.top;
+		var steps = _n1.b.steps;
+		var tileset = _n1.b.tileset;
+		var _n2 = tileset;
+		var spriteWidth = _n2.spriteWidth;
+		var spriteHeight = _n2.spriteHeight;
+		var source = _n2.source;
+		var _n3 = _Utils_Tuple2(left, top);
+		var i = _n3.a;
+		var j = _n3.b;
+		return (!steps) ? A4(
+			author$project$PixelEngine$Graphics$View$Element$displayStaticTile,
+			pos,
+			_Utils_Tuple2(left, top),
+			scale,
+			tileset) : A4(
+			author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile,
+			pos,
+			_Utils_Tuple2(left, top),
+			{scale: scale, steps: steps},
+			tileset);
+	});
+var author$project$PixelEngine$Graphics$View$Element$displayMultiple = F4(
 	function (options, _n0, transitionId, attributes) {
 		var scale = options.a.scale;
 		var transitionSpeedInSec = options.a.transitionSpeedInSec;
@@ -8380,55 +8076,53 @@ var author$project$PixelEngine$Graphics$Abstract$displayMultiple = F4(
 			A2(
 				rtfeldman$elm_css$Html$Styled$div,
 				A2(
-					elm$core$List$append,
-					attributes,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Html$Styled$Attributes$css(
-							function () {
-								if ((multipleSources.b && (multipleSources.a.b.$ === 'TileSource')) && (!multipleSources.b.b)) {
-									var _n4 = multipleSources.a;
-									var tileset = _n4.b.a.tileset;
-									var _n5 = tileset;
-									var spriteWidth = _n5.spriteWidth;
-									var spriteHeight = _n5.spriteHeight;
-									return elm$core$List$append(
-										_List_fromArray(
+					elm$core$List$cons,
+					rtfeldman$elm_css$Html$Styled$Attributes$css(
+						elm$core$List$concat(
+							_List_fromArray(
+								[
+									function () {
+									if ((multipleSources.b && (multipleSources.a.b.$ === 'TileSource')) && (!multipleSources.b.b)) {
+										var _n2 = multipleSources.a;
+										var tileset = _n2.b.a.tileset;
+										var _n3 = tileset;
+										var spriteWidth = _n3.spriteWidth;
+										var spriteHeight = _n3.spriteHeight;
+										return _List_fromArray(
 											[
 												rtfeldman$elm_css$Css$width(
 												rtfeldman$elm_css$Css$px(scale * spriteWidth)),
 												rtfeldman$elm_css$Css$height(
 												rtfeldman$elm_css$Css$px(scale * spriteHeight))
-											]));
-								} else {
-									return elm$core$Basics$identity;
-								}
-							}()(
-								A2(
-									elm$core$List$append,
+											]);
+									} else {
+										return _List_Nil;
+									}
+								}(),
 									_List_fromArray(
-										[
-											rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-											rtfeldman$elm_css$Css$left(
-											rtfeldman$elm_css$Css$px(scale * rootPosition.left)),
-											rtfeldman$elm_css$Css$top(
-											rtfeldman$elm_css$Css$px(scale * rootPosition.top))
-										]),
+									[
+										rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+										rtfeldman$elm_css$Css$left(
+										rtfeldman$elm_css$Css$px(scale * rootPosition.left)),
+										rtfeldman$elm_css$Css$top(
+										rtfeldman$elm_css$Css$px(scale * rootPosition.top))
+									]),
 									function () {
-										if ((transitionId.$ === 'Just') && transitionId.a.b) {
-											var _n2 = transitionId.a;
-											return _List_fromArray(
-												[
-													A2(
-													rtfeldman$elm_css$Css$property,
-													'transition',
-													'left ' + (elm$core$String$fromFloat(transitionSpeedInSec) + ('s,top ' + (elm$core$String$fromFloat(transitionSpeedInSec) + 's;'))))
-												]);
-										} else {
-											return _List_Nil;
-										}
-									}())))
-						])),
+									if ((transitionId.$ === 'Just') && transitionId.a.b) {
+										var _n5 = transitionId.a;
+										return _List_fromArray(
+											[
+												A2(
+												rtfeldman$elm_css$Css$property,
+												'transition',
+												'left ' + (elm$core$String$fromFloat(transitionSpeedInSec) + ('s,top ' + (elm$core$String$fromFloat(transitionSpeedInSec) + 's;'))))
+											]);
+									} else {
+										return _List_Nil;
+									}
+								}()
+								]))),
+					attributes),
 				A2(
 					elm$core$List$map,
 					function (_n6) {
@@ -8438,20 +8132,20 @@ var author$project$PixelEngine$Graphics$Abstract$displayMultiple = F4(
 						if (source.$ === 'ImageSource') {
 							var imageSource = source.a;
 							return A2(
-								author$project$PixelEngine$Graphics$Abstract$displayImage,
+								author$project$PixelEngine$Graphics$View$Element$displayImage,
 								options,
 								_Utils_Tuple2(pos, imageSource));
 						} else {
 							var tileSource = source.a;
 							return A2(
-								author$project$PixelEngine$Graphics$Abstract$displayTile,
+								author$project$PixelEngine$Graphics$View$Element$displayTile,
 								options,
 								_Utils_Tuple2(pos, tileSource));
 						}
 					},
 					multipleSources)));
 	});
-var author$project$PixelEngine$Graphics$Abstract$displayElement = F2(
+var author$project$PixelEngine$Graphics$View$Element$view = F2(
 	function (options, _n0) {
 		var _n1 = _n0.a;
 		var left = _n1.a;
@@ -8463,7 +8157,7 @@ var author$project$PixelEngine$Graphics$Abstract$displayElement = F2(
 		if (elementType.$ === 'SingleSource') {
 			var singleSource = elementType.a;
 			return A4(
-				author$project$PixelEngine$Graphics$Abstract$displayMultiple,
+				author$project$PixelEngine$Graphics$View$Element$displayMultiple,
 				options,
 				_Utils_Tuple2(
 					pos,
@@ -8478,20 +8172,12 @@ var author$project$PixelEngine$Graphics$Abstract$displayElement = F2(
 		} else {
 			var multipleSources = elementType.a;
 			return A4(
-				author$project$PixelEngine$Graphics$Abstract$displayMultiple,
+				author$project$PixelEngine$Graphics$View$Element$displayMultiple,
 				options,
 				_Utils_Tuple2(pos, multipleSources),
 				uniqueId,
 				customAttributes);
 		}
-	});
-var author$project$PixelEngine$Graphics$Abstract$pairMap = F2(
-	function (fun, _n0) {
-		var a = _n0.a;
-		var b = _n0.b;
-		return _Utils_Tuple2(
-			fun(a),
-			fun(b));
 	});
 var elm$core$List$partition = F2(
 	function (pred, list) {
@@ -8558,7 +8244,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderImageArea = F2(
 				A2(
 					author$project$PixelEngine$Graphics$Abstract$pairMap,
 					elm$core$List$map(
-						author$project$PixelEngine$Graphics$Abstract$displayElement(options)),
+						author$project$PixelEngine$Graphics$View$Element$view(options)),
 					A2(
 						elm$core$List$partition,
 						A2(
@@ -8572,7 +8258,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderImageArea = F2(
 								elm$core$Basics$eq(elm$core$Maybe$Nothing))),
 						content))));
 	});
-var author$project$PixelEngine$Graphics$Abstract$TileSource = function (a) {
+var author$project$PixelEngine$Graphics$Data$Element$TileSource = function (a) {
 	return {$: 'TileSource', a: a};
 };
 var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
@@ -8625,7 +8311,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
 							var left = _n3.left;
 							var steps = _n3.steps;
 							return A4(
-								author$project$PixelEngine$Graphics$Abstract$displayMultiple,
+								author$project$PixelEngine$Graphics$View$Element$displayMultiple,
 								options,
 								_Utils_Tuple2(
 									{left: spriteWidth * location.a, top: spriteHeight * location.b},
@@ -8633,7 +8319,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
 										[
 											_Utils_Tuple2(
 											{left: 0, top: 0},
-											author$project$PixelEngine$Graphics$Abstract$TileSource(
+											author$project$PixelEngine$Graphics$Data$Element$TileSource(
 												{left: left, steps: steps, tileset: tileset, top: top}))
 										])),
 								uniqueId,
@@ -8652,9 +8338,34 @@ var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
 								elm$core$Basics$eq(elm$core$Maybe$Nothing))),
 						content))));
 	});
+var rtfeldman$elm_css$Css$backgroundColor = function (c) {
+	return A2(rtfeldman$elm_css$Css$property, 'background-color', c.value);
+};
+var rtfeldman$elm_css$Css$rgb = F3(
+	function (r, g, b) {
+		return {
+			alpha: 1,
+			blue: b,
+			color: rtfeldman$elm_css$Css$Structure$Compatible,
+			green: g,
+			red: r,
+			value: A2(
+				rtfeldman$elm_css$Css$cssFunction,
+				'rgb',
+				A2(
+					elm$core$List$map,
+					elm$core$String$fromInt,
+					_List_fromArray(
+						[r, g, b])))
+		};
+	});
 var elm$virtual_dom$VirtualDom$node = function (tag) {
 	return _VirtualDom_node(
 		_VirtualDom_noScript(tag));
+};
+var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
 };
 var rtfeldman$elm_css$VirtualDom$Styled$unstyledNode = rtfeldman$elm_css$VirtualDom$Styled$Unstyled;
 var rtfeldman$elm_css$Css$Global$global = function (snippets) {
@@ -8729,6 +8440,277 @@ var author$project$PixelEngine$Graphics$Abstract$renderScreen = F2(
 					]),
 				listOfArea));
 	});
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputA = {$: 'AbstractInputA'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputB = {$: 'AbstractInputB'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputDown = {$: 'AbstractInputDown'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputLeft = {$: 'AbstractInputLeft'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputRight = {$: 'AbstractInputRight'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputUp = {$: 'AbstractInputUp'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputX = {$: 'AbstractInputX'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputY = {$: 'AbstractInputY'};
+var elm$core$Basics$pow = _Basics_pow;
+var elm$core$Basics$sqrt = _Basics_sqrt;
+var rtfeldman$elm_css$Css$borderRadius = rtfeldman$elm_css$Css$prop1('border-radius');
+var rtfeldman$elm_css$Css$borderStyle = rtfeldman$elm_css$Css$prop1('border-style');
+var rtfeldman$elm_css$Css$center = rtfeldman$elm_css$Css$prop1('center');
+var rtfeldman$elm_css$Css$fontFamily = rtfeldman$elm_css$Css$prop1('font-family');
+var rtfeldman$elm_css$Css$fontSize = rtfeldman$elm_css$Css$prop1('font-size');
+var rtfeldman$elm_css$Css$none = {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, display: rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, keyframes: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: rtfeldman$elm_css$Css$Structure$Compatible, none: rtfeldman$elm_css$Css$Structure$Compatible, outline: rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, resize: rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: rtfeldman$elm_css$Css$Structure$Compatible, textTransform: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, transform: rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
+var rtfeldman$elm_css$Css$UnitlessFloat = {$: 'UnitlessFloat'};
+var rtfeldman$elm_css$Css$num = function (val) {
+	return {
+		lengthOrNumber: rtfeldman$elm_css$Css$Structure$Compatible,
+		lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible,
+		number: rtfeldman$elm_css$Css$Structure$Compatible,
+		numberOrInfinite: rtfeldman$elm_css$Css$Structure$Compatible,
+		numericValue: val,
+		unitLabel: '',
+		units: rtfeldman$elm_css$Css$UnitlessFloat,
+		value: elm$core$String$fromFloat(val)
+	};
+};
+var rtfeldman$elm_css$Css$opacity = rtfeldman$elm_css$Css$prop1('opacity');
+var rtfeldman$elm_css$Css$sansSerif = {fontFamily: rtfeldman$elm_css$Css$Structure$Compatible, value: 'sans-serif'};
+var rtfeldman$elm_css$Css$textAlign = function (fn) {
+	return A3(
+		rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'textAlign',
+		'text-align',
+		fn(rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
+};
+var rtfeldman$elm_css$Html$Styled$button = rtfeldman$elm_css$Html$Styled$node('button');
+var rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		elm$virtual_dom$VirtualDom$text(str));
+};
+var rtfeldman$elm_css$Html$Styled$text = rtfeldman$elm_css$VirtualDom$Styled$text;
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var rtfeldman$elm_css$VirtualDom$Styled$on = F2(
+	function (eventName, handler) {
+		return A3(
+			rtfeldman$elm_css$VirtualDom$Styled$Attribute,
+			A2(elm$virtual_dom$VirtualDom$on, eventName, handler),
+			_List_Nil,
+			'');
+	});
+var rtfeldman$elm_css$Html$Styled$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			rtfeldman$elm_css$VirtualDom$Styled$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
+	return A2(
+		rtfeldman$elm_css$Html$Styled$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) {
+	var windowSize = _n0.windowSize;
+	var controls = _n0.controls;
+	var diameter = windowSize.height / 4;
+	var circle = F4(
+		function (_char, input, size, listOfCss) {
+			return A2(
+				rtfeldman$elm_css$Html$Styled$button,
+				_List_fromArray(
+					[
+						rtfeldman$elm_css$Html$Styled$Attributes$css(
+						A2(
+							elm$core$List$append,
+							listOfCss,
+							_List_fromArray(
+								[
+									rtfeldman$elm_css$Css$width(
+									rtfeldman$elm_css$Css$px(size)),
+									rtfeldman$elm_css$Css$height(
+									rtfeldman$elm_css$Css$px(size)),
+									rtfeldman$elm_css$Css$borderRadius(
+									rtfeldman$elm_css$Css$px(size / 2)),
+									rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
+									rtfeldman$elm_css$Css$backgroundColor(
+									A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
+									rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
+									rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
+									rtfeldman$elm_css$Css$fontSize(
+									rtfeldman$elm_css$Css$px(size * 0.9)),
+									rtfeldman$elm_css$Css$opacity(
+									rtfeldman$elm_css$Css$num(0.5))
+								]))),
+						rtfeldman$elm_css$Html$Styled$Events$onClick(
+						controls(input))
+					]),
+				_List_fromArray(
+					[
+						rtfeldman$elm_css$Html$Styled$text(_char)
+					]));
+		});
+	return _List_fromArray(
+		[
+			A2(
+			rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(0)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(0))
+						]))
+				]),
+			_List_fromArray(
+				[
+					A4(
+					circle,
+					'◀',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputLeft,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(0))
+						])),
+					A4(
+					circle,
+					'▶',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputRight,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(
+								diameter + (elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
+						])),
+					A4(
+					circle,
+					'▲',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputUp,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 1.0) - ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						])),
+					A4(
+					circle,
+					'▼',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputDown,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 2.0) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						]))
+				])),
+			A2(
+			rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(0)),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(0))
+						]))
+				]),
+			_List_fromArray(
+				[
+					A4(
+					circle,
+					'A',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputA,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(0))
+						])),
+					A4(
+					circle,
+					'X',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputX,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(
+								diameter + (elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
+						])),
+					A4(
+					circle,
+					'Y',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputY,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 1.0) - ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						])),
+					A4(
+					circle,
+					'B',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputB,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 2.0) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						]))
+				]))
+		]);
+};
 var rtfeldman$elm_css$Css$visibility = rtfeldman$elm_css$Css$prop1('visibility');
 var elm$virtual_dom$VirtualDom$attribute = F2(
 	function (key, value) {
@@ -8797,7 +8779,7 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 						return A2(
 							elm$core$List$append,
 							l,
-							author$project$PixelEngine$Graphics$Abstract$renderControls(justCtrlOptions));
+							author$project$PixelEngine$Graphics$Data$Controller$render(justCtrlOptions));
 					} : elm$core$Basics$identity;
 				}
 			}()(
@@ -8889,10 +8871,10 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 							]))
 					])));
 	});
-var author$project$PixelEngine$Graphics$Abstract$usingScale = F2(
+var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
 	function (scale, _n0) {
 		var o = _n0.a;
-		return author$project$PixelEngine$Graphics$Abstract$Options(
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
 			_Utils_update(
 				o,
 				{scale: scale}));
@@ -9379,7 +9361,7 @@ var author$project$PixelEngine$Graphics$render = F3(
 		return rtfeldman$elm_css$Html$Styled$toUnstyled(
 			A2(
 				author$project$PixelEngine$Graphics$Abstract$render,
-				A2(author$project$PixelEngine$Graphics$Abstract$usingScale, scale, o),
+				A2(author$project$PixelEngine$Graphics$Data$Options$usingScale, scale, o),
 				listOfArea));
 	});
 var elm$core$Basics$min = F2(
@@ -9460,139 +9442,33 @@ var author$project$PixelEngine$gameMaybeWithCustomControls = function (_n0) {
 			view: author$project$PixelEngine$viewFunction(view)
 		});
 };
-var author$project$PixelEngine$game = function (_n0) {
+var author$project$PixelEngine$gameWithNoControls = function (_n0) {
 	var init = _n0.init;
 	var update = _n0.update;
 	var subscriptions = _n0.subscriptions;
 	var view = _n0.view;
-	var controls = _n0.controls;
 	return author$project$PixelEngine$gameMaybeWithCustomControls(
-		{
-			controls: elm$core$Maybe$Just(
-				_Utils_Tuple2(author$project$PixelEngine$Controls$defaultLayout, controls)),
-			init: init,
-			subscriptions: subscriptions,
-			update: update,
-			view: view
-		});
+		{controls: elm$core$Maybe$Nothing, init: init, subscriptions: subscriptions, update: update, view: view});
 };
-var author$project$TicTacToe$Down = {$: 'Down'};
-var author$project$TicTacToe$Left = {$: 'Left'};
-var author$project$TicTacToe$Look = function (a) {
-	return {$: 'Look', a: a};
+var author$project$TicTacToe$Cross = {$: 'Cross'};
+var author$project$TicTacToe$init = function (_n0) {
+	return _Utils_Tuple2(
+		{grid: elm$core$Dict$empty, nextMark: author$project$TicTacToe$Cross},
+		elm$core$Platform$Cmd$none);
 };
-var author$project$TicTacToe$None = {$: 'None'};
-var author$project$TicTacToe$Right = {$: 'Right'};
-var author$project$TicTacToe$Up = {$: 'Up'};
-var author$project$TicTacToe$controls = function (input) {
-	switch (input.$) {
-		case 'InputUp':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Up);
-		case 'InputDown':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Down);
-		case 'InputLeft':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Left);
-		case 'InputRight':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Right);
-		default:
-			return author$project$TicTacToe$None;
-	}
+var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
+var author$project$TicTacToe$subscriptions = function (_n0) {
+	return elm$core$Platform$Sub$none;
 };
-var author$project$TicTacToe$boardSize = 4;
-var author$project$TicTacToe$PlaceChicken = function (a) {
-	return {$: 'PlaceChicken', a: a};
-};
-var elm$core$Array$fromListHelp = F3(
-	function (list, nodeList, nodeListSize) {
-		fromListHelp:
-		while (true) {
-			var _n0 = A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, list);
-			var jsArray = _n0.a;
-			var remainingItems = _n0.b;
-			if (_Utils_cmp(
-				elm$core$Elm$JsArray$length(jsArray),
-				elm$core$Array$branchFactor) < 0) {
-				return A2(
-					elm$core$Array$builderToArray,
-					true,
-					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
-			} else {
-				var $temp$list = remainingItems,
-					$temp$nodeList = A2(
-					elm$core$List$cons,
-					elm$core$Array$Leaf(jsArray),
-					nodeList),
-					$temp$nodeListSize = nodeListSize + 1;
-				list = $temp$list;
-				nodeList = $temp$nodeList;
-				nodeListSize = $temp$nodeListSize;
-				continue fromListHelp;
-			}
-		}
-	});
-var elm$core$Array$fromList = function (list) {
-	if (!list.b) {
-		return elm$core$Array$empty;
+var author$project$TicTacToe$Nought = {$: 'Nought'};
+var author$project$TicTacToe$flip = function (mark) {
+	if (mark.$ === 'Nought') {
+		return author$project$TicTacToe$Cross;
 	} else {
-		return A3(elm$core$Array$fromListHelp, list, _List_Nil, 0);
+		return author$project$TicTacToe$Nought;
 	}
-};
-var elm$core$Array$bitMask = 4294967295 >>> (32 - elm$core$Array$shiftStep);
-var elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
-var elm$core$Array$getHelp = F3(
-	function (shift, index, tree) {
-		getHelp:
-		while (true) {
-			var pos = elm$core$Array$bitMask & (index >>> shift);
-			var _n0 = A2(elm$core$Elm$JsArray$unsafeGet, pos, tree);
-			if (_n0.$ === 'SubTree') {
-				var subTree = _n0.a;
-				var $temp$shift = shift - elm$core$Array$shiftStep,
-					$temp$index = index,
-					$temp$tree = subTree;
-				shift = $temp$shift;
-				index = $temp$index;
-				tree = $temp$tree;
-				continue getHelp;
-			} else {
-				var values = _n0.a;
-				return A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, values);
-			}
-		}
-	});
-var elm$core$Array$tailIndex = function (len) {
-	return (len >>> 5) << 5;
 };
 var elm$core$Basics$ge = _Utils_ge;
-var elm$core$Array$get = F2(
-	function (index, _n0) {
-		var len = _n0.a;
-		var startShift = _n0.b;
-		var tree = _n0.c;
-		var tail = _n0.d;
-		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? elm$core$Maybe$Nothing : ((_Utils_cmp(
-			index,
-			elm$core$Array$tailIndex(len)) > -1) ? elm$core$Maybe$Just(
-			A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, tail)) : elm$core$Maybe$Just(
-			A3(elm$core$Array$getHelp, startShift, index, tree)));
-	});
-var elm$core$Array$length = function (_n0) {
-	var len = _n0.a;
-	return len;
-};
-var elm$core$Set$Set_elm_builtin = function (a) {
-	return {$: 'Set_elm_builtin', a: a};
-};
-var elm$core$Set$empty = elm$core$Set$Set_elm_builtin(elm$core$Dict$empty);
-var elm$core$Set$insert = F2(
-	function (key, _n0) {
-		var dict = _n0.a;
-		return elm$core$Set$Set_elm_builtin(
-			A3(elm$core$Dict$insert, key, _Utils_Tuple0, dict));
-	});
-var elm$core$Set$fromList = function (list) {
-	return A3(elm$core$List$foldl, elm$core$Set$insert, elm$core$Set$empty, list);
-};
 var elm$core$Dict$get = F2(
 	function (targetKey, dict) {
 		get:
@@ -9624,495 +9500,59 @@ var elm$core$Dict$get = F2(
 			}
 		}
 	});
-var elm$core$Dict$member = F2(
-	function (key, dict) {
-		var _n0 = A2(elm$core$Dict$get, key, dict);
-		if (_n0.$ === 'Just') {
-			return true;
-		} else {
-			return false;
-		}
-	});
-var elm$core$Set$member = F2(
-	function (key, _n0) {
-		var dict = _n0.a;
-		return A2(elm$core$Dict$member, key, dict);
-	});
-var elm$random$Random$Generate = function (a) {
-	return {$: 'Generate', a: a};
-};
-var elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
-	});
-var elm$random$Random$next = function (_n0) {
-	var state0 = _n0.a;
-	var incr = _n0.b;
-	return A2(elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var elm$random$Random$initialSeed = function (x) {
-	var _n0 = elm$random$Random$next(
-		A2(elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _n0.a;
-	var incr = _n0.b;
-	var state2 = (state1 + x) >>> 0;
-	return elm$random$Random$next(
-		A2(elm$random$Random$Seed, state2, incr));
-};
-var elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
-};
-var elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
-};
-var elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
-	});
-var elm$time$Time$customZone = elm$time$Time$Zone;
-var elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var elm$time$Time$millisToPosix = elm$time$Time$Posix;
-var elm$time$Time$now = _Time_now(elm$time$Time$millisToPosix);
-var elm$time$Time$posixToMillis = function (_n0) {
-	var millis = _n0.a;
-	return millis;
-};
-var elm$random$Random$init = A2(
-	elm$core$Task$andThen,
-	function (time) {
-		return elm$core$Task$succeed(
-			elm$random$Random$initialSeed(
-				elm$time$Time$posixToMillis(time)));
-	},
-	elm$time$Time$now);
-var elm$random$Random$step = F2(
-	function (_n0, seed) {
-		var generator = _n0.a;
-		return generator(seed);
-	});
-var elm$random$Random$onEffects = F3(
-	function (router, commands, seed) {
-		if (!commands.b) {
-			return elm$core$Task$succeed(seed);
-		} else {
-			var generator = commands.a.a;
-			var rest = commands.b;
-			var _n1 = A2(elm$random$Random$step, generator, seed);
-			var value = _n1.a;
-			var newSeed = _n1.b;
-			return A2(
-				elm$core$Task$andThen,
-				function (_n2) {
-					return A3(elm$random$Random$onEffects, router, rest, newSeed);
-				},
-				A2(elm$core$Platform$sendToApp, router, value));
-		}
-	});
-var elm$random$Random$onSelfMsg = F3(
-	function (_n0, _n1, seed) {
-		return elm$core$Task$succeed(seed);
-	});
-var elm$random$Random$Generator = function (a) {
-	return {$: 'Generator', a: a};
-};
-var elm$random$Random$map = F2(
-	function (func, _n0) {
-		var genA = _n0.a;
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var _n1 = genA(seed0);
-				var a = _n1.a;
-				var seed1 = _n1.b;
-				return _Utils_Tuple2(
-					func(a),
-					seed1);
-			});
-	});
-var elm$random$Random$cmdMap = F2(
-	function (func, _n0) {
-		var generator = _n0.a;
-		return elm$random$Random$Generate(
-			A2(elm$random$Random$map, func, generator));
-	});
-_Platform_effectManagers['Random'] = _Platform_createManager(elm$random$Random$init, elm$random$Random$onEffects, elm$random$Random$onSelfMsg, elm$random$Random$cmdMap);
-var elm$random$Random$command = _Platform_leaf('Random');
-var elm$random$Random$generate = F2(
-	function (tagger, generator) {
-		return elm$random$Random$command(
-			elm$random$Random$Generate(
-				A2(elm$random$Random$map, tagger, generator)));
-	});
-var elm$random$Random$peel = function (_n0) {
-	var state = _n0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var elm$random$Random$int = F2(
-	function (a, b) {
-		return elm$random$Random$Generator(
-			function (seed0) {
-				var _n0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-				var lo = _n0.a;
-				var hi = _n0.b;
-				var range = (hi - lo) + 1;
-				if (!((range - 1) & range)) {
-					return _Utils_Tuple2(
-						(((range - 1) & elm$random$Random$peel(seed0)) >>> 0) + lo,
-						elm$random$Random$next(seed0));
-				} else {
-					var threshhold = (((-range) >>> 0) % range) >>> 0;
-					var accountForBias = function (seed) {
-						accountForBias:
-						while (true) {
-							var x = elm$random$Random$peel(seed);
-							var seedN = elm$random$Random$next(seed);
-							if (_Utils_cmp(x, threshhold) < 0) {
-								var $temp$seed = seedN;
-								seed = $temp$seed;
-								continue accountForBias;
-							} else {
-								return _Utils_Tuple2((x % range) + lo, seedN);
-							}
-						}
-					};
-					return accountForBias(seed0);
-				}
-			});
-	});
-var author$project$TicTacToe$newChicken = function (occupiedSquares) {
-	var board = elm$core$Set$fromList(occupiedSquares);
-	var emptySquares = elm$core$Array$fromList(
-		A2(
-			elm$core$List$filter,
-			function (pos) {
-				return !A2(elm$core$Set$member, pos, board);
-			},
-			elm$core$List$concat(
-				A2(
-					elm$core$List$map,
-					function (x) {
-						return A2(
-							elm$core$List$map,
-							function (y) {
-								return _Utils_Tuple2(x, y);
-							},
-							A2(elm$core$List$range, 0, author$project$TicTacToe$boardSize - 1));
-					},
-					A2(elm$core$List$range, 0, author$project$TicTacToe$boardSize - 1)))));
-	return A2(
-		elm$random$Random$generate,
-		author$project$TicTacToe$PlaceChicken,
-		A2(
-			elm$random$Random$map,
-			function (i) {
-				return A2(
-					elm$core$Maybe$withDefault,
-					_Utils_Tuple2(0, 0),
-					A2(elm$core$Array$get, i, emptySquares));
-			},
-			A2(
-				elm$random$Random$int,
-				0,
-				elm$core$Array$length(emptySquares) - 1)));
-};
-var author$project$TicTacToe$init = function (_n0) {
-	var snake = _Utils_Tuple2(
-		_Utils_Tuple2((author$project$TicTacToe$boardSize / 2) | 0, (author$project$TicTacToe$boardSize / 2) | 0),
-		_List_Nil);
-	var head = snake.a;
-	var body = snake.b;
-	return _Utils_Tuple2(
-		{chicken: elm$core$Maybe$Nothing, direction: author$project$TicTacToe$Down, snake: snake},
-		author$project$TicTacToe$newChicken(
-			A2(elm$core$List$cons, head, body)));
-};
-var author$project$TicTacToe$Move = {$: 'Move'};
-var elm$core$Basics$always = F2(
-	function (a, _n0) {
-		return a;
-	});
-var elm$time$Time$Every = F2(
-	function (a, b) {
-		return {$: 'Every', a: a, b: b};
-	});
-var elm$time$Time$State = F2(
-	function (taggers, processes) {
-		return {processes: processes, taggers: taggers};
-	});
-var elm$time$Time$init = elm$core$Task$succeed(
-	A2(elm$time$Time$State, elm$core$Dict$empty, elm$core$Dict$empty));
-var elm$time$Time$addMySub = F2(
-	function (_n0, state) {
-		var interval = _n0.a;
-		var tagger = _n0.b;
-		var _n1 = A2(elm$core$Dict$get, interval, state);
-		if (_n1.$ === 'Nothing') {
-			return A3(
-				elm$core$Dict$insert,
-				interval,
-				_List_fromArray(
-					[tagger]),
-				state);
-		} else {
-			var taggers = _n1.a;
-			return A3(
-				elm$core$Dict$insert,
-				interval,
-				A2(elm$core$List$cons, tagger, taggers),
-				state);
-		}
-	});
-var elm$core$Process$spawn = _Scheduler_spawn;
-var elm$time$Time$setInterval = _Time_setInterval;
-var elm$time$Time$spawnHelp = F3(
-	function (router, intervals, processes) {
-		if (!intervals.b) {
-			return elm$core$Task$succeed(processes);
-		} else {
-			var interval = intervals.a;
-			var rest = intervals.b;
-			var spawnTimer = elm$core$Process$spawn(
-				A2(
-					elm$time$Time$setInterval,
-					interval,
-					A2(elm$core$Platform$sendToSelf, router, interval)));
-			var spawnRest = function (id) {
-				return A3(
-					elm$time$Time$spawnHelp,
-					router,
-					rest,
-					A3(elm$core$Dict$insert, interval, id, processes));
-			};
-			return A2(elm$core$Task$andThen, spawnRest, spawnTimer);
-		}
-	});
-var elm$time$Time$onEffects = F3(
-	function (router, subs, _n0) {
-		var processes = _n0.processes;
-		var rightStep = F3(
-			function (_n6, id, _n7) {
-				var spawns = _n7.a;
-				var existing = _n7.b;
-				var kills = _n7.c;
-				return _Utils_Tuple3(
-					spawns,
-					existing,
-					A2(
-						elm$core$Task$andThen,
-						function (_n5) {
-							return kills;
-						},
-						elm$core$Process$kill(id)));
-			});
-		var newTaggers = A3(elm$core$List$foldl, elm$time$Time$addMySub, elm$core$Dict$empty, subs);
-		var leftStep = F3(
-			function (interval, taggers, _n4) {
-				var spawns = _n4.a;
-				var existing = _n4.b;
-				var kills = _n4.c;
-				return _Utils_Tuple3(
-					A2(elm$core$List$cons, interval, spawns),
-					existing,
-					kills);
-			});
-		var bothStep = F4(
-			function (interval, taggers, id, _n3) {
-				var spawns = _n3.a;
-				var existing = _n3.b;
-				var kills = _n3.c;
-				return _Utils_Tuple3(
-					spawns,
-					A3(elm$core$Dict$insert, interval, id, existing),
-					kills);
-			});
-		var _n1 = A6(
-			elm$core$Dict$merge,
-			leftStep,
-			bothStep,
-			rightStep,
-			newTaggers,
-			processes,
-			_Utils_Tuple3(
-				_List_Nil,
-				elm$core$Dict$empty,
-				elm$core$Task$succeed(_Utils_Tuple0)));
-		var spawnList = _n1.a;
-		var existingDict = _n1.b;
-		var killTask = _n1.c;
-		return A2(
-			elm$core$Task$andThen,
-			function (newProcesses) {
-				return elm$core$Task$succeed(
-					A2(elm$time$Time$State, newTaggers, newProcesses));
-			},
-			A2(
-				elm$core$Task$andThen,
-				function (_n2) {
-					return A3(elm$time$Time$spawnHelp, router, spawnList, existingDict);
-				},
-				killTask));
-	});
-var elm$time$Time$onSelfMsg = F3(
-	function (router, interval, state) {
-		var _n0 = A2(elm$core$Dict$get, interval, state.taggers);
-		if (_n0.$ === 'Nothing') {
-			return elm$core$Task$succeed(state);
-		} else {
-			var taggers = _n0.a;
-			var tellTaggers = function (time) {
-				return elm$core$Task$sequence(
-					A2(
-						elm$core$List$map,
-						function (tagger) {
-							return A2(
-								elm$core$Platform$sendToApp,
-								router,
-								tagger(time));
-						},
-						taggers));
-			};
-			return A2(
-				elm$core$Task$andThen,
-				function (_n1) {
-					return elm$core$Task$succeed(state);
-				},
-				A2(elm$core$Task$andThen, tellTaggers, elm$time$Time$now));
-		}
-	});
-var elm$time$Time$subMap = F2(
-	function (f, _n0) {
-		var interval = _n0.a;
-		var tagger = _n0.b;
-		return A2(
-			elm$time$Time$Every,
-			interval,
-			A2(elm$core$Basics$composeL, f, tagger));
-	});
-_Platform_effectManagers['Time'] = _Platform_createManager(elm$time$Time$init, elm$time$Time$onEffects, elm$time$Time$onSelfMsg, 0, elm$time$Time$subMap);
-var elm$time$Time$subscription = _Platform_leaf('Time');
-var elm$time$Time$every = F2(
-	function (interval, tagger) {
-		return elm$time$Time$subscription(
-			A2(elm$time$Time$Every, interval, tagger));
-	});
-var author$project$TicTacToe$subscriptions = function (_n0) {
-	var second = 1000;
-	return A2(
-		elm$time$Time$every,
-		second * 1,
-		elm$core$Basics$always(author$project$TicTacToe$Move));
-};
-var author$project$TicTacToe$directionToPos = function (direction) {
-	switch (direction.$) {
-		case 'Up':
-			return _Utils_Tuple2(0, -1);
-		case 'Down':
-			return _Utils_Tuple2(0, 1);
-		case 'Left':
-			return _Utils_Tuple2(-1, 0);
-		default:
-			return _Utils_Tuple2(1, 0);
-	}
-};
-var elm$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			elm$core$List$any,
-			function (a) {
-				return _Utils_eq(a, x);
-			},
-			xs);
-	});
-var author$project$TicTacToe$moveSnake = F2(
-	function (direction, _n0) {
-		var pos = _n0.a;
-		var posX = pos.a;
-		var posY = pos.b;
-		var body = _n0.b;
-		var _n1 = author$project$TicTacToe$directionToPos(direction);
-		var dirX = _n1.a;
-		var dirY = _n1.b;
-		var head = _Utils_Tuple2(
-			A2(elm$core$Basics$modBy, author$project$TicTacToe$boardSize, posX + dirX),
-			A2(elm$core$Basics$modBy, author$project$TicTacToe$boardSize, posY + dirY));
-		return _Utils_Tuple2(
-			head,
-			A2(elm$core$List$member, head, body) ? _List_Nil : A2(elm$core$List$cons, pos, body));
-	});
 var author$project$TicTacToe$update = F2(
 	function (msg, model) {
-		switch (msg.$) {
-			case 'Look':
-				var direction = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{direction: direction}),
-					elm$core$Platform$Cmd$none);
-			case 'PlaceChicken':
-				var pos = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
+		var grid = model.grid;
+		var nextMark = model.nextMark;
+		var defaultCase = _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+		if (msg.$ === 'PlaceMark') {
+			var _n1 = msg.a;
+			var x = _n1.a;
+			var y = _n1.b;
+			if ((x >= 0) && ((x < 3) && ((y >= 0) && (y < 3)))) {
+				var _n2 = A2(
+					elm$core$Dict$get,
+					_Utils_Tuple2(x, y),
+					grid);
+				if (_n2.$ === 'Nothing') {
+					return _Utils_Tuple2(
 						{
-							chicken: elm$core$Maybe$Just(pos)
-						}),
-					elm$core$Platform$Cmd$none);
-			case 'Move':
-				var _n1 = A2(author$project$TicTacToe$moveSnake, model.direction, model.snake);
-				var head = _n1.a;
-				var body = _n1.b;
-				var hungryBody = A2(
-					elm$core$List$take,
-					elm$core$List$length(body) - 1,
-					body);
-				var defaultCase = _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							chicken: model.chicken,
-							snake: _Utils_Tuple2(head, hungryBody)
-						}),
-					elm$core$Platform$Cmd$none);
-				var _n2 = model.chicken;
-				if (_n2.$ === 'Just') {
-					var pos = _n2.a;
-					return _Utils_eq(pos, head) ? _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								chicken: elm$core$Maybe$Nothing,
-								snake: _Utils_Tuple2(head, body)
-							}),
-						author$project$TicTacToe$newChicken(
-							A2(elm$core$List$cons, head, body))) : defaultCase;
+							grid: A3(
+								elm$core$Dict$insert,
+								_Utils_Tuple2(x, y),
+								nextMark,
+								grid),
+							nextMark: author$project$TicTacToe$flip(nextMark)
+						},
+						elm$core$Platform$Cmd$none);
 				} else {
 					return defaultCase;
 				}
-			default:
-				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+			} else {
+				return defaultCase;
+			}
+		} else {
+			return author$project$TicTacToe$init(_Utils_Tuple0);
 		}
 	});
-var author$project$PixelEngine$Graphics$Abstract$ImageBackground = function (a) {
+var author$project$PixelEngine$Graphics$Data$ImageBackground = function (a) {
 	return {$: 'ImageBackground', a: a};
 };
 var author$project$PixelEngine$Graphics$imageBackground = function (image) {
-	return author$project$PixelEngine$Graphics$Abstract$ImageBackground(image);
+	return author$project$PixelEngine$Graphics$Data$ImageBackground(image);
 };
-var author$project$PixelEngine$Graphics$Abstract$Transition = function (a) {
+var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
 	return {$: 'Transition', a: a};
 };
-var author$project$PixelEngine$Graphics$Abstract$newOptions = function (_n0) {
+var author$project$PixelEngine$Graphics$Data$Options$new = function (_n0) {
 	var width = _n0.width;
 	var scale = _n0.scale;
 	var transitionSpeedInSec = _n0.transitionSpeedInSec;
-	return author$project$PixelEngine$Graphics$Abstract$Options(
+	return author$project$PixelEngine$Graphics$Data$Options$Options(
 		{
 			controllerOptions: elm$core$Maybe$Nothing,
 			scale: scale,
-			transition: author$project$PixelEngine$Graphics$Abstract$Transition(
+			transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
 				{
 					name: '',
 					transitionList: _List_fromArray(
@@ -10128,10 +9568,10 @@ var author$project$PixelEngine$Graphics$Abstract$newOptions = function (_n0) {
 var author$project$PixelEngine$Graphics$options = function (_n0) {
 	var width = _n0.width;
 	var transitionSpeedInSec = _n0.transitionSpeedInSec;
-	return author$project$PixelEngine$Graphics$Abstract$newOptions(
+	return author$project$PixelEngine$Graphics$Data$Options$new(
 		{scale: 1, transitionSpeedInSec: transitionSpeedInSec, width: width});
 };
-var author$project$PixelEngine$Graphics$Abstract$Tiled = function (a) {
+var author$project$PixelEngine$Graphics$Data$Area$Tiled = function (a) {
 	return {$: 'Tiled', a: a};
 };
 var author$project$PixelEngine$Graphics$tiledArea = F2(
@@ -10139,8 +9579,32 @@ var author$project$PixelEngine$Graphics$tiledArea = F2(
 		var rows = _n0.rows;
 		var tileset = _n0.tileset;
 		var background = _n0.background;
-		return author$project$PixelEngine$Graphics$Abstract$Tiled(
+		return author$project$PixelEngine$Graphics$Data$Area$Tiled(
 			{background: background, content: content, rows: rows, tileset: tileset});
+	});
+var author$project$TicTacToe$foldOverGrid = F2(
+	function (_n0, _function) {
+		var width = _n0.width;
+		var height = _n0.height;
+		return A3(
+			elm$core$List$foldl,
+			F2(
+				function (x, list) {
+					return A3(
+						elm$core$List$foldl,
+						function (y) {
+							return elm$core$List$append(
+								_List_fromArray(
+									[
+										_function(
+										_Utils_Tuple2(x, y))
+									]));
+						},
+						list,
+						A2(elm$core$List$range, 0, height - 1));
+				}),
+			_List_Nil,
+			A2(elm$core$List$range, 0, width - 1));
 	});
 var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
 	var left = _n0.a;
@@ -10151,90 +9615,126 @@ var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
-var author$project$TicTacToe$chickenTile = author$project$PixelEngine$Graphics$Tile$tile(
-	_Utils_Tuple2(3, 0));
-var author$project$TicTacToe$snakeBodyTile = author$project$PixelEngine$Graphics$Tile$tile(
-	_Utils_Tuple2(3, 1));
-var author$project$TicTacToe$snakeHeadTile = function (direction) {
-	return author$project$PixelEngine$Graphics$Tile$tile(
-		function () {
-			switch (direction.$) {
-				case 'Down':
-					return _Utils_Tuple2(1, 0);
-				case 'Up':
-					return _Utils_Tuple2(2, 0);
-				case 'Left':
-					return _Utils_Tuple2(1, 1);
-				default:
-					return _Utils_Tuple2(2, 1);
-			}
-		}());
-};
-var author$project$TicTacToe$viewSnake = F2(
-	function (direction, _n0) {
-		var _n1 = _n0.a;
-		var headX = _n1.a;
-		var headY = _n1.b;
-		var body = _n0.b;
+var author$project$TicTacToe$cross = author$project$PixelEngine$Graphics$Tile$tile(
+	_Utils_Tuple2(1, 1));
+var elm$html$Html$Events$on = F2(
+	function (event, decoder) {
 		return A2(
-			elm$core$List$cons,
-			_Utils_Tuple2(
-				_Utils_Tuple2(headX + 1, headY + 1),
-				author$project$TicTacToe$snakeHeadTile(direction)),
-			A2(
-				elm$core$List$map,
-				function (_n2) {
-					var x = _n2.a;
-					var y = _n2.b;
-					return _Utils_Tuple2(
-						_Utils_Tuple2(x + 1, y + 1),
-						author$project$TicTacToe$snakeBodyTile);
-				},
-				body));
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
 	});
+var elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		elm$html$Html$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$PixelEngine$Graphics$Tile$onClick = function (msg) {
+	return elm$html$Html$Events$onClick(msg);
+};
+var rtfeldman$elm_css$VirtualDom$Styled$unstyledAttribute = function (prop) {
+	return A3(rtfeldman$elm_css$VirtualDom$Styled$Attribute, prop, _List_Nil, '');
+};
+var rtfeldman$elm_css$Html$Styled$Attributes$fromUnstyled = rtfeldman$elm_css$VirtualDom$Styled$unstyledAttribute;
+var author$project$PixelEngine$Graphics$Tile$withAttributes = F2(
+	function (attributes, t) {
+		var customAttributes = t.customAttributes;
+		return _Utils_update(
+			t,
+			{
+				customAttributes: A2(
+					elm$core$List$append,
+					customAttributes,
+					A2(elm$core$List$map, rtfeldman$elm_css$Html$Styled$Attributes$fromUnstyled, attributes))
+			});
+	});
+var author$project$TicTacToe$PlaceMark = function (a) {
+	return {$: 'PlaceMark', a: a};
+};
+var author$project$TicTacToe$none = function (pos) {
+	return A2(
+		author$project$PixelEngine$Graphics$Tile$withAttributes,
+		_List_fromArray(
+			[
+				author$project$PixelEngine$Graphics$Tile$onClick(
+				author$project$TicTacToe$PlaceMark(pos))
+			]),
+		author$project$PixelEngine$Graphics$Tile$tile(
+			_Utils_Tuple2(0, 0)));
+};
+var author$project$TicTacToe$nought = author$project$PixelEngine$Graphics$Tile$tile(
+	_Utils_Tuple2(0, 1));
+var author$project$TicTacToe$getTile = F2(
+	function (_n0, grid) {
+		var x = _n0.a;
+		var y = _n0.b;
+		var _n1 = A2(
+			elm$core$Dict$get,
+			_Utils_Tuple2(x, y),
+			grid);
+		if (_n1.$ === 'Just') {
+			if (_n1.a.$ === 'Nought') {
+				var _n2 = _n1.a;
+				return author$project$TicTacToe$nought;
+			} else {
+				var _n3 = _n1.a;
+				return author$project$TicTacToe$cross;
+			}
+		} else {
+			return author$project$TicTacToe$none(
+				_Utils_Tuple2(x, y));
+		}
+	});
+var author$project$TicTacToe$Reset = {$: 'Reset'};
+var author$project$TicTacToe$reset = A2(
+	author$project$PixelEngine$Graphics$Tile$withAttributes,
+	_List_fromArray(
+		[
+			author$project$PixelEngine$Graphics$Tile$onClick(author$project$TicTacToe$Reset)
+		]),
+	author$project$PixelEngine$Graphics$Tile$tile(
+		_Utils_Tuple2(1, 0)));
 var author$project$TicTacToe$view = function (_n0) {
-	var snake = _n0.snake;
-	var direction = _n0.direction;
-	var chicken = _n0.chicken;
-	var tileSize = 32;
+	var grid = _n0.grid;
+	var windowWidth = 5;
+	var tileSize = 16;
 	var tileset = {source: 'tileset.png', spriteHeight: tileSize, spriteWidth: tileSize};
-	var width = (author$project$TicTacToe$boardSize + 2) * tileSize;
+	var width = windowWidth * tileSize;
 	var background = author$project$PixelEngine$Graphics$imageBackground(
-		{height: width, source: 'background.png', width: width});
+		{height: 80, source: 'background.png', width: 80});
 	return {
 		body: _List_fromArray(
 			[
 				A2(
 				author$project$PixelEngine$Graphics$tiledArea,
-				{background: background, rows: author$project$TicTacToe$boardSize + 2, tileset: tileset},
-				elm$core$List$concat(
+				{background: background, rows: 5, tileset: tileset},
+				A2(
+					elm$core$List$append,
 					_List_fromArray(
 						[
-							A2(author$project$TicTacToe$viewSnake, direction, snake),
-							function () {
-							if (chicken.$ === 'Just') {
-								var _n2 = chicken.a;
-								var x = _n2.a;
-								var y = _n2.b;
-								return _List_fromArray(
-									[
-										_Utils_Tuple2(
-										_Utils_Tuple2(x + 1, y + 1),
-										author$project$TicTacToe$chickenTile)
-									]);
-							} else {
-								return _List_Nil;
-							}
-						}()
-						])))
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 0),
+							author$project$TicTacToe$reset)
+						]),
+					A2(
+						author$project$TicTacToe$foldOverGrid,
+						{height: 3, width: 3},
+						function (pos) {
+							var x = pos.a;
+							var y = pos.b;
+							return _Utils_Tuple2(
+								_Utils_Tuple2(1 + x, 1 + y),
+								A2(author$project$TicTacToe$getTile, pos, grid));
+						})))
 			]),
 		options: author$project$PixelEngine$Graphics$options(
 			{transitionSpeedInSec: 0.2, width: width}),
-		title: 'Snake'
+		title: 'Tic Tac Toe'
 	};
 };
-var author$project$TicTacToe$main = author$project$PixelEngine$game(
-	{controls: author$project$TicTacToe$controls, init: author$project$TicTacToe$init, subscriptions: author$project$TicTacToe$subscriptions, update: author$project$TicTacToe$update, view: author$project$TicTacToe$view});
+var author$project$TicTacToe$main = author$project$PixelEngine$gameWithNoControls(
+	{init: author$project$TicTacToe$init, subscriptions: author$project$TicTacToe$subscriptions, update: author$project$TicTacToe$update, view: author$project$TicTacToe$view});
 _Platform_export({'TicTacToe':{'init':author$project$TicTacToe$main(
 	elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
 
