@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>TicTacToe</title>
+  <title>Snake</title>
 </head>
 
 <body>
@@ -9476,30 +9476,30 @@ var author$project$PixelEngine$game = function (_n0) {
 			view: view
 		});
 };
-var author$project$TicTacToe$Down = {$: 'Down'};
-var author$project$TicTacToe$Left = {$: 'Left'};
-var author$project$TicTacToe$Look = function (a) {
+var author$project$Snake$Down = {$: 'Down'};
+var author$project$Snake$Left = {$: 'Left'};
+var author$project$Snake$Look = function (a) {
 	return {$: 'Look', a: a};
 };
-var author$project$TicTacToe$None = {$: 'None'};
-var author$project$TicTacToe$Right = {$: 'Right'};
-var author$project$TicTacToe$Up = {$: 'Up'};
-var author$project$TicTacToe$controls = function (input) {
+var author$project$Snake$None = {$: 'None'};
+var author$project$Snake$Right = {$: 'Right'};
+var author$project$Snake$Up = {$: 'Up'};
+var author$project$Snake$controls = function (input) {
 	switch (input.$) {
 		case 'InputUp':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Up);
+			return author$project$Snake$Look(author$project$Snake$Up);
 		case 'InputDown':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Down);
+			return author$project$Snake$Look(author$project$Snake$Down);
 		case 'InputLeft':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Left);
+			return author$project$Snake$Look(author$project$Snake$Left);
 		case 'InputRight':
-			return author$project$TicTacToe$Look(author$project$TicTacToe$Right);
+			return author$project$Snake$Look(author$project$Snake$Right);
 		default:
-			return author$project$TicTacToe$None;
+			return author$project$Snake$None;
 	}
 };
-var author$project$TicTacToe$boardSize = 4;
-var author$project$TicTacToe$PlaceChicken = function (a) {
+var author$project$Snake$boardSize = 4;
+var author$project$Snake$PlaceChicken = function (a) {
 	return {$: 'PlaceChicken', a: a};
 };
 var elm$core$Array$fromListHelp = F3(
@@ -9781,7 +9781,7 @@ var elm$random$Random$int = F2(
 				}
 			});
 	});
-var author$project$TicTacToe$newChicken = function (occupiedSquares) {
+var author$project$Snake$newChicken = function (occupiedSquares) {
 	var board = elm$core$Set$fromList(occupiedSquares);
 	var emptySquares = elm$core$Array$fromList(
 		A2(
@@ -9798,12 +9798,12 @@ var author$project$TicTacToe$newChicken = function (occupiedSquares) {
 							function (y) {
 								return _Utils_Tuple2(x, y);
 							},
-							A2(elm$core$List$range, 0, author$project$TicTacToe$boardSize - 1));
+							A2(elm$core$List$range, 0, author$project$Snake$boardSize - 1));
 					},
-					A2(elm$core$List$range, 0, author$project$TicTacToe$boardSize - 1)))));
+					A2(elm$core$List$range, 0, author$project$Snake$boardSize - 1)))));
 	return A2(
 		elm$random$Random$generate,
-		author$project$TicTacToe$PlaceChicken,
+		author$project$Snake$PlaceChicken,
 		A2(
 			elm$random$Random$map,
 			function (i) {
@@ -9817,18 +9817,18 @@ var author$project$TicTacToe$newChicken = function (occupiedSquares) {
 				0,
 				elm$core$Array$length(emptySquares) - 1)));
 };
-var author$project$TicTacToe$init = function (_n0) {
+var author$project$Snake$init = function (_n0) {
 	var snake = _Utils_Tuple2(
-		_Utils_Tuple2((author$project$TicTacToe$boardSize / 2) | 0, (author$project$TicTacToe$boardSize / 2) | 0),
+		_Utils_Tuple2((author$project$Snake$boardSize / 2) | 0, (author$project$Snake$boardSize / 2) | 0),
 		_List_Nil);
 	var head = snake.a;
 	var body = snake.b;
 	return _Utils_Tuple2(
-		{chicken: elm$core$Maybe$Nothing, direction: author$project$TicTacToe$Down, snake: snake},
-		author$project$TicTacToe$newChicken(
+		{chicken: elm$core$Maybe$Nothing, direction: author$project$Snake$Down, snake: snake},
+		author$project$Snake$newChicken(
 			A2(elm$core$List$cons, head, body)));
 };
-var author$project$TicTacToe$Move = {$: 'Move'};
+var author$project$Snake$Move = {$: 'Move'};
 var elm$core$Basics$always = F2(
 	function (a, _n0) {
 		return a;
@@ -9997,14 +9997,14 @@ var elm$time$Time$every = F2(
 		return elm$time$Time$subscription(
 			A2(elm$time$Time$Every, interval, tagger));
 	});
-var author$project$TicTacToe$subscriptions = function (_n0) {
+var author$project$Snake$subscriptions = function (_n0) {
 	var second = 1000;
 	return A2(
 		elm$time$Time$every,
 		second * 1,
-		elm$core$Basics$always(author$project$TicTacToe$Move));
+		elm$core$Basics$always(author$project$Snake$Move));
 };
-var author$project$TicTacToe$directionToPos = function (direction) {
+var author$project$Snake$directionToPos = function (direction) {
 	switch (direction.$) {
 		case 'Up':
 			return _Utils_Tuple2(0, -1);
@@ -10025,23 +10025,23 @@ var elm$core$List$member = F2(
 			},
 			xs);
 	});
-var author$project$TicTacToe$moveSnake = F2(
+var author$project$Snake$moveSnake = F2(
 	function (direction, _n0) {
 		var pos = _n0.a;
 		var posX = pos.a;
 		var posY = pos.b;
 		var body = _n0.b;
-		var _n1 = author$project$TicTacToe$directionToPos(direction);
+		var _n1 = author$project$Snake$directionToPos(direction);
 		var dirX = _n1.a;
 		var dirY = _n1.b;
 		var head = _Utils_Tuple2(
-			A2(elm$core$Basics$modBy, author$project$TicTacToe$boardSize, posX + dirX),
-			A2(elm$core$Basics$modBy, author$project$TicTacToe$boardSize, posY + dirY));
+			A2(elm$core$Basics$modBy, author$project$Snake$boardSize, posX + dirX),
+			A2(elm$core$Basics$modBy, author$project$Snake$boardSize, posY + dirY));
 		return _Utils_Tuple2(
 			head,
 			A2(elm$core$List$member, head, body) ? _List_Nil : A2(elm$core$List$cons, pos, body));
 	});
-var author$project$TicTacToe$update = F2(
+var author$project$Snake$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Look':
@@ -10061,7 +10061,7 @@ var author$project$TicTacToe$update = F2(
 						}),
 					elm$core$Platform$Cmd$none);
 			case 'Move':
-				var _n1 = A2(author$project$TicTacToe$moveSnake, model.direction, model.snake);
+				var _n1 = A2(author$project$Snake$moveSnake, model.direction, model.snake);
 				var head = _n1.a;
 				var body = _n1.b;
 				var hungryBody = A2(
@@ -10086,7 +10086,7 @@ var author$project$TicTacToe$update = F2(
 								chicken: elm$core$Maybe$Nothing,
 								snake: _Utils_Tuple2(head, body)
 							}),
-						author$project$TicTacToe$newChicken(
+						author$project$Snake$newChicken(
 							A2(elm$core$List$cons, head, body))) : defaultCase;
 				} else {
 					return defaultCase;
@@ -10151,11 +10151,11 @@ var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
-var author$project$TicTacToe$chickenTile = author$project$PixelEngine$Graphics$Tile$tile(
+var author$project$Snake$chickenTile = author$project$PixelEngine$Graphics$Tile$tile(
 	_Utils_Tuple2(3, 0));
-var author$project$TicTacToe$snakeBodyTile = author$project$PixelEngine$Graphics$Tile$tile(
+var author$project$Snake$snakeBodyTile = author$project$PixelEngine$Graphics$Tile$tile(
 	_Utils_Tuple2(3, 1));
-var author$project$TicTacToe$snakeHeadTile = function (direction) {
+var author$project$Snake$snakeHeadTile = function (direction) {
 	return author$project$PixelEngine$Graphics$Tile$tile(
 		function () {
 			switch (direction.$) {
@@ -10170,7 +10170,7 @@ var author$project$TicTacToe$snakeHeadTile = function (direction) {
 			}
 		}());
 };
-var author$project$TicTacToe$viewSnake = F2(
+var author$project$Snake$viewSnake = F2(
 	function (direction, _n0) {
 		var _n1 = _n0.a;
 		var headX = _n1.a;
@@ -10180,7 +10180,7 @@ var author$project$TicTacToe$viewSnake = F2(
 			elm$core$List$cons,
 			_Utils_Tuple2(
 				_Utils_Tuple2(headX + 1, headY + 1),
-				author$project$TicTacToe$snakeHeadTile(direction)),
+				author$project$Snake$snakeHeadTile(direction)),
 			A2(
 				elm$core$List$map,
 				function (_n2) {
@@ -10188,17 +10188,17 @@ var author$project$TicTacToe$viewSnake = F2(
 					var y = _n2.b;
 					return _Utils_Tuple2(
 						_Utils_Tuple2(x + 1, y + 1),
-						author$project$TicTacToe$snakeBodyTile);
+						author$project$Snake$snakeBodyTile);
 				},
 				body));
 	});
-var author$project$TicTacToe$view = function (_n0) {
+var author$project$Snake$view = function (_n0) {
 	var snake = _n0.snake;
 	var direction = _n0.direction;
 	var chicken = _n0.chicken;
 	var tileSize = 32;
 	var tileset = {source: 'tileset.png', spriteHeight: tileSize, spriteWidth: tileSize};
-	var width = (author$project$TicTacToe$boardSize + 2) * tileSize;
+	var width = (author$project$Snake$boardSize + 2) * tileSize;
 	var background = author$project$PixelEngine$Graphics$imageBackground(
 		{height: width, source: 'background.png', width: width});
 	return {
@@ -10206,11 +10206,11 @@ var author$project$TicTacToe$view = function (_n0) {
 			[
 				A2(
 				author$project$PixelEngine$Graphics$tiledArea,
-				{background: background, rows: author$project$TicTacToe$boardSize + 2, tileset: tileset},
+				{background: background, rows: author$project$Snake$boardSize + 2, tileset: tileset},
 				elm$core$List$concat(
 					_List_fromArray(
 						[
-							A2(author$project$TicTacToe$viewSnake, direction, snake),
+							A2(author$project$Snake$viewSnake, direction, snake),
 							function () {
 							if (chicken.$ === 'Just') {
 								var _n2 = chicken.a;
@@ -10220,7 +10220,7 @@ var author$project$TicTacToe$view = function (_n0) {
 									[
 										_Utils_Tuple2(
 										_Utils_Tuple2(x + 1, y + 1),
-										author$project$TicTacToe$chickenTile)
+										author$project$Snake$chickenTile)
 									]);
 							} else {
 								return _List_Nil;
@@ -10233,12 +10233,12 @@ var author$project$TicTacToe$view = function (_n0) {
 		title: 'Snake'
 	};
 };
-var author$project$TicTacToe$main = author$project$PixelEngine$game(
-	{controls: author$project$TicTacToe$controls, init: author$project$TicTacToe$init, subscriptions: author$project$TicTacToe$subscriptions, update: author$project$TicTacToe$update, view: author$project$TicTacToe$view});
-_Platform_export({'TicTacToe':{'init':author$project$TicTacToe$main(
+var author$project$Snake$main = author$project$PixelEngine$game(
+	{controls: author$project$Snake$controls, init: author$project$Snake$init, subscriptions: author$project$Snake$subscriptions, update: author$project$Snake$update, view: author$project$Snake$view});
+_Platform_export({'Snake':{'init':author$project$Snake$main(
 	elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
 
-var app = Elm.TicTacToe.init({ node: document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49") });
+var app = Elm.Snake.init({ node: document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49") });
 if (document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49"))
 {
   document.getElementById("elm-f0111bc4e658d0f98db96260c16f7e49").innerText = 'This is a headless program, meaning there is nothing to show here.\n\nI started the program anyway though, and you can access it as `app` in the developer console.';

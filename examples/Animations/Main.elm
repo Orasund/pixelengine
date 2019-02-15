@@ -1,4 +1,4 @@
-module AnimationsExample exposing (main)
+module Animations exposing (main)
 
 import Color
 import Html.Attributes as Attributes

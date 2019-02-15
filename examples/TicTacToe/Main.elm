@@ -1,7 +1,7 @@
-module TicTacToe exposing ( main )
+module TicTacToe exposing (main)
 
 import Dict exposing (Dict)
-import PixelEngine exposing (PixelEngine,gameWithNoControls)
+import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
@@ -38,17 +38,11 @@ type Msg
    INIT
 ------------------------}
 
-
-newGame : Model
-newGame =
-    { grid = Dict.empty
-    , nextMark = Cross
-    }
-
-
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( newGame
+    ( { grid = Dict.empty
+        , nextMark = Cross
+        }
     , Cmd.none
     )
 
@@ -99,7 +93,7 @@ update msg ({ grid, nextMark } as model) =
                 defaultCase
 
         Reset ->
-            ( newGame, Cmd.none )
+            init ()
 
 
 
@@ -113,25 +107,32 @@ subscriptions _ =
     Sub.none
 
 
+
 {------------------------
    VIEW
 ------------------------}
+
+
 none : ( Int, Int ) -> Tile Msg
 none pos =
     tile ( 0, 0 )
         |> Tile.withAttributes [ Tile.onClick (PlaceMark pos) ]
 
+
 nought : Tile Msg
 nought =
     tile ( 0, 1 )
+
 
 cross : Tile Msg
 cross =
     tile ( 1, 1 )
 
+
 reset : Tile Msg
 reset =
     tile ( 1, 0 ) |> Tile.withAttributes [ Tile.onClick Reset ]
+
 
 getTile : ( Int, Int ) -> Grid -> Tile Msg
 getTile ( x, y ) grid =
@@ -215,6 +216,7 @@ view { grid } =
 {------------------------
    MAIN
 ------------------------}
+
 
 main : PixelEngine () Model Msg
 main =
