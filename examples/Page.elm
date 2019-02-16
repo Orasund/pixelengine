@@ -111,7 +111,7 @@ main =
                     )
                 ]
             , Element.column [Element.spacing 10, Element.centerX]
-                [ Typography.h1 [Element.centerX ] <| Element.text "Finished Games"
+                [ Typography.h1 [Element.centerX ] <| Element.text "Games"
                 , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
                     ([ "DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
                         |> List.map card

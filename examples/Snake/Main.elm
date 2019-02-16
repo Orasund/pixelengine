@@ -6,6 +6,8 @@ import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
+import PixelEngine.Grid.Direction as Direction exposing (Direction(..))
+import PixelEngine.Grid.Position as Position exposing (Position,Vector)
 import Random
 import Set exposing (Set)
 import Time
@@ -17,27 +19,20 @@ import Time
 ------------------------}
 
 
-type Direction
-    = Up
-    | Down
-    | Left
-    | Right
-
-
 type alias Snake =
-    ( ( Int, Int ), List ( Int, Int ) )
+    ( Position, List Position )
 
 
 type alias Model =
     { direction : Direction
     , snake : Snake
-    , chicken : Maybe ( Int, Int )
+    , chicken : Maybe Position
     }
 
 
 type Msg
     = Look Direction
-    | PlaceChicken ( Int, Int )
+    | PlaceChicken Position
     | Move
     | None
 
@@ -59,14 +54,14 @@ boardSize =
 ------------------------}
 
 
-newChicken : List ( Int, Int ) -> Cmd Msg
+newChicken : List Position -> Cmd Msg
 newChicken occupiedSquares =
     let
-        board : Set ( Int, Int )
+        board : Set Position
         board =
             Set.fromList occupiedSquares
 
-        emptySquares : Array ( Int, Int )
+        emptySquares : Array Position
         emptySquares =
             List.range 0 (boardSize - 1)
                 |> List.map
@@ -110,32 +105,18 @@ init _ =
 ------------------------}
 
 
-directionToPos : Direction -> ( Int, Int )
-directionToPos direction =
-    case direction of
-        Up ->
-            ( 0, -1 )
-
-        Down ->
-            ( 0, 1 )
-
-        Left ->
-            ( -1, 0 )
-
-        Right ->
-            ( 1, 0 )
-
-
 moveSnake : Direction -> Snake -> Snake
-moveSnake direction ( ( posX, posY ) as pos, body ) =
+moveSnake direction ( pos, body ) =
     let
-        ( dirX, dirY ) =
-            directionToPos direction
+        dirVec : Vector
+        dirVec =
+            direction |> Position.fromDirection 
 
-        head =
-            ( posX + dirX |> modBy boardSize
-            , posY + dirY |> modBy boardSize
-            )
+        head : Position
+        head = 
+            pos |> Position.add dirVec
+                |> Tuple.mapBoth (modBy boardSize) (modBy boardSize)
+
     in
     ( head
     , if body |> List.member head then
@@ -160,7 +141,7 @@ update msg model =
                 ( head, body ) =
                     model.snake |> moveSnake model.direction
 
-                hungryBody : List ( Int, Int )
+                hungryBody : List Position
                 hungryBody =
                     body |> List.take ((body |> List.length) - 1)
 
@@ -268,7 +249,7 @@ snakeBodyTile =
     tile ( 3, 1 )
 
 
-viewSnake : Direction -> Snake -> List ( ( Int, Int ), Tile Msg )
+viewSnake : Direction -> Snake -> List ( Position, Tile Msg )
 viewSnake direction ( ( headX, headY ), body ) =
     ( ( headX + 1, headY + 1 )
     , direction |> snakeHeadTile

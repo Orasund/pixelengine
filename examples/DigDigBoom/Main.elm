@@ -10,7 +10,7 @@ import DigDigBoom.Cell as Cell
         , SolidType(..)
         )
 import DigDigBoom.Component.Inventory as Inventory
-import DigDigBoom.Component.Map as Map exposing (Actor, Direction(..), Location, Map)
+import DigDigBoom.Component.Map as Map exposing (Actor)
 import DigDigBoom.Game as Game
 import DigDigBoom.Player as Player exposing (PlayerData)
 import DigDigBoom.Tileset as Tileset
@@ -20,6 +20,9 @@ import PixelEngine.Graphics as Graphics exposing (Area, Options)
 import PixelEngine.Graphics.Image as Image exposing (image)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
 import PixelEngine.Graphics.Transition as Transition
+import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid.Direction exposing (Direction(..))
+import PixelEngine.Grid.Position as Position exposing (Position, Vector)
 import Random
 
 
@@ -32,7 +35,7 @@ type GameType
 
 
 type alias ModelContent =
-    { map : Map Cell
+    { map : Grid Cell
     , oldScreen : Maybe (List (Area Msg))
     , player : PlayerData
     , gameType : GameType
@@ -68,7 +71,8 @@ tutorial num =
 
         currentMap =
             Cell.tutorial num
-                |> Dict.update ( 7, 7 ) (always (Just (Player Down)))
+                |> Grid.ignoringError
+                    (Grid.update ( 7, 7 ) (always (Just (Player Down))))
     in
     { map = currentMap
     , oldScreen = Nothing
@@ -89,7 +93,8 @@ createNewMap worldSeed =
             Random.step
                 (Map.generator worldSize Cell.generator)
                 (Random.initialSeed worldSeed)
-                |> Tuple.mapFirst (Dict.update ( 7, 7 ) (always (Just (Player Down))))
+                |> Tuple.mapFirst
+                    (Grid.ignoringError <| Grid.update ( 7, 7 ) <| always <| Just <| Player Down)
     in
     { map = currentMap
     , oldScreen = Nothing
@@ -157,18 +162,17 @@ update msg model =
     case model of
         Just ({ map, gameType } as modelContent) ->
             if
-                map
-                    |> Dict.toList
-                    |> List.filter
-                        (\( _, cell ) ->
-                            case cell of
-                                Enemy _ _ ->
-                                    True
+                Grid.find
+                    (\_ cell ->
+                        case cell of
+                            Enemy _ _ ->
+                                True
 
-                                _ ->
-                                    False
-                        )
-                    |> List.isEmpty
+                            _ ->
+                                False
+                    )
+                    map
+                    == Nothing
             then
                 nextLevel modelContent
 
@@ -176,10 +180,10 @@ update msg model =
                 case msg of
                     Input input ->
                         let
-                            maybePlayer : Map Cell -> Maybe Actor
+                            maybePlayer : Grid Cell -> Maybe Actor
                             maybePlayer currentMap =
                                 currentMap
-                                    |> Map.getUnique
+                                    |> Grid.find
                                         (\_ cell ->
                                             case cell of
                                                 Player _ ->
@@ -360,9 +364,10 @@ deathScreen =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        ( List.concat
-            [( 4, 0 ) |> Tileset.text "You have" Tileset.colorWhite
-            ,(( 6, 1 ) |> Tileset.text "died" Tileset.colorWhite)]
+        (List.concat
+            [ ( 4, 0 ) |> Tileset.text "You have" Tileset.colorWhite
+            , ( 6, 1 ) |> Tileset.text "died" Tileset.colorWhite
+            ]
         )
     , Graphics.imageArea
         { height = toFloat <| 12 * 16
@@ -375,8 +380,8 @@ deathScreen =
         , background = Graphics.colorBackground (Color.rgb255 20 12 28)
         , tileset = tileset
         }
-        ( List.concat
-            [ (4,0) |> Tileset.text "Press any" Tileset.colorWhite
+        (List.concat
+            [ ( 4, 0 ) |> Tileset.text "Press any" Tileset.colorWhite
             , ( 6, 1 ) |> Tileset.text "button" Tileset.colorWhite
             ]
         )
@@ -451,7 +456,7 @@ menuScreen =
     ]
 
 
-worldScreen : Int -> Map Cell -> PlayerData -> List ( Location, Tile msg ) -> List (Area msg)
+worldScreen : Int -> Grid Cell -> PlayerData -> List ( Position, Tile msg ) -> List (Area msg)
 worldScreen worldSeed map player hints =
     [ Graphics.tiledArea
         { rows = 1
@@ -462,13 +467,13 @@ worldScreen worldSeed map player hints =
             |> Tileset.text
                 ("X-exit score:"
                     ++ (if (worldSeed // abs worldSeed) == -1 then
-                        "-"
+                            "-"
 
-                       else
-                        " "
-                      )
-                    ++ (String.fromInt (modBy 100 (abs worldSeed) // 10))
-                    ++ (String.fromInt (modBy 10 (abs worldSeed)))
+                        else
+                            " "
+                       )
+                    ++ String.fromInt (modBy 100 (abs worldSeed) // 10)
+                    ++ String.fromInt (modBy 10 (abs worldSeed))
                 )
                 Tileset.colorWhite
         )
@@ -480,14 +485,9 @@ worldScreen worldSeed map player hints =
         (hints
             |> List.append
                 (map
-                    |> Dict.foldl
-                        (\pos cell list ->
-                            ( pos
-                            , Cell.getImage cell
-                            )
-                                :: list
-                        )
-                        []
+                    |> Grid.toList
+                    |> List.map
+                        (\( pos, cell ) -> ( pos, Cell.getImage cell ))
                 )
         )
     , Graphics.tiledArea

@@ -3,6 +3,7 @@ PixelEngine is a graphic engine for rendering turn-based pixel games.
 
 ![Games made with pixelEngine](https://orasund.github.io/pixelengine/img1.png "Games made with pixelEngine")
 
+Games can either be stand-alone documents or [imbedded in a website](https://orasund.github.io/pixelengine/)
 ## Tutorials
 * [Tic Tac Toe](https://github.com/Orasund/pixelengine/wiki/Tutorial:-Tic-Tac-Toe) 
 Beginner Tutorial, uses clickable Tiles.

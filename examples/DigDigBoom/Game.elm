@@ -1,6 +1,5 @@
 module DigDigBoom.Game exposing (applyDirection)
 
-import Dict
 import DigDigBoom.Cell as Cell
     exposing
         ( Cell(..)
@@ -9,8 +8,11 @@ import DigDigBoom.Cell as Cell
         , ItemType(..)
         , SolidType(..)
         )
-import DigDigBoom.Component.Map as Map exposing (Actor, Direction(..), Location)
+import DigDigBoom.Component.Map as Map exposing (Actor)
 import DigDigBoom.Player as Player exposing (Game)
+import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid.Direction exposing (Direction(..))
+import PixelEngine.Grid.Position as Position exposing (Position)
 
 
 applyDirection : Int -> Direction -> ( Actor, Game ) -> ( Actor, Game )
@@ -32,44 +34,45 @@ applyDirection size dir (( ( location, direction ), _ ) as playerCellAndGame) =
 updateGame : Actor -> Game -> Game
 updateGame playerCell (( _, map ) as game) =
     map
-        |> Dict.foldl
+        |> Grid.toList
+        |> List.foldl
             (updateCell playerCell)
             game
 
 
-updateCell : Actor -> Location -> Cell -> Game -> Game
-updateCell playerCell location cell =
+updateCell : Actor -> ( Position, Cell ) -> Game -> Game
+updateCell playerCell ( position, cell ) =
     case cell of
         Enemy enemy _ ->
-            updateEnemy location enemy playerCell
+            updateEnemy position enemy playerCell
 
         Effect _ ->
-            Tuple.mapSecond (Dict.remove location)
+            Tuple.mapSecond (Grid.ignoringError <| Grid.remove position)
 
         Stunned enemy id ->
-            Tuple.mapSecond (Dict.update location (always <| Just <| Enemy enemy id))
+            Tuple.mapSecond (Grid.ignoringError <| Grid.update position (always <| Just <| Enemy enemy id))
 
         _ ->
             identity
 
 
-updateEnemy : Location -> EnemyType -> Actor -> Game -> Game
-updateEnemy location enemyType playerCell =
-    attackPlayer location playerCell
-        >> specialBehaviour location enemyType playerCell
+updateEnemy : Position -> EnemyType -> Actor -> Game -> Game
+updateEnemy position enemyType playerCell =
+    attackPlayer position playerCell
+        >> specialBehaviour position enemyType playerCell
 
 
-attackPlayer : Location -> Actor -> Game -> Game
+attackPlayer : Position -> Actor -> Game -> Game
 attackPlayer location (( playerLocation, _ ) as playerCell) ( playerData, map ) =
     [ Up, Down, Left, Right ]
         |> List.filter
-            ((==) ((\( x1, y1 ) ( x2, y2 ) -> ( x1 - x2, y1 - y2 )) location playerLocation) << Map.dirCoordinates)
+            ((==) (playerLocation |> Position.difference location |> Position.toDirection))
         |> List.head
         |> Maybe.map (always (( playerData, map ) |> Player.attack playerCell))
         |> Maybe.withDefault ( playerData, map )
 
 
-specialBehaviour : Location -> EnemyType -> Actor -> Game -> Game
+specialBehaviour : Position -> EnemyType -> Actor -> Game -> Game
 specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as game) =
     case enemyType of
         PlacedBombe ->
@@ -78,31 +81,47 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                     (placedBombeBehavoiur currentLocation)
                     game
                 |> Tuple.mapSecond
-                    (Dict.update currentLocation (always (Just (Effect Smoke))))
+                    (Grid.ignoringError <| Grid.update currentLocation (always (Just (Effect Smoke))))
 
         monster ->
             let
                 moveDirection : Direction
                 moveDirection =
-                    (\( x1, y1 ) ( x2, y2 ) -> ( x1 - x2, y1 - y2 )) playerLocation currentLocation
-                        --|> (\( x, y ) -> ( y, x ))
-                        |> Map.approximateDirection
+                    currentLocation
+                        |> Position.difference playerLocation
+                        |> Position.toDirection
 
                 actor : Actor
                 actor =
                     ( currentLocation, moveDirection )
 
-                newLocation : Location
+                newLocation : Position
                 newLocation =
                     actor |> Map.posFront 1
             in
             game
-                |> (case map |> Dict.get newLocation of
+                |> (case map |> Grid.get newLocation |> Result.withDefault Nothing of
                         Nothing ->
-                            Tuple.mapSecond (Map.move actor)
+                            Tuple.mapSecond
+                                (\grid ->
+                                    case grid |> Map.move actor of
+                                        Ok result ->
+                                            result
+
+                                        Err _ ->
+                                            grid
+                                )
 
                         Just (Item _) ->
-                            Tuple.mapSecond (Map.move actor)
+                            Tuple.mapSecond
+                                (\grid ->
+                                    case grid |> Map.move actor of
+                                        Ok result ->
+                                            result
+
+                                        Err _ ->
+                                            grid
+                                )
 
                         Just (Solid solid) ->
                             if
@@ -122,8 +141,9 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                                        )
                             then
                                 Tuple.mapSecond <|
-                                    Dict.update newLocation <|
-                                        always (Cell.decomposing solid |> Tuple.first |> Maybe.map Solid)
+                                    Grid.ignoringError <|
+                                        Grid.update newLocation <|
+                                            always (Cell.decomposing solid |> Tuple.first |> Maybe.map Solid)
 
                             else
                                 identity
@@ -133,22 +153,27 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                    )
 
 
-placedBombeBehavoiur : Location -> Direction -> Game -> Game
+placedBombeBehavoiur : Position -> Direction -> Game -> Game
 placedBombeBehavoiur location direction game =
     let
         newLocation =
             ( location, direction ) |> Map.posFront 1
     in
     game
-        |> (case game |> Tuple.second |> Dict.get newLocation of
-                Just (Enemy _ _) ->
-                    Tuple.mapSecond
-                        (Dict.update newLocation <| always <| Just <| Effect Bone)
+        |> Tuple.mapSecond
+            (Grid.ignoringError
+                (Grid.update
+                    newLocation
+                    (\elem ->
+                        case elem of
+                            Just (Enemy _ _) ->
+                                Just <| Effect Bone
 
-                Nothing ->
-                    Tuple.mapSecond
-                        (Dict.update newLocation <| always <| Just <| Effect Smoke)
+                            Nothing ->
+                                Just <| Effect Smoke
 
-                _ ->
-                    identity
-           )
+                            _ ->
+                                elem
+                    )
+                )
+            )

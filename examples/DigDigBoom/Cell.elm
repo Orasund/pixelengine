@@ -14,9 +14,11 @@ module DigDigBoom.Cell exposing
     )
 
 import Dict
-import DigDigBoom.Component.Map exposing (Direction(..), Location, Map)
 import DigDigBoom.Tileset as Tileset
 import PixelEngine.Graphics.Tile exposing (Tile)
+import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid.Direction exposing (Direction(..))
+import PixelEngine.Grid.Position exposing (Position)
 import Random exposing (Generator)
 
 
@@ -202,81 +204,116 @@ resistancy solid =
             2
 
 
-tutorial : Int -> Map Cell
+tutorial : Int -> Grid Cell
 tutorial num =
-    let
-        allBrick : Map Cell
-        allBrick =
-            List.range 0 15
-                |> List.foldl
-                    (\x out ->
-                        List.range 0 15
-                            |> List.foldl
-                                (\y map ->
-                                    map |> Dict.update ( x, y ) (always (Just (Solid StoneBrickWall)))
-                                )
-                                out
-                    )
-                    Dict.empty
+    Grid.fill
+        (\(( x, y ) as pos) ->
+            if 2 <= x && x <= 13 && 7 <= y && y <= 8 then
+                case num of
+                    5 ->
+                        case pos of
+                            ( 13, 8 ) ->
+                                Just <| Enemy Rat "rat_1"
 
-        newTutorial : Map Cell
-        newTutorial =
-            List.range 2 13
-                |> List.foldl
-                    (\x out ->
-                        List.range 7 8
-                            |> List.foldl
-                                (\y map ->
-                                    map |> Dict.update ( x, y ) (always Nothing)
-                                )
-                                out
-                    )
-                    allBrick
-    in
-    case num of
-        5 ->
-            newTutorial
-                |> Dict.update ( 13, 8 ) (always <| Just <| Enemy Rat "rat_1")
-                |> Dict.update ( 11, 7 ) (always <| Just <| Enemy Oger "Oger_1")
-                |> Dict.update ( 8, 7 ) (always <| Just <| Solid <| Placed <| Stone)
-                |> Dict.update ( 3, 8 ) (always <| Just <| Item <| Bombe)
-                |> Dict.update ( 6, 7 ) (always <| Just <| Item <| Material <| Stone)
-                |> Dict.update ( 7, 8 ) (always <| Just <| Item <| Bombe)
+                            ( 11, 7 ) ->
+                                Just <| Enemy Oger "Oger_1"
 
-        4 ->
-            newTutorial
-                |> Dict.update ( 9, 7 ) (always <| Just <| Solid StoneBrickWall)
-                |> Dict.update ( 9, 8 ) (always <| Just <| Solid StoneWall)
-                |> Dict.update ( 13, 7 ) (always <| Just <| Enemy Goblin "goblin_1")
-                |> Dict.update ( 7, 8 ) (always <| Just <| Item <| Bombe)
-                |> Dict.update ( 8, 8 ) (always <| Just <| Item <| Bombe)
+                            ( 8, 7 ) ->
+                                Just <| Solid <| Placed <| Stone
 
-        3 ->
-            newTutorial
-                |> Dict.update ( 10, 8 ) (always <| Just <| Solid StoneWall)
-                |> Dict.update ( 13, 7 ) (always <| Just <| Enemy Goblin "goblin_1")
-                |> Dict.update ( 11, 8 ) (always <| Just <| Item <| Bombe)
+                            ( 3, 8 ) ->
+                                Just <| (Item <| Bombe)
 
-        2 ->
-            newTutorial
-                |> Dict.update ( 9, 7 ) (always <| Just <| Solid StoneWall)
-                |> Dict.update ( 11, 7 ) (always <| Just <| Solid <| Placed Dirt)
-                |> Dict.update ( 9, 8 ) (always <| Just <| Solid <| Placed Dirt)
-                |> Dict.update ( 13, 7 ) (always <| Just <| Enemy Goblin "goblin_1")
-                |> Dict.update ( 7, 8 ) (always <| Just <| Item <| Bombe)
+                            ( 6, 7 ) ->
+                                Just <| (Item <| Material <| Stone)
 
-        _ ->
-            newTutorial
-                |> Dict.update ( 9, 7 ) (always <| Just <| Solid StoneWall)
-                |> Dict.update ( 13, 7 ) (always <| Just <| Enemy Rat "rat_1")
-                |> Dict.update ( 7, 8 ) (always <| Just <| Item <| Bombe)
+                            ( 7, 8 ) ->
+                                Just <| (Item <| Bombe)
+
+                            _ ->
+                                Nothing
+
+                    4 ->
+                        case pos of
+                            ( 9, 7 ) ->
+                                Just <| Solid StoneBrickWall
+
+                            ( 9, 8 ) ->
+                                Just <| Solid StoneWall
+
+                            ( 13, 7 ) ->
+                                Just <| Enemy Goblin "goblin_1"
+
+                            ( 7, 8 ) ->
+                                Just <| (Item <| Bombe)
+
+                            ( 8, 8 ) ->
+                                Just <| (Item <| Bombe)
+
+                            _ ->
+                                Nothing
+
+                    3 ->
+                        case pos of
+                            ( 10, 8 ) ->
+                                Just <| Solid StoneWall
+
+                            ( 13, 7 ) ->
+                                Just <| Enemy Goblin "goblin_1"
+
+                            ( 11, 8 ) ->
+                                Just <| (Item <| Bombe)
+
+                            _ ->
+                                Nothing
+
+                    2 ->
+                        case pos of
+                            ( 9, 7 ) ->
+                                Just <| Solid StoneWall
+
+                            ( 11, 7 ) ->
+                                Just <| (Solid <| Placed Dirt)
+
+                            ( 9, 8 ) ->
+                                Just <| (Solid <| Placed Dirt)
+
+                            ( 13, 7 ) ->
+                                Just <| Enemy Goblin "goblin_1"
+
+                            ( 7, 8 ) ->
+                                Just <| (Item <| Bombe)
+
+                            _ ->
+                                Nothing
+
+                    _ ->
+                        case pos of
+                            ( 9, 7 ) ->
+                                Just <| Solid StoneWall
+
+                            ( 13, 7 ) ->
+                                Just <| Enemy Rat "rat_1"
+
+                            ( 7, 8 ) ->
+                                Just <| (Item <| Bombe)
+
+                            _ ->
+                                Nothing
+
+            else
+                Just (Solid StoneBrickWall)
+        )
+        { columns = 16
+        , rows = 16
+        }
 
 
-generator : Generator (Location -> Maybe Cell)
+generator : Generator (Position -> Maybe Cell)
 generator =
     let
-        locationToMaybeCell : Maybe Cell -> Generator (Location -> Maybe Cell)
-        locationToMaybeCell maybeCell =
+        positionToMaybeCell : Maybe Cell -> Generator (Position -> Maybe Cell)
+        positionToMaybeCell maybeCell =
             constant
                 (\pos ->
                     case pos of
@@ -308,41 +345,41 @@ generator =
         |> Random.andThen
             (\r ->
                 if r < 50 then
-                    locationToMaybeCell <| Just <| Solid <| Placed Dirt
+                    positionToMaybeCell <| Just <| Solid <| Placed Dirt
 
                 else if r < 150 then
-                    locationToMaybeCell <| Just <| Solid StoneWall
+                    positionToMaybeCell <| Just <| Solid StoneWall
 
                 else if r < 200 then
-                    locationToMaybeCell <| Just <| Solid StoneBrickWall
+                    positionToMaybeCell <| Just <| Solid StoneBrickWall
 
                 else if r < 225 then
-                    locationToMaybeCell <| Just <| Item Bombe
+                    positionToMaybeCell <| Just <| Item Bombe
 
                 else if r < 230 then
-                    locationToMaybeCell <| Just <| Item HealthPotion
+                    positionToMaybeCell <| Just <| Item HealthPotion
 
                 else if r < 235 then
                     Random.float 0 1
                         |> Random.andThen
                             (\id ->
-                                locationToMaybeCell <| Just <| Enemy Rat <| "Rat" ++ String.fromFloat id
+                                positionToMaybeCell <| Just <| Enemy Rat <| "Rat" ++ String.fromFloat id
                             )
 
                 else if r < 238 then
                     Random.float 0 1
                         |> Random.andThen
                             (\id ->
-                                locationToMaybeCell <| Just <| Enemy Goblin <| "Goblin" ++ String.fromFloat id
+                                positionToMaybeCell <| Just <| Enemy Goblin <| "Goblin" ++ String.fromFloat id
                             )
 
                 else if r < 239 then
                     Random.float 0 1
                         |> Random.andThen
                             (\id ->
-                                locationToMaybeCell <| Just <| Enemy Oger <| "Oger" ++ String.fromFloat id
+                                positionToMaybeCell <| Just <| Enemy Oger <| "Oger" ++ String.fromFloat id
                             )
 
                 else
-                    locationToMaybeCell <| Nothing
+                    positionToMaybeCell <| Nothing
             )

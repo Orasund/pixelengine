@@ -4,15 +4,15 @@ import RuinJump.MapElement as MapElement exposing (Block(..), MapElement(..))
 import RuinJump.Config as Config
 import Dict exposing (Dict)
 
-type alias Map =
-    Dict ( Int, Int ) MapElement
+import PixelEngine.Component.Position exposing( Position)
 
-remove : (Int,Int) -> Map -> Map
-remove (x,lowestY) map =
+type alias Map =
+    Dict Position MapElement
+
+remove : Position -> Map -> Map
+remove ((_,lowestY) as pos) map =
     map
-        |> Dict.update
-            ( x, lowestY )
-            (Maybe.map MapElement.remove)
+        |> Dict.update pos (Maybe.map MapElement.remove)
         |> (if
                 lowestY
                     |> modBy Config.sectionHeight

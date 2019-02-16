@@ -22,7 +22,10 @@ import DigDigBoom.Cell as Cell
         , SolidType(..)
         )
 import DigDigBoom.Component.Inventory as Inventory exposing (Inventory)
-import DigDigBoom.Component.Map as Map exposing (Actor, Direction(..), Location, Map)
+import DigDigBoom.Component.Map as Map exposing (Actor)
+import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid.Direction exposing (Direction(..))
+import PixelEngine.Grid.Position exposing (Position)
 
 
 type alias PlayerData =
@@ -32,7 +35,7 @@ type alias PlayerData =
 
 
 type alias Game =
-    ( PlayerData, Map Cell )
+    ( PlayerData, Grid Cell )
 
 
 init : Int -> PlayerData
@@ -42,9 +45,10 @@ init backpackSize =
     }
 
 
-face : Location -> Direction -> Map Cell -> Map Cell
-face location direction map =
-    map |> Map.place location (Player direction)
+face : Position -> Direction -> Grid Cell -> Grid Cell
+face position direction map =
+    map |> Grid.ignoringError
+        (Grid.insert position (Player direction))
 
 
 attack : Actor -> Game -> Game
@@ -60,7 +64,8 @@ attack ( location, _ ) ( playerData, currentMap ) =
                 identity
 
             else
-                Dict.update location <| always <| Just <| Effect Bone
+                Grid.ignoringError
+                    (Grid.insert location <| Effect Bone)
            )
     )
 
@@ -86,7 +91,7 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                                 x == worldSize
                    )
 
-        newLocation : Location
+        newLocation : Position
         newLocation =
             playerCell |> Map.posFront 1
 
@@ -98,7 +103,7 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
         ( playerCell, game )
 
     else
-        case currentMap |> Dict.get newLocation of
+        case currentMap |> Grid.get newLocation |> Result.withDefault Nothing of
             Just (Item item) ->
                 let
                     ( maybeDroppedItem, inventory ) =
@@ -108,15 +113,21 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 , ( { playerData
                         | inventory = inventory |> Inventory.add item
                     }
-                  , currentMap
-                        |> Map.move playerCell
-                        |> (case maybeDroppedItem of
+                  , case
+                        currentMap |> Map.move playerCell
+                    of
+                        Ok result ->
+                            (case maybeDroppedItem of
                                 Just droppedItem ->
-                                    Map.place location (Item droppedItem)
+                                    result
+                                     |>Grid.ignoringError
+                                        (Grid.insert location (Item droppedItem))
 
                                 _ ->
-                                    identity
+                                    result
                            )
+                        Err _ ->
+                            currentMap
                   )
                 )
 
@@ -131,16 +142,17 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 in
                 ( newPlayerCell
                 , ( playerData |> (\a -> { a | inventory = inventory })
-                  , currentMap
-                        |> Map.move playerCell
-                        |> (\m ->
-                                case item of
+                  , case currentMap |> Map.move playerCell of
+                        Ok result ->
+                            case item of
                                     Just a ->
-                                        m |> Map.place location (Item a)
+                                        result |> Grid.ignoringError
+                                            (Grid.insert location (Item a))
 
                                     Nothing ->
-                                        m
-                           )
+                                        result
+                        Err _ ->
+                            currentMap
                   )
                 )
 
@@ -151,15 +163,22 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 in
                 ( newPlayerCell
                 , ( playerData |> (\a -> { a | inventory = inventory })
-                  , currentMap
+                  , case
+                        currentMap
                         |> Map.move playerCell
-                        |> (case item of
+                    of
+                        Ok result ->
+                            (case item of
                                 Just a ->
-                                    Map.place location (Item a)
+                                    result |> 
+                                        Grid.ignoringError
+                                            (Grid.insert location (Item a))
 
                                 Nothing ->
-                                    identity
+                                    currentMap
                            )
+                        Err _ ->
+                            currentMap
                   )
                 )
 
@@ -170,7 +189,8 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                         ( playerData
                             |> (addToInventory <| Material material)
                         , currentMap
-                            |> Dict.remove newLocation
+                            |> Grid.ignoringError
+                                (Grid.remove newLocation)
                         )
 
                     _ ->
@@ -183,18 +203,20 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 )
 
 
-throwEnemy : Actor -> EnemyType -> String -> Map Cell -> Map Cell
-throwEnemy (( _,direction ) as playerCell) enemyType enemyId currentMap =
+throwEnemy : Actor -> EnemyType -> String -> Grid Cell -> Grid Cell
+throwEnemy (( _, direction ) as playerCell) enemyType enemyId currentMap =
     let
-        newLocation : Location
+        newLocation : Position
         newLocation =
             playerCell |> Map.posFront 1
     in
     currentMap
-        |> Dict.update newLocation (always (Just <| Stunned enemyType enemyId))
+        |> Grid.ignoringError
+            (Grid.update newLocation (always (Just <| Stunned enemyType enemyId)))
         |> (case
                 currentMap
-                    |> Dict.get (playerCell |> Map.posFront 2)
+                    |> Grid.get (playerCell |> Map.posFront 2)
+                    |> Result.withDefault Nothing
             of
                 Just (Solid _) ->
                     identity
@@ -205,10 +227,12 @@ throwEnemy (( _,direction ) as playerCell) enemyType enemyId currentMap =
                 _ ->
                     \newMap ->
                         newMap
-                            |> Map.move ( newLocation, direction )
+                            |> Grid.ignoringError
+                                (Map.move ( newLocation, direction ))
                             |> (case
                                     newMap
-                                        |> Dict.get (playerCell |> Map.posFront 3)
+                                        |> Grid.get (playerCell |> Map.posFront 3)
+                                        |> Result.withDefault Nothing
                                 of
                                     Just (Solid _) ->
                                         identity
@@ -217,7 +241,8 @@ throwEnemy (( _,direction ) as playerCell) enemyType enemyId currentMap =
                                         identity
 
                                     _ ->
-                                        Map.move ( playerCell |> Map.posFront 2, direction )
+                                        Grid.ignoringError
+                                        (Map.move ( playerCell |> Map.posFront 2, direction ))
                                )
            )
 
@@ -235,19 +260,23 @@ activate playerCell (( playerData, _ ) as game) =
            )
 
 
-placingItem : Map Cell -> Actor -> Cell -> (SolidType -> Maybe (Game -> Game)) -> Maybe (Game -> Game)
+placingItem : Grid Cell -> Actor -> Cell -> (SolidType -> Maybe (Game -> Game)) -> Maybe (Game -> Game)
 placingItem map playerCell cell specialCase =
     let
-        frontPos : Map.Location
+        frontPos : Position
         frontPos =
             playerCell |> Map.posFront 1
     in
-    case map |> Dict.get frontPos of
+    case map |> Grid.get frontPos |> Result.withDefault Nothing of
         Nothing ->
-            Just <| Tuple.mapSecond (Map.place frontPos cell)
+            Just <|
+                Tuple.mapSecond
+                    ( Grid.ignoringError <| Grid.insert frontPos cell)
 
         Just (Effect _) ->
-            Just <| Tuple.mapSecond (Map.place frontPos cell)
+            Just <|
+                Tuple.mapSecond
+                    ( Grid.ignoringError <| Grid.insert frontPos cell)
 
         Just (Solid solidType) ->
             specialCase solidType
@@ -259,21 +288,24 @@ placingItem map playerCell cell specialCase =
 drop : Actor -> Game -> Game
 drop playerCell ( playerData, map ) =
     let
-        ( item, inventory ) =
+        ( maybeItem, inventory ) =
             playerData.inventory |> Inventory.take
 
-        dir : Map.Location
+        dir : Position
         dir =
             playerCell |> Map.posFront 1
     in
-    case map |> Dict.get dir of
+    case map |> Grid.get dir |> Result.withDefault Nothing of
         Nothing ->
             ( { playerData | inventory = inventory }
-            , map
-                |> (item
-                        |> Maybe.map (\a -> Map.place dir (Item a))
-                        |> Maybe.withDefault identity
-                   )
+            , case maybeItem of
+                Just item ->
+                    map
+                        |> Grid.ignoringError
+                            (Grid.insert dir (Item item))
+
+                Nothing ->
+                    map
             )
 
         _ ->
@@ -348,7 +380,7 @@ healthPotionAction { lifes } =
         Nothing
 
 
-bombeAction : Map Cell -> Actor -> Maybe (Game -> Game)
+bombeAction : Grid Cell -> Actor -> Maybe (Game -> Game)
 bombeAction currentMap playerCell =
     let
         specialCase : SolidType -> Maybe (Game -> Game)
@@ -364,7 +396,8 @@ bombeAction currentMap playerCell =
                             ( playerData
                                 |> addToInventory (Material material)
                             , map
-                                |> Map.place (playerCell |> Map.posFront 1) (Solid solid)
+                                |> Grid.ignoringError
+                                    (Grid.insert (playerCell |> Map.posFront 1) (Solid solid))
                             )
                     )
 
@@ -382,7 +415,7 @@ bombeAction currentMap playerCell =
     placingItem currentMap playerCell (Enemy PlacedBombe id) specialCase
 
 
-materialAction : Map Cell -> Actor -> MaterialType -> Maybe (Game -> Game)
+materialAction : Grid Cell -> Actor -> MaterialType -> Maybe (Game -> Game)
 materialAction map playerCell material =
     let
         specialCase : SolidType -> Maybe (Game -> Game)
@@ -390,7 +423,12 @@ materialAction map playerCell material =
             Just
                 (case Cell.composing ( Just solidType, material ) of
                     Just newSolid ->
-                        Tuple.mapSecond <| Map.place (playerCell |> Map.posFront 1) (Solid newSolid)
+                        Tuple.mapSecond
+                            (\grid ->
+                                grid
+                                    |> Grid.ignoringError
+                                        (Grid.insert (playerCell |> Map.posFront 1) (Solid newSolid))
+                            )
 
                     Nothing ->
                         Tuple.mapFirst <| addToInventory <| Material material

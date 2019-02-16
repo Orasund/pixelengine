@@ -7,7 +7,7 @@ import PixelEngine.Graphics.Tile exposing (Tile)
 import Random exposing (Generator)
 import RuinJump.Player exposing (FaceingDirection(..),  PlayerAction(..))
 import RuinJump.Tileset as Tileset
-
+import PixelEngine.Component.Position exposing( Position)
 
 type Block
     = Dirt
@@ -50,7 +50,7 @@ woodGenerator =
     Random.int 0 Random.maxInt |> Random.map (BlockElement Wood)
 
 
-toTiles : ( Int, Int ) -> MapElement -> List ( ( Int, Int ), Tile msg )
+toTiles : Position -> MapElement -> List ( Position, Tile msg )
 toTiles pos mapElement =
     case mapElement of
         PlayerElement action faceingDirection ->

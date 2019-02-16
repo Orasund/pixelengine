@@ -1,6 +1,6 @@
 module RuinJump.MapSegment exposing (append, concat, floorGenerator, intersectionGenerator, parkourGenerator)
 
-import CellAutomata exposing (Automata, Location, Rule, RuleExpression(..))
+import CellAutomata exposing (Automata, Rule, RuleExpression(..))
 import Dict
 import Natural exposing (Natural16(..))
 import Random exposing (Generator)
@@ -9,7 +9,7 @@ import RuinJump.Config as Config
 import RuinJump.Map exposing (Map)
 import RuinJump.MapElement exposing (Block(..), MapElement(..))
 import RuinJump.Rules as Rules
-
+import PixelEngine.Component.Position exposing(Position)
 
 width : Int
 width =
@@ -42,7 +42,7 @@ concat list =
                     a
 
 
-newSeed : Int -> Location -> Random.Seed
+newSeed : Int -> Position -> Random.Seed
 newSeed seed ( x, y ) =
     Random.initialSeed (seed + x * width + y)
 
@@ -68,7 +68,7 @@ stepWithAutomata customAutomata yOffset rules grid =
                     |> List.foldl
                         (\y list ->
                             let
-                                pos : Location
+                                pos : Position
                                 pos =
                                     ( x, y )
 
@@ -105,7 +105,7 @@ repeat num fun dict =
         |> List.foldl (always <| fun) dict
 
 
-walls : Int -> List ( ( Int, Int ), Block )
+walls : Int -> List ( Position, Block )
 walls yOffset =
     List.concat
         [ List.repeat height Stone
@@ -116,7 +116,7 @@ walls yOffset =
         ]
 
 
-horizontalLine : Int -> List ( ( Int, Int ), Block )
+horizontalLine : Int -> List ( Position, Block )
 horizontalLine y =
     List.concat
         [ List.repeat (width // 4) Stone
@@ -125,7 +125,7 @@ horizontalLine y =
             |> List.indexedMap (\x elem -> ( ( 2 + x * 4, y ), elem ))
         ]
 
-sparceHorLine : Int -> List ( ( Int, Int ), Block )
+sparceHorLine : Int -> List ( Position, Block )
 sparceHorLine y =
     List.concat
         [ List.repeat (width // 8) Stone
@@ -134,7 +134,7 @@ sparceHorLine y =
             |> List.indexedMap (\x elem -> ( ( 4 + x * 8, y ), elem ))
         ]
 
-piliar : ( Int, Int ) -> Int -> List ( ( Int, Int ), Block )
+piliar : Position -> Int -> List ( Position, Block )
 piliar ( x, y ) yOffset =
     [ ( ( x, -y - yOffset ), Stone )
     , ( ( x + 1, -y - yOffset ), Stone )
@@ -187,7 +187,7 @@ parkourGenerator level =
         yOffset =
             level * height
 
-        build : List (Maybe Block) -> List ( Location, Block )
+        build : List (Maybe Block) -> List ( Position, Block )
         build =
             List.indexedMap (\x -> Maybe.map (\elem -> ( ( x |> modBy width, -1 - yOffset - 2 * (x // width) ), elem )))
                 >> List.filterMap identity
@@ -214,7 +214,7 @@ floorGenerator level =
         yOffset =
             level * height
 
-        build : List (Maybe Block) -> List ( Location, Block )
+        build : List (Maybe Block) -> List ( Position, Block )
         build =
             List.indexedMap (\x -> Maybe.map (\elem -> ( ( x, -2 - yOffset ), elem )))
                 >> List.filterMap identity
