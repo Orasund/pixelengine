@@ -33,14 +33,15 @@ To get started, copy the following example:
 -}
 
 import PixelEngine.Graphics exposing (Area, Options)
-import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Transition as TransitionData
+import PixelEngine.Graphics.Data.Options as OptionsData
 
 
 
 {-| A transition between screens
 -}
 type alias Transition =
-    Abstract.Transition
+    TransitionData.Transition
 
 
 {-| The default constructor for a `Transition`.
@@ -68,7 +69,7 @@ so the example would also work without the opacity-parameter.
 -}
 custom : String -> List ( Float, String ) -> Transition
 custom name transitionList =
-    Abstract.Transition { name = name, transitionList = transitionList }
+    TransitionData.Transition { name = name, transitionList = transitionList }
 
 
 {-| adds the `Transition` to the `Options`.
@@ -77,8 +78,8 @@ The first argument is the List or Areas taken **before** the transition is appli
 (e.g. the last state)
 -}
 from : List (Area msg) -> Transition -> Options msg -> Options msg
-from listOfArea transition (Abstract.Options options) =
-    Abstract.Options
+from listOfArea transition (OptionsData.Options options) =
+    OptionsData.Options
         { options
             | transitionFrom = listOfArea
             , transition = transition
