@@ -2,6 +2,7 @@ module Index.ExampleWithCode exposing (view)
 
 import Element exposing (Element)
 import Element.Background as Background
+import Element.Border as Border
 import Element.Font as Font
 import Framework.Card as Card
 import Framework.Typography as Typography
@@ -34,6 +35,7 @@ markdown block =
         _ ->
             defaultCase
 
+
 sectionParser : Parser ParsedType
 sectionParser =
     Parser.succeed Section
@@ -41,11 +43,12 @@ sectionParser =
         |. Parser.chompWhile ((==) '-')
         |= Parser.variable
             { start = always True
-            , inner = ((/=) '-')
-            , reserved= Set.empty
+            , inner = (/=) '-'
+            , reserved = Set.empty
             }
         |. Parser.chompWhile ((==) '-')
-        |. Parser.token "}"
+        |. Parser.token "}\n"
+
 
 codeParser : Parser ParsedType
 codeParser =
@@ -71,13 +74,11 @@ multipleHelp list =
         [ Parser.succeed (Done list)
             |. Parser.end
         , Parser.succeed (\e -> Loop (List.append list [ e ]))
-            |= sectionParser 
+            |= sectionParser
         , Parser.succeed (\e -> Loop (List.append list [ e ]))
             |= commentParser
-                               
         , Parser.succeed (\e -> Loop (List.append list [ e ]))
             |= codeParser
-            
         , Parser.succeed (Done <| list)
         ]
 
@@ -131,9 +132,20 @@ parse string =
                                 Element.paragraph [] <|
                                     List.map markdown <|
                                         Markdown.parse Nothing comment
-                            
+
                             Section title ->
-                                Typography.h1 [] <|
+                                Typography.h1
+                                    [ Font.letterSpacing 5
+                                    , Font.heavy
+                                    , Font.justify
+                                    , Border.widthEach
+                                        {bottom = 0
+                                        , left = 0
+                                        , right = 0
+                                        , top = 2}
+                                    , Element.width Element.fill
+                                    ]
+                                <|
                                     Element.text title
                     )
 
