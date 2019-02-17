@@ -66,7 +66,7 @@ update msg model =
         GetCode name ->
             ( { model | page = Example name }
             , Http.get
-                { url = "examples/"++name++"/Main.elm"
+                { url = "https://raw.githubusercontent.com/Orasund/pixelengine/master/examples/"++name++"/Main.elm"--"examples/"++name++"/Main.elm"
                 , expect =
                     Http.expectString
                         (\result ->

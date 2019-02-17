@@ -36,7 +36,7 @@ view () =
 
         tileset : Tileset
         tileset =
-            { source = "https://orasund.github.io/pixelengine/Animations/tileset.png"
+            { source = "https://orasund.github.io/pixelengine/examples/Animations/tileset.png"
             , spriteWidth = 16, spriteHeight = 16 }
 
         background : Background
