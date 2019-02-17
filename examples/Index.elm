@@ -65,12 +65,8 @@ update msg model =
 
         GetCode name ->
             ( { model | page = Example name }
-            , Http.request
-                { method = "PUT"
-                , headers =
-                    [ Http.header "Accept" "application/vnd.github.v3.raw"
-                    ]
-                , url = "examples/"++name++"/Main.elm"
+            , Http.get
+                { url = "examples/"++name++"/Main.elm"
                 , expect =
                     Http.expectString
                         (\result ->
@@ -83,9 +79,6 @@ update msg model =
                                         |> Debug.log "Error:"
                                         |> always (ViewExample name)
                         )
-                , timeout = Nothing
-                , tracker = Nothing
-                , body = Http.emptyBody
                 }
             )
 
@@ -140,8 +133,8 @@ onUrlChange url =
     case maybeName of
         Just name ->
             if examplesWithCode |> List.member name then
-                {-GetCode name-}
-                ViewExample name
+                GetCode name
+                {-ViewExample name-}
 
             else if examplesWithoutCode |> List.member name then
                 ViewExample name

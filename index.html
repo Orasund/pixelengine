@@ -4785,6 +4785,9 @@ function _Url_percentDecode(string)
 };
 var author$project$Index$Home = {$: 'Home'};
 var author$project$Index$Back = {$: 'Back'};
+var author$project$Index$GetCode = function (a) {
+	return {$: 'GetCode', a: a};
+};
 var author$project$Index$ViewExample = function (a) {
 	return {$: 'ViewExample', a: a};
 };
@@ -4913,7 +4916,7 @@ var author$project$Index$onUrlChange = function (url) {
 	var maybeName = url.fragment;
 	if (maybeName.$ === 'Just') {
 		var name = maybeName.a;
-		return A2(elm$core$List$member, name, author$project$Index$examplesWithCode) ? author$project$Index$ViewExample(name) : (A2(elm$core$List$member, name, author$project$Index$examplesWithoutCode) ? author$project$Index$ViewExample(name) : author$project$Index$Back);
+		return A2(elm$core$List$member, name, author$project$Index$examplesWithCode) ? author$project$Index$GetCode(name) : (A2(elm$core$List$member, name, author$project$Index$examplesWithoutCode) ? author$project$Index$ViewExample(name) : author$project$Index$Back);
 	} else {
 		return author$project$Index$Back;
 	}
@@ -5637,6 +5640,11 @@ var elm$core$Basics$always = F2(
 var elm$core$Debug$log = _Debug_log;
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
 var elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
 var elm$core$Basics$compare = _Utils_compare;
@@ -6190,12 +6198,6 @@ var elm$http$Http$Sending = function (a) {
 	return {$: 'Sending', a: a};
 };
 var elm$http$Http$Timeout_ = {$: 'Timeout_'};
-var elm$http$Http$emptyBody = _Http_emptyBody;
-var elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
 var elm$http$Http$expectStringResponse = F2(
 	function (toMsg, toResult) {
 		return A3(
@@ -6255,11 +6257,7 @@ var elm$http$Http$expectString = function (toMsg) {
 		toMsg,
 		elm$http$Http$resolve(elm$core$Result$Ok));
 };
-var elm$http$Http$Header = F2(
-	function (a, b) {
-		return {$: 'Header', a: a, b: b};
-	});
-var elm$http$Http$header = elm$http$Http$Header;
+var elm$http$Http$emptyBody = _Http_emptyBody;
 var elm$http$Http$Request = function (a) {
 	return {$: 'Request', a: a};
 };
@@ -6428,6 +6426,10 @@ var elm$http$Http$request = function (r) {
 		elm$http$Http$Request(
 			{allowCookiesFromOtherDomains: false, body: r.body, expect: r.expect, headers: r.headers, method: r.method, timeout: r.timeout, tracker: r.tracker, url: r.url}));
 };
+var elm$http$Http$get = function (r) {
+	return elm$http$Http$request(
+		{body: elm$http$Http$emptyBody, expect: r.expect, headers: _List_Nil, method: 'GET', timeout: elm$core$Maybe$Nothing, tracker: elm$core$Maybe$Nothing, url: r.url});
+};
 var elm$url$Url$addPort = F2(
 	function (maybePort, starter) {
 		if (maybePort.$ === 'Nothing') {
@@ -6506,9 +6508,8 @@ var author$project$Index$update = F2(
 						{
 							page: author$project$Index$Example(name)
 						}),
-					elm$http$Http$request(
+					elm$http$Http$get(
 						{
-							body: elm$http$Http$emptyBody,
 							expect: elm$http$Http$expectString(
 								function (result) {
 									if (result.$ === 'Ok') {
@@ -6523,13 +6524,6 @@ var author$project$Index$update = F2(
 											A2(elm$core$Debug$log, 'Error:', error));
 									}
 								}),
-							headers: _List_fromArray(
-								[
-									A2(elm$http$Http$header, 'Accept', 'application/vnd.github.v3.raw')
-								]),
-							method: 'PUT',
-							timeout: elm$core$Maybe$Nothing,
-							tracker: elm$core$Maybe$Nothing,
 							url: 'examples/' + (name + '/Main.elm')
 						}));
 			case 'Back':
