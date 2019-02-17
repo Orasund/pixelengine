@@ -19,7 +19,7 @@ view name =
         ]
         [ Element.html <|
             Html.iframe
-                [ Attributes.src ("examples/"++ name)
+                [ Attributes.src ("examples/"++ name ++ ".html")
                 , Attributes.style "height" "100%"
                 , Attributes.style "width" "100%"
                 , Attributes.style "border-width" "0"
