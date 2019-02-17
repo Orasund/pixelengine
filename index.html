@@ -6528,7 +6528,7 @@ var author$project$Index$update = F2(
 								}),
 							headers: _List_fromArray(
 								[
-									A2(elm$http$Http$header, 'Accept', 'text/plain')
+									A2(elm$http$Http$header, 'Accept', 'application/vnd.github.v3.raw')
 								]),
 							method: 'PUT',
 							timeout: elm$core$Maybe$Nothing,
@@ -13504,7 +13504,7 @@ var author$project$Index$Example$view = function (name) {
 					elm$html$Html$iframe,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$src('examples/' + (name + '.html')),
+							elm$html$Html$Attributes$src('examples/' + (name + '/index.html')),
 							A2(elm$html$Html$Attributes$style, 'height', '100%'),
 							A2(elm$html$Html$Attributes$style, 'width', '100%'),
 							A2(elm$html$Html$Attributes$style, 'border-width', '0')

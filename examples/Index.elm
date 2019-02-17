@@ -68,7 +68,7 @@ update msg model =
             , Http.request
                 { method = "PUT"
                 , headers =
-                    [ Http.header "Accept" "text/plain"
+                    [ Http.header "Accept" "application/vnd.github.v3.raw"
                     ]
                 , url = "examples/"++name++"/Main.elm"
                 , expect =
