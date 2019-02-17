@@ -1,0 +1,35 @@
+module Index.Example exposing (view)
+
+{-| # Bla Bla Bla
+asdasd
+-}
+
+import Element exposing (Element)
+import Html
+import Html.Attributes as Attributes
+
+{-| # New Header *sds*
+
+## subheader *ssd*
+
+This is an example
+
+**Bold Text**
+-}
+view : String -> Element msg
+view name =
+    Element.el
+        [ Element.width Element.fill
+        , Element.height <| Element.px <| 800
+        , Element.centerY
+        ]
+    <|
+        Element.html <|
+            Html.iframe
+                [ Attributes.src name
+                , Attributes.style "height" "100%"
+                , Attributes.style "width" "100%"
+                , Attributes.style "border-width" "0"
+                
+                ]
+                []

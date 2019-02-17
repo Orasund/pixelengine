@@ -25,7 +25,7 @@ If you have created a game with this engine, please let me know.
 This package follows a few philosophies:
   * **Let CSS handle all animations** - I feel like functional programming should describe *reactions* to some events. Animations are normally running all the time and not a reaction. Addionally by getting rid of an infinite game loop, we can use the **time-travel debugger**.
   * **Pixel games first** - There are a few optimizations to ensure crips pixels as well as good old low-frame animations.
-  * **Demand driven features** - There is no roadmap. I intent to use this engine for all my games. If I feel like I can't make a game, because my engine is missing a feature, I will add it. (Please feel free to ask if you are missing a feature.)
+  * **Demand driven features** - There is no roadmap. I intend to use this engine for all my games. If I feel like I can't make a game, because my engine is missing a feature, I will add it. (Please feel free to ask if you are missing a feature.)
 
 When to use it:
 

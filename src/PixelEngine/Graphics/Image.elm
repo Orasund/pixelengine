@@ -28,7 +28,6 @@ import PixelEngine.Graphics.Data.Element as ElementData
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
 
 
-
 {-| A `Image` is actually a very general type: As we will see later,
 even tiles are essentially images.
 The following functions are intended to be modular.
