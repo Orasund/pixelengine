@@ -4785,9 +4785,6 @@ function _Url_percentDecode(string)
 };
 var author$project$Index$Home = {$: 'Home'};
 var author$project$Index$Back = {$: 'Back'};
-var author$project$Index$GetCode = function (a) {
-	return {$: 'GetCode', a: a};
-};
 var author$project$Index$ViewExample = function (a) {
 	return {$: 'ViewExample', a: a};
 };
@@ -4916,7 +4913,7 @@ var author$project$Index$onUrlChange = function (url) {
 	var maybeName = url.fragment;
 	if (maybeName.$ === 'Just') {
 		var name = maybeName.a;
-		return A2(elm$core$List$member, name, author$project$Index$examplesWithCode) ? author$project$Index$GetCode(name) : (A2(elm$core$List$member, name, author$project$Index$examplesWithoutCode) ? author$project$Index$ViewExample(name) : author$project$Index$Back);
+		return A2(elm$core$List$member, name, author$project$Index$examplesWithCode) ? author$project$Index$ViewExample(name) : (A2(elm$core$List$member, name, author$project$Index$examplesWithoutCode) ? author$project$Index$ViewExample(name) : author$project$Index$Back);
 	} else {
 		return author$project$Index$Back;
 	}
@@ -24428,7 +24425,7 @@ var author$project$Index$Home$view = function (_n0) {
 									[
 										_Utils_Tuple2(
 										_Utils_Tuple2(32, 0),
-										author$project$PixelEngine$Graphics$Image$image('https://orasund.github.io/pixelengine/pixelengine-logo.png')),
+										author$project$PixelEngine$Graphics$Image$image('https://orasund.github.io/pixelengine/docs/pixelengine-logo.png')),
 										_Utils_Tuple2(
 										_Utils_Tuple2(width / 2, 8),
 										A3(author$project$PixelEngine$Graphics$Image$fromTextWithSpacing, -2, 'Create Games', font)),

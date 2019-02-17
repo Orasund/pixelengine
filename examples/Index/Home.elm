@@ -87,7 +87,7 @@ view { examples, games } =
                         , background = background
                         }
                         [ ( ( 32, 0 )
-                          , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
+                          , image "https://orasund.github.io/pixelengine/docs/pixelengine-logo.png"
                           )
                         , ( ( width / 2, 8 ), Image.fromTextWithSpacing -2 "Create Games" font )
                         , ( ( width / 2, 32 ), Image.fromTextWithSpacing -3 "with Elm" font )

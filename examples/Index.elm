@@ -140,7 +140,8 @@ onUrlChange url =
     case maybeName of
         Just name ->
             if examplesWithCode |> List.member name then
-                GetCode name
+                {-GetCode name-}
+                ViewExample name
 
             else if examplesWithoutCode |> List.member name then
                 ViewExample name
