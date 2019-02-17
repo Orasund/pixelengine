@@ -2,6 +2,7 @@ module Index.ExampleWithCode exposing (view)
 
 import Element exposing (Element)
 import Element.Background as Background
+import Element.Font as Font
 import Framework.Card as Card
 import Framework.Typography as Typography
 import Html
@@ -36,7 +37,7 @@ markdown block =
 codeParser : Parser ParsedType
 codeParser =
     Parser.succeed ()
-        |. Parser.chompUntilEndOr "\u{000D}\n\u{000D}\n{-|"
+        |. Parser.chompUntilEndOr "\n\n{-|"
         |> Parser.getChompedString
         |> Parser.map Code
 
@@ -44,9 +45,9 @@ codeParser =
 commentParser : Parser ParsedType
 commentParser =
     Parser.succeed Comment
-        |. Parser.keyword "\u{000D}\n\u{000D}\n{-|"
+        |. Parser.keyword "\n\n{-|"
         |= (Parser.chompUntil "-}" |> Parser.getChompedString)
-        |. Parser.keyword "-}\u{000D}"
+        |. Parser.keyword "-}\n"
         |. Parser.chompWhile (\char -> char == '\n' || char == '\u{000D}' || char == '\t')
 
 
@@ -67,7 +68,7 @@ parseMultiple : Parser (List ParsedType)
 parseMultiple =
 
     Parser.succeed identity
-        |. Parser.multiComment "module" ")\r" Parser.NotNestable
+        |. Parser.multiComment "module" ")\n" Parser.NotNestable
         |. Parser.keyword ")"
         |= Parser.loop [] multipleHelp
 
@@ -84,10 +85,11 @@ parse =
                             [ Element.width Element.fill
                             , Element.paddingXY 20 0
                             , Background.color <| Element.rgb255 255 255 255
+                            , Font.size <| 16
                             ]
                         <|
                             Element.html <|
-                                Html.div []
+                                Html.div [Attributes.style "line-height" "1.2"]
                                     [ SyntaxHighlight.useTheme SyntaxHighlight.gitHub
                                     , SyntaxHighlight.elm code
                                         |> Result.map (SyntaxHighlight.toBlockHtml Nothing)
@@ -107,10 +109,10 @@ view { src, code } =
     Element.column [ Element.centerX, Element.width Element.fill ]
         [ Example.view src
         , Element.column
-            [ Element.width <| Element.px 800
+            [ Element.width <| Element.px 900
             , Element.centerX
             , Element.padding 20
             , Element.spacing 10
             ]
-            (parse code)
+            (parse (code |> Debug.log "Gotit:"))
         ]

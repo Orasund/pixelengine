@@ -36,7 +36,7 @@ card name =
                 { url = "#" ++ name
                 , label =
                     Element.image [ Element.width <| Element.fill ]
-                        { src = "examples/" ++ name ++ "/" ++ "preview.png"
+                        { src = "https://orasund.github.io/pixelengine/examples/" ++ name ++ "/" ++ "preview.png"
                         , description = "Preview"
                         }
                 }
