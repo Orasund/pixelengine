@@ -129,13 +129,6 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps } { spriteWidth
 
 displayTile : Options msg -> ( Position, TileWithTileset ) -> Html msg
 displayTile (Options { scale }) ( pos, { left, top, steps, tileset } ) =
-    let
-        ( i, j ) =
-            ( left, top )
-
-        { spriteWidth, spriteHeight, source } =
-            tileset
-    in
     if steps == 0 then
         displayStaticTile pos ( left, top ) scale tileset
 
@@ -156,45 +149,45 @@ displayMultiple : Options msg -> ( Position, MultipleSources ) -> Maybe ( String
 displayMultiple ((Options { scale, transitionSpeedInSec }) as options) ( rootPosition, multipleSources ) transitionId attributes =
     ( transitionId |> Maybe.map Tuple.first |> Maybe.withDefault ""
     , div
-        (
-            (css <| List.concat
-            [ case multipleSources of
-                [ ( _, TileSource { tileset } ) ] ->
-                    let
-                        { spriteWidth, spriteHeight } =
-                            tileset
-                    in
-                    [ Css.width <|
-                        Css.px <|
-                            scale
-                                * (toFloat <| spriteWidth)
-                    , Css.height <|
-                        Css.px <|
-                            scale
-                                * (toFloat <| spriteHeight)
-                    ]
+        ((css <|
+            List.concat
+                [ case multipleSources of
+                    [ ( _, TileSource { tileset } ) ] ->
+                        let
+                            { spriteWidth, spriteHeight } =
+                                tileset
+                        in
+                        [ Css.width <|
+                            Css.px <|
+                                scale
+                                    * (toFloat <| spriteWidth)
+                        , Css.height <|
+                            Css.px <|
+                                scale
+                                    * (toFloat <| spriteHeight)
+                        ]
 
-                _ ->
-                    []
-            , [ Css.position Css.absolute
-              , Css.left (Css.px <| scale * rootPosition.left)
-              , Css.top (Css.px <| scale * rootPosition.top)
-              ]
-            , case transitionId of
-                Just ( _, True ) ->
-                    [ Css.property "transition"
-                        ("left "
-                            ++ String.fromFloat transitionSpeedInSec
-                            ++ "s,top "
-                            ++ String.fromFloat transitionSpeedInSec
-                            ++ "s;"
-                        )
-                    ]
+                    _ ->
+                        []
+                , [ Css.position Css.absolute
+                  , Css.left (Css.px <| scale * rootPosition.left)
+                  , Css.top (Css.px <| scale * rootPosition.top)
+                  ]
+                , case transitionId of
+                    Just ( _, True ) ->
+                        [ Css.property "transition"
+                            ("left "
+                                ++ String.fromFloat transitionSpeedInSec
+                                ++ "s,top "
+                                ++ String.fromFloat transitionSpeedInSec
+                                ++ "s;"
+                            )
+                        ]
 
-                _ ->
-                    []
-            ]
-            )
+                    _ ->
+                        []
+                ]
+         )
             :: attributes
         )
         (multipleSources

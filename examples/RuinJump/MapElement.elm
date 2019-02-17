@@ -7,7 +7,7 @@ import PixelEngine.Graphics.Tile exposing (Tile)
 import Random exposing (Generator)
 import RuinJump.Player exposing (FaceingDirection(..),  PlayerAction(..))
 import RuinJump.Tileset as Tileset
-import PixelEngine.Component.Position exposing( Position)
+import PixelEngine.Grid.Position exposing( Position)
 
 type Block
     = Dirt

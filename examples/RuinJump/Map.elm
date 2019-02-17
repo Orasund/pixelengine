@@ -4,7 +4,7 @@ import RuinJump.MapElement as MapElement exposing (Block(..), MapElement(..))
 import RuinJump.Config as Config
 import Dict exposing (Dict)
 
-import PixelEngine.Component.Position exposing( Position)
+import PixelEngine.Grid.Position exposing( Position)
 
 type alias Map =
     Dict Position MapElement

@@ -4,8 +4,8 @@ import Color
 import Html
 import Html.Attributes as Attributes
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image as Image exposing (image, multipleImages)
-import PixelEngine.Graphics.Tile as Tile exposing (Tileset)
+import PixelEngine.Graphics.Image as Image exposing (image)
+import PixelEngine.Graphics.Tile exposing (Tileset)
 
 
 main =
@@ -50,7 +50,7 @@ main =
                     [ ( ( 32, 0 )
                       , image "https://orasund.github.io/pixelengine/pixelengine-logo.png"
                       )
-                    , ( ( width / 2+16, 8 ), Image.fromTextWithSpacing -1 "powered by" font )
+                    , ( ( width / 2 + 16, 8 ), Image.fromTextWithSpacing -1 "powered by" font )
                     , ( ( width / 2, 32 ), Image.fromText "PixelEngine" font )
                     ]
                 ]

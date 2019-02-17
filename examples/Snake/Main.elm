@@ -1,15 +1,14 @@
 module Snake exposing (main)
 
 import Array exposing (Array)
-import Dict exposing (Dict)
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
-import PixelEngine.Grid.Direction as Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position,Vector)
+import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid.Direction exposing (Direction(..))
+import PixelEngine.Grid.Position as Position exposing (Position, Vector)
 import Random
-import Set exposing (Set)
 import Time
 
 
@@ -57,20 +56,28 @@ boardSize =
 newChicken : List Position -> Cmd Msg
 newChicken occupiedSquares =
     let
-        board : Set Position
+        board : Grid ()
         board =
-            Set.fromList occupiedSquares
+            occupiedSquares
+                |> List.map (\pos -> ( pos, () ))
+                |> Grid.fromList
+                    { columns = boardSize
+                    , rows = boardSize
+                    }
 
         emptySquares : Array Position
         emptySquares =
-            List.range 0 (boardSize - 1)
-                |> List.map
-                    (\x ->
-                        List.range 0 (boardSize - 1)
-                            |> List.map (\y -> ( x, y ))
+            board
+                |> Grid.map
+                    (\_ maybeMark ->
+                        case maybeMark of
+                            Just _ ->
+                                Nothing
+
+                            Nothing ->
+                                Just ()
                     )
-                |> List.concat
-                |> List.filter (\pos -> not <| Set.member pos board)
+                |> Grid.positions
                 |> Array.fromList
     in
     Random.generate
@@ -110,13 +117,13 @@ moveSnake direction ( pos, body ) =
     let
         dirVec : Vector
         dirVec =
-            direction |> Position.fromDirection 
+            direction |> Position.fromDirection
 
         head : Position
-        head = 
-            pos |> Position.add dirVec
+        head =
+            pos
+                |> Position.add dirVec
                 |> Tuple.mapBoth (modBy boardSize) (modBy boardSize)
-
     in
     ( head
     , if body |> List.member head then
@@ -189,6 +196,8 @@ subscriptions _ =
     in
     Time.every (second * 1) (always Move)
 
+
+
 {------------------------
    Controls
 ------------------------}
@@ -212,14 +221,11 @@ controls input =
         _ ->
             None
 
+
+
 {------------------------
    VIEW
 ------------------------}
-
-
-emptyTile : Tile Msg
-emptyTile =
-    tile ( 0, 1 )
 
 
 chickenTile : Tile Msg
@@ -252,9 +258,16 @@ snakeBodyTile =
 viewSnake : Direction -> Snake -> List ( Position, Tile Msg )
 viewSnake direction ( ( headX, headY ), body ) =
     ( ( headX + 1, headY + 1 )
-    , direction |> snakeHeadTile
+    , direction |> snakeHeadTile |> Tile.movable "head"
     )
-        :: (body |> List.map (\( x, y ) -> ( ( x + 1, y + 1 ), snakeBodyTile )))
+        :: (body
+                |> List.indexedMap
+                    (\i ( x, y ) ->
+                        ( ( x + 1, y + 1 )
+                        , snakeBodyTile |> Tile.movable (String.fromInt i)
+                        )
+                    )
+           )
 
 
 view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
@@ -303,10 +316,6 @@ view { snake, direction, chicken } =
             )
         ]
     }
-
-
-
-
 
 
 

@@ -37,11 +37,7 @@ generator size fun =
                     in
                     ( (case maybeA pos of
                                 Just a ->
-                                    case grid |> Grid.insert pos a of
-                                        Ok value ->
-                                            value
-                                        Err _ ->
-                                            grid
+                                    grid |> Grid.insert pos a 
 
                                 Nothing ->
                                     grid
@@ -59,15 +55,14 @@ generator size fun =
             )
 
 
-move : Actor -> Grid a -> Result () (Grid a)
+move : Actor -> Grid a -> Grid a
 move ( pos, dir ) grid =
-    case grid |> Grid.get pos |> Result.withDefault Nothing of
+    case grid |> Grid.get pos of
         Just a ->
             grid
                 |> Grid.insert
                     (pos |> Position.move 1 dir)
                     a
-                |> Result.andThen (Grid.remove pos)
-                |> Result.mapError (always ())
+                |> Grid.remove pos
         Nothing ->
-            Ok grid
+            grid

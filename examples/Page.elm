@@ -7,11 +7,9 @@ import Framework.Button as Button
 import Framework.Card as Card
 import Framework.Modifier exposing (Modifier(..))
 import Framework.Typography as Typography
-import Html
-import Html.Attributes as Attributes
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image as Image exposing (image, multipleImages)
-import PixelEngine.Graphics.Tile as Tile exposing (Tileset)
+import PixelEngine.Graphics.Image as Image exposing (image)
+import PixelEngine.Graphics.Tile exposing (Tileset)
 
 
 card : String -> Element ()
@@ -31,7 +29,7 @@ card name =
                 [ Element.text name
                 , Button.buttonLink
                     []
-                    ("https://github.com/Orasund/pixelengine/blob/master/examples/"++name++"/Main.elm")
+                    ("https://github.com/Orasund/pixelengine/blob/master/examples/" ++ name ++ "/Main.elm")
                     "Source"
                 ]
             , Element.image [ Element.width <| Element.fill ]
@@ -103,15 +101,15 @@ main =
                             , ( ( width / 2, 32 ), Image.fromTextWithSpacing -3 "with Elm" font )
                             ]
                         ]
-            , Element.column [Element.spacing 10, Element.centerX]
-                [ Typography.h1 [Element.centerX ] <| Element.text "Examples"
+            , Element.column [ Element.spacing 10, Element.centerX ]
+                [ Typography.h1 [ Element.centerX ] <| Element.text "Examples"
                 , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
-                    ([ "Animations", "TicTacToe","Snake"]
+                    ([ "Animations", "TicTacToe", "Snake" ]
                         |> List.map card
                     )
                 ]
-            , Element.column [Element.spacing 10, Element.centerX]
-                [ Typography.h1 [Element.centerX ] <| Element.text "Games"
+            , Element.column [ Element.spacing 10, Element.centerX ]
+                [ Typography.h1 [ Element.centerX ] <| Element.text "Games"
                 , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
                     ([ "DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
                         |> List.map card

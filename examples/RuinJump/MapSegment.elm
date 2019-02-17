@@ -9,7 +9,7 @@ import RuinJump.Config as Config
 import RuinJump.Map exposing (Map)
 import RuinJump.MapElement exposing (Block(..), MapElement(..))
 import RuinJump.Rules as Rules
-import PixelEngine.Component.Position exposing(Position)
+import PixelEngine.Grid.Position exposing(Position)
 
 width : Int
 width =

@@ -1,10 +1,11 @@
 module TicTacToe exposing (main)
 
-import Dict exposing (Dict)
 import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
+import PixelEngine.Grid.Position exposing (Position)
+import PixelEngine.Grid as Grid exposing (Grid)
 
 
 
@@ -18,18 +19,14 @@ type Mark
     | Cross
 
 
-type alias Grid =
-    Dict ( Int, Int ) Mark
-
-
 type alias Model =
-    { grid : Grid
+    { grid : Grid Mark
     , nextMark : Mark
     }
 
 
 type Msg
-    = PlaceMark ( Int, Int )
+    = PlaceMark Position
     | Reset
 
 
@@ -38,11 +35,16 @@ type Msg
    INIT
 ------------------------}
 
+
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { grid = Dict.empty
-        , nextMark = Cross
-        }
+    ( { grid =
+            Grid.empty
+                { columns = 3
+                , rows = 3
+                }
+      , nextMark = Cross
+      }
     , Cmd.none
     )
 
@@ -71,26 +73,17 @@ update msg ({ grid, nextMark } as model) =
             ( model, Cmd.none )
     in
     case msg of
-        PlaceMark ( x, y ) ->
-            if x >= 0 && x < 3 && y >= 0 && y < 3 then
-                case grid |> Dict.get ( x, y ) of
-                    Nothing ->
-                        ( { grid = grid |> Dict.insert ( x, y ) nextMark
-                          , nextMark = flip nextMark
-                          }
-                        , Cmd.none
-                        )
+        PlaceMark pos ->
+            case grid |> Grid.get pos of
+                Nothing ->
+                    ( { grid = grid |> Grid.insert pos nextMark
+                      , nextMark = flip nextMark
+                      }
+                    , Cmd.none
+                    )
 
-                    Just _ ->
-                        defaultCase
-
-            else
-                {- It is not a good coding practice to have dead branches like
-                   this one, but fixing it would blow up this short example.
-                   Check out https://www.youtube.com/watch?v=IcgmSRJHu_8 why
-                   impossible states are bad.
-                -}
-                defaultCase
+                Just _ ->
+                    defaultCase
 
         Reset ->
             init ()
@@ -134,9 +127,9 @@ reset =
     tile ( 1, 0 ) |> Tile.withAttributes [ Tile.onClick Reset ]
 
 
-getTile : ( Int, Int ) -> Grid -> Tile Msg
+getTile : ( Int, Int ) -> Grid Mark -> Tile Msg
 getTile ( x, y ) grid =
-    case grid |> Dict.get ( x, y ) of
+    case grid |> Grid.get ( x, y ) of
         Just Nought ->
             nought
 

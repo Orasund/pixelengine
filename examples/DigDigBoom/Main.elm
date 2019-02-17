@@ -71,7 +71,7 @@ tutorial num =
 
         currentMap =
             Cell.tutorial num
-                |> Grid.ignoringError
+                |> 
                     (Grid.update ( 7, 7 ) (always (Just (Player Down))))
     in
     { map = currentMap
@@ -94,7 +94,7 @@ createNewMap worldSeed =
                 (Map.generator worldSize Cell.generator)
                 (Random.initialSeed worldSeed)
                 |> Tuple.mapFirst
-                    (Grid.ignoringError <| Grid.update ( 7, 7 ) <| always <| Just <| Player Down)
+                    (Grid.update ( 7, 7 ) <| always <| Just <| Player Down)
     in
     { map = currentMap
     , oldScreen = Nothing

@@ -47,10 +47,10 @@ updateCell playerCell ( position, cell ) =
             updateEnemy position enemy playerCell
 
         Effect _ ->
-            Tuple.mapSecond (Grid.ignoringError <| Grid.remove position)
+            Tuple.mapSecond (    Grid.remove position)
 
         Stunned enemy id ->
-            Tuple.mapSecond (Grid.ignoringError <| Grid.update position (always <| Just <| Enemy enemy id))
+            Tuple.mapSecond (    Grid.update position (always <| Just <| Enemy enemy id))
 
         _ ->
             identity
@@ -81,7 +81,7 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                     (placedBombeBehavoiur currentLocation)
                     game
                 |> Tuple.mapSecond
-                    (Grid.ignoringError <| Grid.update currentLocation (always (Just (Effect Smoke))))
+                    (    Grid.update currentLocation (always (Just (Effect Smoke))))
 
         monster ->
             let
@@ -100,27 +100,15 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                     actor |> Map.posFront 1
             in
             game
-                |> (case map |> Grid.get newLocation |> Result.withDefault Nothing of
+                |> (case map |> Grid.get newLocation of
                         Nothing ->
                             Tuple.mapSecond
-                                (\grid ->
-                                    case grid |> Map.move actor of
-                                        Ok result ->
-                                            result
-
-                                        Err _ ->
-                                            grid
+                                (Map.move actor 
                                 )
 
                         Just (Item _) ->
                             Tuple.mapSecond
-                                (\grid ->
-                                    case grid |> Map.move actor of
-                                        Ok result ->
-                                            result
-
-                                        Err _ ->
-                                            grid
+                                (Map.move actor 
                                 )
 
                         Just (Solid solid) ->
@@ -141,7 +129,7 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                                        )
                             then
                                 Tuple.mapSecond <|
-                                    Grid.ignoringError <|
+                                       
                                         Grid.update newLocation <|
                                             always (Cell.decomposing solid |> Tuple.first |> Maybe.map Solid)
 
@@ -161,7 +149,7 @@ placedBombeBehavoiur location direction game =
     in
     game
         |> Tuple.mapSecond
-            (Grid.ignoringError
+            (
                 (Grid.update
                     newLocation
                     (\elem ->

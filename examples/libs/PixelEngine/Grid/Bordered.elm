@@ -1,4 +1,4 @@
-module PixelEngine.Grid exposing
+module PixelEngine.Grid.Bordered exposing
     ( Grid
     , diff
     , dimensions
@@ -11,13 +11,14 @@ module PixelEngine.Grid exposing
     , fromDict
     , fromList
     , get
+    , ignoringError
     , insert
     , intersect
     , isEmpty
+    , keys
     , map
     , member
     , partition
-    , positions
     , remove
     , size
     , toDict
@@ -41,7 +42,7 @@ import PixelEngine.Grid.Position exposing (Position)
 
 # Build
 
-@docs fill, empty, insert, update, remove
+@docs fill, empty, insert, update, remove, ignoringError
 
 
 # Query
@@ -51,7 +52,7 @@ import PixelEngine.Grid.Position exposing (Position)
 
 # List
 
-@docs positions, values, toList, fromList
+@docs keys, values, toList, fromList
 
 
 # Dict
@@ -67,6 +68,11 @@ import PixelEngine.Grid.Position exposing (Position)
 @docs union, intersect, diff
 
 -}
+isValid : Position -> Grid a -> Bool
+isValid ( x, y ) (Grid { rows, columns }) =
+    x >= 0 && x < columns && y >= 0 && y < rows
+
+
 mapDict : (Dict Position a -> Dict Position b) -> Grid a -> Grid b
 mapDict fun (Grid { dict, rows, columns }) =
     Grid
@@ -76,11 +82,8 @@ mapDict fun (Grid { dict, rows, columns }) =
         }
 
 
-wrap : Grid a -> Position -> Position
-wrap (Grid { rows, columns }) ( x, y ) =
-    ( x |> modBy columns
-    , y |> modBy rows
-    )
+type OutOfBounds
+    = OutOfBounds
 
 
 
@@ -93,11 +96,9 @@ wrap (Grid { rows, columns }) ( x, y ) =
 
 It has a fixed amount of columns and rows.
 
-It will wrap the borders (apply ModBy), making every position valid.
+If case of a invalid position, it returns an error.
 
-    grid |> Dict.get ( -1, 0 ) == grid |> Grid.get ( columns - 1, 0 )
-
-If instead you want to have hard border around your grid, use `Grid.Bordered` instead.
+    grid |> Grid.insert ( -1, 0 ) virus == Err OutOfBounds
 
 -}
 type Grid a
@@ -129,23 +130,50 @@ empty { rows, columns } =
 
 {-| Insert a value at a position in a grid. Replaces value when there is a collision.
 -}
-insert : Position -> a -> Grid a -> Grid a
+insert : Position -> a -> Grid a -> Result OutOfBounds (Grid a)
 insert pos elem grid =
-    grid |> mapDict (Dict.insert (pos |> wrap grid) elem)
+    if grid |> isValid pos then
+        Ok <| mapDict (Dict.insert pos elem) grid
+
+    else
+        Err OutOfBounds
 
 
 {-| Update the value of a grid for a specific position with a given function.
 -}
-update : Position -> (Maybe a -> Maybe a) -> Grid a -> Grid a
+update : Position -> (Maybe a -> Maybe a) -> Grid a -> Result OutOfBounds (Grid a)
 update pos fun grid =
-    grid |> mapDict (Dict.update (pos |> wrap grid) fun)
+    if grid |> isValid pos then
+        Ok <| mapDict (Dict.update pos fun) grid
+
+    else
+        Err OutOfBounds
 
 
 {-| Remove a vlaue from a grid. If the position is empty, no changes are made.
 -}
-remove : Position -> Grid a -> Grid a
+remove : Position -> Grid a -> Result OutOfBounds (Grid a)
 remove pos grid =
-    grid |> mapDict (Dict.remove (pos |> wrap grid))
+    if grid |> isValid pos then
+        Ok <| mapDict (Dict.remove pos) grid
+
+    else
+        Err OutOfBounds
+
+
+{-| Trys modifying a grid and if its fails it returns the original grid.
+
+Please be aware, that by using this function you might introduce errors.
+
+-}
+ignoringError : (Grid a -> Result result (Grid a)) -> Grid a -> Grid a
+ignoringError fun grid =
+    case grid |> fun of
+        Ok result ->
+            result
+
+        Err _ ->
+            grid
 
 
 {-| Determine if a grid is empty.
@@ -157,16 +185,24 @@ isEmpty (Grid { dict }) =
 
 {-| Determine if a position is empty.
 -}
-member : Position -> Grid a -> Bool
+member : Position -> Grid a -> Result OutOfBounds Bool
 member pos ((Grid { dict }) as grid) =
-    dict |> Dict.member (pos |> wrap grid)
+    if grid |> isValid pos then
+        dict |> Dict.member pos |> Ok
+
+    else
+        Err OutOfBounds
 
 
 {-| Get the value associated with a position. If the position is empty, return Nothing.
 -}
-get : Position -> Grid a -> Maybe a
+get : Position -> Grid a -> Result OutOfBounds (Maybe a)
 get pos ((Grid { dict }) as grid) =
-    dict |> Dict.get (pos |> wrap grid)
+    if grid |> isValid pos then
+        dict |> Dict.get pos |> Ok
+
+    else
+        Err OutOfBounds
 
 
 {-| Determine the number of values in the grid.
@@ -187,12 +223,12 @@ dimensions (Grid { columns, rows }) =
 
 {-| Get all non empty positions in a grid, sorted from lowest to highest.
 -}
-positions : Grid a -> List Position
-positions (Grid { dict }) =
+keys : Grid a -> List Position
+keys (Grid { dict }) =
     dict |> Dict.keys
 
 
-{-| Get all of the values in a grid, in the order of their positions.
+{-| Get all of the values in a grid, in the order of their keys.
 -}
 values : Grid a -> List a
 values (Grid { dict }) =
@@ -211,7 +247,14 @@ toList (Grid { dict }) =
 fromList : { rows : Int, columns : Int } -> List ( Position, a ) -> Grid a
 fromList config =
     List.foldl
-        (\( pos, elem ) -> insert pos elem)
+        (\( pos, elem ) grid ->
+            case grid |> insert pos elem of
+                Ok value ->
+                    value
+
+                Err OutOfBounds ->
+                    grid
+        )
         (empty config)
 
 
@@ -235,13 +278,18 @@ map : (Position -> Maybe a -> Maybe b) -> Grid a -> Grid b
 map fun ((Grid { rows, columns }) as grid) =
     grid
         |> foldl
-            (\pos elem ->
+            (\pos elem g ->
                 case fun pos elem of
                     Just newElem ->
-                        insert pos newElem
+                        case g |> insert pos newElem of
+                            Ok value ->
+                                value
+
+                            Err OutOfBounds ->
+                                g
 
                     Nothing ->
-                        identity
+                        g
             )
             (empty { rows = rows, columns = columns })
 

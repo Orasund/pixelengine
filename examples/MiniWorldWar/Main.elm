@@ -415,15 +415,6 @@ subscriptions state =
 
 
 
-{------------------------
-   CONTROLS
-------------------------}
-
-
-controls : Input -> Msg
-controls _ =
-    None
-
 
 
 {------------------------
