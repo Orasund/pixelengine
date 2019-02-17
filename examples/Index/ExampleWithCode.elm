@@ -18,6 +18,7 @@ import SyntaxHighlight
 type ParsedType
     = Code String
     | Comment String
+    | Section String
 
 
 markdown : Block b i -> Element msg
@@ -33,11 +34,24 @@ markdown block =
         _ ->
             defaultCase
 
+sectionParser : Parser ParsedType
+sectionParser =
+    Parser.succeed Section
+        |. Parser.token "\n\n{--"
+        |. Parser.chompWhile ((==) '-')
+        |= Parser.variable
+            { start = always True
+            , inner = ((/=) '-')
+            , reserved= Set.empty
+            }
+        |. Parser.chompWhile ((==) '-')
+        |. Parser.token "}"
 
 codeParser : Parser ParsedType
 codeParser =
     Parser.succeed ()
-        |. Parser.chompUntilEndOr "\n\n{-|"
+        |. Parser.chompWhile (\char -> char == '\n' || char == '\u{000D}' || char == '\t')
+        |. Parser.chompUntilEndOr "\n\n{-"
         |> Parser.getChompedString
         |> Parser.map Code
 
@@ -45,63 +59,83 @@ codeParser =
 commentParser : Parser ParsedType
 commentParser =
     Parser.succeed Comment
-        |. Parser.keyword "\n\n{-|"
+        |. Parser.token "\n\n{-|"
         |= (Parser.chompUntil "-}" |> Parser.getChompedString)
-        |. Parser.keyword "-}\n"
+        |. Parser.token "-}\n"
         |. Parser.chompWhile (\char -> char == '\n' || char == '\u{000D}' || char == '\t')
 
 
 multipleHelp : List ParsedType -> Parser (Step (List ParsedType) (List ParsedType))
 multipleHelp list =
     Parser.oneOf
-        [ Parser.succeed (Done <| Debug.log "DoneEnd" <| list)
+        [ Parser.succeed (Done list)
             |. Parser.end
-        , Parser.succeed (\e -> Loop (Debug.log "LoopComment" <| List.append list [ e ]))
+        , Parser.succeed (\e -> Loop (List.append list [ e ]))
+            |= sectionParser 
+        , Parser.succeed (\e -> Loop (List.append list [ e ]))
             |= commentParser
-        , Parser.succeed (\e -> Loop (Debug.log "LoopCode" <| List.append list [ e ]))
+                               
+        , Parser.succeed (\e -> Loop (List.append list [ e ]))
             |= codeParser
-        , Parser.succeed (Done <| Debug.log "Done" <| list)
+            
+        , Parser.succeed (Done <| list)
         ]
 
 
 parseMultiple : Parser (List ParsedType)
 parseMultiple =
-
     Parser.succeed identity
         |. Parser.multiComment "module" ")\n" Parser.NotNestable
-        |. Parser.keyword ")"
+        |. Parser.token ")"
         |= Parser.loop [] multipleHelp
 
 
 parse : String -> List (Element msg)
-parse =
-    Parser.run parseMultiple
-        >> Result.withDefault []
-        >> List.map
-            (\elem ->
-                case elem of
-                    Code code ->
-                        Element.el
-                            [ Element.width Element.fill
-                            , Element.paddingXY 20 0
-                            , Background.color <| Element.rgb255 255 255 255
-                            , Font.size <| 16
-                            ]
-                        <|
-                            Element.html <|
-                                Html.div [Attributes.style "line-height" "1.2"]
-                                    [ SyntaxHighlight.useTheme SyntaxHighlight.gitHub
-                                    , SyntaxHighlight.elm code
-                                        |> Result.map (SyntaxHighlight.toBlockHtml Nothing)
-                                        |> Result.withDefault
-                                            (Html.code [] [ Html.text code ])
-                                    ]
+parse string =
+    let
+        displayCode : String -> Element msg
+        displayCode code =
+            Element.el
+                [ Element.width Element.fill
+                , Element.paddingXY 20 0
+                , Background.color <| Element.rgb255 255 255 255
+                , Font.size <| 16
+                ]
+            <|
+                Element.html <|
+                    Html.div [ Attributes.style "line-height" "1.2" ]
+                        [ SyntaxHighlight.useTheme SyntaxHighlight.gitHub
+                        , SyntaxHighlight.elm code
+                            |> Result.map (SyntaxHighlight.toBlockHtml Nothing)
+                            |> Result.withDefault
+                                (Html.code [] [ Html.text code ])
+                        ]
+    in
+    case
+        string
+            |> Parser.run parseMultiple
+            |> Result.withDefault []
+    of
+        [] ->
+            [ string |> displayCode ]
 
-                    Comment string ->
-                        Element.column [] <|
-                            List.map markdown <|
-                                Markdown.parse Nothing string
-            )
+        list ->
+            list
+                |> List.map
+                    (\elem ->
+                        case elem of
+                            Code code ->
+                                code |> displayCode
+
+                            Comment comment ->
+                                Element.paragraph [] <|
+                                    List.map markdown <|
+                                        Markdown.parse Nothing comment
+                            
+                            Section title ->
+                                Typography.h1 [] <|
+                                    Element.text title
+                    )
 
 
 view : { src : String, code : String } -> Element msg

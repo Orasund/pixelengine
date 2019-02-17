@@ -1,14 +1,18 @@
 module TicTacToe exposing (main)
 
-{-| # Tic Tac Toe
+{-|
+
+
+# Tic Tac Toe
+
 -}
 
 import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
-import PixelEngine.Grid.Position exposing (Position)
 import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid.Position exposing (Position)
 
 
 
@@ -16,42 +20,59 @@ import PixelEngine.Grid as Grid exposing (Grid)
    TYPES
 ------------------------}
 
-{-| ## Types
+
+{-|
+
+
+## Types
 
 
 ### Players
 
-
 In Tic Tac Toe we have two players: one is playing _Noughts_, the other _Crosses_.
 
 ![Noughts and Crosses](https://orasund.github.io/pixelengine/docs/tictactoe1.png "Noughts and Crosses")
+
 -}
 type Mark
     = Nought
     | Cross
 
-{-| ### State
 
-The state of an ongoing Tic Tac Toe-game consists of two things: The board(`grid`) and the current player(`nextMark`).
+{-|
+
+
+### State
+
+The state of an ongoing Tic Tac Toe-game consists of two things:
+The board(`grid`) and the current player(`nextMark`).
 
 ![Model](https://orasund.github.io/pixelengine/docs/tictactoe2.png "Model")
 
 For the grid we use a custom type called Grid, you can think of it as a
 `Dict (Int,Int) Mark` with a fixed size.
 
-**Note:**  
-Think of the `Model` as the state of the game. In Elm the convention is to name it `Model`, but for games this term might be confusing.
+**Note:**
+Think of the `Model` as the state of the game. In Elm the convention is to name
+it `Model`, but for games this term might be confusing.
+
 -}
 type alias Model =
     { grid : Grid Mark
     , nextMark : Mark
     }
 
-{-| ### Actions
+
+{-|
+
+
+### Actions
 
 What are the things a user should be able to do?
-* We want to be able to place a mark. (`PlaceMark (x,y)`)
-* Once the game is over we want to be able to `reset` the game.
+
+  - We want to be able to place a mark. (`PlaceMark (x,y)`)
+  - Once the game is over we want to be able to `reset` the game.
+
 -}
 type Msg
     = PlaceMark Position
@@ -63,7 +84,12 @@ type Msg
    INIT
 ------------------------}
 
-{-| ## Initial State
+
+{-|
+
+
+## Initial State
+
 -}
 init : () -> ( Model, Cmd Msg )
 init _ =
@@ -83,7 +109,12 @@ init _ =
    UPDATE
 ------------------------}
 
-{-| ## Update
+
+{-|
+
+
+## Update
+
 -}
 flip : Mark -> Mark
 flip mark =
@@ -94,7 +125,10 @@ flip mark =
         Cross ->
             Nought
 
-{-| The update function is very straight forward: First we validate if this move is actually legit, and then we update the board accordently and flip the current player.
+
+{-| The update function is very straight forward: First we validate if this move
+is actually legit, and then we update the board accordently and flip the current
+player.
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg ({ grid, nextMark } as model) =
@@ -136,21 +170,28 @@ subscriptions _ =
    VIEW
 ------------------------}
 
-{-| ## View
+
+{-|
+
+
+## View
 
 
 ### Tiles
 
 For our game we use four Tiles:
-* Empty Cell
-* Cell filled with a nought
-* Cell filled with a cross
-* Restart button
+
+  - Empty Cell
+  - Cell filled with a nought
+  - Cell filled with a cross
+  - Restart button
 
 ![Tileset](https://orasund.github.io/pixelengine/docs/tictactoe3.png "Tileset")
 
-**Note:**  
-Everything that is clickable needs to be a `Tile`. That's why the restart button is a `Tile` as well.
+**Note:**
+Everything that is clickable needs to be a `Tile`. That's why the restart button
+is a `Tile` as well.
+
 -}
 none : ( Int, Int ) -> Tile Msg
 none pos =
@@ -185,9 +226,14 @@ getTile ( x, y ) mark =
         Nothing ->
             none ( x, y )
 
-{-| ## Drawing The Screen
+
+{-|
+
+
+## Drawing The Screen
 
 The `Grid` datatype takes care of iteration over all elements of the grid.
+
 -}
 view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
 view { grid } =
@@ -227,14 +273,15 @@ view { grid } =
             , tileset = tileset
             , background = background
             }
-            (grid |> Grid.foldl
-                (\(( x, y ) as pos) maybeMark ->
-                    (::) 
-                    ( ( 1 + x, 1 + y )
-                    , maybeMark |> getTile pos
+            (grid
+                |> Grid.foldl
+                    (\(( x, y ) as pos) maybeMark ->
+                        (::)
+                            ( ( 1 + x, 1 + y )
+                            , maybeMark |> getTile pos
+                            )
                     )
-                )
-                []
+                    []
                 |> List.append
                     [ ( ( 2, 0 ), reset ) ]
             )
