@@ -15,7 +15,7 @@ import Random
 import Random.Extra as RandomExtra
 import Task
 import Time exposing (Posix)
-import PixelEngine.Location as Location exposing (Location,Angle,Vector)
+import PixelEngine.Location as Location exposing (Vector)
 
 
 type alias Model =

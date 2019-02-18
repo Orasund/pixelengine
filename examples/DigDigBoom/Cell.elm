@@ -13,7 +13,7 @@ module DigDigBoom.Cell exposing
     , tutorial
     )
 
-import DigDigBoom.Tileset as Tileset
+import DigDigBoom.View.Tile as Tile
 import PixelEngine.Graphics.Tile exposing (Tile)
 import PixelEngine.Grid as Grid exposing (Grid)
 import PixelEngine.Grid.Direction exposing (Direction(..))
@@ -102,84 +102,84 @@ getImage cell =
         Player a ->
             (case a of
                 Down ->
-                    Tileset.player_down
+                    Tile.player_down
 
                 Up ->
-                    Tileset.player_up
+                    Tile.player_up
 
                 Left ->
-                    Tileset.player_left
+                    Tile.player_left
 
                 Right ->
-                    Tileset.player_right
+                    Tile.player_right
             )
-                Tileset.colorWhite
+                Tile.colorWhite
 
         Solid (Placed Stone) ->
-            Tileset.placed_stone Tileset.colorGray
+            Tile.placed_stone Tile.colorGray
 
         Solid (Placed Dirt) ->
-            Tileset.dirt_wall Tileset.colorBrown
+            Tile.dirt_wall Tile.colorBrown
 
         Solid StoneWall ->
-            Tileset.stone_wall Tileset.colorGray
+            Tile.stone_wall Tile.colorGray
 
         Solid StoneBrickWall ->
-            Tileset.stone_brick_wall Tileset.colorGray
+            Tile.stone_brick_wall Tile.colorGray
 
         Item Bombe ->
-            Tileset.bombe Tileset.colorGreen
+            Tile.bombe Tile.colorGreen
 
         Item HealthPotion ->
-            Tileset.health_potion Tileset.colorGreen
+            Tile.health_potion Tile.colorGreen
 
         Item (Material Dirt) ->
-            Tileset.dirt_wall Tileset.colorBlue
+            Tile.dirt_wall Tile.colorBlue
 
         Item (Material Stone) ->
-            Tileset.stone Tileset.colorBlue
+            Tile.stone Tile.colorBlue
 
         Enemy enemy id ->
             (case enemy of
                 PlacedBombe ->
-                    Tileset.placed_bombe id
+                    Tile.placed_bombe id
 
                 Oger ->
-                    Tileset.oger id
+                    Tile.oger id
 
                 Goblin ->
-                    Tileset.goblin id
+                    Tile.goblin id
 
                 Rat ->
-                    Tileset.rat id
+                    Tile.rat id
             )
-                Tileset.colorRed
+                Tile.colorRed
 
         Stunned enemy id ->
             (case enemy of
                 PlacedBombe ->
-                    Tileset.placed_bombe id
+                    Tile.placed_bombe id
 
                 Oger ->
-                    Tileset.oger id
+                    Tile.oger id
 
                 Goblin ->
-                    Tileset.goblin id
+                    Tile.goblin id
 
                 Rat ->
-                    Tileset.rat id
+                    Tile.rat id
             )
-                Tileset.colorYellow
+                Tile.colorYellow
 
         Effect effect ->
             (case effect of
                 Smoke ->
-                    Tileset.smoke
+                    Tile.smoke
 
                 Bone ->
-                    Tileset.bone
+                    Tile.bone
             )
-                Tileset.colorWhite
+                Tile.colorWhite
 
 
 

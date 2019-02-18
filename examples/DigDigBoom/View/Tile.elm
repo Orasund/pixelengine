@@ -1,4 +1,4 @@
-module DigDigBoom.Tileset exposing
+module DigDigBoom.View.Tile exposing
     ( arrow_down
     , arrow_left
     , arrow_right
@@ -16,7 +16,6 @@ module DigDigBoom.Tileset exposing
     , goblin
     , health_potion
     , heart
-    , text
     , oger
     , placed_bombe
     , placed_dirt
@@ -34,16 +33,24 @@ module DigDigBoom.Tileset exposing
     , stunned_goblin
     , stunned_oger
     , stunned_rat
+    , text
+    , tileset
     )
 
 import Color exposing (Color)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, animated, backgroundColor, movable, tile, withAttributes)
+import PixelEngine.Graphics.Tile as Tile exposing (Tile, animated, backgroundColor, movable, tile, withAttributes,Tileset)
 
-text : String -> Color -> (Int,Int) -> List ((Int,Int),Tile msg)
-text string color (x,y) =
+tileset : Tileset
+tileset =
+    Tile.tileset { source = "tileset.png", spriteHeight = 16, spriteWidth = 16 }
+
+
+text : String -> Color -> ( Int, Int ) -> List ( ( Int, Int ), Tile msg )
+text string color ( x, y ) =
     string
-        |> Tile.fromText (0,10)
-        |> List.indexedMap (\i tile -> ((x+i,y),tile |> withAttributes [ backgroundColor color ]))
+        |> Tile.fromText ( 0, 10 )
+        |> List.indexedMap (\i tile -> ( ( x + i, y ), tile |> withAttributes [ backgroundColor color ] ))
+
 
 colorWhite : Color
 colorWhite =
@@ -78,6 +85,7 @@ colorBlue =
 colorRed : Color
 colorRed =
     Color.rgb255 208 70 72
+
 
 arrow_up : Color -> Tile msg
 arrow_up color =
@@ -152,7 +160,6 @@ bombe color =
 health_potion : Color -> Tile msg
 health_potion color =
     tile ( 5, 7 ) |> withAttributes [ backgroundColor color ]
-
 
 
 stone : Color -> Tile msg
