@@ -6,6 +6,15 @@ module PixelEngine.Graphics.Options exposing
     , withMovementSpeed
     )
 
+{-| Options are tweak different aspects of your program.
+
+
+## Options
+
+@docs Options,fromWidth,withAnimationFPS,withMovementSpeed,withScale
+
+-}
+
 import PixelEngine.Graphics.Data.Options as OptionsData
 
 
