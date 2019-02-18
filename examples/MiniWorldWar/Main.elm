@@ -9,7 +9,7 @@ import MiniWorldWar.Request as Request exposing (Response(..))
 import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
 import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
-import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing ( WaitingHostMsg(..))
+import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
 import MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
 import MiniWorldWar.Role.Client as Client
 import MiniWorldWar.Role.Guest as Guest
@@ -24,8 +24,9 @@ import MiniWorldWar.View.TitleScreen as TitleScreenView
 import MiniWorldWar.View.Units as UnitsView
 import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
+import PixelEngine.Graphics as Graphics exposing (Area, Background)
 import PixelEngine.Graphics.Image as Image exposing (Image)
+import PixelEngine.Graphics.Options as Options exposing (Options)
 import Time exposing (Posix)
 
 
@@ -415,8 +416,6 @@ subscriptions state =
 
 
 
-
-
 {------------------------
    VIEW
 ------------------------}
@@ -532,7 +531,9 @@ view state =
             ]
     in
     { title = "Mini World War"
-    , options = Graphics.options { width = size, transitionSpeedInSec = 0.012 }
+    , options =
+        Options.fromWidth size
+            |> Options.withAnimationFPS 4
     , body = body
     }
 

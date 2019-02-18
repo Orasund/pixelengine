@@ -1,14 +1,17 @@
 module PixelEngine.Graphics exposing
-    ( Options, options, render
-    , Area, tiledArea, imageArea, heightOf
+    ( Area, tiledArea, imageArea, heightOf
     , Background, imageBackground, colorBackground
+    , Options, options
+    , render
+    , view
     )
-    
+
 {-| This module takes care of the Graphics.
 
 You will want to add [PixelEngine.Graphics.Image](PixelEngine-Graphics-Image)
 or [PixelEngine.Graphics.Tile](PixelEngine-Graphics-Tile) to
 actually draw something.
+
 
 ## Area
 
@@ -17,22 +20,25 @@ so called areas.
 
 @docs Area, tiledArea, imageArea, heightOf
 
+
 ## Background
 
 @docs Background, imageBackground, colorBackground
 
-## Options
-
-@docs Options, options
 
 # Advanced
 
-If one wants to use just use this module on its own, you can use `render` instead
+If one wants to use just use this module on its own, you can use `view` instead
 of the `game` function from the main module.
 
-## Render
 
-@docs render
+## View
+
+@docs view
+
+## DEPRECATED
+
+@docs render,Options, options
 
 -}
 
@@ -40,9 +46,9 @@ import Color exposing (Color)
 import Html exposing (Html)
 import Html.Styled
 import PixelEngine.Graphics.Abstract as Abstract
-import PixelEngine.Graphics.Data.Options as OptionsData
 import PixelEngine.Graphics.Data as Data
 import PixelEngine.Graphics.Data.Area as AreaData
+import PixelEngine.Graphics.Data.Options as OptionsData
 import PixelEngine.Graphics.Image exposing (Image)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 
@@ -50,21 +56,22 @@ import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 {-| A horizontal area of the content.
 A `Area` defines how the content should be displayed.
 
-**Note:**  
+**Note:**
 An area can only contain elements of the same type.
 So either you have tiles or images.
 
 ![A typical game](https://orasund.github.io/pixelengine/img4.png "A typical game")
+
 -}
 type alias Area msg =
     AreaData.Area msg
 
 
-
 {-| Returns the height of a list of Areas
 
 This can be used to return the height of a `tiledArea`.
-For a `imageArea` this function is trivial. 
+For a `imageArea` this function is trivial.
+
 -}
 heightOf : List (Area msg) -> Float
 heightOf listOfArea =
@@ -88,10 +95,7 @@ type alias Background =
     Data.Background
 
 
-{-| Options for the render function
--}
-type alias Options msg =
-    OptionsData.Options msg
+
 
 
 {-| A single color background.
@@ -165,36 +169,49 @@ tiledArea { rows, tileset, background } content =
         , content = content
         }
 
+{-| Displays content of the game.
+-}
+view : Options msg -> List (Area msg) -> Html msg
+view o listOfArea =
+    Abstract.render
+        o
+        listOfArea
+        |> Html.Styled.toUnstyled
 
-{-| The engine comes with a set of options:
+----------------------------
+-- DEPRECATED
+----------------------------
 
-  - `width` - Width of the game.  
-    **Note:**  
-    all spatial values are given in _Pixels_.
+{-| [DEPRECATED]
 
-  - `transitionSpeedInSec` - The speed of animations.  
-    **Default value:** `0` for no animations
+Use `pixelEngine.Graphics.Options.Options` instead
+-}
+type alias Options msg =
+    OptionsData.Options msg
 
-For the start use the following settings
+{-| [DEPRECATED]
 
-```
-{width = 800, transitionSpeedInSec = 0.2}
-```
-
+Use `pixelEngine.Graphics.Options.fromWidth` instead
 -}
 options : { width : Float, transitionSpeedInSec : Float } -> Options msg
 options { width, transitionSpeedInSec } =
-    OptionsData.new { width = width, scale = 1, transitionSpeedInSec = transitionSpeedInSec }
+    OptionsData.new
+        { width = width
+        , scale = 1
+        , movementSpeedInSec = transitionSpeedInSec
+        , animationFPS = 1
+        }
 
-{-| Displays content of the game.
 
-**Note:**  
-The first argument is the scale. Use only power of `2` as scale to ensure crisp
-pixels.
+
+
+{-| [DEPRECATED]
+
+use `view` instead.
 -}
 render : Float -> Options msg -> List (Area msg) -> Html msg
 render scale o listOfArea =
     Abstract.render
-        (o |> OptionsData.usingScale scale)
+        (o |> OptionsData.usingScale (floor<|scale))
         listOfArea
-    |> Html.Styled.toUnstyled
+        |> Html.Styled.toUnstyled

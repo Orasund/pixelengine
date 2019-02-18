@@ -139,8 +139,8 @@ import Browser.Events as Events
 import Html
 import PixelEngine.Controls as Controls exposing (Input)
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
-import PixelEngine.Graphics.Data.Options as OptionsData
 import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data.Options as OptionsData
 import Task
 
 
@@ -200,15 +200,16 @@ subscriptionsFunction : (model -> Sub msg) -> Model model msg -> Sub (Msg msg)
 subscriptionsFunction subscriptions { modelContent, config } =
     Sub.batch
         ([ subscriptions modelContent |> Sub.map MsgContent
-        , Events.onResize <| \w h -> Resize { width = toFloat w, height = toFloat h }
-        ]
-        |> List.append
-            (case config.controls of
-                Just (_,controlsToMsg)->
-                    [Controls.basic controlsToMsg |> Sub.map MsgContent]
-                Nothing ->
-                    []
-            )
+         , Events.onResize <| \w h -> Resize { width = toFloat w, height = toFloat h }
+         ]
+            |> List.append
+                (case config.controls of
+                    Just ( _, controlsToMsg ) ->
+                        [ Controls.basic controlsToMsg |> Sub.map MsgContent ]
+
+                    Nothing ->
+                        []
+                )
         )
 
 
@@ -225,33 +226,34 @@ viewFunction view { modelContent, config } =
             options
 
         height =
-            scale * Graphics.heightOf body
+            (toFloat<|scale) * Graphics.heightOf body
     in
     { title = title
     , body =
         [ (case windowSize of
             Just wS ->
-                Graphics.render
-                    (toFloat <|
-                        min (2 ^ (floor <| logBase 2 <| wS.height / height))
-                            (2 ^ (floor <| logBase 2 <| wS.width / width))
-                    )
+                Graphics.view
                     (options
-                        |>
-                            (case controls of
-                            Just (_,controlsToMsg) ->
-                                Controls.supportingMobile
-                                { windowSize = wS
-                                , controls = controlsToMsg
-                                }
-                            Nothing ->
-                                identity 
+                        |> OptionsData.usingScale
+                            (
+                                min (2 ^ (floor <| logBase 2 <| wS.height / height))
+                                    (2 ^ (floor <| logBase 2 <| wS.width / width))
                             )
+                        |> (case controls of
+                                Just ( _, controlsToMsg ) ->
+                                    Controls.supportingMobile
+                                        { windowSize = wS
+                                        , controls = controlsToMsg
+                                        }
+
+                                Nothing ->
+                                    identity
+                           )
                     )
                     body
 
             Nothing ->
-                Graphics.render 1 options []
+                Graphics.view options []
           )
             |> Html.map MsgContent
         ]
@@ -282,6 +284,7 @@ initFunction controls init =
             ]
         )
 
+
 gameMaybeWithCustomControls :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
@@ -302,6 +305,7 @@ gameMaybeWithCustomControls { init, update, subscriptions, view, controls } =
             viewFunction view
         }
 
+
 {-| A game using custom controls.
 
 The default controls should be enough to start,
@@ -320,15 +324,14 @@ gameWithCustomControls :
 gameWithCustomControls { init, update, subscriptions, view, controls } =
     gameMaybeWithCustomControls
         { init = init
-        , update= update
-        , subscriptions =subscriptions
+        , update = update
+        , subscriptions = subscriptions
         , view = view
         , controls = Just controls
         }
 
 
 {-| A game with no controls.
-
 
 Use it just like `document` from [elm/browser](https://package.elm-lang.org/packages/elm/browser/latest/Browser).
 
@@ -340,7 +343,7 @@ gameWithNoControls :
     , view : model -> { title : String, options : Options msg, body : List (Area msg) }
     }
     -> Program flags (Model model msg) (Msg msg)
-gameWithNoControls { init, update, subscriptions, view} =
+gameWithNoControls { init, update, subscriptions, view } =
     gameMaybeWithCustomControls
         { init = init
         , update = update

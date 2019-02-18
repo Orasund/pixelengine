@@ -7,6 +7,7 @@ import Dict exposing (Dict)
 import Html
 import Html.Attributes as Attributes
 import PixelEngine.Graphics as Graphics
+import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Image as Image exposing (image)
 import PixelEngine.Graphics.Tile as Tile
 import Process
@@ -250,10 +251,9 @@ view maybeModel =
             300
 
         options =
-            Graphics.options
-                { width = width
-                , transitionSpeedInSec = 8
-                }
+            Options.fromWidth width
+            |> Options.withMovementSpeed 8
+            |> Options.withScale 2
     in
     { title = "CultSim"
     , body =
@@ -261,7 +261,7 @@ view maybeModel =
             [ Html.text "Cult Simulator" ]
         , Html.h3 [ Attributes.style "text-align" "center" ]
             [ Html.text "Start a Cult. Pray to Cuthulu. Die." ]
-        , Graphics.render 2
+        , Graphics.view
             options
             [ Graphics.imageArea
                 { height = height

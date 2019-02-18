@@ -5,18 +5,18 @@ PixelEngine is a graphic engine for rendering turn-based pixel games.
 
 Games can either be stand-alone documents or [imbedded in a website](https://orasund.github.io/pixelengine/)
 ## Tutorials
-* [Tic Tac Toe](https://github.com/Orasund/pixelengine/wiki/Tutorial:-Tic-Tac-Toe) 
+* [Tic Tac Toe](https://orasund.github.io/pixelengine/#TicTacToe) 
 Beginner Tutorial, uses clickable Tiles.
-* [Snake](https://github.com/Orasund/pixelengine/wiki/Tutorial:-Snake)
+* [Snake](https://orasund.github.io/pixelengine/#Snake)
 Beginner Tutorial, uses keyboard controls.
 
 ## Games made with this Engine
 
-  * [Mini World War - Card Game](https://orasund.github.io/pixelengine/MiniWorldWar/)([src](https://github.com/Orasund/pixelengine/tree/master/examples/MiniWorldWar)) A Risc-inspired fast card game. Its a 2-Player online game written purely in Elm.
+  * [Mini World War - Card Game](https://orasund.github.io/pixelengine/#MiniWorldWar/)([src](https://github.com/Orasund/pixelengine/tree/master/examples/MiniWorldWar)) A Risc-inspired fast card game. Its a 2-Player online game written purely in Elm.
   *(Use the Mouse to play)*
-  * [Dig Dig Boom - Rogue-like Game](https://orasund.itch.io/dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
-  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
-  * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/RuinJump/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
+  * [Dig Dig Boom - Rogue-like Game](https://orasund.github.io/pixelengine/#dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
+  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/#CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
+  * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/#RuinJump/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
 
 If you have created a game with this engine, please let me know.
 

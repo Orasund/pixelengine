@@ -90,28 +90,27 @@ parseMultiple =
         |. Parser.token ")"
         |= Parser.loop [] multipleHelp
 
+displayCode : String -> Element msg
+displayCode code =
+    Element.el
+        [ Element.width Element.fill
+        , Element.paddingXY 20 0
+        , Background.color <| Element.rgb255 255 255 255
+        , Font.size <| 16
+        , Border.rounded 10
+        ]
+    <|
+        Element.html <|
+            Html.div [ Attributes.style "line-height" "1.2" ]
+                [ SyntaxHighlight.useTheme SyntaxHighlight.gitHub
+                , SyntaxHighlight.elm code
+                    |> Result.map (SyntaxHighlight.toBlockHtml Nothing)
+                    |> Result.withDefault
+                        (Html.code [] [ Html.text code ])
+                ]
 
 parse : String -> List (Element msg)
 parse string =
-    let
-        displayCode : String -> Element msg
-        displayCode code =
-            Element.el
-                [ Element.width Element.fill
-                , Element.paddingXY 20 0
-                , Background.color <| Element.rgb255 255 255 255
-                , Font.size <| 16
-                ]
-            <|
-                Element.html <|
-                    Html.div [ Attributes.style "line-height" "1.2" ]
-                        [ SyntaxHighlight.useTheme SyntaxHighlight.gitHub
-                        , SyntaxHighlight.elm code
-                            |> Result.map (SyntaxHighlight.toBlockHtml Nothing)
-                            |> Result.withDefault
-                                (Html.code [] [ Html.text code ])
-                        ]
-    in
     case
         string
             |> Parser.run parseMultiple

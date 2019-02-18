@@ -8,6 +8,7 @@
         "PixelEngine.Graphics.Image",
         "PixelEngine.Graphics.Tile",
         "PixelEngine.Graphics.Transition",
+        "PixelEngine.Graphics.Options",
         "PixelEngine.Graphics",
         "PixelEngine.Controls",
         "PixelEngine"

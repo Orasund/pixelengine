@@ -13,7 +13,7 @@ import Url.Parser as UrlParser exposing ((</>))
 import Framework.Typography as Typography
 
 examplesWithCode =
-    [ "Animations", "TicTacToe", "Snake" ]
+    [  "TicTacToe", "SlotMachine", "Snake" ]
 
 
 examplesWithoutCode =

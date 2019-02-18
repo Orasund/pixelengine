@@ -82,7 +82,7 @@ renderTiledArea ((Options { width, scale }) as options) { rows, background, cont
     in
     div
         [ cssArea
-            scale
+            (toFloat<|scale)
             background
             { width = width
             , height = toFloat <| tileset.spriteHeight * rows
@@ -127,7 +127,7 @@ renderImageArea : Options msg -> ImageAreaContent msg -> Html msg
 renderImageArea ((Options { scale, width }) as options) { height, background, content } =
     div
         [ cssArea
-            scale
+            (toFloat<|scale)
             background
             { width = width
             , height = height
@@ -230,7 +230,7 @@ render ((Options { width, scale, transitionFrom, transition, controllerOptions }
          , div
             [ css
                 [ Css.position Css.relative
-                , Css.width <| px <| scale * width
+                , Css.width <| px <| (toFloat<|scale) * width
                 , Css.margin Css.auto
                 ]
             ]

@@ -15,8 +15,9 @@ import DigDigBoom.Game as Game
 import DigDigBoom.Player as Player exposing (PlayerData)
 import DigDigBoom.Tileset as Tileset
 import PixelEngine exposing (PixelEngine, game)
+import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Options)
+import PixelEngine.Graphics as Graphics exposing (Area)
 import PixelEngine.Graphics.Image as Image exposing (image)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
 import PixelEngine.Graphics.Transition as Transition
@@ -531,10 +532,7 @@ view model =
             16
 
         options =
-            Graphics.options
-                { width = toFloat <| tileset.spriteWidth * width
-                , transitionSpeedInSec = 0.2
-                }
+            Options.fromWidth <| toFloat <| tileset.spriteWidth * width
 
         title : String
         title =

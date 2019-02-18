@@ -3,7 +3,8 @@ module Snake exposing (main)
 import Array exposing (Array)
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
+import PixelEngine.Graphics as Graphics exposing (Area, Background)
+import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
 import PixelEngine.Grid as Grid exposing (Grid)
 import PixelEngine.Grid.Direction exposing (Direction(..))
@@ -199,7 +200,7 @@ subscriptions _ =
 
 
 {------------------------
-   Controls
+   CONTROLS
 ------------------------}
 
 
@@ -297,7 +298,8 @@ view { snake, direction, chicken } =
                 }
     in
     { title = "Snake"
-    , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
+    , options = Options.fromWidth width
+            |> Options.withMovementSpeed 0.8
     , body =
         [ Graphics.tiledArea
             { rows = boardSize + 2

@@ -4,7 +4,8 @@ import Color
 import Dict
 import PixelEngine exposing (PixelEngine, game)
 import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Options)
+import PixelEngine.Graphics.Options as Options exposing (Options)
+import PixelEngine.Graphics as Graphics exposing (Area)
 import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
 import Process
 import Random exposing (Generator, Seed)
@@ -324,10 +325,8 @@ view maybeState =
             toFloat <| 3 * Config.width
 
         options =
-            Graphics.options
-                { width = width
-                , transitionSpeedInSec = 0.5
-                }
+            Options.fromWidth width
+                |> Options.withMovementSpeed 0.5
 
         rows : Int
         rows =

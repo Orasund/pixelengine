@@ -1,15 +1,9 @@
 module TicTacToe exposing (main)
 
-{-|
-
-
-# Tic Tac Toe
-
--}
-
 import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
+import PixelEngine.Graphics as Graphics exposing (Area, Background)
+import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
 import PixelEngine.Grid as Grid exposing (Grid)
 import PixelEngine.Grid.Position exposing (Position)
@@ -24,10 +18,7 @@ import PixelEngine.Grid.Position exposing (Position)
 {-|
 
 
-## Types
-
-
-### Players
+# Players
 
 In Tic Tac Toe we have two players: one is playing _Noughts_, the other _Crosses_.
 
@@ -42,7 +33,7 @@ type Mark
 {-|
 
 
-### State
+# State
 
 The state of an ongoing Tic Tac Toe-game consists of two things:
 The board(`grid`) and the current player(`nextMark`).
@@ -66,7 +57,7 @@ type alias Model =
 {-|
 
 
-### Actions
+# Actions
 
 What are the things a user should be able to do?
 
@@ -85,12 +76,6 @@ type Msg
 ------------------------}
 
 
-{-|
-
-
-## Initial State
-
--}
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( { grid =
@@ -110,12 +95,6 @@ init _ =
 ------------------------}
 
 
-{-|
-
-
-## Update
-
--}
 flip : Mark -> Mark
 flip mark =
     case mark of
@@ -174,10 +153,7 @@ subscriptions _ =
 {-|
 
 
-## View
-
-
-### Tiles
+# Tiles
 
 For our game we use four Tiles:
 
@@ -193,10 +169,10 @@ Everything that is clickable needs to be a `Tile`. That's why the restart button
 is a `Tile` as well.
 
 -}
-none : ( Int, Int ) -> Tile Msg
+none : Position -> Tile Msg
 none pos =
     tile ( 0, 0 )
-        |> Tile.withAttributes [ Tile.onClick (PlaceMark pos) ]
+        |> Tile.clickable (PlaceMark pos)
 
 
 nought : Tile Msg
@@ -211,10 +187,10 @@ cross =
 
 reset : Tile Msg
 reset =
-    tile ( 1, 0 ) |> Tile.withAttributes [ Tile.onClick Reset ]
+    tile ( 1, 0 ) |> Tile.clickable Reset
 
 
-getTile : ( Int, Int ) -> Maybe Mark -> Tile Msg
+getTile : Position -> Maybe Mark -> Tile Msg
 getTile ( x, y ) mark =
     case mark of
         Just Nought ->
@@ -230,11 +206,24 @@ getTile ( x, y ) mark =
 {-|
 
 
-## Drawing The Screen
+# Grid
 
 The `Grid` datatype takes care of iteration over all elements of the grid.
 
 -}
+viewGrid : Grid Mark -> List ( Position, Tile Msg )
+viewGrid grid =
+    grid
+        |> Grid.foldl
+            (\(( x, y ) as pos) maybeMark ->
+                (::)
+                    ( ( 1 + x, 1 + y )
+                    , maybeMark |> getTile pos
+                    )
+            )
+            []
+
+
 view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
 view { grid } =
     let
@@ -266,24 +255,17 @@ view { grid } =
                 }
     in
     { title = "Tic Tac Toe"
-    , options = Graphics.options { width = width, transitionSpeedInSec = 0.2 }
+    , options = Options.fromWidth width
     , body =
         [ Graphics.tiledArea
             { rows = 5
             , tileset = tileset
             , background = background
             }
-            (grid
-                |> Grid.foldl
-                    (\(( x, y ) as pos) maybeMark ->
-                        (::)
-                            ( ( 1 + x, 1 + y )
-                            , maybeMark |> getTile pos
-                            )
-                    )
-                    []
-                |> List.append
-                    [ ( ( 2, 0 ), reset ) ]
+            (List.concat
+                [ grid |> viewGrid
+                , [ ( ( 2, 0 ), reset ) ]
+                ]
             )
         ]
     }

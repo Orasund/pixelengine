@@ -1,31 +1,54 @@
-module PixelEngine.Graphics.Data.Options exposing (Options(..),new,usingScale)
+module PixelEngine.Graphics.Data.Options exposing
+    ( Options(..)
+    , new
+    , usingScale
+    , withAnimationFPS
+    , withMovementSpeed
+    )
 
-import PixelEngine.Graphics.Data.Controller exposing (ControllerOptions)
 import PixelEngine.Graphics.Data.Area exposing (Area)
+import PixelEngine.Graphics.Data.Controller exposing (ControllerOptions)
 import PixelEngine.Graphics.Data.Transition exposing (Transition(..))
 
-usingScale : Float -> Options msg -> Options msg
-usingScale scale (Options o) =
-    Options { o | scale = scale }
 
 type Options msg
     = Options
         { width : Float
-        , scale : Float
-        , transitionSpeedInSec : Float
+        , scale : Int
+        , movementSpeedInSec : Float
+        , animationFPS : Float
         , controllerOptions : Maybe (ControllerOptions msg)
         , transitionFrom : List (Area msg)
         , transition : Transition
         }
 
 
-new : { width : Float, scale : Float, transitionSpeedInSec : Float } -> Options msg
-new { width, scale, transitionSpeedInSec } =
+new : { width : Float, scale : Int, movementSpeedInSec : Float, animationFPS : Float } -> Options msg
+new { width, scale, movementSpeedInSec, animationFPS } =
     Options
         { width = width
         , scale = scale
-        , transitionSpeedInSec = transitionSpeedInSec
+        , movementSpeedInSec = movementSpeedInSec
+        , animationFPS = animationFPS
         , controllerOptions = Nothing
         , transitionFrom = []
         , transition = Transition { name = "", transitionList = [ ( 0, "" ) ] }
         }
+
+
+withAnimationFPS : Float -> Options msg -> Options msg
+withAnimationFPS fps (Options o) =
+    if fps > 0 then
+        Options { o | animationFPS = fps }
+
+    else
+        Options o
+
+withMovementSpeed : Float -> Options msg -> Options msg
+withMovementSpeed movementSpeed (Options o) =
+    Options { o | movementSpeedInSec = movementSpeed }
+
+
+usingScale : Int -> Options msg -> Options msg
+usingScale scale (Options o) =
+    Options { o | scale = scale }

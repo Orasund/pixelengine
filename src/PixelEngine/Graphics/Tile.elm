@@ -94,7 +94,7 @@ As an example
 
 is the 3 row in the second column of the `Tileset`.
 
-![a tileset](https://orasund.github.io/pixelengine/img3.png "a tileset")
+![a tileset](https://orasund.github.io/pixelengine/docs/img3.png "a tileset")
 
 -}
 tile : ( Int, Int ) -> Tile msg
@@ -119,7 +119,7 @@ Setting the steps to `0` describes a tile with no animation.
 
     tile ( 0, 0 ) |> animated 0 == tile ( 0, 0 )
 
-![animation](https://orasund.github.io/pixelengine/img2.png "animation")
+![animation](https://orasund.github.io/pixelengine/docs/img2.png "animation")
 
 **Note:**
 Negaive steps are not supported, in this case no animation will be played.

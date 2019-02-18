@@ -8,6 +8,7 @@ import Framework.Card as Card
 import Framework.Modifier exposing (Modifier(..))
 import Framework.Typography as Typography
 import PixelEngine.Graphics as Graphics exposing (Background)
+import PixelEngine.Graphics.Options as Options  exposing (Options)
 import PixelEngine.Graphics.Image as Image exposing (image)
 import PixelEngine.Graphics.Tile exposing (Tileset)
 
@@ -75,12 +76,9 @@ view { examples, games } =
             ]
           <|
             Element.html <|
-                Graphics.render
-                    4
-                    (Graphics.options
-                        { width = width
-                        , transitionSpeedInSec = 0.2
-                        }
+                Graphics.view
+                    (Options.fromWidth width
+                        |> Options.withScale 4
                     )
                     [ Graphics.imageArea
                         { height = 64

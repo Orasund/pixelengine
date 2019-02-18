@@ -7971,6 +7971,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 		var spriteTop = _n0.b;
 		var scale = _n1.scale;
 		var steps = _n1.steps;
+		var fps = _n1.fps;
 		var spriteWidth = _n2.spriteWidth;
 		var spriteHeight = _n2.spriteHeight;
 		var source = _n2.source;
@@ -8004,7 +8005,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 								[
 									rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 									rtfeldman$elm_css$Css$right(
-									rtfeldman$elm_css$Css$px(scale * (spriteWidth * (steps + 2))))
+									rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 2)))
 								]))
 						]),
 					_List_fromArray(
@@ -8028,12 +8029,12 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 											rtfeldman$elm_css$Css$px(spriteHeight)),
 											rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 											rtfeldman$elm_css$Css$left(
-											rtfeldman$elm_css$Css$px(scale * (spriteWidth * (steps + 1)))),
+											rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 1))),
 											A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
 											A2(
 											rtfeldman$elm_css$Css$property,
 											'animation',
-											'pixelengine_graphics_basic ' + (elm$core$String$fromInt(steps + 1) + ('.0s steps(' + (elm$core$String$fromInt(steps + 1) + ') infinite')))),
+											'pixelengine_graphics_basic ' + (elm$core$String$fromFloat((steps + 1) / fps) + ('.0s steps(' + (elm$core$String$fromInt(steps + 1) + ') infinite')))),
 											A2(rtfeldman$elm_css$Css$property, 'transform-origin', 'top left'),
 											rtfeldman$elm_css$Css$transform(
 											A2(rtfeldman$elm_css$Css$scale2, scale, scale)),
@@ -8084,6 +8085,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayStaticTile = F4(
 var author$project$PixelEngine$Graphics$View$Element$displayTile = F2(
 	function (_n0, _n1) {
 		var scale = _n0.a.scale;
+		var animationFPS = _n0.a.animationFPS;
 		var pos = _n1.a;
 		var left = _n1.b.left;
 		var top = _n1.b.top;
@@ -8098,7 +8100,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayTile = F2(
 			author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile,
 			pos,
 			_Utils_Tuple2(left, top),
-			{scale: scale, steps: steps},
+			{fps: animationFPS, scale: scale, steps: steps},
 			tileset);
 	});
 var author$project$PixelEngine$Graphics$View$Element$displayMultiple = F4(
@@ -8910,14 +8912,6 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 							]))
 					])));
 	});
-var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
-	function (scale, _n0) {
-		var o = _n0.a;
-		return author$project$PixelEngine$Graphics$Data$Options$Options(
-			_Utils_update(
-				o,
-				{scale: scale}));
-	});
 var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
 	return _VirtualDom_keyedNode(
 		_VirtualDom_noScript(tag));
@@ -9395,13 +9389,18 @@ var rtfeldman$elm_css$VirtualDom$Styled$toUnstyled = function (vdom) {
 	}
 };
 var rtfeldman$elm_css$Html$Styled$toUnstyled = rtfeldman$elm_css$VirtualDom$Styled$toUnstyled;
-var author$project$PixelEngine$Graphics$render = F3(
-	function (scale, o, listOfArea) {
+var author$project$PixelEngine$Graphics$view = F2(
+	function (o, listOfArea) {
 		return rtfeldman$elm_css$Html$Styled$toUnstyled(
-			A2(
-				author$project$PixelEngine$Graphics$Abstract$render,
-				A2(author$project$PixelEngine$Graphics$Data$Options$usingScale, scale, o),
-				listOfArea));
+			A2(author$project$PixelEngine$Graphics$Abstract$render, o, listOfArea));
+	});
+var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
+	function (scale, _n0) {
+		var o = _n0.a;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				o,
+				{scale: scale}));
 	});
 var elm$core$Basics$min = F2(
 	function (x, y) {
@@ -9433,20 +9432,8 @@ var author$project$PixelEngine$viewFunction = F2(
 					function () {
 						if (windowSize.$ === 'Just') {
 							var wS = windowSize.a;
-							return A3(
-								author$project$PixelEngine$Graphics$render,
-								A2(
-									elm$core$Basics$min,
-									A2(
-										elm$core$Basics$pow,
-										2,
-										elm$core$Basics$floor(
-											A2(elm$core$Basics$logBase, 2, wS.height / height))),
-									A2(
-										elm$core$Basics$pow,
-										2,
-										elm$core$Basics$floor(
-											A2(elm$core$Basics$logBase, 2, wS.width / width)))),
+							return A2(
+								author$project$PixelEngine$Graphics$view,
 								function () {
 									if (controls.$ === 'Just') {
 										var _n6 = controls.a;
@@ -9456,10 +9443,25 @@ var author$project$PixelEngine$viewFunction = F2(
 									} else {
 										return elm$core$Basics$identity;
 									}
-								}()(options),
+								}()(
+									A2(
+										author$project$PixelEngine$Graphics$Data$Options$usingScale,
+										A2(
+											elm$core$Basics$min,
+											A2(
+												elm$core$Basics$pow,
+												2,
+												elm$core$Basics$floor(
+													A2(elm$core$Basics$logBase, 2, wS.height / height))),
+											A2(
+												elm$core$Basics$pow,
+												2,
+												elm$core$Basics$floor(
+													A2(elm$core$Basics$logBase, 2, wS.width / width)))),
+										options)),
 								body);
 						} else {
-							return A3(author$project$PixelEngine$Graphics$render, 1, options, _List_Nil);
+							return A2(author$project$PixelEngine$Graphics$view, options, _List_Nil);
 						}
 					}())
 				]),
@@ -10211,6 +10213,17 @@ var author$project$PixelEngine$Graphics$Data$ImageBackground = function (a) {
 var author$project$PixelEngine$Graphics$imageBackground = function (image) {
 	return author$project$PixelEngine$Graphics$Data$ImageBackground(image);
 };
+var author$project$PixelEngine$Graphics$Data$Area$Tiled = function (a) {
+	return {$: 'Tiled', a: a};
+};
+var author$project$PixelEngine$Graphics$tiledArea = F2(
+	function (_n0, content) {
+		var rows = _n0.rows;
+		var tileset = _n0.tileset;
+		var background = _n0.background;
+		return author$project$PixelEngine$Graphics$Data$Area$Tiled(
+			{background: background, content: content, rows: rows, tileset: tileset});
+	});
 var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
 	return {$: 'Transition', a: a};
 };
@@ -10218,8 +10231,10 @@ var author$project$PixelEngine$Graphics$Data$Options$new = function (_n0) {
 	var width = _n0.width;
 	var scale = _n0.scale;
 	var transitionSpeedInSec = _n0.transitionSpeedInSec;
+	var animationFPS = _n0.animationFPS;
 	return author$project$PixelEngine$Graphics$Data$Options$Options(
 		{
+			animationFPS: animationFPS,
 			controllerOptions: elm$core$Maybe$Nothing,
 			scale: scale,
 			transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
@@ -10235,23 +10250,19 @@ var author$project$PixelEngine$Graphics$Data$Options$new = function (_n0) {
 			width: width
 		});
 };
-var author$project$PixelEngine$Graphics$options = function (_n0) {
-	var width = _n0.width;
-	var transitionSpeedInSec = _n0.transitionSpeedInSec;
+var author$project$PixelEngine$Graphics$Options$fromWidth = function (width) {
 	return author$project$PixelEngine$Graphics$Data$Options$new(
-		{scale: 1, transitionSpeedInSec: transitionSpeedInSec, width: width});
+		{animationFPS: 1, scale: 1, transitionSpeedInSec: 0.2, width: width});
 };
-var author$project$PixelEngine$Graphics$Data$Area$Tiled = function (a) {
-	return {$: 'Tiled', a: a};
-};
-var author$project$PixelEngine$Graphics$tiledArea = F2(
-	function (_n0, content) {
-		var rows = _n0.rows;
-		var tileset = _n0.tileset;
-		var background = _n0.background;
-		return author$project$PixelEngine$Graphics$Data$Area$Tiled(
-			{background: background, content: content, rows: rows, tileset: tileset});
+var author$project$PixelEngine$Graphics$Data$Options$withTransitionSpeed = F2(
+	function (transitionSpeed, _n0) {
+		var o = _n0.a;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				o,
+				{transitionSpeedInSec: transitionSpeed}));
 	});
+var author$project$PixelEngine$Graphics$Options$withTransitionSpeed = author$project$PixelEngine$Graphics$Data$Options$withTransitionSpeed;
 var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
 	var left = _n0.a;
 	var top = _n0.b;
@@ -10354,8 +10365,10 @@ var author$project$Snake$view = function (_n0) {
 						}()
 						])))
 			]),
-		options: author$project$PixelEngine$Graphics$options(
-			{transitionSpeedInSec: 0.2, width: width}),
+		options: A2(
+			author$project$PixelEngine$Graphics$Options$withTransitionSpeed,
+			0.8,
+			author$project$PixelEngine$Graphics$Options$fromWidth(width)),
 		title: 'Snake'
 	};
 };
