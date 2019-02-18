@@ -8,7 +8,7 @@ import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
 import PixelEngine.Grid as Grid exposing (Grid)
 import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position, Vector)
+import PixelEngine.Grid.Position as Position exposing (Position, Coord)
 import Random
 import Time
 
@@ -57,28 +57,15 @@ boardSize =
 newChicken : List Position -> Cmd Msg
 newChicken occupiedSquares =
     let
-        board : Grid ()
-        board =
+        emptySquares : Array Position
+        emptySquares =
             occupiedSquares
-                |> List.map (\pos -> ( pos, () ))
+                |> List.map (\pos -> (pos,()))
                 |> Grid.fromList
                     { columns = boardSize
                     , rows = boardSize
                     }
-
-        emptySquares : Array Position
-        emptySquares =
-            board
-                |> Grid.map
-                    (\_ maybeMark ->
-                        case maybeMark of
-                            Just _ ->
-                                Nothing
-
-                            Nothing ->
-                                Just ()
-                    )
-                |> Grid.positions
+                |> Grid.emptyPositions
                 |> Array.fromList
     in
     Random.generate
@@ -116,7 +103,7 @@ init _ =
 moveSnake : Direction -> Snake -> Snake
 moveSnake direction ( pos, body ) =
     let
-        dirVec : Vector
+        dirVec : Coord
         dirVec =
             direction |> Position.fromDirection
 

@@ -1,13 +1,9 @@
-module CultSim.Person exposing (Action(..), Person, Position, generate, move, pray, setPraying, tile, tile_bar)
+module CultSim.Person exposing (Action(..), Person, generate, move, pray, setPraying, tile, tile_bar)
 
 import PixelEngine.Graphics.Tile as Tile exposing (Tile)
+import PixelEngine.Location as Location exposing (Location,Angle(..))
 import Random
 
-
-type alias Position =
-    { x : Float
-    , y : Float
-    }
 
 
 type Action
@@ -25,7 +21,7 @@ type alias Skin =
 
 
 type alias Person =
-    { position : Position
+    { location : Location
     , action : Action
     , skin : Skin
     , praying_duration : Int
@@ -68,31 +64,19 @@ generateSkin =
         (Random.int 0 7)
 
 
-generatePosition : Float -> Random.Generator Position
-generatePosition r =
+generatePosition : Float -> Random.Generator Location
+generatePosition l =
     Random.float 0 (2 * pi)
-        |> Random.map
-            (\phi ->
-                let
-                    x : Float
-                    x =
-                        r * cos phi
-
-                    y : Float
-                    y =
-                        r * sin phi
-                in
-                { x = x, y = y }
-            )
+        |> Random.map (\r -> (0,0) |> Location.move l (Angle r))
 
 
 move : Person -> Random.Seed -> ( Person, Random.Seed )
 move person =
     Random.step (generatePosition 75)
         >> Tuple.mapFirst
-            (\position ->
+            (\location ->
                 { person
-                    | position = position
+                    | location = location
                     , action = Walking
                 }
             )
@@ -126,9 +110,9 @@ setPraying person =
 generate : Random.Generator ( String, Person )
 generate =
     Random.map3
-        (\position float skin ->
+        (\location float skin ->
             ( "person_" ++ String.fromFloat float
-            , { position = position
+            , { location= location
               , action = None
               , skin = skin
               , praying_duration = 0

@@ -7,6 +7,7 @@ import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
 import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, tile, tileset)
+import PixelEngine.Location as Location exposing (Location,Vector)
 import Random
 
 
@@ -215,22 +216,22 @@ text string =
 # Locations
 
 -}
-firstCardLocation : ( Float, Float )
+firstCardLocation : Location
 firstCardLocation =
-    ( 0 * 32, 0 * 32 ) |> addOffset offset
+    ( 0 * 32, 0 * 32 ) |> Location.add offset
 
 
-secondCardLocation : ( Float, Float )
+secondCardLocation : Location
 secondCardLocation =
-    ( 1 * 32, 0 * 32 ) |> addOffset offset
+    ( 1 * 32, 0 * 32 ) |> Location.add offset
 
 
-thirdCardLocation : ( Float, Float )
+thirdCardLocation : Location
 thirdCardLocation =
-    ( 2 * 32, 0 * 32 ) |> addOffset offset
+    ( 2 * 32, 0 * 32 ) |> Location.add offset
 
 
-viewCards : Model -> List ( ( Float, Float ), Image Msg )
+viewCards : Model -> List ( Location, Image Msg )
 viewCards model =
     case model of
         None ->
@@ -262,15 +263,9 @@ viewCards model =
 We want to define an offset, that will be added to every location.
 
 -}
-offset : { left : Float, top : Float }
+offset : Vector
 offset =
-    { left = 50, top = 84 }
-
-
-addOffset : { left : Float, top : Float } -> ( Float, Float ) -> ( Float, Float )
-addOffset l ( left, top ) =
-    ( l.left + left, l.top + top )
-
+    { x = 50, y = 84 }
 
 {-|
 
@@ -300,9 +295,9 @@ view model =
             , background = background
             }
             (List.concat
-                [ [ ( ( -8, -8 ) |> addOffset offset, backgroundImage )
-                  , ( ( 3 * 32, 8 ) |> addOffset offset, resetButtonImage )
-                  , ( ( 0, 35 ) |> addOffset offset, text "SLOT-MACHINE" )
+                [ [ ( ( -8, -8 ) |> Location.add offset, backgroundImage )
+                  , ( ( 3 * 32, 8 ) |> Location.add offset, resetButtonImage )
+                  , ( ( 0, 35 ) |> Location.add offset, text "SLOT-MACHINE" )
                   ]
                 , viewCards model
                 ]

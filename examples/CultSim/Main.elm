@@ -15,6 +15,7 @@ import Random
 import Random.Extra as RandomExtra
 import Task
 import Time exposing (Posix)
+import PixelEngine.Location as Location exposing (Location,Angle,Vector)
 
 
 type alias Model =
@@ -239,6 +240,8 @@ subscriptions _ =
     Sub.none
 
 
+
+
 view : Maybe Model -> Document Msg
 view maybeModel =
     let
@@ -254,6 +257,12 @@ view maybeModel =
             Options.fromWidth width
                 |> Options.withMovementSpeed 8
                 |> Options.withScale 2
+        
+        offset : Vector
+        offset =
+            { x = width / 2
+            , y = height / 2
+            }
     in
     { title = "CultSim"
     , body =
@@ -274,11 +283,8 @@ view maybeModel =
                                 |> Dict.toList
                                 |> List.append [ newPerson ]
                                 |> List.map
-                                    (\( id, { position, action, skin, praying_duration } ) ->
+                                    (\( id, { location, action, skin, praying_duration } ) ->
                                         let
-                                            { x, y } =
-                                                position
-
                                             image =
                                                 Image.fromTile (Person.tile action)
                                                     (Tile.tileset
@@ -291,7 +297,7 @@ view maybeModel =
                                             { head, body } =
                                                 skin
                                         in
-                                        ( ( width / 2 + x, height / 2 + y )
+                                        ( location |> Location.add offset
                                         , Image.multipleImages
                                             (if action == Dying then
                                                 [ ( ( 0, 0 )

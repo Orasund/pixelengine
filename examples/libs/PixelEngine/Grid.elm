@@ -10,6 +10,7 @@ module PixelEngine.Grid exposing
     , foldr
     , fromDict
     , fromList
+    , emptyPositions
     , get
     , insert
     , intersect
@@ -51,7 +52,7 @@ import PixelEngine.Grid.Position exposing (Position)
 
 # List
 
-@docs positions, values, toList, fromList
+@docs positions, emptyPositions, values, toList, fromList
 
 
 # Dict
@@ -197,6 +198,21 @@ positions (Grid { dict }) =
 values : Grid a -> List a
 values (Grid { dict }) =
     dict |> Dict.values
+
+{-| Get all empty positions in a grid, sorted from lowest to highest.
+-}
+emptyPositions : Grid a -> List Position
+emptyPositions =
+    map
+        (\_ maybeMark ->
+            case maybeMark of
+                Just _ ->
+                    Nothing
+
+                Nothing ->
+                    Just ()
+        )
+        >> positions
 
 
 {-| Convert a grid into an association list of position-value pairs, sorted by the position.

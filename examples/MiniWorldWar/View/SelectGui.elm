@@ -6,7 +6,6 @@ import MiniWorldWar.View as View
 import MiniWorldWar.View.Image.SelectGui as Gui
 import PixelEngine.Graphics.Image as Image exposing (Image)
 
-
 relativeCoord : ( Int, Int ) -> ( Float, Float ) -> ( Float, Float )
 relativeCoord ( x1, y1 ) ( x, y ) =
     ( x + 8 * (x1 |> toFloat), y + 3 + 8 * (y1 |> toFloat) )
