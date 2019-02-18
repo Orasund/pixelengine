@@ -2,14 +2,13 @@ module Index.Home exposing (view)
 
 import Color
 import Element exposing (Element)
-import Element.Background as Background
 import Framework.Button as Button
 import Framework.Card as Card
 import Framework.Modifier exposing (Modifier(..))
 import Framework.Typography as Typography
 import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Options as Options  exposing (Options)
 import PixelEngine.Graphics.Image as Image exposing (image)
+import PixelEngine.Graphics.Options as Options
 import PixelEngine.Graphics.Tile exposing (Tileset)
 
 

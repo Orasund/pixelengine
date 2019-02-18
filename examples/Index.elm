@@ -2,26 +2,27 @@ module Index exposing (main)
 
 import Browser exposing (Document, UrlRequest(..), application)
 import Browser.Navigation as Nav exposing (Key)
-import Element exposing (Element)
+import Element
 import Element.Background as Background
 import Http
 import Index.Example as Example
 import Index.ExampleWithCode as ExampleWithCode
 import Index.Home as Home
 import Url exposing (Url)
-import Url.Parser as UrlParser exposing ((</>))
-import Framework.Typography as Typography
 
+examplesWithCode : List String
 examplesWithCode =
-    [  "TicTacToe", "SlotMachine", "Snake" ]
+    [ "TicTacToe", "SlotMachine", "Snake" ]
 
-
+examplesWithoutCode : List String
 examplesWithoutCode =
     [ "DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
 
 
 type alias ExampleModel =
-    { src : String, code : String }
+    { src : String
+    , code : String
+    }
 
 
 type Page
@@ -66,7 +67,7 @@ update msg model =
         GetCode name ->
             ( { model | page = Example name }
             , Http.get
-                { url = "https://raw.githubusercontent.com/Orasund/pixelengine/master/examples/"++name++"/Main.elm"--"examples/"++name++"/Main.elm"
+                { url = "https://raw.githubusercontent.com/Orasund/pixelengine/master/examples/" ++ name ++ "/Main.elm" --"examples/"++name++"/Main.elm"
                 , expect =
                     Http.expectString
                         (\result ->
@@ -76,7 +77,6 @@ update msg model =
 
                                 Err error ->
                                     error
-                                        |> Debug.log "Error:"
                                         |> always (ViewExample name)
                         )
                 }
@@ -99,7 +99,7 @@ update msg model =
 
 
 view : Model -> Document Msg
-view ({ page } as model) =
+view { page } =
     { title = "PixelEngine"
     , body =
         [ Element.layout
@@ -134,7 +134,7 @@ onUrlChange url =
         Just name ->
             if examplesWithCode |> List.member name then
                 GetCode name
-                {-ViewExample name-}
+                {- ViewExample name -}
 
             else if examplesWithoutCode |> List.member name then
                 ViewExample name

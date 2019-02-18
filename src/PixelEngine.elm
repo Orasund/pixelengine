@@ -9,8 +9,6 @@ PixelEngine needs a lot of wiring in order for it to work as intended.
 Thats why this module gives different prewired frames.
 To start, copy this example and expand upon it.
 
-    module ControlsExample exposing (main)
-
     import Color
     import Html.Attributes as Attributes
     import PixelEngine exposing (PixelEngine)
@@ -18,21 +16,17 @@ To start, copy this example and expand upon it.
     import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
     import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
 
-
     windowWidth : Int
     windowWidth =
         16
-
 
     type alias Model =
         { x : Int
         , y : Int
         }
 
-
     type Msg
         = Controls Input
-
 
     view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
     view ({ x, y } as model) =
@@ -61,10 +55,11 @@ To start, copy this example and expand upon it.
                 tile ( 12, 12 )
         in
         { title = "Example"
-        , options = Graphics.options
-            { width = width
-            , transitionSpeedInSec = 0.2
-            }
+        , options =
+            Graphics.options
+                { width = width
+                , transitionSpeedInSec = 0.2
+                }
         , body =
             [ Graphics.tiledArea
                 { rows = windowWidth
@@ -72,19 +67,17 @@ To start, copy this example and expand upon it.
                 , tileset = tileset
                 }
                 [ ( ( x, y )
-                , playerTile
-                )
+                  , playerTile
+                  )
                 ]
             ]
         }
-
 
     init : () -> ( Model, Cmd Msg )
     init _ =
         ( { x = windowWidth // 2, y = windowWidth // 2 }
         , Cmd.none
         )
-
 
     update : Msg -> Model -> ( Model, Cmd Msg )
     update msg ({ x, y } as model) =
@@ -108,16 +101,13 @@ To start, copy this example and expand upon it.
         , Cmd.none
         )
 
-
     subscriptions : Model -> Sub Msg
     subscriptions _ =
         Sub.none
 
-
     controls : Input -> Msg
     controls =
         Controls
-
 
     main : PixelEngine () Model Msg
     main =
@@ -139,7 +129,6 @@ import Browser.Events as Events
 import Html
 import PixelEngine.Controls as Controls exposing (Input)
 import PixelEngine.Graphics as Graphics exposing (Area, Options)
-import PixelEngine.Graphics.Abstract as Abstract
 import PixelEngine.Graphics.Data.Options as OptionsData
 import Task
 
@@ -226,7 +215,7 @@ viewFunction view { modelContent, config } =
             options
 
         height =
-            (toFloat<|scale) * Graphics.heightOf body
+            (toFloat <| scale) * Graphics.heightOf body
     in
     { title = title
     , body =
@@ -235,9 +224,8 @@ viewFunction view { modelContent, config } =
                 Graphics.view
                     (options
                         |> OptionsData.usingScale
-                            (
-                                min (2 ^ (floor <| logBase 2 <| wS.height / height))
-                                    (2 ^ (floor <| logBase 2 <| wS.width / width))
+                            (min (2 ^ (floor <| logBase 2 <| wS.height / height))
+                                (2 ^ (floor <| logBase 2 <| wS.width / width))
                             )
                         |> (case controls of
                                 Just ( _, controlsToMsg ) ->

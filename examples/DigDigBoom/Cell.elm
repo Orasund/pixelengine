@@ -13,7 +13,6 @@ module DigDigBoom.Cell exposing
     , tutorial
     )
 
-import Dict
 import DigDigBoom.Tileset as Tileset
 import PixelEngine.Graphics.Tile exposing (Tile)
 import PixelEngine.Grid as Grid exposing (Grid)

@@ -7,8 +7,8 @@ import Dict exposing (Dict)
 import Html
 import Html.Attributes as Attributes
 import PixelEngine.Graphics as Graphics
-import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Image as Image exposing (image)
+import PixelEngine.Graphics.Options as Options
 import PixelEngine.Graphics.Tile as Tile
 import Process
 import Random
@@ -252,8 +252,8 @@ view maybeModel =
 
         options =
             Options.fromWidth width
-            |> Options.withMovementSpeed 8
-            |> Options.withScale 2
+                |> Options.withMovementSpeed 8
+                |> Options.withScale 2
     in
     { title = "CultSim"
     , body =
@@ -350,33 +350,33 @@ view maybeModel =
                                                )
                                         )
                                     )
-                            ,  if hunger < 1 then
-                                    [ ( ( width / 2 - 32, height / 2 - 48 )
-                                        , Image.image "temple.png"
-                                    )
-                                    ]
-                                  else
-                                    [ ( ( width / 2 - 32, height / 2 - 48 )
-                                        , Image.image "devil_temple.png"
-                                    )
-                                    
-                                        , ( ( width / 2 - 80, height / 2 - 90 )
-                                        
-                                , Image.fromTextWithSpacing -4 "Cuthulhu asks"
-                                    { source = "Berlin16x16.png"
-                                    , spriteWidth = 16
-                                    , spriteHeight = 16
-                                    }
-                                )
-                              , ( ( width / 2 - 85, height / 2 - 70 )
-                                , Image.fromTextWithSpacing -5 "for a sacrifice..."
-                                    { source = "Berlin16x16.png"
-                                    , spriteWidth = 16
-                                    , spriteHeight = 16
-                                    }
-                                )
-                                    ]
-                              
+                            , if hunger < 1 then
+                                [ ( ( width / 2 - 32, height / 2 - 48 )
+                                  , Image.image "temple.png"
+                                  )
+                                ]
+
+                              else
+                                [ ( ( width / 2 - 32, height / 2 - 48 )
+                                  , Image.image "devil_temple.png"
+                                  )
+                                , ( ( width / 2 - 80, height / 2 - 90 )
+                                  , Image.fromTextWithSpacing -4
+                                        "Cuthulhu asks"
+                                        { source = "Berlin16x16.png"
+                                        , spriteWidth = 16
+                                        , spriteHeight = 16
+                                        }
+                                  )
+                                , ( ( width / 2 - 85, height / 2 - 70 )
+                                  , Image.fromTextWithSpacing -5
+                                        "for a sacrifice..."
+                                        { source = "Berlin16x16.png"
+                                        , spriteWidth = 16
+                                        , spriteHeight = 16
+                                        }
+                                  )
+                                ]
                             ]
 
                     Nothing ->

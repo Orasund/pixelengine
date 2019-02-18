@@ -1,7 +1,6 @@
 module DigDigBoom.Main exposing (main)
 
 import Color
-import Dict
 import DigDigBoom.Cell as Cell
     exposing
         ( Cell(..)
@@ -15,15 +14,15 @@ import DigDigBoom.Game as Game
 import DigDigBoom.Player as Player exposing (PlayerData)
 import DigDigBoom.Tileset as Tileset
 import PixelEngine exposing (PixelEngine, game)
-import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area)
 import PixelEngine.Graphics.Image as Image exposing (image)
+import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
 import PixelEngine.Graphics.Transition as Transition
 import PixelEngine.Grid as Grid exposing (Grid)
 import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position, Vector)
+import PixelEngine.Grid.Position exposing (Position)
 import Random
 
 
@@ -72,8 +71,7 @@ tutorial num =
 
         currentMap =
             Cell.tutorial num
-                |> 
-                    (Grid.update ( 7, 7 ) (always (Just (Player Down))))
+                |> Grid.update ( 7, 7 ) (always (Just (Player Down)))
     in
     { map = currentMap
     , oldScreen = Nothing

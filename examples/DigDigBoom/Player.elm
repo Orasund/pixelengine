@@ -11,7 +11,6 @@ module DigDigBoom.Player exposing
     , rotateRight
     )
 
-import Dict
 import DigDigBoom.Cell as Cell
     exposing
         ( Cell(..)
@@ -112,13 +111,15 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 , ( { playerData
                         | inventory = inventory |> Inventory.add item
                     }
-                  , currentMap |> Map.move playerCell
+                  , currentMap
+                        |> Map.move playerCell
                         |> (case maybeDroppedItem of
                                 Just droppedItem ->
                                     Grid.insert location (Item droppedItem)
 
                                 _ ->
-                                    identity)
+                                    identity
+                           )
                   )
                 )
 
@@ -133,14 +134,15 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 in
                 ( newPlayerCell
                 , ( playerData |> (\a -> { a | inventory = inventory })
-                  ,  currentMap |> Map.move playerCell
-                    |> (case item of
+                  , currentMap
+                        |> Map.move playerCell
+                        |> (case item of
                                 Just a ->
                                     Grid.insert location (Item a)
 
                                 Nothing ->
                                     identity
-                    )
+                           )
                   )
                 )
 
@@ -152,13 +154,13 @@ move worldSize ( ( location, direction ) as playerCell, ( playerData, currentMap
                 ( newPlayerCell
                 , ( playerData |> (\a -> { a | inventory = inventory })
                   , case item of
-                                Just a ->
-                                    currentMap
-                                        |> Map.move playerCell
-                                        |> Grid.insert location (Item a)
+                        Just a ->
+                            currentMap
+                                |> Map.move playerCell
+                                |> Grid.insert location (Item a)
 
-                                Nothing ->
-                                    currentMap
+                        Nothing ->
+                            currentMap
                   )
                 )
 

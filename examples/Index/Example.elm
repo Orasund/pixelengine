@@ -3,7 +3,6 @@ module Index.Example exposing (view)
 import Element exposing (Element)
 import Framework.Button as Button
 import Framework.Modifier exposing (Modifier(..))
-import Framework.Typography as Typography
 import Html
 import Html.Attributes as Attributes
 
@@ -12,7 +11,7 @@ view : String -> Element msg
 view name =
     Element.column
         [ Element.width Element.fill
-        , Element.height <| Element.px <| 800
+        , Element.height <| Element.px <| 820
         , Element.centerY
         ]
         [ Element.html <|

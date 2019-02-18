@@ -4,7 +4,6 @@ import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Framework.Card as Card
 import Framework.Typography as Typography
 import Html
 import Html.Attributes as Attributes
@@ -90,6 +89,7 @@ parseMultiple =
         |. Parser.token ")"
         |= Parser.loop [] multipleHelp
 
+
 displayCode : String -> Element msg
 displayCode code =
     Element.el
@@ -108,6 +108,7 @@ displayCode code =
                     |> Result.withDefault
                         (Html.code [] [ Html.text code ])
                 ]
+
 
 parse : String -> List (Element msg)
 parse string =
@@ -138,10 +139,11 @@ parse string =
                                     , Font.heavy
                                     , Font.justify
                                     , Border.widthEach
-                                        {bottom = 0
+                                        { bottom = 0
                                         , left = 0
                                         , right = 0
-                                        , top = 2}
+                                        , top = 2
+                                        }
                                     , Element.width Element.fill
                                     ]
                                 <|

@@ -1,15 +1,13 @@
 module SlotMachine exposing (main)
 
-import Array exposing (Array)
 import Color
 import PixelEngine exposing (PixelEngine, gameWithNoControls)
 import PixelEngine.Controls exposing (Input(..))
 import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
 import PixelEngine.Graphics.Image as Image exposing (Image, image)
 import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile, tileset)
+import PixelEngine.Graphics.Tile as Tile exposing (Tile, tile, tileset)
 import Random
-import Time
 
 
 
@@ -54,7 +52,7 @@ type Model
 
 # Actions
 
-  - The player can `Click` on the Pile. In that case we request a random card.
+  - The player can `Click` on the pile. In that case we request a random card.
   - The random card will be returned and we update the Model. `(`DealCard Suit\`)
   - Once the game is done, the player can press the `reset` button.
 
@@ -80,6 +78,7 @@ init _ =
 {------------------------
    UPDATE
 ------------------------}
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -126,24 +125,39 @@ subscriptions _ =
    VIEW
 ------------------------}
 
-{-| # Images
+
+{-|
+
+
+# Images
+
 We want to display three different things:
-* The background (`backgroundImage`)
-* The reset button (`resetButtonImage`)
-* The cards (`cardImage`)
+
+  - The background (`backgroundImage`)
+  - The reset button (`resetButtonImage`)
+  - The cards (`cardImage`)F
+
 -}
 backgroundImage : Image Msg
 backgroundImage =
     image "background.png"
+
 
 resetButtonImage : Image Msg
 resetButtonImage =
     image "reset.png"
         |> Image.clickable Reset
 
-{-| ## Cards
-The function "animated" states how many steps the animation is doing.
-8 Sprites -> 7 Steps.
+
+{-|
+
+
+## Cards
+
+The function `Tile.animated` states how many steps the animation is doing.
+
+we have 8 sprites and there for 7 steps.
+
 -}
 shufflingTile : Tile Msg
 shufflingTile =
@@ -175,10 +189,15 @@ cardImage suit =
                     , spriteHeight = 32
                     }
 
-{-| # Text
+
+{-|
+
+
+# Text
+
 The `text` uses a tileset that contains the font.
-Negative spacing means that the letters overlap. This is only possible because
-we are not using tiles.
+Negative spacing means that the letters overlap.
+
 -}
 text : String -> Image Msg
 text string =
@@ -189,7 +208,12 @@ text string =
             , spriteHeight = 8
             }
 
-{-| # Locations
+
+{-|
+
+
+# Locations
+
 -}
 firstCardLocation : ( Float, Float )
 firstCardLocation =
@@ -230,25 +254,29 @@ viewCards model =
             ]
 
 
-{-| #Offset
+{-|
 
-We want to define an offset, that means a value that will be added to every
-location.
+
+# Offset
+
+We want to define an offset, that will be added to every location.
+
 -}
 offset : { left : Float, top : Float }
 offset =
     { left = 50, top = 84 }
+
 
 addOffset : { left : Float, top : Float } -> ( Float, Float ) -> ( Float, Float )
 addOffset l ( left, top ) =
     ( l.left + left, l.top + top )
 
 
+{-|
 
 
+# Viewing the Model
 
-
-{-| # Viewing the Model
 -}
 view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
 view model =

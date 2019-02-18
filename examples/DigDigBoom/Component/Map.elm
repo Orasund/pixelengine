@@ -5,10 +5,9 @@ module DigDigBoom.Component.Map exposing
     , posFront
     )
 
-import Dict exposing (Dict)
 import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Direction as Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position, Vector)
+import PixelEngine.Grid.Direction exposing (Direction(..))
+import PixelEngine.Grid.Position as Position exposing (Position)
 import Random exposing (Generator)
 import Result exposing (Result(..))
 
@@ -35,13 +34,12 @@ generator size fun =
                             , xy // size
                             )
                     in
-                    ( (case maybeA pos of
-                                Just a ->
-                                    grid |> Grid.insert pos a 
+                    ( case maybeA pos of
+                        Just a ->
+                            grid |> Grid.insert pos a
 
-                                Nothing ->
-                                    grid
-                           )
+                        Nothing ->
+                            grid
                     , xy + 1
                     )
                 )
@@ -64,5 +62,6 @@ move ( pos, dir ) grid =
                     (pos |> Position.move 1 dir)
                     a
                 |> Grid.remove pos
+
         Nothing ->
             grid

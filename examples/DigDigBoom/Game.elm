@@ -10,7 +10,7 @@ import DigDigBoom.Cell as Cell
         )
 import DigDigBoom.Component.Map as Map exposing (Actor)
 import DigDigBoom.Player as Player exposing (Game)
-import PixelEngine.Grid as Grid exposing (Grid)
+import PixelEngine.Grid as Grid
 import PixelEngine.Grid.Direction exposing (Direction(..))
 import PixelEngine.Grid.Position as Position exposing (Position)
 
@@ -47,10 +47,10 @@ updateCell playerCell ( position, cell ) =
             updateEnemy position enemy playerCell
 
         Effect _ ->
-            Tuple.mapSecond (    Grid.remove position)
+            Tuple.mapSecond (Grid.remove position)
 
         Stunned enemy id ->
-            Tuple.mapSecond (    Grid.update position (always <| Just <| Enemy enemy id))
+            Tuple.mapSecond (Grid.update position (always <| Just <| Enemy enemy id))
 
         _ ->
             identity
@@ -81,7 +81,7 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                     (placedBombeBehavoiur currentLocation)
                     game
                 |> Tuple.mapSecond
-                    (    Grid.update currentLocation (always (Just (Effect Smoke))))
+                    (Grid.update currentLocation (always (Just (Effect Smoke))))
 
         monster ->
             let
@@ -103,13 +103,11 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                 |> (case map |> Grid.get newLocation of
                         Nothing ->
                             Tuple.mapSecond
-                                (Map.move actor 
-                                )
+                                (Map.move actor)
 
                         Just (Item _) ->
                             Tuple.mapSecond
-                                (Map.move actor 
-                                )
+                                (Map.move actor)
 
                         Just (Solid solid) ->
                             if
@@ -129,9 +127,8 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                                        )
                             then
                                 Tuple.mapSecond <|
-                                       
-                                        Grid.update newLocation <|
-                                            always (Cell.decomposing solid |> Tuple.first |> Maybe.map Solid)
+                                    Grid.update newLocation <|
+                                        always (Cell.decomposing solid |> Tuple.first |> Maybe.map Solid)
 
                             else
                                 identity
@@ -149,19 +146,17 @@ placedBombeBehavoiur location direction game =
     in
     game
         |> Tuple.mapSecond
-            (
-                (Grid.update
-                    newLocation
-                    (\elem ->
-                        case elem of
-                            Just (Enemy _ _) ->
-                                Just <| Effect Bone
+            (Grid.update
+                newLocation
+                (\elem ->
+                    case elem of
+                        Just (Enemy _ _) ->
+                            Just <| Effect Bone
 
-                            Nothing ->
-                                Just <| Effect Smoke
+                        Nothing ->
+                            Just <| Effect Smoke
 
-                            _ ->
-                                elem
-                    )
+                        _ ->
+                            elem
                 )
             )

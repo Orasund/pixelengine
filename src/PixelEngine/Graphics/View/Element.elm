@@ -65,14 +65,14 @@ displayStaticTile pos ( spriteLeft, spriteTop ) scale { spriteWidth, spriteHeigh
         []
 
 
-displayAnimatedTile : Position -> Location -> { scale : Int, steps : Int, fps : Float} -> Tileset -> Html msg
-displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps,fps } { spriteWidth, spriteHeight, source } =
+displayAnimatedTile : Position -> Location -> { scale : Int, steps : Int, fps : Float } -> Tileset -> Html msg
+displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps, fps } { spriteWidth, spriteHeight, source } =
     div
         [ css
             [ Css.position Css.absolute
             , Css.top <| px <| pos.top
             , Css.left <| px <| pos.left
-            , Css.width <| px <|  (toFloat <| scale *spriteWidth)
+            , Css.width <| px <| (toFloat <| scale * spriteWidth)
             , Css.height <| px <| (toFloat <| scale * spriteHeight)
             , Css.overflow Css.hidden
             ]
@@ -82,7 +82,7 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps,fps } { spriteW
                 [ Css.position Css.absolute
                 , Css.right <|
                     px <|
-                         (toFloat <| scale *spriteWidth * (steps + 2))
+                        (toFloat <| scale * spriteWidth * (steps + 2))
                 ]
             ]
             [ img
@@ -105,17 +105,18 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps,fps } { spriteW
                     , Css.height <| px <| toFloat <| spriteHeight
                     , Css.position Css.absolute
                     , Css.left <|
-                        px <| (toFloat <| scale *spriteWidth * (steps + 1))
+                        px <|
+                            (toFloat <| scale * spriteWidth * (steps + 1))
                     , Css.property "image-rendering" "pixelated"
                     , Css.property "animation"
                         ("pixelengine_graphics_basic "
-                            ++ String.fromFloat ((toFloat (steps + 1) )/fps)
+                            ++ String.fromFloat (toFloat (steps + 1) / fps)
                             ++ ".0s steps("
                             ++ String.fromInt (steps + 1)
                             ++ ") infinite"
                         )
                     , Css.property "transform-origin" "top left"
-                    , Css.transform <| Css.scale2 (toFloat<|scale) (toFloat<|scale)
+                    , Css.transform <| Css.scale2 (toFloat <| scale) (toFloat <| scale)
                     , Css.float Css.right
                     ]
                 ]
@@ -125,14 +126,14 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps,fps } { spriteW
 
 
 displayTile : Options msg -> ( Position, TileWithTileset ) -> Html msg
-displayTile (Options { scale,animationFPS }) ( pos, { left, top, steps, tileset } ) =
+displayTile (Options { scale, animationFPS }) ( pos, { left, top, steps, tileset } ) =
     if steps == 0 then
         displayStaticTile pos ( left, top ) scale tileset
 
     else
         displayAnimatedTile pos
             ( left, top )
-            { scale = scale, steps = steps,fps = animationFPS }
+            { scale = scale, steps = steps, fps = animationFPS }
             tileset
 
 
@@ -159,7 +160,7 @@ displayMultiple ((Options { scale, movementSpeedInSec }) as options) ( rootPosit
                                 (toFloat <| scale * spriteWidth)
                         , Css.height <|
                             Css.px <|
-                                 (toFloat <| scale *spriteHeight)
+                                (toFloat <| scale * spriteHeight)
                         ]
 
                     _ ->
