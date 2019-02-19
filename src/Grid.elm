@@ -1,38 +1,15 @@
 module Grid exposing
     ( Grid
-    , diff
-    , dimensions
-    , empty
-    , emptyPositions
-    , fill
-    , filter
-    , find
-    , foldl
-    , foldr
-    , fromDict
-    , fromList
-    , get
-    , insert
-    , intersect
-    , isEmpty
-    , map
-    , member
-    , partition
-    , positions
-    , remove
-    , size
-    , toDict
-    , toList
-    , union
-    , update
-    , values
+    , fill, empty, insert, update, remove
+    , isEmpty, member, get, size, dimensions
+    , positions, emptyPositions, values, toList, fromList
+    , toDict, fromDict
+    , map, foldl, foldr, filter, partition, find
+    , union, intersect, diff
     )
 
-import Dict exposing (Dict)
-import Grid.Position exposing (Position)
-
-
 {-| A `Grid` is a dictionary that has a size constraint.
+Here is an example where such a grid is used: (Snake Example)[https://orasund.github.io/pixelengine/#Snake].
 
 
 # Grids
@@ -63,11 +40,17 @@ import Grid.Position exposing (Position)
 
 @docs map, foldl, foldr, filter, partition, find
 
-#Combine
+
+# Combine
 
 @docs union, intersect, diff
 
 -}
+
+import Dict exposing (Dict)
+import Grid.Position exposing (Position)
+
+
 mapDict : (Dict Position a -> Dict Position b) -> Grid a -> Grid b
 mapDict fun (Grid { dict, rows, columns }) =
     Grid
@@ -90,13 +73,12 @@ wrap (Grid { rows, columns }) ( x, y ) =
 ---------------------------------
 
 
-{-| A grid of values.
-
-It has a fixed amount of columns and rows.
+{-| A grid with a fixes amount of columns and rows.
 
 It will wrap the borders (apply ModBy), making every position valid.
 
-    grid |> Dict.get ( -1, 0 ) == grid |> Grid.get ( columns - 1, 0 )
+    grid |> Dict.get ( -1, 0 )
+    == grid |> Grid.get ( columns - 1, 0 )
 
 If instead you want to have hard border around your grid, use `Grid.Bordered` instead.
 
@@ -110,6 +92,11 @@ type Grid a
 
 
 {-| Create a grid
+
+```
+fill (always <| Just () ) config |> emptyPositions == []
+```
+
 -}
 fill : (Position -> Maybe a) -> { rows : Int, columns : Int } -> Grid a
 fill fun config =
@@ -118,6 +105,11 @@ fill fun config =
 
 
 {-| Create an empty grid
+
+```
+empty == fill (always <| Just () )
+```
+
 -}
 empty : { rows : Int, columns : Int } -> Grid a
 empty { rows, columns } =
@@ -129,6 +121,11 @@ empty { rows, columns } =
 
 
 {-| Insert a value at a position in a grid. Replaces value when there is a collision.
+
+```
+grid |> insert position a |> get position == Just a
+```
+
 -}
 insert : Position -> a -> Grid a -> Grid a
 insert pos elem grid =

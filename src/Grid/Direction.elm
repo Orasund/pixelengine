@@ -1,14 +1,14 @@
-module Grid.Direction exposing
-    ( Direction(..)
-    , flip
-    , rotLeft
-    , rotRight
-    )
+module Grid.Direction exposing (Direction(..), flip, rotLeft, rotRight)
 
-{-| A abstract concept of a direction on a grid.
+{-|
+
+@docs Direction, flip, rotLeft, rotRight
+
 -}
 
 
+{-| A abstract concept of a direction on a grid.
+-}
 type Direction
     = Up
     | Down

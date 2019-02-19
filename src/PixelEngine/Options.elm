@@ -1,8 +1,7 @@
 module PixelEngine.Options exposing
     ( withTransitionFrom
     , Transition, transition
-    , Options, withAnimationFPS, withMovementSpeed, withScale
-    , default
+    , Options, default, withAnimationFPS, withMovementSpeed, withScale
     )
 
 {-| Options tweak different aspects of your program.
@@ -38,7 +37,7 @@ To get started, copy the following example:
 
 ## Options
 
-@docs Options, withAnimationFPS, withMovementSpeed, withScale
+@docs Options, default, withAnimationFPS, withMovementSpeed, withScale
 
 -}
 
@@ -125,11 +124,6 @@ type alias Options msg =
 default : Options msg
 default =
     OptionsData.new
-        { width = 512
-        , scale = 1
-        , movementSpeedInSec = 0.2
-        , animationFPS = 1
-        }
 
 
 {-| adds the `Transition` to the `Options`.

@@ -1,15 +1,22 @@
 module Grid.Position exposing
-    ( Coord
-    , Position
-    , add
-    , difference
-    , distance
-    , fromDirection
-    , length
-    , move
-    , scaleBy
-    , toDirection
+    ( Position, move, add, coordsTo
+    , Coord, fromDirection, toDirection, distance, scaleBy, length
     )
+
+{-| This module contains two ways of representing a point on a grid:
+`Position` and `Coord`. Positions are meant to be stored, and coordinates are
+meant to to calculations with.
+
+
+# Position
+
+@docs Position, move, add, coordsTo
+
+#Vector
+
+@docs Coord, fromDirection, toDirection, distance, scaleBy, length
+
+-}
 
 import Grid.Direction exposing (Direction(..))
 
@@ -34,7 +41,24 @@ type alias Coord =
     }
 
 
+{-| moves a Point some amount of steps in a direction. This is the most used
+way how to change a position.
+-}
+move : Int -> Direction -> Position -> Position
+move n direction =
+    let
+        dir =
+            direction |> fromDirection
+    in
+    add <| scaleBy n dir
+
+
 {-| Apply Coordinates to a position to get the relative position.
+
+```
+move amount direction == add ( fromDirection direction |> scaleby amount)
+```
+
 -}
 add : Coord -> Position -> Position
 add v ( x, y ) =
@@ -43,6 +67,13 @@ add v ( x, y ) =
     )
 
 
+{-| Scales Coordnates. Coordnates obtained by `fromDirection` have size 1.
+
+```
+fromDirection angle |> scaleBy l |> length == l
+```
+
+-}
 scaleBy : Int -> Coord -> Coord
 scaleBy n { x, y } =
     { x = x * n
@@ -57,14 +88,14 @@ difference p1 p2 == p1 <------- p2
 ```
 
 -}
-difference : Position -> Position -> Coord
-difference ( x1, y1 ) ( x2, y2 ) =
+coordsTo : Position -> Position -> Coord
+coordsTo ( x1, y1 ) ( x2, y2 ) =
     { x = x1 - x2
     , y = y1 - y2
     }
 
 
-{-| returns the length of the coordinate (distance to (0,0)
+{-| Returns the length of the coordinate (distance to (0,0)
 -}
 length : Coord -> Float
 length { x, y } =
@@ -73,12 +104,17 @@ length { x, y } =
 
 {-| Gets the distance between to points.
 (The length of the difference)
+
+```
+distance == vectorTo >> length
+```
+
 -}
 distance : Position -> Position -> Float
 distance p1 p2 =
     let
         { x, y } =
-            difference p1 p2
+            coordsTo p1 p2
     in
     sqrt <| toFloat <| (x * x + y * y)
 
@@ -124,14 +160,3 @@ toDirection { x, y } =
 
     else
         Up
-
-
-{-| moves a Point some amount of steps in a direction.
--}
-move : Int -> Direction -> Position -> Position
-move n direction =
-    let
-        dir =
-            direction |> fromDirection
-    in
-    add <| scaleBy n dir

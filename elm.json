@@ -7,9 +7,13 @@
     "exposed-modules": [
         "PixelEngine.Image",
         "PixelEngine.Tile",
-        "PixelEngine.Graphics.Transition",
-        "PixelEngine.Graphics.Options",
-        "PixelEngine"
+        "PixelEngine.Options",
+        "PixelEngine",
+        "Location",
+        "Grid",
+        "Grid.Position",
+        "Grid.Bordered",
+        "Grid.Direction"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {

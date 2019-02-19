@@ -1,38 +1,15 @@
-module PixelEngine.Bordered exposing
+module Grid.Bordered exposing
     ( Grid
-    , diff
-    , dimensions
-    , empty
-    , fill
-    , filter
-    , find
-    , foldl
-    , foldr
-    , fromDict
-    , fromList
-    , get
-    , ignoringError
-    , insert
-    , intersect
-    , isEmpty
-    , keys
-    , map
-    , member
-    , partition
-    , remove
-    , size
-    , toDict
-    , toList
-    , union
-    , update
-    , values
+    , fill, empty, insert, update, remove, ignoringError
+    , isEmpty, member, get, size, dimensions
+    , keys, values, toList, fromList
+    , toDict, fromDict
+    , map, foldl, foldr, filter, partition, find
+    , union, intersect, diff
     )
 
-import Dict exposing (Dict)
-import PixelEngine.Grid.Position exposing (Position)
-
-
-{-| A `Grid` is a dictionary that has a size constraint.
+{-| A grid with a hard border around the edges. you cant read or write from squares
+outside the border.
 
 
 # Grids
@@ -68,6 +45,11 @@ import PixelEngine.Grid.Position exposing (Position)
 @docs union, intersect, diff
 
 -}
+
+import Dict exposing (Dict)
+import Grid.Position exposing (Position)
+
+
 isValid : Position -> Grid a -> Bool
 isValid ( x, y ) (Grid { rows, columns }) =
     x >= 0 && x < columns && y >= 0 && y < rows

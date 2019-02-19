@@ -27,10 +27,10 @@ type Options msg
 new : { width : Float, scale : Int, movementSpeedInSec : Float, animationFPS : Float } -> Options msg
 new { width, scale, movementSpeedInSec, animationFPS } =
     Options
-        { width = width
-        , scale = scale
-        , movementSpeedInSec = movementSpeedInSec
-        , animationFPS = animationFPS
+        { width = 512
+        , scale = 1
+        , movementSpeedInSec = 0.2
+        , animationFPS = 1
         , controllerOptions = Nothing
         , transitionFrom = []
         , transition = Transition { name = "", transitionList = [ ( 0, "" ) ] }

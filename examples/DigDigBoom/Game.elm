@@ -66,8 +66,7 @@ attackPlayer : Position -> Actor -> Game -> Game
 attackPlayer location (( playerLocation, _ ) as playerCell) ( playerData, map ) =
     [ Up, Down, Left, Right ]
         |> List.filter
-            (Position.fromDirection >> (==) (playerLocation |> Position.difference location))
-        --((==) (playerLocation |> Position.difference location |> Position.toDirection))
+            (Position.fromDirection >> (==) (playerLocation |> Position.vectorTo location))
         |> List.head
         |> Maybe.map (always (( playerData, map ) |> Player.attack playerCell))
         |> Maybe.withDefault ( playerData, map )
@@ -89,7 +88,7 @@ specialBehaviour currentLocation enemyType ( playerLocation, _ ) (( _, map ) as 
                 moveDirection : Direction
                 moveDirection =
                     currentLocation
-                        |> Position.difference playerLocation
+                        |> Position.vectorTo playerLocation
                         |> Position.toDirection
 
                 actor : Actor

@@ -4,8 +4,7 @@ module PixelEngine exposing
     , toHtml, game, gameWithNoControls, gameWithCustomControls
     , Background, imageBackground, colorBackground
     , Input(..), defaultInputs
-    , withMobileSupport
-    , basicControls, customControls
+    , basicControls, customControls, withMobileSupport
     )
 
 {-| This module takes care of the Graphics.
@@ -15,7 +14,7 @@ or [PixelEngine.Graphics.Tile](PixelEngine-Graphics-Tile) to
 actually draw something.
 
 
-## Area
+# Area
 
 The main idea of this graphic engine is to arrage the content into horizontal stripes,
 so called areas.
@@ -33,27 +32,20 @@ of the `game` function from the main module.
 @docs toHtml, game, gameWithNoControls, gameWithCustomControls
 
 
-## Background
-
-@docs Background, imageBackground, colorBackground
-
-
-## Input
+# Controls
 
 The graphic engine provides a touch-controller for mobile devices.
 
 @docs Input, defaultInputs
 
+# Background
 
-## Mobile Support
-
-@docs withMobileSupport
+@docs Background, imageBackground, colorBackground
 
 
-## Subscriptions
+# Advanced
 
-@docs basicControls, customControls
-
+@docs basicControls, customControls, withMobileSupport
 -}
 
 import Browser
@@ -412,48 +404,6 @@ type Input
     | InputY
 
 
-{-| Adds mobile support to the options.
-It needs the window size.
-
-<PixelEngine> provides a fully wired program that takes care of everything.
-
--}
-withMobileSupport : { windowSize : { width : Float, height : Float }, controls : Input -> Maybe msg } -> Options msg -> Options msg
-withMobileSupport { windowSize, controls } (OptionsData.Options options) =
-    let
-        { width, height } =
-            windowSize
-
-        convert : ControllerData.AbstractInput -> Input
-        convert input =
-            case input of
-                ControllerData.AbstractInputA ->
-                    InputA
-
-                ControllerData.AbstractInputB ->
-                    InputB
-
-                ControllerData.AbstractInputX ->
-                    InputX
-
-                ControllerData.AbstractInputY ->
-                    InputY
-
-                ControllerData.AbstractInputUp ->
-                    InputUp
-
-                ControllerData.AbstractInputLeft ->
-                    InputLeft
-
-                ControllerData.AbstractInputRight ->
-                    InputRight
-
-                ControllerData.AbstractInputDown ->
-                    InputDown
-    in
-    OptionsData.Options { options | controllerOptions = Just { windowSize = { width = width, height = height }, controls = convert >> controls } }
-
-
 {-| The default layout:
 
   - A/ArrowLeft - `InputLeft`
@@ -650,3 +600,45 @@ game { init, update, width, subscriptions, view, controls } =
         , width = width
         , controls = Just ( defaultInputs, controls )
         }
+
+
+{-| Adds mobile support to the options.
+It needs the window size.
+
+<PixelEngine> provides a fully wired program that takes care of everything.
+
+-}
+withMobileSupport : { windowSize : { width : Float, height : Float }, controls : Input -> Maybe msg } -> Options msg -> Options msg
+withMobileSupport { windowSize, controls } (OptionsData.Options options) =
+    let
+        { width, height } =
+            windowSize
+
+        convert : ControllerData.AbstractInput -> Input
+        convert input =
+            case input of
+                ControllerData.AbstractInputA ->
+                    InputA
+
+                ControllerData.AbstractInputB ->
+                    InputB
+
+                ControllerData.AbstractInputX ->
+                    InputX
+
+                ControllerData.AbstractInputY ->
+                    InputY
+
+                ControllerData.AbstractInputUp ->
+                    InputUp
+
+                ControllerData.AbstractInputLeft ->
+                    InputLeft
+
+                ControllerData.AbstractInputRight ->
+                    InputRight
+
+                ControllerData.AbstractInputDown ->
+                    InputDown
+    in
+    OptionsData.Options { options | controllerOptions = Just { windowSize = { width = width, height = height }, controls = convert >> controls } }
