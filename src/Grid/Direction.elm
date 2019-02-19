@@ -1,4 +1,4 @@
-module PixelEngine.Grid.Direction exposing
+module Grid.Direction exposing
     ( Direction(..)
     , flip
     , rotLeft
@@ -7,6 +7,8 @@ module PixelEngine.Grid.Direction exposing
 
 {-| A abstract concept of a direction on a grid.
 -}
+
+
 type Direction
     = Up
     | Down

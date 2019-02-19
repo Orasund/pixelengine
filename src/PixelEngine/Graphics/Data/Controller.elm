@@ -1,4 +1,4 @@
-module PixelEngine.Graphics.Data.Controller exposing (ControllerOptions,AbstractInput(..), render)
+module PixelEngine.Graphics.Data.Controller exposing (AbstractInput(..), ControllerOptions, render)
 
 import Css exposing (px)
 import Html.Styled as Html exposing (Html, div)
@@ -16,12 +16,11 @@ type AbstractInput
     | AbstractInputB
     | AbstractInputX
     | AbstractInputY
-    | AbstractInputNone
 
 
 type alias ControllerOptions msg =
     { windowSize : Dimensions
-    , controls : AbstractInput -> msg
+    , controls : AbstractInput -> Maybe msg
     }
 
 
@@ -35,21 +34,29 @@ render { windowSize, controls } =
         circle : String -> AbstractInput -> Float -> List Css.Style -> Html msg
         circle char input size listOfCss =
             Html.button
-                [ css
-                    ([ Css.width <| Css.px <| size
-                     , Css.height <| Css.px <| size
-                     , Css.borderRadius <| Css.px <| size / 2
-                     , Css.borderStyle <| Css.none
-                     , Css.backgroundColor <| Css.rgb 256 256 256
-                     , Css.textAlign Css.center
-                     , Css.fontFamily Css.sansSerif
-                     , Css.fontSize <| Css.px <| size * 0.9
-                     , Css.opacity <| Css.num 0.5
-                     ]
-                        |> List.append listOfCss
+                (List.append
+                    [ css
+                        ([ Css.width <| Css.px <| size
+                         , Css.height <| Css.px <| size
+                         , Css.borderRadius <| Css.px <| size / 2
+                         , Css.borderStyle <| Css.none
+                         , Css.backgroundColor <| Css.rgb 256 256 256
+                         , Css.textAlign Css.center
+                         , Css.fontFamily Css.sansSerif
+                         , Css.fontSize <| Css.px <| size * 0.9
+                         , Css.opacity <| Css.num 0.5
+                         ]
+                            |> List.append listOfCss
+                        )
+                    ]
+                    (case controls <| input of
+                        Just msg ->
+                            [ Events.onClick msg ]
+
+                        Nothing ->
+                            []
                     )
-                , Events.onClick <| controls <| input
-                ]
+                )
                 [ Html.text char
                 ]
     in

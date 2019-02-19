@@ -1,4 +1,4 @@
-module PixelEngine.Grid.Bordered exposing
+module PixelEngine.Bordered exposing
     ( Grid
     , diff
     , dimensions

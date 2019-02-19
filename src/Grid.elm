@@ -1,8 +1,9 @@
-module PixelEngine.Grid exposing
+module Grid exposing
     ( Grid
     , diff
     , dimensions
     , empty
+    , emptyPositions
     , fill
     , filter
     , find
@@ -10,7 +11,6 @@ module PixelEngine.Grid exposing
     , foldr
     , fromDict
     , fromList
-    , emptyPositions
     , get
     , insert
     , intersect
@@ -29,7 +29,7 @@ module PixelEngine.Grid exposing
     )
 
 import Dict exposing (Dict)
-import PixelEngine.Grid.Position exposing (Position)
+import Grid.Position exposing (Position)
 
 
 {-| A `Grid` is a dictionary that has a size constraint.
@@ -198,6 +198,7 @@ positions (Grid { dict }) =
 values : Grid a -> List a
 values (Grid { dict }) =
     dict |> Dict.values
+
 
 {-| Get all empty positions in a grid, sorted from lowest to highest.
 -}

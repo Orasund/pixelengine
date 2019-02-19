@@ -8,7 +8,7 @@ import PixelEngine.Graphics.Options as Options exposing (Options)
 import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
 import PixelEngine.Grid as Grid exposing (Grid)
 import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position, Coord)
+import PixelEngine.Grid.Position as Position exposing (Coord, Position)
 import Random
 import Time
 
@@ -60,7 +60,7 @@ newChicken occupiedSquares =
         emptySquares : Array Position
         emptySquares =
             occupiedSquares
-                |> List.map (\pos -> (pos,()))
+                |> List.map (\pos -> ( pos, () ))
                 |> Grid.fromList
                     { columns = boardSize
                     , rows = boardSize
@@ -285,7 +285,8 @@ view { snake, direction, chicken } =
                 }
     in
     { title = "Snake"
-    , options = Options.fromWidth width
+    , options =
+        Options.fromWidth width
             |> Options.withMovementSpeed 0.8
     , body =
         [ Graphics.tiledArea

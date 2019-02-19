@@ -1,31 +1,77 @@
-module PixelEngine exposing (PixelEngine, game, gameWithNoControls, gameWithCustomControls)
+module PixelEngine exposing
+    ( Area, tiledArea, imageArea, heightOf
+    , PixelEngine
+    , toHtml, game, gameWithNoControls, gameWithCustomControls
+    , Background, imageBackground, colorBackground
+    , Input(..), defaultInputs
+    , withMobileSupport
+    , basicControls, customControls
+    )
 
-{-| This module takes care of all the wiring.
+{-| This module takes care of the Graphics.
 
-**If you are looking for the main module,
-head over to [PixelEngine.Graphics](PixelEngine-Graphics).**
+You will want to add [PixelEngine.Graphics.Image](PixelEngine-Graphics-Image)
+or [PixelEngine.Graphics.Tile](PixelEngine-Graphics-Tile) to
+actually draw something.
 
-@docs PixelEngine, game, gameWithNoControls, gameWithCustomControls
+
+## Area
+
+The main idea of this graphic engine is to arrage the content into horizontal stripes,
+so called areas.
+
+@docs Area, tiledArea, imageArea, heightOf
+
+
+# PixelEngine
+
+@docs PixelEngine
+
+If one wants to use just use this module on its own, you can use `toHtml` instead
+of the `game` function from the main module.
+
+@docs toHtml, game, gameWithNoControls, gameWithCustomControls
+
+
+## Background
+
+@docs Background, imageBackground, colorBackground
+
+
+## Input
+
+The graphic engine provides a touch-controller for mobile devices.
+
+@docs Input, defaultInputs
+
+
+## Mobile Support
+
+@docs withMobileSupport
+
+
+## Subscriptions
+
+@docs basicControls, customControls
 
 -}
 
 import Browser
 import Browser.Dom as Dom
 import Browser.Events as Events
-import Html
-import PixelEngine.Controls as Controls exposing (Input)
-import PixelEngine.Graphics as Graphics exposing (Area, Options)
+import Color exposing (Color)
+import Html exposing (Html)
+import Html.Styled
+import Json.Decode as Decode
+import PixelEngine.Graphics.Abstract as Abstract
+import PixelEngine.Graphics.Data as Data
+import PixelEngine.Graphics.Data.Area as AreaData
+import PixelEngine.Graphics.Data.Controller as ControllerData
 import PixelEngine.Graphics.Data.Options as OptionsData
+import PixelEngine.Image exposing (Image)
+import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Tile exposing (Tile, Tileset)
 import Task
-
-
-{-| An alias for a PixelEngine program.
-
-Your `main` function will have this type.
-
--}
-type alias PixelEngine flag model msg =
-    Program flag (Model model msg) (Msg msg)
 
 
 type alias Config msg =
@@ -34,7 +80,7 @@ type alias Config msg =
             { width : Float
             , height : Float
             }
-    , controls : Maybe ( String -> Input, Input -> msg )
+    , controls : Maybe ( String -> Maybe Input, Input -> Maybe msg )
     }
 
 
@@ -47,6 +93,7 @@ type alias Model model msg =
 type Msg msg
     = Resize { width : Float, height : Float }
     | MsgContent msg
+    | DoNothing
 
 
 batch : ( model, Cmd msg ) -> Model model msg -> ( Model model msg, Cmd (Msg msg) )
@@ -70,6 +117,11 @@ updateFunction update msg ({ modelContent, config } as model) =
         MsgContent msgC ->
             model |> batch (update msgC modelContent)
 
+        DoNothing ->
+            ( model
+            , Cmd.none
+            )
+
 
 subscriptionsFunction : (model -> Sub msg) -> Model model msg -> Sub (Msg msg)
 subscriptionsFunction subscriptions { modelContent, config } =
@@ -80,7 +132,17 @@ subscriptionsFunction subscriptions { modelContent, config } =
             |> List.append
                 (case config.controls of
                     Just ( _, controlsToMsg ) ->
-                        [ Controls.basic controlsToMsg |> Sub.map MsgContent ]
+                        [ basicControls controlsToMsg
+                            |> Sub.map
+                                (\maybeMsg ->
+                                    case maybeMsg of
+                                        Just msg ->
+                                            MsgContent msg
+
+                                        Nothing ->
+                                            DoNothing
+                                )
+                        ]
 
                     Nothing ->
                         []
@@ -88,53 +150,62 @@ subscriptionsFunction subscriptions { modelContent, config } =
         )
 
 
-viewFunction : (model -> { title : String, options : Options msg, body : List (Area msg) }) -> Model model msg -> Browser.Document (Msg msg)
-viewFunction view { modelContent, config } =
+viewFunction : (model -> { title : String, options : Maybe (Options msg), body : List (Area msg) }) -> Float -> Model model msg -> Browser.Document (Msg msg)
+viewFunction view width { modelContent, config } =
     let
         { windowSize, controls } =
             config
 
-        { title, options, body } =
+        ({ title, body } as viewResult) =
             view modelContent
 
-        (OptionsData.Options { width, scale }) =
-            options
+        ((OptionsData.Options { scale }) as options) =
+            case viewResult.options of
+                Just o ->
+                    o
+
+                Nothing ->
+                    Options.default
 
         height =
-            (toFloat <| scale) * Graphics.heightOf body
+            (toFloat <| scale) * heightOf body
     in
     { title = title
     , body =
         [ (case windowSize of
             Just wS ->
-                Graphics.view
-                    (options
-                        |> OptionsData.usingScale
-                            (min (2 ^ (floor <| logBase 2 <| wS.height / height))
-                                (2 ^ (floor <| logBase 2 <| wS.width / width))
-                            )
-                        |> (case controls of
-                                Just ( _, controlsToMsg ) ->
-                                    Controls.supportingMobile
-                                        { windowSize = wS
-                                        , controls = controlsToMsg
-                                        }
+                toHtml
+                    { width = width
+                    , options =
+                        Just
+                            (options
+                                |> OptionsData.usingScale
+                                    (min (2 ^ (floor <| logBase 2 <| wS.height / height))
+                                        (2 ^ (floor <| logBase 2 <| wS.width / width))
+                                    )
+                                |> (case controls of
+                                        Just ( _, controlsToMsg ) ->
+                                            withMobileSupport
+                                                { windowSize = wS
+                                                , controls = controlsToMsg
+                                                }
 
-                                Nothing ->
-                                    identity
-                           )
-                    )
+                                        Nothing ->
+                                            identity
+                                   )
+                            )
+                    }
                     body
 
             Nothing ->
-                Graphics.view options []
+                toHtml { width = width, options = viewResult.options } []
           )
             |> Html.map MsgContent
         ]
     }
 
 
-initFunction : Maybe ( String -> Input, Input -> msg ) -> (flags -> ( model, Cmd msg )) -> (flags -> ( Model model msg, Cmd (Msg msg) ))
+initFunction : Maybe ( String -> Maybe Input, Input -> Maybe msg ) -> (flags -> ( model, Cmd msg )) -> (flags -> ( Model model msg, Cmd (Msg msg) ))
 initFunction controls init =
     \flag ->
         let
@@ -163,11 +234,12 @@ gameMaybeWithCustomControls :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
-    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
-    , controls : Maybe ( String -> Input, Input -> msg )
+    , width : Float
+    , view : model -> { title : String, options : Maybe (Options msg), body : List (Area msg) }
+    , controls : Maybe ( String -> Maybe Input, Input -> Maybe msg )
     }
     -> Program flags (Model model msg) (Msg msg)
-gameMaybeWithCustomControls { init, update, subscriptions, view, controls } =
+gameMaybeWithCustomControls { init, update, subscriptions, view, width, controls } =
     Browser.document
         { init =
             initFunction controls init
@@ -176,8 +248,332 @@ gameMaybeWithCustomControls { init, update, subscriptions, view, controls } =
         , subscriptions =
             subscriptionsFunction subscriptions
         , view =
-            viewFunction view
+            viewFunction view width
         }
+
+
+
+--------------------------------------------------
+-- exposing
+--------------------------------------------------
+----------------------
+-- Area
+----------------------
+
+
+{-| A horizontal area of the content.
+A `Area` defines how the content should be displayed.
+
+**Note:**
+An area can only contain elements of the same type.
+So either you have tiles or images.
+
+![A typical game](https://orasund.github.io/pixelengine/img4.png "A typical game")
+
+-}
+type alias Area msg =
+    AreaData.Area msg
+
+
+{-| Returns the height of a list of Areas
+
+This can be used to return the height of a `tiledArea`.
+For a `imageArea` this function is trivial.
+
+-}
+heightOf : List (Area msg) -> Float
+heightOf listOfArea =
+    List.sum
+        (listOfArea
+            |> List.map
+                (\area ->
+                    case area of
+                        AreaData.Tiled { rows, tileset } ->
+                            toFloat <| rows * tileset.spriteHeight
+
+                        AreaData.Images { height } ->
+                            height
+                )
+        )
+
+
+{-| Every area has a background.
+-}
+type alias Background =
+    Data.Background
+
+
+{-| A single color background.
+It uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest).
+
+```
+colorBackground (Color.rgb255 20 12 28)
+```
+
+-}
+colorBackground : Color -> Background
+colorBackground color =
+    Data.ColorBackground color
+
+
+{-| An image that gets repeated.
+
+```
+Image "groundTile.png"
+```
+
+-}
+imageBackground : { source : String, width : Float, height : Float } -> Background
+imageBackground image =
+    Data.ImageBackground image
+
+
+{-| An area containing images that can be arranged freely.
+
+This is a complete contrast to the way how `tiledArea` is working.
+Usefull applications are GUIs, menus or loading screens.
+
+Checkout [PixelEngine.Graphics.Image](PixelEngine-Graphics-Image) for more information.
+
+This area has the following options:
+
+  - `height` - The height or the `Area` in pixels.
+  - `background` - The background of the `Area`.
+
+-}
+imageArea : { height : Float, background : Background } -> List ( ( Float, Float ), Image msg ) -> Area msg
+imageArea { height, background } content =
+    AreaData.Images
+        { height = height
+        , background = background
+        , content = content
+        }
+
+
+{-| An area for using tilesets.
+
+It supports one tileset at a time,
+that means all sprites must be of the same size and stored as a grid in one single file.
+This area is useful for displaying the playing field of a game.
+
+Checkout [PixelEngine.Graphics.Tile](PixelEngine-Graphics-Image) for more information.
+
+This area has the following options:
+
+  - `rows` - The amount of rows of the grid. This value defines the height of the `Area`.
+  - `tileset` - The tileset that will be used for all elements in the `Area`.
+  - `background` - The background of the `Area`.
+
+-}
+tiledArea : { rows : Int, tileset : Tileset, background : Background } -> List ( ( Int, Int ), Tile msg ) -> Area msg
+tiledArea { rows, tileset, background } content =
+    AreaData.Tiled
+        { rows = rows
+        , tileset = tileset
+        , background = background
+        , content = content
+        }
+
+
+{-| Displays content of the game.
+-}
+toHtml : { width : Float, options : Maybe (Options msg) } -> List (Area msg) -> Html msg
+toHtml { width, options } listOfArea =
+    Abstract.render
+        ((case options of
+            Just o ->
+                o
+
+            Nothing ->
+                Options.default
+         )
+            |> OptionsData.withWidth width
+        )
+        listOfArea
+        |> Html.Styled.toUnstyled
+
+
+
+----------------------
+-- Controls
+----------------------
+
+
+{-| all possible Inputs.
+-}
+type Input
+    = InputLeft
+    | InputRight
+    | InputUp
+    | InputDown
+    | InputA
+    | InputB
+    | InputX
+    | InputY
+
+
+{-| Adds mobile support to the options.
+It needs the window size.
+
+<PixelEngine> provides a fully wired program that takes care of everything.
+
+-}
+withMobileSupport : { windowSize : { width : Float, height : Float }, controls : Input -> Maybe msg } -> Options msg -> Options msg
+withMobileSupport { windowSize, controls } (OptionsData.Options options) =
+    let
+        { width, height } =
+            windowSize
+
+        convert : ControllerData.AbstractInput -> Input
+        convert input =
+            case input of
+                ControllerData.AbstractInputA ->
+                    InputA
+
+                ControllerData.AbstractInputB ->
+                    InputB
+
+                ControllerData.AbstractInputX ->
+                    InputX
+
+                ControllerData.AbstractInputY ->
+                    InputY
+
+                ControllerData.AbstractInputUp ->
+                    InputUp
+
+                ControllerData.AbstractInputLeft ->
+                    InputLeft
+
+                ControllerData.AbstractInputRight ->
+                    InputRight
+
+                ControllerData.AbstractInputDown ->
+                    InputDown
+    in
+    OptionsData.Options { options | controllerOptions = Just { windowSize = { width = width, height = height }, controls = convert >> controls } }
+
+
+{-| The default layout:
+
+  - A/ArrowLeft - `InputLeft`
+  - W/ArrowUp - `InputUp`
+  - D/ArrowRight - `InputRight`
+  - S/ArrowDown - `InputDown`
+  - Space/Enter - `InputA`
+  - X/Backspace/Esc - `InputB`
+  - Q - `InputX`
+  - E - `InputY`
+
+-}
+defaultInputs : String -> Maybe Input
+defaultInputs =
+    \string ->
+        case string of
+            "w" ->
+                Just InputUp
+
+            "W" ->
+                Just InputUp
+
+            "ArrowUp" ->
+                Just InputUp
+
+            "s" ->
+                Just InputDown
+
+            "S" ->
+                Just InputDown
+
+            "ArrowDown" ->
+                Just InputDown
+
+            "d" ->
+                Just InputRight
+
+            "D" ->
+                Just InputRight
+
+            "ArrowRight" ->
+                Just InputRight
+
+            "a" ->
+                Just InputLeft
+
+            "A" ->
+                Just InputLeft
+
+            "ArrowLeft" ->
+                Just InputLeft
+
+            " " ->
+                Just InputA
+
+            "Enter" ->
+                Just InputA
+
+            "q" ->
+                Just InputX
+
+            "Q" ->
+                Just InputX
+
+            "e" ->
+                Just InputY
+
+            "E" ->
+                Just InputY
+
+            "x" ->
+                Just InputB
+
+            "X" ->
+                Just InputB
+
+            "Escape" ->
+                Just InputB
+
+            "Backspace" ->
+                Just InputB
+
+            _ ->
+                Nothing
+
+
+{-| Subscribes to a keypress using custom key layouts.
+
+It uses [key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) for the String.
+You can use this [website](http://keycode.info) to find out the key value.
+
+-}
+customControls : (String -> Maybe Input) -> (Input -> Maybe msg) -> Sub (Maybe msg)
+customControls decoder fun =
+    Decode.field "key" Decode.string
+        |> Decode.map decoder
+        |> Decode.map (Maybe.andThen fun)
+        |> Events.onKeyDown
+
+
+{-| Subscribes to a keypress and sends the corresponding msg. This Function uses the default key layout.
+-}
+basicControls : (Input -> Maybe msg) -> Sub (Maybe msg)
+basicControls fun =
+    customControls defaultInputs fun
+
+
+
+----------------------
+-- PixelEngine
+----------------------
+
+
+{-| An alias for a PixelEngine program.
+
+Your `main` function will have this type.
+
+-}
+type alias PixelEngine flag model msg =
+    Program flag (Model model msg) (Msg msg)
 
 
 {-| A game using custom controls.
@@ -191,17 +587,19 @@ gameWithCustomControls :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
-    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
-    , controls : ( String -> Input, Input -> msg )
+    , width : Float
+    , view : model -> { title : String, options : Maybe (Options msg), body : List (Area msg) }
+    , controls : ( String -> Maybe Input, Input -> Maybe msg )
     }
     -> Program flags (Model model msg) (Msg msg)
-gameWithCustomControls { init, update, subscriptions, view, controls } =
+gameWithCustomControls { width, init, update, subscriptions, view, controls } =
     gameMaybeWithCustomControls
         { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
         , controls = Just controls
+        , width = width
         }
 
 
@@ -214,15 +612,17 @@ gameWithNoControls :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
-    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
+    , width : Float
+    , view : model -> { title : String, options : Maybe (Options msg), body : List (Area msg) }
     }
     -> Program flags (Model model msg) (Msg msg)
-gameWithNoControls { init, update, subscriptions, view } =
+gameWithNoControls { init, width, update, subscriptions, view } =
     gameMaybeWithCustomControls
         { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
+        , width = width
         , controls = Nothing
         }
 
@@ -236,15 +636,17 @@ game :
     { init : flags -> ( model, Cmd msg )
     , update : msg -> model -> ( model, Cmd msg )
     , subscriptions : model -> Sub msg
-    , view : model -> { title : String, options : Options msg, body : List (Area msg) }
-    , controls : Input -> msg
+    , view : model -> { title : String, options : Maybe (Options msg), body : List (Area msg) }
+    , controls : Input -> Maybe msg
+    , width : Float
     }
     -> Program flags (Model model msg) (Msg msg)
-game { init, update, subscriptions, view, controls } =
+game { init, update, width, subscriptions, view, controls } =
     gameMaybeWithCustomControls
         { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
-        , controls = Just ( Controls.defaultLayout, controls )
+        , width = width
+        , controls = Just ( defaultInputs, controls )
         }

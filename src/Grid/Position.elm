@@ -1,17 +1,17 @@
-module PixelEngine.Grid.Position exposing
+module Grid.Position exposing
     ( Coord
     , Position
     , add
     , difference
-    , fromDirection
-    , move
-    , toDirection
     , distance
+    , fromDirection
     , length
+    , move
     , scaleBy
+    , toDirection
     )
 
-import PixelEngine.Grid.Direction exposing (Direction(..))
+import Grid.Direction exposing (Direction(..))
 
 
 {-| A `Position` is a comparable representation for 2D Coordinates.
@@ -42,16 +42,20 @@ add v ( x, y ) =
     , y + v.y
     )
 
+
 scaleBy : Int -> Coord -> Coord
-scaleBy n {x,y} =
-    {x=x*n
-    ,y=y*n
+scaleBy n { x, y } =
+    { x = x * n
+    , y = y * n
     }
 
+
 {-| Returns the difference between two positions.
+
 ```
 difference p1 p2 == p1 <------- p2
 ```
+
 -}
 difference : Position -> Position -> Coord
 difference ( x1, y1 ) ( x2, y2 ) =
@@ -59,10 +63,13 @@ difference ( x1, y1 ) ( x2, y2 ) =
     , y = y1 - y2
     }
 
-{-| returns the length of the coordinate (distance to (0,0) -}
+
+{-| returns the length of the coordinate (distance to (0,0)
+-}
 length : Coord -> Float
-length {x,y} =
-    distance (0,0) (x,y)
+length { x, y } =
+    distance ( 0, 0 ) ( x, y )
+
 
 {-| Gets the distance between to points.
 (The length of the difference)
@@ -127,4 +134,4 @@ move n direction =
         dir =
             direction |> fromDirection
     in
-    add <| scaleBy n dir 
+    add <| scaleBy n dir

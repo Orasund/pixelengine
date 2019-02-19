@@ -1,8 +1,6 @@
-module PixelEngine.Graphics.Tile exposing
-    ( Tile, tile, movable, jumping, animated, monochrome, withAttributes
-    , Tileset, tileset, fromText
-    , onClick, backgroundColor
-    , clickable
+module PixelEngine.Tile exposing
+    ( Tile, fromPosition, fromText, movable, jumping, animated, clickable, monochrome, withAttributes
+    , Tileset, tileset
     )
 
 {-| This module contains functions for creating tiles.
@@ -11,17 +9,12 @@ Tiles are used for the `tiledArea` function from the main module.
 
 ## Tile
 
-@docs Tile, tile, fromText, movable, jumping, animated, clickable, monochrome, withAttributes
+@docs Tile, fromPosition, fromText, movable, jumping, animated, clickable, monochrome, withAttributes
 
 
 ## Tileset
 
 @docs Tileset, tileset
-
-
-## DEPRECATED
-
-@docs onClick, backgroundColor
 
 -}
 
@@ -30,8 +23,9 @@ import Html exposing (Attribute)
 import Html.Attributes as Attributes
 import Html.Events as Events
 import Html.Styled.Attributes
-import PixelEngine.Graphics.Data.Tile as TileData
 import PixelEngine.Graphics.Data.Text as Text
+import PixelEngine.Graphics.Data.Tile as TileData
+
 
 {-| Created a List of Tiles from a String and a Offset.
 
@@ -41,11 +35,13 @@ The Offset `(Int,Int` should point to the sprite repesenting the space-character
 
 This package comes with a [collection of Fonts](https://github.com/Orasund/pixelengine/wiki/Collection-of-Fonts)
 that are free to use.
+
 -}
-fromText : (Int,Int) -> String -> List (Tile msg)
-fromText (x,y) =
+fromText : ( Int, Int ) -> String -> List (Tile msg)
+fromText ( x, y ) =
     Text.fromString
-    >> List.map (\(x1,y1)-> tile (x+x1,y+y1) )
+        >> List.map (\( x1, y1 ) -> fromPosition ( x + x1, y + y1 ))
+
 
 {-| A Tileset contains the actuall image that a `Tile` can reference.
 -}
@@ -97,8 +93,8 @@ is the 3 row in the second column of the `Tileset`.
 ![a tileset](https://orasund.github.io/pixelengine/docs/img3.png "a tileset")
 
 -}
-tile : ( Int, Int ) -> Tile msg
-tile ( left, top ) =
+fromPosition : ( Int, Int ) -> Tile msg
+fromPosition ( left, top ) =
     { info = { top = top, left = left, steps = 0 }
     , uniqueId = Nothing
     , customAttributes = []
@@ -131,11 +127,11 @@ animated steps ({ info } as t) =
         | info =
             { info
                 | steps =
-                    if steps > 0 then
+                    if steps > 1 then
                         steps
 
                     else
-                        0
+                        1
             }
     }
 
@@ -221,24 +217,3 @@ withAttributes attributes ({ customAttributes } as t) =
                 |> List.map Html.Styled.Attributes.fromUnstyled
                 |> List.append customAttributes
     }
-
-
-{-| [DEPRECATED]
-
-Use `monochrome` instead.
-
--}
-backgroundColor : Color -> Attribute msg
-backgroundColor =
-    Color.toCssString
-        >> Attributes.style "background-color"
-
-
-{-| [DEPRECATED]
-
-Use `clickable` instead.
-
--}
-onClick : msg -> Attribute msg
-onClick msg =
-    Events.onClick msg

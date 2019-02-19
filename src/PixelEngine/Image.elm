@@ -1,5 +1,5 @@
-module PixelEngine.Graphics.Image exposing
-    ( Image, image, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
+module PixelEngine.Image exposing
+    ( Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
     , onClick
     )
 
@@ -9,7 +9,7 @@ These Images can then be used for the `imageArea` function from the <PixelEngine
 
 ## Image
 
-@docs Image, image, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
+@docs Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
 
 
 ## DEPRECATED
@@ -25,7 +25,7 @@ import Html.Events as Events
 import Html.Styled.Attributes
 import PixelEngine.Graphics.Data.Area as AreaData
 import PixelEngine.Graphics.Data.Element as ElementData
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
+import PixelEngine.Tile as Tile exposing (Tile, Tileset)
 
 
 {-| A `Image` is actually a very general type: As we will see later,
@@ -39,11 +39,11 @@ type alias Image msg =
 {-| The basic image constructor.
 The string contains the url to the image
 
-    image "aStone.png"
+    fromSrc "aStone.png"
 
 -}
-image : String -> Image msg
-image source =
+fromSrc : String -> Image msg
+fromSrc source =
     { elementType =
         ElementData.SingleSource <|
             ElementData.ImageSource source

@@ -4,6 +4,7 @@ module PixelEngine.Graphics.Data.Options exposing
     , usingScale
     , withAnimationFPS
     , withMovementSpeed
+    , withWidth
     )
 
 import PixelEngine.Graphics.Data.Area exposing (Area)
@@ -36,6 +37,11 @@ new { width, scale, movementSpeedInSec, animationFPS } =
         }
 
 
+withWidth : Float -> Options msg -> Options msg
+withWidth width (Options o) =
+    Options { o | width = width }
+
+
 withAnimationFPS : Float -> Options msg -> Options msg
 withAnimationFPS fps (Options o) =
     if fps > 0 then
@@ -43,6 +49,7 @@ withAnimationFPS fps (Options o) =
 
     else
         Options o
+
 
 withMovementSpeed : Float -> Options msg -> Options msg
 withMovementSpeed movementSpeed (Options o) =

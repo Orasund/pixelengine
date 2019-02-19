@@ -1,5 +1,6 @@
-module PixelEngine.Location exposing
-    ( Location
+module Location exposing
+    ( Angle(..)
+    , Location
     , Vector
     , add
     , difference
@@ -10,12 +11,12 @@ module PixelEngine.Location exposing
     , rotate
     , scaleBy
     , toAngle
-    , Angle(..)
     )
 
 
-type Angle =
-  Angle Float
+type Angle
+    = Angle Float
+
 
 type alias Location =
     ( Float, Float )

@@ -1,12 +1,10 @@
 module TicTacToe exposing (main)
 
-import PixelEngine exposing (PixelEngine, gameWithNoControls)
-import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background)
-import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Position exposing (Position)
+import Grid exposing (Grid)
+import Grid.Position exposing (Position)
+import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
+import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Tile as Tile exposing (Tile, Tileset)
 
 
 
@@ -171,23 +169,23 @@ is a `Tile` as well.
 -}
 none : Position -> Tile Msg
 none pos =
-    tile ( 0, 0 )
+    Tile.fromPosition ( 0, 0 )
         |> Tile.clickable (PlaceMark pos)
 
 
 nought : Tile Msg
 nought =
-    tile ( 0, 1 )
+    Tile.fromPosition ( 0, 1 )
 
 
 cross : Tile Msg
 cross =
-    tile ( 1, 1 )
+    Tile.fromPosition ( 1, 1 )
 
 
 reset : Tile Msg
 reset =
-    tile ( 1, 0 ) |> Tile.clickable Reset
+    Tile.fromPosition ( 1, 0 ) |> Tile.clickable Reset
 
 
 getTile : Position -> Maybe Mark -> Tile Msg
@@ -224,21 +222,19 @@ viewGrid grid =
             []
 
 
-view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
+tileSize : Int
+tileSize =
+    16
+
+
+width : Float
+width =
+    toFloat <| 5 * tileSize
+
+
+view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view { grid } =
     let
-        tileSize : Int
-        tileSize =
-            16
-
-        windowWidth : Int
-        windowWidth =
-            5
-
-        width : Float
-        width =
-            toFloat <| windowWidth * tileSize
-
         tileset : Tileset
         tileset =
             { source = "tileset.png"
@@ -248,16 +244,16 @@ view { grid } =
 
         background : Background
         background =
-            Graphics.imageBackground
+            PixelEngine.imageBackground
                 { height = 80
                 , width = 80
                 , source = "background.png"
                 }
     in
     { title = "Tic Tac Toe"
-    , options = Options.fromWidth width
+    , options = Nothing
     , body =
-        [ Graphics.tiledArea
+        [ PixelEngine.tiledArea
             { rows = 5
             , tileset = tileset
             , background = background
@@ -284,4 +280,5 @@ main =
         , update = update
         , subscriptions = subscriptions
         , view = view
+        , width = width
         }

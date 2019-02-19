@@ -82,7 +82,7 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps, fps } { sprite
                 [ Css.position Css.absolute
                 , Css.right <|
                     px <|
-                        (toFloat <| scale * spriteWidth * (steps + 2))
+                        (toFloat <| scale * spriteWidth * (steps + 1))
                 ]
             ]
             [ img
@@ -101,18 +101,18 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps, fps } { sprite
                         px <|
                             toFloat <|
                                 spriteWidth
-                                    * (steps + 1)
+                                    * steps
                     , Css.height <| px <| toFloat <| spriteHeight
                     , Css.position Css.absolute
                     , Css.left <|
                         px <|
-                            (toFloat <| scale * spriteWidth * (steps + 1))
+                            (toFloat <| scale * spriteWidth * steps)
                     , Css.property "image-rendering" "pixelated"
                     , Css.property "animation"
                         ("pixelengine_graphics_basic "
-                            ++ String.fromFloat (toFloat (steps + 1) / fps)
+                            ++ String.fromFloat (toFloat steps / fps)
                             ++ ".0s steps("
-                            ++ String.fromInt (steps + 1)
+                            ++ String.fromInt steps
                             ++ ") infinite"
                         )
                     , Css.property "transform-origin" "top left"
