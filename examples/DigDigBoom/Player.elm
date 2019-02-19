@@ -22,9 +22,9 @@ import DigDigBoom.Cell as Cell
         )
 import DigDigBoom.Component.Inventory as Inventory exposing (Inventory)
 import DigDigBoom.Component.Map as Map exposing (Actor)
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position exposing (Position)
+import Grid exposing (Grid)
+import Grid.Direction exposing (Direction(..))
+import Grid.Position exposing (Position)
 
 
 type alias PlayerData =

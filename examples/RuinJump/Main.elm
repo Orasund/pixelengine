@@ -2,11 +2,9 @@ module RuinJump.Main exposing (main)
 
 import Color
 import Dict
-import PixelEngine exposing (PixelEngine, game)
-import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Graphics as Graphics exposing (Area)
-import PixelEngine.Graphics.Tile exposing (Tile, Tileset)
+import PixelEngine exposing (Area, Input(..), PixelEngine, game)
+import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Tile exposing (Tile, Tileset)
 import Process
 import Random exposing (Generator, Seed)
 import RuinJump.Config as Config
@@ -317,15 +315,16 @@ getTilesList { currentY, lowestY } =
         []
 
 
-view : Maybe State -> { title : String, options : Options Msg, body : List (Area Msg) }
+width : Float
+width =
+    toFloat <| 3 * Config.width
+
+
+view : Maybe State -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view maybeState =
     let
-        width : Float
-        width =
-            toFloat <| 3 * Config.width
-
         options =
-            Options.fromWidth width
+            Options.default
                 |> Options.withMovementSpeed 0.5
 
         rows : Int
@@ -340,10 +339,10 @@ view maybeState =
             }
     in
     { title = "Ruine Jump"
-    , options = options
+    , options = Just options
     , body =
-        [ Graphics.tiledArea
-            { background = Graphics.colorBackground <| Color.rgb255 68 36 52
+        [ PixelEngine.tiledArea
+            { background = PixelEngine.colorBackground <| Color.rgb255 68 36 52
             , rows = rows
             , tileset = tileset
             }
@@ -374,5 +373,6 @@ main =
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , controls = Input
+        , controls = Input >> Just
+        , width = width
         }

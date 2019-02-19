@@ -22,11 +22,9 @@ import MiniWorldWar.View.SelectGui as SelectGuiView
 import MiniWorldWar.View.Supplys as SupplysView
 import MiniWorldWar.View.TitleScreen as TitleScreenView
 import MiniWorldWar.View.Units as UnitsView
-import PixelEngine exposing (PixelEngine, gameWithNoControls)
-import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background)
-import PixelEngine.Graphics.Image as Image exposing (Image)
-import PixelEngine.Graphics.Options as Options exposing (Options)
+import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
+import PixelEngine.Image as Image exposing (Image)
+import PixelEngine.Options as Options exposing (Options)
 import Time exposing (Posix)
 
 
@@ -491,24 +489,30 @@ drawModel submitMsg { game, select, playerColor, ready } =
         ]
 
 
-view : State -> { title : String, options : Options Msg, body : List (Area Msg) }
+size : Float
+size =
+    View.tileSize * 8
+
+
+view : State -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view state =
     let
-        size : Float
-        size =
-            View.tileSize * 8
-
         background : Background
         background =
-            Graphics.imageBackground
+            PixelEngine.imageBackground
                 { height = size
                 , width = size
                 , source = "background.png"
                 }
 
-        body : List (Area Msg)
-        body =
-            [ Graphics.imageArea
+        options : Options Msg
+        options =
+            Options.default
+                |> Options.withAnimationFPS 4
+
+        areas : List (Area Msg)
+        areas =
+            [ PixelEngine.imageArea
                 { height = size
                 , background = background
                 }
@@ -532,9 +536,8 @@ view state =
     in
     { title = "Mini World War"
     , options =
-        Options.fromWidth size
-            |> Options.withAnimationFPS 4
-    , body = body
+        Just options
+    , body = areas
     }
 
 
@@ -551,4 +554,5 @@ main =
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , width = size
         }

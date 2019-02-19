@@ -5,9 +5,9 @@ module DigDigBoom.Component.Map exposing
     , posFront
     )
 
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position)
+import Grid as Grid exposing (Grid)
+import Grid.Direction exposing (Direction(..))
+import Grid.Position as Position exposing (Position)
 import Random exposing (Generator)
 import Result exposing (Result(..))
 

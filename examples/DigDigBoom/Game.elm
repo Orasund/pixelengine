@@ -10,9 +10,9 @@ import DigDigBoom.Cell as Cell
         )
 import DigDigBoom.Component.Map as Map exposing (Actor)
 import DigDigBoom.Player as Player exposing (Game)
-import PixelEngine.Grid as Grid
-import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Position)
+import Grid as Grid
+import Grid.Direction exposing (Direction(..))
+import Grid.Position as Position exposing (Position)
 
 
 applyDirection : Int -> Direction -> ( Actor, Game ) -> ( Actor, Game )
@@ -66,7 +66,8 @@ attackPlayer : Position -> Actor -> Game -> Game
 attackPlayer location (( playerLocation, _ ) as playerCell) ( playerData, map ) =
     [ Up, Down, Left, Right ]
         |> List.filter
-            ((==) (playerLocation |> Position.difference location |> Position.toDirection))
+            (Position.fromDirection >> (==) (playerLocation |> Position.difference location))
+        --((==) (playerLocation |> Position.difference location |> Position.toDirection))
         |> List.head
         |> Maybe.map (always (( playerData, map ) |> Player.attack playerCell))
         |> Maybe.withDefault ( playerData, map )

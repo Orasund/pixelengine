@@ -1,13 +1,19 @@
-module RuinJump.MapElement exposing (
-        Block(..), MapElement(..),
-        isOccupied, woodGenerator, remove,dirtGenerator, toTiles
+module RuinJump.MapElement exposing
+    ( Block(..)
+    , MapElement(..)
+    , dirtGenerator
+    , isOccupied
+    , remove
+    , toTiles
+    , woodGenerator
     )
 
-import PixelEngine.Graphics.Tile exposing (Tile)
+import Grid.Position exposing (Position)
+import PixelEngine.Tile exposing (Tile)
 import Random exposing (Generator)
-import RuinJump.Player exposing (FaceingDirection(..),  PlayerAction(..))
+import RuinJump.Player exposing (FaceingDirection(..), PlayerAction(..))
 import RuinJump.Tileset as Tileset
-import PixelEngine.Grid.Position exposing( Position)
+
 
 type Block
     = Dirt
@@ -16,9 +22,11 @@ type Block
     | Wood
     | Air
 
+
 type MapElement
     = PlayerElement PlayerAction FaceingDirection
     | BlockElement Block Int
+
 
 isOccupied : Maybe MapElement -> Bool
 isOccupied elem =
@@ -32,18 +40,21 @@ isOccupied elem =
         Just _ ->
             True
 
+
 remove : MapElement -> MapElement
 remove element =
     case element of
-                PlayerElement _ _ ->
-                    BlockElement Air 0
+        PlayerElement _ _ ->
+            BlockElement Air 0
 
-                BlockElement _ id ->
-                    BlockElement Air id
+        BlockElement _ id ->
+            BlockElement Air id
+
 
 dirtGenerator : Generator MapElement
 dirtGenerator =
     Random.int 0 Random.maxInt |> Random.map (BlockElement Dirt)
+
 
 woodGenerator : Generator MapElement
 woodGenerator =
@@ -79,20 +90,20 @@ toTiles pos mapElement =
             List.singleton
                 ( pos
                 , id
-                    |> case block of
-                        Dirt ->
-                            Tileset.dirt
-                        
-                        Grass ->
-                            Tileset.grass
-                        
-                        Stone ->
-                            Tileset.stone
-                        
-                        Wood ->
-                            Tileset.wood
-                        
-                        Air ->
-                            Tileset.air
-                )
+                    |> (case block of
+                            Dirt ->
+                                Tileset.dirt
 
+                            Grass ->
+                                Tileset.grass
+
+                            Stone ->
+                                Tileset.stone
+
+                            Wood ->
+                                Tileset.wood
+
+                            Air ->
+                                Tileset.air
+                       )
+                )

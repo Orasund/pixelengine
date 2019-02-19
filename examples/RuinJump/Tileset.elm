@@ -1,5 +1,6 @@
 module RuinJump.Tileset exposing
-    ( dirt
+    ( air
+    , dirt
     , grass
     , player_jump_left
     , player_jump_right
@@ -7,11 +8,10 @@ module RuinJump.Tileset exposing
     , player_right
     , stone
     , wood
-    , air
     )
 
 import Natural exposing (Natural16(..))
-import PixelEngine.Graphics.Tile exposing (Tile, movable, tile)
+import PixelEngine.Tile as Tile exposing (Tile, movable)
 
 
 variantTile : Int -> ( Int, Int ) -> Tile msg
@@ -21,7 +21,7 @@ variantTile int ( x, y ) =
         variant =
             int |> modBy 16
     in
-    tile ( x + (variant |> modBy 4), y + variant // 4 )
+    Tile.fromPosition ( x + (variant |> modBy 4), y + variant // 4 )
 
 
 quadCoordinates : ( Int, Int ) -> List ( Int, Int )
@@ -34,44 +34,54 @@ quadTile { tilePos, pos } =
     List.map2
         (\p t -> ( p, t ))
         (quadCoordinates pos)
-        (quadCoordinates tilePos |> List.map tile)
+        (quadCoordinates tilePos |> List.map Tile.fromPosition)
+
 
 air : Int -> Tile msg
 air _ =
-    tile (1,0)
-        {- |> movable ""-}
+    Tile.fromPosition ( 1, 0 )
+
+
+
+{- |> movable "" -}
 
 
 dirt : Int -> Tile msg
 dirt seed =
     variantTile seed ( 4, 0 )
-        {- |> movable ""-}
+
+
+
+{- |> movable "" -}
+
 
 wood : Int -> Tile msg
 wood seed =
     variantTile seed ( 8, 0 )
-        {- |> movable ""-}
 
+
+
+{- |> movable "" -}
 {- ("tile_" ++ (String.fromInt seed)) -}
 
 
 stone : Int -> Tile msg
 stone seed =
     variantTile seed ( 0, 4 )
-        {- |> movable ""-}
 
 
 
+{- |> movable "" -}
 {- ("tile_" ++ (String.fromInt seed)) -}
 
 
 grass : Int -> Tile msg
 grass seed =
     variantTile seed ( 4, 4 )
-        {- |> movable ""-}
 
 
 
+{- |> movable "" -}
 {- ("tile_" ++ (String.fromInt seed)) -}
 
 

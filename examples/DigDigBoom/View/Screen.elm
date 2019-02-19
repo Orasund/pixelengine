@@ -5,11 +5,11 @@ import DigDigBoom.Cell as Cell exposing (Cell(..), EnemyType(..), ItemType(..), 
 import DigDigBoom.Component.Inventory as Inventory
 import DigDigBoom.Player exposing (PlayerData)
 import DigDigBoom.View.Tile as TileView
-import PixelEngine.Graphics as Graphics exposing (Area)
-import PixelEngine.Graphics.Image as Image exposing (image)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset)
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Position exposing (Position)
+import Grid as Grid exposing (Grid)
+import Grid.Position exposing (Position)
+import PixelEngine exposing (Area)
+import PixelEngine.Image as Image
+import PixelEngine.Tile as Tile exposing (Tile, Tileset)
 
 
 logo : Tileset
@@ -24,15 +24,15 @@ death =
         width =
             16
     in
-    [ Graphics.tiledArea
+    [ PixelEngine.tiledArea
         { rows = 2
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         []
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 2
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         (List.concat
@@ -40,15 +40,17 @@ death =
             , ( 6, 1 ) |> TileView.text "died" TileView.colorWhite
             ]
         )
-    , Graphics.imageArea
+    , PixelEngine.imageArea
         { height = toFloat <| 12 * 16
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         }
-        [ ( ( toFloat <| (16 * width) // 2 - 64, toFloat <| (12 * width) // 2 - 64 ), image "skull.png" )
+        [ ( ( toFloat <| (16 * width) // 2 - 64, toFloat <| (12 * width) // 2 - 64 )
+          , Image.fromSrc "skull.png"
+          )
         ]
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 2
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         (List.concat
@@ -56,9 +58,9 @@ death =
             , ( 6, 1 ) |> TileView.text "button" TileView.colorWhite
             ]
         )
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 2
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         []
@@ -74,17 +76,17 @@ menu =
 
         tile : Tile msg
         tile =
-            Tile.tile ( 0, 0 ) |> Tile.animated 1
+            Tile.fromPosition ( 0, 0 ) |> Tile.animated 2
     in
-    [ Graphics.tiledArea
+    [ PixelEngine.tiledArea
         { rows = 2
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         []
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 3
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         (List.concat
@@ -93,15 +95,15 @@ menu =
             , ( 6, 2 ) |> TileView.text "BOOM" TileView.colorWhite
             ]
         )
-    , Graphics.imageArea
+    , PixelEngine.imageArea
         { height = toFloat <| 9 * 16
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         }
         [ ( ( toFloat <| (16 * width) // 2 - 64, 0 ), Image.fromTile tile logo )
         ]
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 4
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         (List.concat
@@ -118,9 +120,9 @@ menu =
             , ( 4, 3 ) |> TileView.text "s -Tutorial" TileView.colorWhite
             ]
         )
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 2
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         []
@@ -129,9 +131,9 @@ menu =
 
 world : Int -> Grid Cell -> PlayerData -> List ( Position, Tile msg ) -> List (Area msg)
 world worldSeed map player hints =
-    [ Graphics.tiledArea
+    [ PixelEngine.tiledArea
         { rows = 1
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         (( 0, 0 )
@@ -148,9 +150,11 @@ world worldSeed map player hints =
                 )
                 TileView.colorWhite
         )
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 16
-        , background = Graphics.imageBackground { source = "groundTile.png", width = 16, height = 16 }
+        , background =
+            PixelEngine.imageBackground
+                { source = "groundTile.png", width = 16, height = 16 }
         , tileset = TileView.tileset
         }
         (hints
@@ -161,9 +165,9 @@ world worldSeed map player hints =
                         (\( pos, cell ) -> ( pos, Cell.getImage cell ))
                 )
         )
-    , Graphics.tiledArea
+    , PixelEngine.tiledArea
         { rows = 3
-        , background = Graphics.colorBackground (Color.rgb255 20 12 28)
+        , background = PixelEngine.colorBackground (Color.rgb255 20 12 28)
         , tileset = TileView.tileset
         }
         (List.concat

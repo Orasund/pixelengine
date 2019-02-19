@@ -7,7 +7,7 @@ import MiniWorldWar.Data.Direction exposing (Direction(..))
 import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.View exposing (continentToPosition, tileSize)
 import MiniWorldWar.View.Image.Unit as Unit
-import PixelEngine.Graphics.Image as Image exposing (Image)
+import PixelEngine.Image as Image exposing (Image)
 
 
 drawUnit : ( Float, Float ) -> Unit -> ( ( Float, Float ), Image msg )

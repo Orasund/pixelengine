@@ -1,25 +1,29 @@
-module DigDigBoom.View.Transition exposing (nextLevel,death )
+module DigDigBoom.View.Transition exposing (death, nextLevel)
 
-import PixelEngine.Graphics.Transition as Transition exposing (Transition)
-import PixelEngine.Graphics as Graphics exposing (Area)
-import PixelEngine.Graphics.Options as Options exposing (Options)
+import PixelEngine exposing (Area)
+import PixelEngine.Options as Options exposing (Options, Transition)
+
 
 nextLevel : List (Area msg) -> (Options msg -> Options msg)
 nextLevel list =
-    Transition.from list <|
-      Transition.custom
-          "next_level"
-          [ ( 0, "filter:saturate(200%) contrast(100%);overflow:hidden;width:100%" )
-          , ( 2, "filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;" )
-          ]
+    Options.withTransitionFrom list <|
+        Options.transition
+            "next_level"
+            { start = "filter:saturate(200%) contrast(100%);overflow:hidden;width:100%"
+            , keyFrames = [ Nothing ]
+            , end = "filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;"
+            }
 
 
 death : List (Area msg) -> (Options msg -> Options msg)
 death list =
-  Transition.from list <|
-    Transition.custom
-        "death_transition"
-        [ ( 0, "opacity:1;filter:grayscale(0%) blur(0px);" )
-        , ( 1, "opacity:1;filter:grayscale(70%) blur(0px);" )
-        , ( 3, "opacity:0;filter:grayscale(70%) blur(5px);" )
-        ]
+    Options.withTransitionFrom list <|
+        Options.transition
+            "death_transition"
+            { start = "opacity:1;filter:grayscale(0%) blur(0px);"
+            , keyFrames =
+                [ Just "opacity:1;filter:grayscale(70%) blur(0px);"
+                , Nothing
+                ]
+            , end = "opacity:0;filter:grayscale(70%) blur(5px);"
+            }

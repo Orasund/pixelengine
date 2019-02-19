@@ -111,7 +111,7 @@ displayAnimatedTile pos ( spriteLeft, spriteTop ) { scale, steps, fps } { sprite
                     , Css.property "animation"
                         ("pixelengine_graphics_basic "
                             ++ String.fromFloat (toFloat steps / fps)
-                            ++ ".0s steps("
+                            ++ "s steps("
                             ++ String.fromInt steps
                             ++ ") infinite"
                         )

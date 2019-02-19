@@ -2,6 +2,7 @@ module RuinJump.MapSegment exposing (append, concat, floorGenerator, intersectio
 
 import CellAutomata exposing (Automata, Rule, RuleExpression(..))
 import Dict
+import Grid.Position exposing (Position)
 import Natural exposing (Natural16(..))
 import Random exposing (Generator)
 import RuinJump.Automata as Automata exposing (Grid, automata, mirroringAutomata)
@@ -9,7 +10,7 @@ import RuinJump.Config as Config
 import RuinJump.Map exposing (Map)
 import RuinJump.MapElement exposing (Block(..), MapElement(..))
 import RuinJump.Rules as Rules
-import PixelEngine.Grid.Position exposing(Position)
+
 
 width : Int
 width =
@@ -125,6 +126,7 @@ horizontalLine y =
             |> List.indexedMap (\x elem -> ( ( 2 + x * 4, y ), elem ))
         ]
 
+
 sparceHorLine : Int -> List ( Position, Block )
 sparceHorLine y =
     List.concat
@@ -133,6 +135,7 @@ sparceHorLine y =
         , List.repeat (width // 8) Stone
             |> List.indexedMap (\x elem -> ( ( 4 + x * 8, y ), elem ))
         ]
+
 
 piliar : Position -> Int -> List ( Position, Block )
 piliar ( x, y ) yOffset =
@@ -161,14 +164,14 @@ intersectionGenerator level =
             , horizontalLine <| -yOffset
             , sparceHorLine <| -3 - yOffset
             , sparceHorLine <| -6 - yOffset
-            , piliar (width//2+1,1) yOffset
-            , piliar (width//2-4,1) yOffset
-            , piliar (width//2+1,3) yOffset
-            , piliar (width//2-4,3) yOffset
-            , piliar (width//2+1,5) yOffset
-            , piliar (width//2-4,5) yOffset
-            , piliar (width//2+1,7) yOffset
-            , piliar (width//2-4,7) yOffset
+            , piliar ( width // 2 + 1, 1 ) yOffset
+            , piliar ( width // 2 - 4, 1 ) yOffset
+            , piliar ( width // 2 + 1, 3 ) yOffset
+            , piliar ( width // 2 - 4, 3 ) yOffset
+            , piliar ( width // 2 + 1, 5 ) yOffset
+            , piliar ( width // 2 - 4, 5 ) yOffset
+            , piliar ( width // 2 + 1, 7 ) yOffset
+            , piliar ( width // 2 - 4, 7 ) yOffset
             ]
                 |> List.concat
                 |> Dict.fromList

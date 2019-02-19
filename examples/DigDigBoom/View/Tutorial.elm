@@ -1,15 +1,16 @@
 module DigDigBoom.View.Tutorial exposing (view)
 
-import DigDigBoom.View.Tile as TileView
-import PixelEngine.Graphics.Tile exposing (Tile)
-import PixelEngine.Grid.Position exposing (Position)
-import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Graphics as Graphics exposing (Area)
+import DigDigBoom.Cell as Cell exposing (Cell(..), EnemyType(..), ItemType(..), SolidType(..))
 import DigDigBoom.Player as Player exposing (PlayerData)
-import PixelEngine.Grid as Grid exposing (Grid)
-import DigDigBoom.Cell as Cell exposing ( Cell(..)  , EnemyType(..)  , ItemType(..)    , SolidType(..))
 import DigDigBoom.View.Screen as Screen
+import DigDigBoom.View.Tile as TileView
 import DigDigBoom.View.Transition as Transition
+import Grid exposing (Grid)
+import Grid.Position exposing (Position)
+import PixelEngine exposing (Area)
+import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Tile exposing (Tile)
+
 
 viewHint : Int -> List ( Position, Tile msg )
 viewHint num =
@@ -82,8 +83,9 @@ viewHint num =
                 , ( 6, 5 ) |> TileView.text "!" TileView.colorWhite
                 ]
 
+
 view : Maybe (List (Area msg)) -> PlayerData -> Grid Cell -> Int -> ( Options msg -> Options msg, List (Area msg) )
-view  oldScreen player map  num =
+view oldScreen player map num =
     let
         tutorialWorldScreen =
             Screen.world num
@@ -109,6 +111,5 @@ view  oldScreen player map  num =
             else
                 ( Transition.death
                     tutorialWorldScreen
-                    
                 , Screen.death
                 )

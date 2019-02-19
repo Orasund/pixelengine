@@ -8,8 +8,8 @@ module MiniWorldWar.View.Image.SelectGui exposing
     , swapUnitsButton
     )
 
-import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import PixelEngine.Graphics.Tile exposing (Tile, Tileset, tile)
+import PixelEngine.Image as Image exposing (Image)
+import PixelEngine.Tile as Tile exposing (Tile, Tileset)
 
 
 tileset : Tileset
@@ -31,44 +31,44 @@ number n =
             else
                 n
     in
-    tile ( boundedN, 0 )
+    Tile.fromPosition ( boundedN, 0 )
 
 
 supply : Image msg
 supply =
-    Image.fromTile (tile ( 5, 1 )) tileset
+    Image.fromTile (Tile.fromPosition ( 5, 1 )) tileset
 
 
 removeUnitButton : Image msg
 removeUnitButton =
-    Image.fromTile (tile ( 3, 1 )) tileset
+    Image.fromTile (Tile.fromPosition ( 3, 1 )) tileset
 
 
 addUnitButton : Image msg
 addUnitButton =
-    Image.fromTile (tile ( 2, 1 )) tileset
+    Image.fromTile (Tile.fromPosition ( 2, 1 )) tileset
 
 
 centerCardButton : Image msg
 centerCardButton =
-    Image.fromTile (tile ( 1, 1 )) tileset
+    Image.fromTile (Tile.fromPosition ( 1, 1 )) tileset
 
 
 cardButton : Image msg
 cardButton =
-    Image.fromTile (tile ( 0, 1 )) tileset
+    Image.fromTile (Tile.fromPosition ( 0, 1 )) tileset
 
 
 swapUnitsButton : Image msg
 swapUnitsButton =
-    Image.fromTile (tile ( 4, 1 )) tileset
+    Image.fromTile (Tile.fromPosition ( 4, 1 )) tileset
 
 
 selectGui : { selected : Int, remaining : Int } -> Image msg
 selectGui { selected, remaining } =
     Image.multipleImages
-        [ ( ( 0, 0 ), image "bigMarker.png" )
+        [ ( ( 0, 0 ), Image.fromSrc "bigMarker.png" )
         , ( ( 0, 3 + 0 ), Image.fromTile (number remaining) tileset )
-        , ( ( 8, 3 + 0 ), Image.fromTile (tile ( 11, 0 )) tileset )
+        , ( ( 8, 3 + 0 ), Image.fromTile (Tile.fromPosition ( 11, 0 )) tileset )
         , ( ( 8 * 2, 3 + 0 ), Image.fromTile (number selected) tileset )
         ]

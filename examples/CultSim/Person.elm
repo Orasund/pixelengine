@@ -1,9 +1,8 @@
 module CultSim.Person exposing (Action(..), Person, generate, move, pray, setPraying, tile, tile_bar)
 
-import PixelEngine.Graphics.Tile as Tile exposing (Tile)
-import PixelEngine.Location as Location exposing (Location,Angle(..))
+import Location exposing (Angle(..), Location)
+import PixelEngine.Tile as Tile exposing (Tile)
 import Random
-
 
 
 type Action
@@ -32,18 +31,18 @@ tile : Action -> Tile msg
 tile action =
     case action of
         PendingPraying ->
-            Tile.tile ( 0, 1 )
+            Tile.fromPosition ( 0, 1 )
 
         Praying _ ->
-            Tile.tile ( 0, 2 )
+            Tile.fromPosition ( 0, 2 )
 
         _ ->
-            Tile.tile ( 0, 0 )
+            Tile.fromPosition ( 0, 0 )
 
 
 tile_bar : Int -> Int -> Tile msg
 tile_bar from amount =
-    Tile.tile ( 8 * amount, from )
+    Tile.fromPosition ( 8 * amount, from )
 
 
 generateSkin : Random.Generator Skin
@@ -67,7 +66,7 @@ generateSkin =
 generatePosition : Float -> Random.Generator Location
 generatePosition l =
     Random.float 0 (2 * pi)
-        |> Random.map (\r -> (0,0) |> Location.move l (Angle r))
+        |> Random.map (\r -> ( 0, 0 ) |> Location.move l (Angle r))
 
 
 move : Person -> Random.Seed -> ( Person, Random.Seed )
@@ -112,7 +111,7 @@ generate =
     Random.map3
         (\location float skin ->
             ( "person_" ++ String.fromFloat float
-            , { location= location
+            , { location = location
               , action = None
               , skin = skin
               , praying_duration = 0

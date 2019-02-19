@@ -4,7 +4,7 @@ import MiniWorldWar.Data.Board as Board exposing (Supply, SupplyBoard, UnitBoard
 import MiniWorldWar.Data.Continent exposing (Continent(..))
 import MiniWorldWar.View as View
 import MiniWorldWar.View.Image.SelectGui as Gui
-import PixelEngine.Graphics.Image exposing (Image)
+import PixelEngine.Image exposing (Image)
 
 
 drawSupply : Continent -> ( Float, Float ) -> Maybe Supply -> Maybe ( ( Float, Float ), Image msg )

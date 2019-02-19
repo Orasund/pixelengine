@@ -8,12 +8,10 @@ import DigDigBoom.View.Screen as Screen
 import DigDigBoom.View.Tile as TileView
 import DigDigBoom.View.Transition as Transition
 import DigDigBoom.View.Tutorial as Tutorial
-import PixelEngine exposing (PixelEngine, game)
-import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics exposing (Area)
-import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Direction exposing (Direction(..))
+import Grid as Grid exposing (Grid)
+import Grid.Direction exposing (Direction(..))
+import PixelEngine exposing (Area, Input(..), PixelEngine, game)
+import PixelEngine.Options as Options exposing (Options)
 import Random
 
 
@@ -258,11 +256,6 @@ update msg model =
                                         , Cmd.none
                                         )
 
-                                    InputNone ->
-                                        ( model
-                                        , Cmd.none
-                                        )
-
                             Nothing ->
                                 case gameType of
                                     Rogue { worldSeed } ->
@@ -382,20 +375,14 @@ viewRogue { oldScreen, player, map } worldSeed =
                 )
 
 
-view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
+width : Int
+width =
+    16
+
+
+view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view model =
     let
-        width : Int
-        width =
-            16
-
-        options =
-            Options.fromWidth <| toFloat <| TileView.tileset.spriteWidth * width
-
-        title : String
-        title =
-            "Dig Dig Boom"
-
         ( optionFunction, body ) =
             case model of
                 Just ({ gameType, oldScreen, player, map } as modelContent) ->
@@ -408,9 +395,12 @@ view model =
 
                 Nothing ->
                     ( identity, Screen.menu )
+
+        options =
+            optionFunction Options.default
     in
-    { title = title
-    , options = optionFunction options
+    { title = "Dig Dig Boom"
+    , options = Just options
     , body = body
     }
 
@@ -428,5 +418,6 @@ main =
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , controls = Input
+        , controls = Input >> Just
+        , width = toFloat <| TileView.tileset.spriteWidth * width
         }

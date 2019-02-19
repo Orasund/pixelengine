@@ -1,14 +1,12 @@
 module Snake exposing (main)
 
 import Array exposing (Array)
-import PixelEngine exposing (PixelEngine, game)
-import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background)
-import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, Tileset, tile)
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position as Position exposing (Coord, Position)
+import Grid as Grid exposing (Grid)
+import Grid.Direction exposing (Direction(..))
+import Grid.Position as Position exposing (Coord, Position)
+import PixelEngine exposing (Area, Background, Input(..), PixelEngine, game)
+import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Tile as Tile exposing (Tile, Tileset)
 import Random
 import Time
 
@@ -34,7 +32,6 @@ type Msg
     = Look Direction
     | PlaceChicken Position
     | Move
-    | None
 
 
 
@@ -46,6 +43,16 @@ type Msg
 boardSize : Int
 boardSize =
     4
+
+
+tileSize : Int
+tileSize =
+    32
+
+
+width : Float
+width =
+    toFloat <| (boardSize + 2) * tileSize
 
 
 
@@ -165,9 +172,6 @@ update msg model =
                 Nothing ->
                     defaultCase
 
-        None ->
-            ( model, Cmd.none )
-
 
 
 {------------------------
@@ -191,23 +195,23 @@ subscriptions _ =
 ------------------------}
 
 
-controls : Input -> Msg
+controls : Input -> Maybe Msg
 controls input =
     case input of
         InputUp ->
-            Look Up
+            Just <| Look Up
 
         InputDown ->
-            Look Down
+            Just <| Look Down
 
         InputLeft ->
-            Look Left
+            Just <| Look Left
 
         InputRight ->
-            Look Right
+            Just <| Look Right
 
         _ ->
-            None
+            Nothing
 
 
 
@@ -218,12 +222,12 @@ controls input =
 
 chickenTile : Tile Msg
 chickenTile =
-    tile ( 3, 0 )
+    Tile.fromPosition ( 3, 0 )
 
 
 snakeHeadTile : Direction -> Tile Msg
 snakeHeadTile direction =
-    tile <|
+    Tile.fromPosition <|
         case direction of
             Down ->
                 ( 1, 0 )
@@ -240,7 +244,7 @@ snakeHeadTile direction =
 
 snakeBodyTile : Tile Msg
 snakeBodyTile =
-    tile ( 3, 1 )
+    Tile.fromPosition ( 3, 1 )
 
 
 viewSnake : Direction -> Snake -> List ( Position, Tile Msg )
@@ -258,60 +262,53 @@ viewSnake direction ( ( headX, headY ), body ) =
            )
 
 
-view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
-view { snake, direction, chicken } =
-    let
-        tileSize : Int
-        tileSize =
-            32
-
-        width : Float
-        width =
-            toFloat <| (boardSize + 2) * tileSize
-
-        tileset : Tileset
-        tileset =
+areas : Model -> List (Area Msg)
+areas { snake, direction, chicken } =
+    [ PixelEngine.tiledArea
+        { rows = boardSize + 2
+        , tileset =
             { source = "tileset.png"
             , spriteWidth = tileSize
             , spriteHeight = tileSize
             }
-
-        background : Background
-        background =
-            Graphics.imageBackground
+        , background =
+            PixelEngine.imageBackground
                 { height = width
                 , width = width
                 , source = "background.png"
                 }
-    in
-    { title = "Snake"
-    , options =
-        Options.fromWidth width
-            |> Options.withMovementSpeed 0.8
-    , body =
-        [ Graphics.tiledArea
-            { rows = boardSize + 2
-            , tileset = tileset
-            , background = background
-            }
-            (List.concat
-                [ snake |> viewSnake direction
-                , case chicken of
-                    Just ( x, y ) ->
-                        [ ( ( x + 1, y + 1 ), chickenTile ) ]
+        }
+        (List.concat
+            [ snake |> viewSnake direction
+            , case chicken of
+                Just ( x, y ) ->
+                    [ ( ( x + 1, y + 1 ), chickenTile ) ]
 
-                    Nothing ->
-                        []
-                ]
-            )
-        ]
-    }
+                Nothing ->
+                    []
+            ]
+        )
+    ]
 
 
 
 {------------------------
-   MAIN
+   CONFIGURATION
 ------------------------}
+
+
+options : Options Msg
+options =
+    Options.default
+        |> Options.withMovementSpeed 0.8
+
+
+view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view model =
+    { title = "Snake"
+    , options = Just options
+    , body = areas model
+    }
 
 
 main : PixelEngine () Model Msg
@@ -322,4 +319,5 @@ main =
         , subscriptions = subscriptions
         , view = view
         , controls = controls
+        , width = width
         }

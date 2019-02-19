@@ -4,7 +4,8 @@ import MiniWorldWar.Data.Continent exposing (Continent(..))
 import MiniWorldWar.Data.Direction exposing (Direction(..))
 import MiniWorldWar.View as View
 import MiniWorldWar.View.Image.SelectGui as Gui
-import PixelEngine.Graphics.Image as Image exposing (Image)
+import PixelEngine.Image as Image exposing (Image)
+
 
 relativeCoord : ( Int, Int ) -> ( Float, Float ) -> ( Float, Float )
 relativeCoord ( x1, y1 ) ( x, y ) =

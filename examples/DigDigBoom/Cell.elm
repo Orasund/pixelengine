@@ -14,10 +14,10 @@ module DigDigBoom.Cell exposing
     )
 
 import DigDigBoom.View.Tile as Tile
-import PixelEngine.Graphics.Tile exposing (Tile)
-import PixelEngine.Grid as Grid exposing (Grid)
-import PixelEngine.Grid.Direction exposing (Direction(..))
-import PixelEngine.Grid.Position exposing (Position)
+import Grid as Grid exposing (Grid)
+import Grid.Direction exposing (Direction(..))
+import Grid.Position exposing (Position)
+import PixelEngine.Tile exposing (Tile)
 import Random exposing (Generator)
 
 

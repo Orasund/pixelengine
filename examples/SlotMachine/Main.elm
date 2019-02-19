@@ -1,13 +1,11 @@
 module SlotMachine exposing (main)
 
 import Color
-import PixelEngine exposing (PixelEngine, gameWithNoControls)
-import PixelEngine.Controls exposing (Input(..))
-import PixelEngine.Graphics as Graphics exposing (Area, Background, Options)
-import PixelEngine.Graphics.Image as Image exposing (Image, image)
-import PixelEngine.Graphics.Options as Options exposing (Options)
-import PixelEngine.Graphics.Tile as Tile exposing (Tile, tile, tileset)
-import PixelEngine.Location as Location exposing (Location,Vector)
+import Location exposing (Location, Vector)
+import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
+import PixelEngine.Image as Image exposing (Image)
+import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Tile as Tile exposing (Tile, tileset)
 import Random
 
 
@@ -141,12 +139,12 @@ We want to display three different things:
 -}
 backgroundImage : Image Msg
 backgroundImage =
-    image "background.png"
+    Image.fromSrc "background.png"
 
 
 resetButtonImage : Image Msg
 resetButtonImage =
-    image "reset.png"
+    Image.fromSrc "reset.png"
         |> Image.clickable Reset
 
 
@@ -162,8 +160,8 @@ we have 8 sprites and there for 7 steps.
 -}
 shufflingTile : Tile Msg
 shufflingTile =
-    tile ( 0, 0 )
-        |> Tile.animated 7
+    Tile.fromPosition ( 0, 0 )
+        |> Tile.animated 8
         |> Tile.clickable Click
 
 
@@ -171,16 +169,16 @@ cardImage : Maybe Suit -> Image Msg
 cardImage suit =
     case suit of
         Just Heart ->
-            image "heart.png"
+            Image.fromSrc "heart.png"
 
         Just Diamond ->
-            image "diamond.png"
+            Image.fromSrc "diamond.png"
 
         Just Spade ->
-            image "spade.png"
+            Image.fromSrc "spade.png"
 
         Just Club ->
-            image "club.png"
+            Image.fromSrc "club.png"
 
         Nothing ->
             Image.fromTile shufflingTile <|
@@ -267,32 +265,34 @@ offset : Vector
 offset =
     { x = 50, y = 84 }
 
+
+size : Float
+size =
+    200
+
+
+options : Options Msg
+options =
+    Options.default
+        |> Options.withAnimationFPS 8
+
+
 {-|
 
 
 # Viewing the Model
 
 -}
-view : Model -> { title : String, options : Options Msg, body : List (Area Msg) }
+view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view model =
-    let
-        size : Float
-        size =
-            200
-
-        background : Background
-        background =
-            Graphics.colorBackground <|
-                Color.rgb255 222 238 214
-    in
     { title = "Slot Machine"
-    , options =
-        Options.fromWidth size
-            |> Options.withAnimationFPS 8
+    , options = Just options
     , body =
-        [ Graphics.imageArea
+        [ PixelEngine.imageArea
             { height = size
-            , background = background
+            , background =
+                PixelEngine.colorBackground <|
+                    Color.rgb255 222 238 214
             }
             (List.concat
                 [ [ ( ( -8, -8 ) |> Location.add offset, backgroundImage )
@@ -317,6 +317,7 @@ main =
     gameWithNoControls
         { init = init
         , update = update
+        , width = size
         , subscriptions = subscriptions
         , view = view
         }
