@@ -2,8 +2,8 @@ module PixelEngine exposing
     ( Area, tiledArea, imageArea, heightOf
     , PixelEngine
     , toHtml, game, gameWithNoControls, gameWithCustomControls
-    , Background, imageBackground, colorBackground
     , Input(..), defaultInputs
+    , Background, imageBackground, colorBackground
     , basicControls, customControls, withMobileSupport
     )
 
@@ -38,6 +38,7 @@ The graphic engine provides a touch-controller for mobile devices.
 
 @docs Input, defaultInputs
 
+
 # Background
 
 @docs Background, imageBackground, colorBackground
@@ -46,6 +47,7 @@ The graphic engine provides a touch-controller for mobile devices.
 # Advanced
 
 @docs basicControls, customControls, withMobileSupport
+
 -}
 
 import Browser
@@ -260,7 +262,7 @@ A `Area` defines how the content should be displayed.
 An area can only contain elements of the same type.
 So either you have tiles or images.
 
-![A typical game](https://orasund.github.io/pixelengine/img4.png "A typical game")
+![A typical game](https://orasund.github.io/pixelengine/docs/img4.png "A typical game")
 
 -}
 type alias Area msg =

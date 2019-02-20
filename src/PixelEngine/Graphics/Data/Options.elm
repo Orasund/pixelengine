@@ -24,8 +24,8 @@ type Options msg
         }
 
 
-new : { width : Float, scale : Int, movementSpeedInSec : Float, animationFPS : Float } -> Options msg
-new { width, scale, movementSpeedInSec, animationFPS } =
+new : Options msg
+new =
     Options
         { width = 512
         , scale = 1

@@ -6,10 +6,10 @@ import Framework.Button as Button
 import Framework.Card as Card
 import Framework.Modifier exposing (Modifier(..))
 import Framework.Typography as Typography
-import PixelEngine.Graphics as Graphics exposing (Background)
-import PixelEngine.Graphics.Image as Image exposing (image)
-import PixelEngine.Graphics.Options as Options
-import PixelEngine.Graphics.Tile exposing (Tileset)
+import PixelEngine exposing (Background)
+import PixelEngine.Image as Image exposing (fromSrc)
+import PixelEngine.Options as Options
+import PixelEngine.Tile exposing (Tileset)
 
 
 card : String -> Element msg
@@ -63,7 +63,7 @@ view { examples, games } =
 
         background : Background
         background =
-            Graphics.colorBackground (Color.rgb255 222 238 214)
+            PixelEngine.colorBackground (Color.rgb255 222 238 214)
     in
     Element.column
         [ Element.spacing 50
@@ -75,16 +75,20 @@ view { examples, games } =
             ]
           <|
             Element.html <|
-                Graphics.view
-                    (Options.fromWidth width
-                        |> Options.withScale 4
-                    )
-                    [ Graphics.imageArea
+                PixelEngine.toHtml
+                    { width = width
+                    , options =
+                        Just
+                            (Options.default
+                                |> Options.withScale 4
+                            )
+                    }
+                    [ PixelEngine.imageArea
                         { height = 64
                         , background = background
                         }
                         [ ( ( 32, 0 )
-                          , image "https://orasund.github.io/pixelengine/docs/pixelengine-logo.png"
+                          , fromSrc "https://orasund.github.io/pixelengine/docs/pixelengine-logo.png"
                           )
                         , ( ( width / 2, 8 ), Image.fromTextWithSpacing -2 "Create Games" font )
                         , ( ( width / 2, 32 ), Image.fromTextWithSpacing -3 "with Elm" font )

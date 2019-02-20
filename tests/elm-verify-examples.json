@@ -1,0 +1,14 @@
+{
+  "root": "../src",
+  "tests": [
+    "Grid",
+    "Grid.Bordered",
+    "Grid.Direction",
+    "Grid.Position",
+    "Location",
+    "PixelEngine",
+    "PixelEngine.Image",
+    "PixelEngine.Options",
+    "PixelEngine.Tile"
+  ]
+}

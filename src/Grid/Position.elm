@@ -12,7 +12,8 @@ meant to to calculations with.
 
 @docs Position, move, add, coordsTo
 
-#Vector
+
+# Vector
 
 @docs Coord, fromDirection, toDirection, distance, scaleBy, length
 

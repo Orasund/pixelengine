@@ -134,7 +134,7 @@ parse string =
                                         Markdown.parse Nothing comment
 
                             Section title ->
-                                Typography.h1
+                                Element.el
                                     [ Font.letterSpacing 5
                                     , Font.heavy
                                     , Font.justify

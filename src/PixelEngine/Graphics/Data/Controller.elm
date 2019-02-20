@@ -33,32 +33,31 @@ render { windowSize, controls } =
 
         circle : String -> AbstractInput -> Float -> List Css.Style -> Html msg
         circle char input size listOfCss =
-            Html.button
-                (List.append
-                    [ css
-                        ([ Css.width <| Css.px <| size
-                         , Css.height <| Css.px <| size
-                         , Css.borderRadius <| Css.px <| size / 2
-                         , Css.borderStyle <| Css.none
-                         , Css.backgroundColor <| Css.rgb 256 256 256
-                         , Css.textAlign Css.center
-                         , Css.fontFamily Css.sansSerif
-                         , Css.fontSize <| Css.px <| size * 0.9
-                         , Css.opacity <| Css.num 0.5
-                         ]
-                            |> List.append listOfCss
-                        )
-                    ]
-                    (case controls <| input of
-                        Just msg ->
+            case controls <| input of
+                Just msg ->
+                    Html.button
+                        (List.append
+                            [ css
+                                ([ Css.width <| Css.px <| size
+                                 , Css.height <| Css.px <| size
+                                 , Css.borderRadius <| Css.px <| size / 2
+                                 , Css.borderStyle <| Css.none
+                                 , Css.backgroundColor <| Css.rgb 256 256 256
+                                 , Css.textAlign Css.center
+                                 , Css.fontFamily Css.sansSerif
+                                 , Css.fontSize <| Css.px <| size * 0.9
+                                 , Css.opacity <| Css.num 0.5
+                                 ]
+                                    |> List.append listOfCss
+                                )
+                            ]
                             [ Events.onClick msg ]
+                        )
+                        [ Html.text char
+                        ]
 
-                        Nothing ->
-                            []
-                    )
-                )
-                [ Html.text char
-                ]
+                Nothing ->
+                    Html.button [] []
     in
     [ div
         [ css

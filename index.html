@@ -13506,7 +13506,7 @@ var author$project$Index$Example$view = function (name) {
 			[
 				mdgriffith$elm_ui$Element$width(mdgriffith$elm_ui$Element$fill),
 				mdgriffith$elm_ui$Element$height(
-				mdgriffith$elm_ui$Element$px(820)),
+				mdgriffith$elm_ui$Element$px(512 + 28)),
 				mdgriffith$elm_ui$Element$centerY
 			]),
 		_List_fromArray(
@@ -16672,107 +16672,6 @@ var author$project$Index$ExampleWithCode$parseMultiple = A2(
 			A3(elm$parser$Parser$multiComment, 'module', ')\n', elm$parser$Parser$NotNestable)),
 		elm$parser$Parser$token(')')),
 	A2(elm$parser$Parser$loop, _List_Nil, author$project$Index$ExampleWithCode$multipleHelp));
-var lucamug$style_framework$Framework$Typography$SizeH1 = {$: 'SizeH1'};
-var lucamug$style_framework$Framework$Typography$fontSize = function (level) {
-	switch (level.$) {
-		case 'SizeH1':
-			return 32;
-		case 'SizeH2':
-			return 28;
-		case 'SizeH3':
-			return 24;
-		case 'SizeH4':
-			return 20;
-		case 'SizeH5':
-			return 16;
-		case 'SizeH6':
-			return 14;
-		case 'SizeLead':
-			return 24;
-		case 'SizeSmall':
-			return 14;
-		default:
-			return 12;
-	}
-};
-var lucamug$style_framework$Framework$Typography$headingLevel = function (level) {
-	switch (level.$) {
-		case 'SizeH1':
-			return 1;
-		case 'SizeH2':
-			return 2;
-		case 'SizeH3':
-			return 3;
-		case 'SizeH4':
-			return 4;
-		case 'SizeH5':
-			return 5;
-		case 'SizeH6':
-			return 6;
-		default:
-			return 5;
-	}
-};
-var mdgriffith$elm_ui$Internal$Model$Left = {$: 'Left'};
-var mdgriffith$elm_ui$Element$alignLeft = mdgriffith$elm_ui$Internal$Model$AlignX(mdgriffith$elm_ui$Internal$Model$Left);
-var mdgriffith$elm_ui$Internal$Model$paddingName = F4(
-	function (top, right, bottom, left) {
-		return 'pad-' + (elm$core$String$fromInt(top) + ('-' + (elm$core$String$fromInt(right) + ('-' + (elm$core$String$fromInt(bottom) + ('-' + elm$core$String$fromInt(left)))))));
-	});
-var mdgriffith$elm_ui$Element$paddingEach = function (_n0) {
-	var top = _n0.top;
-	var right = _n0.right;
-	var bottom = _n0.bottom;
-	var left = _n0.left;
-	return (_Utils_eq(top, right) && (_Utils_eq(top, bottom) && _Utils_eq(top, left))) ? A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$padding,
-		A5(
-			mdgriffith$elm_ui$Internal$Model$PaddingStyle,
-			'p-' + elm$core$String$fromInt(top),
-			top,
-			top,
-			top,
-			top)) : A2(
-		mdgriffith$elm_ui$Internal$Model$StyleClass,
-		mdgriffith$elm_ui$Internal$Flag$padding,
-		A5(
-			mdgriffith$elm_ui$Internal$Model$PaddingStyle,
-			A4(mdgriffith$elm_ui$Internal$Model$paddingName, top, right, bottom, left),
-			top,
-			right,
-			bottom,
-			left));
-};
-var mdgriffith$elm_ui$Internal$Flag$fontWeight = mdgriffith$elm_ui$Internal$Flag$flag(13);
-var mdgriffith$elm_ui$Element$Font$bold = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.bold);
-var mdgriffith$elm_ui$Internal$Model$Heading = function (a) {
-	return {$: 'Heading', a: a};
-};
-var mdgriffith$elm_ui$Element$Region$heading = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Describe, mdgriffith$elm_ui$Internal$Model$Heading);
-var lucamug$style_framework$Framework$Typography$heading = F3(
-	function (level, attributes, child) {
-		return A2(
-			mdgriffith$elm_ui$Element$el,
-			_Utils_ap(
-				_List_fromArray(
-					[
-						mdgriffith$elm_ui$Element$Region$heading(
-						lucamug$style_framework$Framework$Typography$headingLevel(level)),
-						mdgriffith$elm_ui$Element$Font$size(
-						lucamug$style_framework$Framework$Typography$fontSize(level)),
-						mdgriffith$elm_ui$Element$paddingEach(
-						{bottom: 0, left: 0, right: 0, top: 0}),
-						mdgriffith$elm_ui$Element$alignLeft,
-						mdgriffith$elm_ui$Element$Font$bold
-					]),
-				attributes),
-			child);
-	});
-var lucamug$style_framework$Framework$Typography$h1 = F2(
-	function (listAttr, element) {
-		return A3(lucamug$style_framework$Framework$Typography$heading, lucamug$style_framework$Framework$Typography$SizeH1, listAttr, element);
-	});
 var mdgriffith$elm_ui$Internal$Model$SpacingStyle = F3(
 	function (a, b, c) {
 		return {$: 'SpacingStyle', a: a, b: b, c: c};
@@ -16839,6 +16738,7 @@ var mdgriffith$elm_ui$Element$Border$widthEach = function (_n0) {
 			bottom,
 			left));
 };
+var mdgriffith$elm_ui$Internal$Flag$fontWeight = mdgriffith$elm_ui$Internal$Flag$flag(13);
 var mdgriffith$elm_ui$Element$Font$heavy = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.textHeavy);
 var mdgriffith$elm_ui$Internal$Flag$fontAlignment = mdgriffith$elm_ui$Internal$Flag$flag(12);
 var mdgriffith$elm_ui$Element$Font$justify = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontAlignment, mdgriffith$elm_ui$Internal$Style$classes.textJustify);
@@ -20466,7 +20366,7 @@ var author$project$Index$ExampleWithCode$parse = function (string) {
 					default:
 						var title = elem.a;
 						return A2(
-							lucamug$style_framework$Framework$Typography$h1,
+							mdgriffith$elm_ui$Element$el,
 							_List_fromArray(
 								[
 									mdgriffith$elm_ui$Element$Font$letterSpacing(5),
@@ -20668,13 +20568,13 @@ var author$project$Index$Home$card = function (name) {
 var author$project$PixelEngine$Graphics$Data$ColorBackground = function (a) {
 	return {$: 'ColorBackground', a: a};
 };
-var author$project$PixelEngine$Graphics$colorBackground = function (color) {
+var author$project$PixelEngine$colorBackground = function (color) {
 	return author$project$PixelEngine$Graphics$Data$ColorBackground(color);
 };
 var author$project$PixelEngine$Graphics$Data$Area$Images = function (a) {
 	return {$: 'Images', a: a};
 };
-var author$project$PixelEngine$Graphics$imageArea = F2(
+var author$project$PixelEngine$imageArea = F2(
 	function (_n0, content) {
 		var height = _n0.height;
 		var background = _n0.background;
@@ -22698,7 +22598,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 								[
 									rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 									rtfeldman$elm_css$Css$right(
-									rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 2)))
+									rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 1)))
 								]))
 						]),
 					_List_fromArray(
@@ -22717,17 +22617,17 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 											'object-position',
 											elm$core$String$fromInt(((-1) * spriteWidth) * spriteLeft) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * spriteTop) + 'px'))),
 											rtfeldman$elm_css$Css$width(
-											rtfeldman$elm_css$Css$px(spriteWidth * (steps + 1))),
+											rtfeldman$elm_css$Css$px(spriteWidth * steps)),
 											rtfeldman$elm_css$Css$height(
 											rtfeldman$elm_css$Css$px(spriteHeight)),
 											rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 											rtfeldman$elm_css$Css$left(
-											rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 1))),
+											rtfeldman$elm_css$Css$px((scale * spriteWidth) * steps)),
 											A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
 											A2(
 											rtfeldman$elm_css$Css$property,
 											'animation',
-											'pixelengine_graphics_basic ' + (elm$core$String$fromFloat((steps + 1) / fps) + ('.0s steps(' + (elm$core$String$fromInt(steps + 1) + ') infinite')))),
+											'pixelengine_graphics_basic ' + (elm$core$String$fromFloat(steps / fps) + ('s steps(' + (elm$core$String$fromInt(steps) + ') infinite')))),
 											A2(rtfeldman$elm_css$Css$property, 'transform-origin', 'top left'),
 											rtfeldman$elm_css$Css$transform(
 											A2(rtfeldman$elm_css$Css$scale2, scale, scale)),
@@ -23238,39 +23138,49 @@ var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) 
 	var diameter = windowSize.height / 4;
 	var circle = F4(
 		function (_char, input, size, listOfCss) {
-			return A2(
-				rtfeldman$elm_css$Html$Styled$button,
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$Attributes$css(
-						A2(
-							elm$core$List$append,
-							listOfCss,
-							_List_fromArray(
-								[
-									rtfeldman$elm_css$Css$width(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$height(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$borderRadius(
-									rtfeldman$elm_css$Css$px(size / 2)),
-									rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
-									rtfeldman$elm_css$Css$backgroundColor(
-									A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
-									rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
-									rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
-									rtfeldman$elm_css$Css$fontSize(
-									rtfeldman$elm_css$Css$px(size * 0.9)),
-									rtfeldman$elm_css$Css$opacity(
-									rtfeldman$elm_css$Css$num(0.5))
-								]))),
-						rtfeldman$elm_css$Html$Styled$Events$onClick(
-						controls(input))
-					]),
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$text(_char)
-					]));
+			var _n1 = controls(input);
+			if (_n1.$ === 'Just') {
+				var msg = _n1.a;
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					A2(
+						elm$core$List$append,
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Attributes$css(
+								A2(
+									elm$core$List$append,
+									listOfCss,
+									_List_fromArray(
+										[
+											rtfeldman$elm_css$Css$width(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$height(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$borderRadius(
+											rtfeldman$elm_css$Css$px(size / 2)),
+											rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
+											rtfeldman$elm_css$Css$backgroundColor(
+											A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
+											rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
+											rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
+											rtfeldman$elm_css$Css$fontSize(
+											rtfeldman$elm_css$Css$px(size * 0.9)),
+											rtfeldman$elm_css$Css$opacity(
+											rtfeldman$elm_css$Css$num(0.5))
+										])))
+							]),
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Events$onClick(msg)
+							])),
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$text(_char)
+						]));
+			} else {
+				return A2(rtfeldman$elm_css$Html$Styled$button, _List_Nil, _List_Nil);
+			}
 		});
 	return _List_fromArray(
 		[
@@ -23590,6 +23500,38 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 							]))
 					])));
 	});
+var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
+	return {$: 'Options', a: a};
+};
+var author$project$PixelEngine$Graphics$Data$Options$withWidth = F2(
+	function (width, _n0) {
+		var o = _n0.a;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				o,
+				{width: width}));
+	});
+var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
+	return {$: 'Transition', a: a};
+};
+var author$project$PixelEngine$Graphics$Data$Options$new = author$project$PixelEngine$Graphics$Data$Options$Options(
+	{
+		animationFPS: 1,
+		controllerOptions: elm$core$Maybe$Nothing,
+		movementSpeedInSec: 0.2,
+		scale: 1,
+		transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
+			{
+				name: '',
+				transitionList: _List_fromArray(
+					[
+						_Utils_Tuple2(0, '')
+					])
+			}),
+		transitionFrom: _List_Nil,
+		width: 512
+	});
+var author$project$PixelEngine$Options$default = author$project$PixelEngine$Graphics$Data$Options$new;
 var elm$virtual_dom$VirtualDom$keyedNodeNS = F2(
 	function (namespace, tag) {
 		return A2(
@@ -24063,15 +24005,41 @@ var rtfeldman$elm_css$VirtualDom$Styled$toUnstyled = function (vdom) {
 	}
 };
 var rtfeldman$elm_css$Html$Styled$toUnstyled = rtfeldman$elm_css$VirtualDom$Styled$toUnstyled;
-var author$project$PixelEngine$Graphics$view = F2(
-	function (o, listOfArea) {
+var author$project$PixelEngine$toHtml = F2(
+	function (_n0, listOfArea) {
+		var width = _n0.width;
+		var options = _n0.options;
 		return rtfeldman$elm_css$Html$Styled$toUnstyled(
-			A2(author$project$PixelEngine$Graphics$Abstract$render, o, listOfArea));
+			A2(
+				author$project$PixelEngine$Graphics$Abstract$render,
+				A2(
+					author$project$PixelEngine$Graphics$Data$Options$withWidth,
+					width,
+					function () {
+						if (options.$ === 'Just') {
+							var o = options.a;
+							return o;
+						} else {
+							return author$project$PixelEngine$Options$default;
+						}
+					}()),
+				listOfArea));
 	});
+var author$project$PixelEngine$Graphics$Data$Element$ImageSource = function (a) {
+	return {$: 'ImageSource', a: a};
+};
 var author$project$PixelEngine$Graphics$Data$Element$SingleSource = function (a) {
 	return {$: 'SingleSource', a: a};
 };
-var author$project$PixelEngine$Graphics$Image$fromTile = F2(
+var author$project$PixelEngine$Image$fromSrc = function (source) {
+	return {
+		customAttributes: _List_Nil,
+		elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
+			author$project$PixelEngine$Graphics$Data$Element$ImageSource(source)),
+		uniqueId: elm$core$Maybe$Nothing
+	};
+};
+var author$project$PixelEngine$Image$fromTile = F2(
 	function (_n0, tileset) {
 		var info = _n0.info;
 		var uniqueId = _n0.uniqueId;
@@ -24091,7 +24059,7 @@ var author$project$PixelEngine$Graphics$Image$fromTile = F2(
 var author$project$PixelEngine$Graphics$Data$Element$MultipleSources = function (a) {
 	return {$: 'MultipleSources', a: a};
 };
-var author$project$PixelEngine$Graphics$Image$multipleImages = function (list) {
+var author$project$PixelEngine$Image$multipleImages = function (list) {
 	var images = A3(
 		elm$core$List$foldr,
 		function (_n0) {
@@ -24320,7 +24288,7 @@ var author$project$PixelEngine$Graphics$Data$Text$fromString = A2(
 			}());
 	},
 	_List_Nil);
-var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
+var author$project$PixelEngine$Tile$fromPosition = function (_n0) {
 	var left = _n0.a;
 	var top = _n0.b;
 	return {
@@ -24329,7 +24297,7 @@ var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
-var author$project$PixelEngine$Graphics$Tile$fromText = function (_n0) {
+var author$project$PixelEngine$Tile$fromText = function (_n0) {
 	var x = _n0.a;
 	var y = _n0.b;
 	return A2(
@@ -24339,71 +24307,27 @@ var author$project$PixelEngine$Graphics$Tile$fromText = function (_n0) {
 			function (_n1) {
 				var x1 = _n1.a;
 				var y1 = _n1.b;
-				return author$project$PixelEngine$Graphics$Tile$tile(
+				return author$project$PixelEngine$Tile$fromPosition(
 					_Utils_Tuple2(x + x1, y + y1));
 			}));
 };
-var author$project$PixelEngine$Graphics$Image$fromTextWithSpacing = F3(
+var author$project$PixelEngine$Image$fromTextWithSpacing = F3(
 	function (space, text, tileset) {
 		var spriteWidth = tileset.spriteWidth;
-		return author$project$PixelEngine$Graphics$Image$multipleImages(
+		return author$project$PixelEngine$Image$multipleImages(
 			A2(
 				elm$core$List$indexedMap,
 				F2(
 					function (i, tile) {
 						return _Utils_Tuple2(
 							_Utils_Tuple2(i * (spriteWidth + space), 0),
-							A2(author$project$PixelEngine$Graphics$Image$fromTile, tile, tileset));
+							A2(author$project$PixelEngine$Image$fromTile, tile, tileset));
 					}),
 				A2(
-					author$project$PixelEngine$Graphics$Tile$fromText,
+					author$project$PixelEngine$Tile$fromText,
 					_Utils_Tuple2(0, 0),
 					text)));
 	});
-var author$project$PixelEngine$Graphics$Data$Element$ImageSource = function (a) {
-	return {$: 'ImageSource', a: a};
-};
-var author$project$PixelEngine$Graphics$Image$image = function (source) {
-	return {
-		customAttributes: _List_Nil,
-		elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
-			author$project$PixelEngine$Graphics$Data$Element$ImageSource(source)),
-		uniqueId: elm$core$Maybe$Nothing
-	};
-};
-var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
-	return {$: 'Options', a: a};
-};
-var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
-	return {$: 'Transition', a: a};
-};
-var author$project$PixelEngine$Graphics$Data$Options$new = function (_n0) {
-	var width = _n0.width;
-	var scale = _n0.scale;
-	var movementSpeedInSec = _n0.movementSpeedInSec;
-	var animationFPS = _n0.animationFPS;
-	return author$project$PixelEngine$Graphics$Data$Options$Options(
-		{
-			animationFPS: animationFPS,
-			controllerOptions: elm$core$Maybe$Nothing,
-			movementSpeedInSec: movementSpeedInSec,
-			scale: scale,
-			transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
-				{
-					name: '',
-					transitionList: _List_fromArray(
-						[
-							_Utils_Tuple2(0, '')
-						])
-				}),
-			transitionFrom: _List_Nil,
-			width: width
-		});
-};
-var author$project$PixelEngine$Graphics$Options$fromWidth = function (width) {
-	return author$project$PixelEngine$Graphics$Data$Options$new(
-		{animationFPS: 1, movementSpeedInSec: 0.2, scale: 1, width: width});
-};
 var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
 	function (scale, _n0) {
 		var o = _n0.a;
@@ -24412,7 +24336,7 @@ var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
 				o,
 				{scale: scale}));
 	});
-var author$project$PixelEngine$Graphics$Options$withScale = author$project$PixelEngine$Graphics$Data$Options$usingScale;
+var author$project$PixelEngine$Options$withScale = author$project$PixelEngine$Graphics$Data$Options$usingScale;
 var avh4$elm_color$Color$RgbaSpace = F4(
 	function (a, b, c, d) {
 		return {$: 'RgbaSpace', a: a, b: b, c: c, d: d};
@@ -24428,6 +24352,106 @@ var avh4$elm_color$Color$rgb255 = F3(
 			avh4$elm_color$Color$scaleFrom255(g),
 			avh4$elm_color$Color$scaleFrom255(b),
 			1.0);
+	});
+var lucamug$style_framework$Framework$Typography$SizeH1 = {$: 'SizeH1'};
+var lucamug$style_framework$Framework$Typography$fontSize = function (level) {
+	switch (level.$) {
+		case 'SizeH1':
+			return 32;
+		case 'SizeH2':
+			return 28;
+		case 'SizeH3':
+			return 24;
+		case 'SizeH4':
+			return 20;
+		case 'SizeH5':
+			return 16;
+		case 'SizeH6':
+			return 14;
+		case 'SizeLead':
+			return 24;
+		case 'SizeSmall':
+			return 14;
+		default:
+			return 12;
+	}
+};
+var lucamug$style_framework$Framework$Typography$headingLevel = function (level) {
+	switch (level.$) {
+		case 'SizeH1':
+			return 1;
+		case 'SizeH2':
+			return 2;
+		case 'SizeH3':
+			return 3;
+		case 'SizeH4':
+			return 4;
+		case 'SizeH5':
+			return 5;
+		case 'SizeH6':
+			return 6;
+		default:
+			return 5;
+	}
+};
+var mdgriffith$elm_ui$Internal$Model$Left = {$: 'Left'};
+var mdgriffith$elm_ui$Element$alignLeft = mdgriffith$elm_ui$Internal$Model$AlignX(mdgriffith$elm_ui$Internal$Model$Left);
+var mdgriffith$elm_ui$Internal$Model$paddingName = F4(
+	function (top, right, bottom, left) {
+		return 'pad-' + (elm$core$String$fromInt(top) + ('-' + (elm$core$String$fromInt(right) + ('-' + (elm$core$String$fromInt(bottom) + ('-' + elm$core$String$fromInt(left)))))));
+	});
+var mdgriffith$elm_ui$Element$paddingEach = function (_n0) {
+	var top = _n0.top;
+	var right = _n0.right;
+	var bottom = _n0.bottom;
+	var left = _n0.left;
+	return (_Utils_eq(top, right) && (_Utils_eq(top, bottom) && _Utils_eq(top, left))) ? A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$padding,
+		A5(
+			mdgriffith$elm_ui$Internal$Model$PaddingStyle,
+			'p-' + elm$core$String$fromInt(top),
+			top,
+			top,
+			top,
+			top)) : A2(
+		mdgriffith$elm_ui$Internal$Model$StyleClass,
+		mdgriffith$elm_ui$Internal$Flag$padding,
+		A5(
+			mdgriffith$elm_ui$Internal$Model$PaddingStyle,
+			A4(mdgriffith$elm_ui$Internal$Model$paddingName, top, right, bottom, left),
+			top,
+			right,
+			bottom,
+			left));
+};
+var mdgriffith$elm_ui$Element$Font$bold = A2(mdgriffith$elm_ui$Internal$Model$Class, mdgriffith$elm_ui$Internal$Flag$fontWeight, mdgriffith$elm_ui$Internal$Style$classes.bold);
+var mdgriffith$elm_ui$Internal$Model$Heading = function (a) {
+	return {$: 'Heading', a: a};
+};
+var mdgriffith$elm_ui$Element$Region$heading = A2(elm$core$Basics$composeL, mdgriffith$elm_ui$Internal$Model$Describe, mdgriffith$elm_ui$Internal$Model$Heading);
+var lucamug$style_framework$Framework$Typography$heading = F3(
+	function (level, attributes, child) {
+		return A2(
+			mdgriffith$elm_ui$Element$el,
+			_Utils_ap(
+				_List_fromArray(
+					[
+						mdgriffith$elm_ui$Element$Region$heading(
+						lucamug$style_framework$Framework$Typography$headingLevel(level)),
+						mdgriffith$elm_ui$Element$Font$size(
+						lucamug$style_framework$Framework$Typography$fontSize(level)),
+						mdgriffith$elm_ui$Element$paddingEach(
+						{bottom: 0, left: 0, right: 0, top: 0}),
+						mdgriffith$elm_ui$Element$alignLeft,
+						mdgriffith$elm_ui$Element$Font$bold
+					]),
+				attributes),
+			child);
+	});
+var lucamug$style_framework$Framework$Typography$h1 = F2(
+	function (listAttr, element) {
+		return A3(lucamug$style_framework$Framework$Typography$heading, lucamug$style_framework$Framework$Typography$SizeH1, listAttr, element);
 	});
 var mdgriffith$elm_ui$Internal$Model$Padding = F5(
 	function (a, b, c, d, e) {
@@ -24603,7 +24627,7 @@ var author$project$Index$Home$view = function (_n0) {
 	var windowWidth = 200;
 	var width = windowWidth;
 	var font = {source: 'https://orasund.github.io/pixelengine/fonts/RetroDeco8x16.png', spriteHeight: 16, spriteWidth: 8};
-	var background = author$project$PixelEngine$Graphics$colorBackground(
+	var background = author$project$PixelEngine$colorBackground(
 		A3(avh4$elm_color$Color$rgb255, 222, 238, 214));
 	return A2(
 		mdgriffith$elm_ui$Element$column,
@@ -24624,27 +24648,28 @@ var author$project$Index$Home$view = function (_n0) {
 					]),
 				mdgriffith$elm_ui$Element$html(
 					A2(
-						author$project$PixelEngine$Graphics$view,
-						A2(
-							author$project$PixelEngine$Graphics$Options$withScale,
-							4,
-							author$project$PixelEngine$Graphics$Options$fromWidth(width)),
+						author$project$PixelEngine$toHtml,
+						{
+							options: elm$core$Maybe$Just(
+								A2(author$project$PixelEngine$Options$withScale, 4, author$project$PixelEngine$Options$default)),
+							width: width
+						},
 						_List_fromArray(
 							[
 								A2(
-								author$project$PixelEngine$Graphics$imageArea,
+								author$project$PixelEngine$imageArea,
 								{background: background, height: 64},
 								_List_fromArray(
 									[
 										_Utils_Tuple2(
 										_Utils_Tuple2(32, 0),
-										author$project$PixelEngine$Graphics$Image$image('https://orasund.github.io/pixelengine/docs/pixelengine-logo.png')),
+										author$project$PixelEngine$Image$fromSrc('https://orasund.github.io/pixelengine/docs/pixelengine-logo.png')),
 										_Utils_Tuple2(
 										_Utils_Tuple2(width / 2, 8),
-										A3(author$project$PixelEngine$Graphics$Image$fromTextWithSpacing, -2, 'Create Games', font)),
+										A3(author$project$PixelEngine$Image$fromTextWithSpacing, -2, 'Create Games', font)),
 										_Utils_Tuple2(
 										_Utils_Tuple2(width / 2, 32),
-										A3(author$project$PixelEngine$Graphics$Image$fromTextWithSpacing, -3, 'with Elm', font))
+										A3(author$project$PixelEngine$Image$fromTextWithSpacing, -3, 'with Elm', font))
 									]))
 							])))),
 				A2(

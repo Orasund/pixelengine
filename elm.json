@@ -24,5 +24,7 @@
         "elm/json": "1.1.2 <= v < 2.0.0",
         "rtfeldman/elm-css": "16.0.0 <= v < 17.0.0"
     },
-    "test-dependencies": {}
+    "test-dependencies": {
+        "elm-explorations/test": "1.2.1 <= v < 2.0.0"
+    }
 }

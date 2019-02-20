@@ -1,8 +1,9 @@
 module Grid.Bordered exposing
-    ( Grid
-    , fill, empty, insert, update, remove, ignoringError
-    , isEmpty, member, get, size, dimensions
-    , keys, values, toList, fromList
+    ( Error, ignoringErrors
+    , Grid
+    , fill, empty, insert, update, remove
+    , isEmpty, member, get, isValid, size, dimensions
+    , positions, emptyPositions, values, toList, fromList
     , toDict, fromDict
     , map, foldl, foldr, filter, partition, find
     , union, intersect, diff
@@ -12,6 +13,11 @@ module Grid.Bordered exposing
 outside the border.
 
 
+# Error
+
+@docs Error, ignoringErrors
+
+
 # Grids
 
 @docs Grid
@@ -19,28 +25,30 @@ outside the border.
 
 # Build
 
-@docs fill, empty, insert, update, remove, ignoringError
+@docs fill, empty, insert, update, remove
 
 
 # Query
 
-@docs isEmpty, member, get, size, dimensions
+@docs isEmpty, member, get, isValid, size, dimensions
 
 
 # List
 
-@docs keys, values, toList, fromList
+@docs positions, emptyPositions, values, toList, fromList
 
 
 # Dict
 
 @docs toDict, fromDict
 
-#Transform
+
+# Transform
 
 @docs map, foldl, foldr, filter, partition, find
 
-#Combine
+
+# Combine
 
 @docs union, intersect, diff
 
@@ -48,11 +56,6 @@ outside the border.
 
 import Dict exposing (Dict)
 import Grid.Position exposing (Position)
-
-
-isValid : Position -> Grid a -> Bool
-isValid ( x, y ) (Grid { rows, columns }) =
-    x >= 0 && x < columns && y >= 0 && y < rows
 
 
 mapDict : (Dict Position a -> Dict Position b) -> Grid a -> Grid b
@@ -64,14 +67,21 @@ mapDict fun (Grid { dict, rows, columns }) =
         }
 
 
-type OutOfBounds
-    = OutOfBounds
-
-
 
 ---------------------------------
 -- Exposed
 ---------------------------------
+
+
+{-| Possible Errors.
+
+  - `OutOfBounds` - the position is not valid
+  - `NotSucessful` - the function as a problem fullfilling the task. (Maybe the position is occupied?)
+
+-}
+type Error
+    = OutOfBounds
+    | NotSuccessful
 
 
 {-| A grid of values.
@@ -89,6 +99,26 @@ type Grid a
         , rows : Int
         , columns : Int
         }
+
+
+{-| checks if a position is valid.
+
+    grid : Grid a
+    grid =
+        empty
+            { columns=42
+            , rows=3
+            }
+
+
+    grid |> isValid (-1,0) --> False
+    grid |> isValid (41,0) --> True
+    grid |> isValid (42,0) --> False
+
+-}
+isValid : Position -> Grid a -> Bool
+isValid ( x, y ) (Grid { rows, columns }) =
+    x >= 0 && x < columns && y >= 0 && y < rows
 
 
 {-| Create a grid
@@ -110,12 +140,17 @@ empty { rows, columns } =
         }
 
 
-{-| Insert a value at a position in a grid. Replaces value when there is a collision.
+{-| Insert a value at a position in a grid. Returns a `NotSuccessful` error if
+the position is occupied.
 -}
-insert : Position -> a -> Grid a -> Result OutOfBounds (Grid a)
-insert pos elem grid =
+insert : Position -> a -> Grid a -> Result Error (Grid a)
+insert pos elem ((Grid { dict }) as grid) =
     if grid |> isValid pos then
-        Ok <| mapDict (Dict.insert pos elem) grid
+        if dict |> Dict.member pos then
+            Err NotSuccessful
+
+        else
+            Ok <| mapDict (Dict.insert pos elem) grid
 
     else
         Err OutOfBounds
@@ -123,21 +158,40 @@ insert pos elem grid =
 
 {-| Update the value of a grid for a specific position with a given function.
 -}
-update : Position -> (Maybe a -> Maybe a) -> Grid a -> Result OutOfBounds (Grid a)
-update pos fun grid =
+update : Position -> (Maybe a -> Result () (Maybe a)) -> Grid a -> Result Error (Grid a)
+update pos fun ((Grid { dict }) as grid) =
     if grid |> isValid pos then
-        Ok <| mapDict (Dict.update pos fun) grid
+        case dict |> Dict.get pos |> fun of
+            Ok result ->
+                Ok <|
+                    mapDict
+                        (case result of
+                            Just a ->
+                                Dict.insert pos a
+
+                            Nothing ->
+                                Dict.remove pos
+                        )
+                        grid
+
+            Err () ->
+                Err NotSuccessful
 
     else
         Err OutOfBounds
 
 
-{-| Remove a vlaue from a grid. If the position is empty, no changes are made.
+{-| Remove a vlaue from a grid. If the position is empty, it returs a
+`NotSuccessful` error.
 -}
-remove : Position -> Grid a -> Result OutOfBounds (Grid a)
-remove pos grid =
+remove : Position -> Grid a -> Result Error (Grid a)
+remove pos ((Grid { dict }) as grid) =
     if grid |> isValid pos then
-        Ok <| mapDict (Dict.remove pos) grid
+        if dict |> Dict.member pos then
+            Ok <| mapDict (Dict.remove pos) grid
+
+        else
+            Err NotSuccessful
 
     else
         Err OutOfBounds
@@ -148,8 +202,8 @@ remove pos grid =
 Please be aware, that by using this function you might introduce errors.
 
 -}
-ignoringError : (Grid a -> Result result (Grid a)) -> Grid a -> Grid a
-ignoringError fun grid =
+ignoringErrors : (Grid a -> Result result (Grid a)) -> Grid a -> Grid a
+ignoringErrors fun grid =
     case grid |> fun of
         Ok result ->
             result
@@ -167,24 +221,24 @@ isEmpty (Grid { dict }) =
 
 {-| Determine if a position is empty.
 -}
-member : Position -> Grid a -> Result OutOfBounds Bool
+member : Position -> Grid a -> Result () Bool
 member pos ((Grid { dict }) as grid) =
     if grid |> isValid pos then
         dict |> Dict.member pos |> Ok
 
     else
-        Err OutOfBounds
+        Err ()
 
 
 {-| Get the value associated with a position. If the position is empty, return Nothing.
 -}
-get : Position -> Grid a -> Result OutOfBounds (Maybe a)
+get : Position -> Grid a -> Result () (Maybe a)
 get pos ((Grid { dict }) as grid) =
     if grid |> isValid pos then
         dict |> Dict.get pos |> Ok
 
     else
-        Err OutOfBounds
+        Err ()
 
 
 {-| Determine the number of values in the grid.
@@ -205,9 +259,25 @@ dimensions (Grid { columns, rows }) =
 
 {-| Get all non empty positions in a grid, sorted from lowest to highest.
 -}
-keys : Grid a -> List Position
-keys (Grid { dict }) =
+positions : Grid a -> List Position
+positions (Grid { dict }) =
     dict |> Dict.keys
+
+
+{-| Get all empty positions in a grid, sorted from lowest to highest.
+-}
+emptyPositions : Grid a -> List Position
+emptyPositions =
+    map
+        (\_ maybeMark ->
+            case maybeMark of
+                Just _ ->
+                    Nothing
+
+                Nothing ->
+                    Just ()
+        )
+        >> positions
 
 
 {-| Get all of the values in a grid, in the order of their keys.
@@ -234,7 +304,7 @@ fromList config =
                 Ok value ->
                     value
 
-                Err OutOfBounds ->
+                Err _ ->
                     grid
         )
         (empty config)
@@ -267,7 +337,7 @@ map fun ((Grid { rows, columns }) as grid) =
                             Ok value ->
                                 value
 
-                            Err OutOfBounds ->
+                            Err _ ->
                                 g
 
                     Nothing ->

@@ -1,7 +1,4 @@
-module PixelEngine.Image exposing
-    ( Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
-    , onClick
-    )
+module PixelEngine.Image exposing (Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes)
 
 {-| This module contains functions for creating images.
 These Images can then be used for the `imageArea` function from the <PixelEngine>
@@ -10,11 +7,6 @@ These Images can then be used for the `imageArea` function from the <PixelEngine
 ## Image
 
 @docs Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
-
-
-## DEPRECATED
-
-@docs onClick
 
 -}
 
@@ -216,16 +208,6 @@ withAttributes attributes ({ customAttributes } as i) =
                 |> List.map Html.Styled.Attributes.fromUnstyled
                 |> List.append customAttributes
     }
-
-
-{-| [DEPRECATED]
-
-Use `clickable` instead.
-
--}
-onClick : msg -> Attribute msg
-onClick msg =
-    Events.onClick msg
 
 
 {-| It is possible to compose an `Image` from a set of other images.

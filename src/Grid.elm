@@ -9,7 +9,8 @@ module Grid exposing
     )
 
 {-| A `Grid` is a dictionary that has a size constraint.
-Here is an example where such a grid is used: (Snake Example)[https://orasund.github.io/pixelengine/#Snake].
+Here is an example where such a grid is used:
+[Snake Example](https://orasund.github.io/pixelengine/#Snake).
 
 
 # Grids
@@ -36,7 +37,8 @@ Here is an example where such a grid is used: (Snake Example)[https://orasund.gi
 
 @docs toDict, fromDict
 
-#Transform
+
+# Transform
 
 @docs map, foldl, foldr, filter, partition, find
 
@@ -77,8 +79,18 @@ wrap (Grid { rows, columns }) ( x, y ) =
 
 It will wrap the borders (apply ModBy), making every position valid.
 
-    grid |> Dict.get ( -1, 0 )
-    == grid |> Grid.get ( columns - 1, 0 )
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> get ( -1, 0 )
+    --> grid |> get ( (dimensions |> .columns) - 1, 0 )
 
 If instead you want to have hard border around your grid, use `Grid.Bordered` instead.
 
@@ -93,9 +105,18 @@ type Grid a
 
 {-| Create a grid
 
-```
-fill (always <| Just () ) config |> emptyPositions == []
-```
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    fill (always <| Just ()) dimensions |> emptyPositions
+    --> []
 
 -}
 fill : (Position -> Maybe a) -> { rows : Int, columns : Int } -> Grid a
@@ -106,9 +127,14 @@ fill fun config =
 
 {-| Create an empty grid
 
-```
-empty == fill (always <| Just () )
-```
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    empty dimensions
+    --> fill (always Nothing ) dimensions
 
 -}
 empty : { rows : Int, columns : Int } -> Grid a
@@ -122,9 +148,18 @@ empty { rows, columns } =
 
 {-| Insert a value at a position in a grid. Replaces value when there is a collision.
 
-```
-grid |> insert position a |> get position == Just a
-```
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> get (2,2)
+    --> Just 42
 
 -}
 insert : Position -> a -> Grid a -> Grid a
@@ -133,6 +168,20 @@ insert pos elem grid =
 
 
 {-| Update the value of a grid for a specific position with a given function.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> update (2,2) (always <| Just 42)
+    --> grid |> insert (2,2) 42
+
 -}
 update : Position -> (Maybe a -> Maybe a) -> Grid a -> Grid a
 update pos fun grid =
@@ -140,6 +189,21 @@ update pos fun grid =
 
 
 {-| Remove a vlaue from a grid. If the position is empty, no changes are made.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> get (2,2) --> Just 42
+    grid |> insert (2,2) 42 |> remove (2,2) |> get (2,2)
+    --> Nothing
+
 -}
 remove : Position -> Grid a -> Grid a
 remove pos grid =
@@ -147,6 +211,20 @@ remove pos grid =
 
 
 {-| Determine if a grid is empty.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> isEmpty --> True
+    grid |> insert (2,2) 42 |> isEmpty --> False
+
 -}
 isEmpty : Grid a -> Bool
 isEmpty (Grid { dict }) =
@@ -154,6 +232,20 @@ isEmpty (Grid { dict }) =
 
 
 {-| Determine if a position is empty.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> member (2,2)
+    --> True
+
 -}
 member : Position -> Grid a -> Bool
 member pos ((Grid { dict }) as grid) =
@@ -161,6 +253,20 @@ member pos ((Grid { dict }) as grid) =
 
 
 {-| Get the value associated with a position. If the position is empty, return Nothing.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> get (2,2)
+    --> Just 42
+
 -}
 get : Position -> Grid a -> Maybe a
 get pos ((Grid { dict }) as grid) =
@@ -168,13 +274,41 @@ get pos ((Grid { dict }) as grid) =
 
 
 {-| Determine the number of values in the grid.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> size
+    --> 1
+
 -}
 size : Grid a -> Int
 size (Grid { dict }) =
     dict |> Dict.size
 
 
-{-| return the dimensions of the grid
+{-| Return the dimensions of the grid.
+
+    dim : { columns:Int , rows:Int }
+    dim =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dim
+
+    grid |> dimensions
+    --> dim
+
 -}
 dimensions : Grid a -> { columns : Int, rows : Int }
 dimensions (Grid { columns, rows }) =
@@ -184,6 +318,20 @@ dimensions (Grid { columns, rows }) =
 
 
 {-| Get all non empty positions in a grid, sorted from lowest to highest.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> positions
+    --> [(2,2)]
+
 -}
 positions : Grid a -> List Position
 positions (Grid { dict }) =
@@ -191,6 +339,20 @@ positions (Grid { dict }) =
 
 
 {-| Get all of the values in a grid, in the order of their positions.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid a
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> values
+    --> [42]
+
 -}
 values : Grid a -> List a
 values (Grid { dict }) =
@@ -198,6 +360,22 @@ values (Grid { dict }) =
 
 
 {-| Get all empty positions in a grid, sorted from lowest to highest.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid Int
+    grid =
+        fill
+            (always <| Just <| 42)
+            dimensions
+
+    grid |> remove (2,2) |> emptyPositions
+    --> [(2,2)]
+
 -}
 emptyPositions : Grid a -> List Position
 emptyPositions =
@@ -213,7 +391,22 @@ emptyPositions =
         >> positions
 
 
-{-| Convert a grid into an association list of position-value pairs, sorted by the position.
+{-| Convert a grid into an association list of position-value pairs,
+sorted by the position.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid Int
+    grid =
+        empty dimensions
+
+    grid |> insert (2,2) 42 |> toList
+    --> [( (2,2), 42 )]
+
 -}
 toList : Grid a -> List ( Position, a )
 toList (Grid { dict }) =
@@ -221,6 +414,20 @@ toList (Grid { dict }) =
 
 
 {-| Convert an association list into a grid.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid Int
+    grid =
+        empty dimensions
+
+    [((2,2),42),((2,1),20)] |> fromList dimensions
+    --> grid |> insert (2,2) 42 |> insert (2,1) 20
+
 -}
 fromList : { rows : Int, columns : Int } -> List ( Position, a ) -> Grid a
 fromList config =
@@ -230,6 +437,21 @@ fromList config =
 
 
 {-| Convert a grid into an associated dictionary
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid Int
+    grid =
+        empty dimensions
+            |> insert (2,2) 42
+
+    grid |> toDict |> fromDict dimensions |> get (2,2)
+    --> Just 42
+
 -}
 toDict : Grid a -> Dict Position a
 toDict (Grid { dict }) =
@@ -237,6 +459,20 @@ toDict (Grid { dict }) =
 
 
 {-| Convert an dictionary to a grid
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid Int
+    grid =
+        empty dimensions
+
+    grid |> toDict |> fromDict dimensions |> get (2,2)
+    --> Nothing
+
 -}
 fromDict : { rows : Int, columns : Int } -> Dict Position a -> Grid a
 fromDict config =
@@ -244,6 +480,16 @@ fromDict config =
 
 
 {-| Apply a function to **all** positions in a grid.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    empty dimensions |> map (\_ _ -> Just 42)
+    --> fill (always <| Just 42) dimensions
+
 -}
 map : (Position -> Maybe a -> Maybe b) -> Grid a -> Grid b
 map fun ((Grid { rows, columns }) as grid) =
@@ -295,6 +541,22 @@ foldr fun val (Grid { dict, rows, columns }) =
 
 
 {-| Keep only the values that pass the given test.
+
+    dimensions : { columns:Int , rows:Int }
+    dimensions =
+        { columns=42
+        , rows=3
+        }
+
+    grid : Grid Int
+    grid =
+        empty dimensions
+            |> insert (2,4) 2
+            |> insert (2,3) 42
+
+    grid |> filter (\_ -> (==) 42) |> values
+    --> [42]
+
 -}
 filter : (Position -> a -> Bool) -> Grid a -> Grid a
 filter fun =
