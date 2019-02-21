@@ -3,7 +3,7 @@
     "name": "Orasund/pixelengine",
     "summary": "Graphic engine for turn based pixel games.",
     "license": "BSD-3-Clause",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "exposed-modules": [
         "PixelEngine.Image",
         "PixelEngine.Tile",
