@@ -8469,6 +8469,7 @@ var elm$core$Basics$sqrt = _Basics_sqrt;
 var rtfeldman$elm_css$Css$borderRadius = rtfeldman$elm_css$Css$prop1('border-radius');
 var rtfeldman$elm_css$Css$borderStyle = rtfeldman$elm_css$Css$prop1('border-style');
 var rtfeldman$elm_css$Css$center = rtfeldman$elm_css$Css$prop1('center');
+var rtfeldman$elm_css$Css$display = rtfeldman$elm_css$Css$prop1('display');
 var rtfeldman$elm_css$Css$fontFamily = rtfeldman$elm_css$Css$prop1('font-family');
 var rtfeldman$elm_css$Css$fontSize = rtfeldman$elm_css$Css$prop1('font-size');
 var rtfeldman$elm_css$Css$none = {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, display: rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, keyframes: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: rtfeldman$elm_css$Css$Structure$Compatible, none: rtfeldman$elm_css$Css$Structure$Compatible, outline: rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, resize: rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: rtfeldman$elm_css$Css$Structure$Compatible, textTransform: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, transform: rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
@@ -8572,7 +8573,17 @@ var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) 
 							rtfeldman$elm_css$Html$Styled$text(_char)
 						]));
 			} else {
-				return A2(rtfeldman$elm_css$Html$Styled$button, _List_Nil, _List_Nil);
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$Attributes$css(
+							_List_fromArray(
+								[
+									rtfeldman$elm_css$Css$display(rtfeldman$elm_css$Css$none)
+								]))
+						]),
+					_List_Nil);
 			}
 		});
 	return _List_fromArray(
@@ -10877,20 +10888,17 @@ var author$project$Spaceinvaders$updateEntity = F3(
 			return elm$core$Basics$identity;
 		}
 	});
-var author$project$Spaceinvaders$updateBoard = function (grid) {
-	return A3(
-		author$project$Grid$Bordered$foldl,
-		author$project$Spaceinvaders$updateEntity(grid),
-		grid,
-		grid);
-};
 var author$project$Spaceinvaders$updateState = function (_n0) {
 	var state = _n0.a;
 	var board = state.board;
 	var player = state.player;
 	var seed = _n0.b;
 	var boardGenerator = author$project$Spaceinvaders$bulletGenerator(
-		author$project$Spaceinvaders$updateBoard(state.board));
+		A3(
+			author$project$Grid$Bordered$foldl,
+			author$project$Spaceinvaders$updateEntity(board),
+			board,
+			board));
 	var stateGenerator = A2(
 		elm$random$Random$map,
 		function (grid) {
@@ -10905,53 +10913,48 @@ var author$project$Spaceinvaders$updateState = function (_n0) {
 };
 var author$project$Spaceinvaders$update = F2(
 	function (msg, model) {
-		var defaultCase = _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
-		if (model.$ === 'Just') {
-			var _n1 = model.a;
-			var state = _n1.a;
-			var seed = _n1.b;
-			switch (msg.$) {
-				case 'Move':
-					var direction = msg.a;
-					return _Utils_Tuple2(
-						elm$core$Maybe$Just(
-							_Utils_Tuple2(
-								A2(author$project$Spaceinvaders$movePlayer, direction, state),
-								seed)),
-						elm$core$Platform$Cmd$none);
-				case 'Tick':
-					return _Utils_Tuple2(
-						elm$core$Maybe$Just(
-							author$project$Spaceinvaders$updateState(
-								_Utils_Tuple2(state, seed))),
-						elm$core$Platform$Cmd$none);
-				case 'Shoot':
-					return _Utils_Tuple2(
-						elm$core$Maybe$Just(
-							author$project$Spaceinvaders$updateState(
+		return _Utils_Tuple2(
+			function () {
+				if (model.$ === 'Just') {
+					var _n1 = model.a;
+					var state = _n1.a;
+					var seed = _n1.b;
+					switch (msg.$) {
+						case 'Move':
+							var direction = msg.a;
+							return elm$core$Maybe$Just(
 								_Utils_Tuple2(
-									author$project$Spaceinvaders$shoot(state),
-									seed))),
-						elm$core$Platform$Cmd$none);
-				default:
-					return defaultCase;
-			}
-		} else {
-			if (msg.$ === 'SetSeed') {
-				var seed = msg.a;
-				return _Utils_Tuple2(
-					elm$core$Maybe$Just(
-						_Utils_Tuple2(
-							{
-								board: author$project$Spaceinvaders$newBoard,
-								player: _Utils_Tuple2((author$project$Spaceinvaders$boardSize / 2) | 0, author$project$Spaceinvaders$boardSize - 1)
-							},
-							seed)),
-					elm$core$Platform$Cmd$none);
-			} else {
-				return defaultCase;
-			}
-		}
+									A2(author$project$Spaceinvaders$movePlayer, direction, state),
+									seed));
+						case 'Tick':
+							return elm$core$Maybe$Just(
+								author$project$Spaceinvaders$updateState(
+									_Utils_Tuple2(state, seed)));
+						case 'Shoot':
+							return elm$core$Maybe$Just(
+								author$project$Spaceinvaders$updateState(
+									_Utils_Tuple2(
+										author$project$Spaceinvaders$shoot(state),
+										seed)));
+						default:
+							return model;
+					}
+				} else {
+					if (msg.$ === 'SetSeed') {
+						var seed = msg.a;
+						return elm$core$Maybe$Just(
+							_Utils_Tuple2(
+								{
+									board: author$project$Spaceinvaders$newBoard,
+									player: _Utils_Tuple2((author$project$Spaceinvaders$boardSize / 2) | 0, author$project$Spaceinvaders$boardSize - 1)
+								},
+								seed));
+					} else {
+						return model;
+					}
+				}
+			}(),
+			elm$core$Platform$Cmd$none);
 	});
 var author$project$Grid$Bordered$toList = function (_n0) {
 	var dict = _n0.a.dict;

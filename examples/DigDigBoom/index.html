@@ -4853,18 +4853,18 @@ var author$project$DigDigBoom$Cell$Bone = {$: 'Bone'};
 var author$project$DigDigBoom$Cell$Effect = function (a) {
 	return {$: 'Effect', a: a};
 };
-var author$project$PixelEngine$Grid$Grid = function (a) {
+var author$project$Grid$Grid = function (a) {
 	return {$: 'Grid', a: a};
 };
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
-var author$project$PixelEngine$Grid$mapDict = F2(
+var author$project$Grid$mapDict = F2(
 	function (fun, _n0) {
 		var dict = _n0.a.dict;
 		var rows = _n0.a.rows;
 		var columns = _n0.a.columns;
-		return author$project$PixelEngine$Grid$Grid(
+		return author$project$Grid$Grid(
 			{
 				columns: columns,
 				dict: fun(dict),
@@ -4872,7 +4872,7 @@ var author$project$PixelEngine$Grid$mapDict = F2(
 			});
 	});
 var elm$core$Basics$modBy = _Basics_modBy;
-var author$project$PixelEngine$Grid$wrap = F2(
+var author$project$Grid$wrap = F2(
 	function (_n0, _n1) {
 		var rows = _n0.a.rows;
 		var columns = _n0.a.columns;
@@ -4992,13 +4992,13 @@ var elm$core$Dict$insert = F3(
 			return x;
 		}
 	});
-var author$project$PixelEngine$Grid$insert = F3(
+var author$project$Grid$insert = F3(
 	function (pos, elem, grid) {
 		return A2(
-			author$project$PixelEngine$Grid$mapDict,
+			author$project$Grid$mapDict,
 			A2(
 				elm$core$Dict$insert,
-				A2(author$project$PixelEngine$Grid$wrap, grid, pos),
+				A2(author$project$Grid$wrap, grid, pos),
 				elem),
 			grid);
 	});
@@ -5013,15 +5013,15 @@ var author$project$DigDigBoom$Player$attack = F2(
 				playerData,
 				{lifes: lifes}),
 			((lifes > 0) ? elm$core$Basics$identity : A2(
-				author$project$PixelEngine$Grid$insert,
+				author$project$Grid$insert,
 				location,
 				author$project$DigDigBoom$Cell$Effect(author$project$DigDigBoom$Cell$Bone)))(currentMap));
 	});
-var author$project$PixelEngine$Grid$Direction$Down = {$: 'Down'};
-var author$project$PixelEngine$Grid$Direction$Left = {$: 'Left'};
-var author$project$PixelEngine$Grid$Direction$Right = {$: 'Right'};
-var author$project$PixelEngine$Grid$Direction$Up = {$: 'Up'};
-var author$project$PixelEngine$Grid$Position$difference = F2(
+var author$project$Grid$Direction$Down = {$: 'Down'};
+var author$project$Grid$Direction$Left = {$: 'Left'};
+var author$project$Grid$Direction$Right = {$: 'Right'};
+var author$project$Grid$Direction$Up = {$: 'Up'};
+var author$project$Grid$Position$coordsTo = F2(
 	function (_n0, _n1) {
 		var x1 = _n0.a;
 		var y1 = _n0.b;
@@ -5032,19 +5032,26 @@ var author$project$PixelEngine$Grid$Position$difference = F2(
 var elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var author$project$PixelEngine$Grid$Position$toDirection = function (_n0) {
-	var x = _n0.x;
-	var y = _n0.y;
-	return (_Utils_cmp(
-		elm$core$Basics$abs(x),
-		elm$core$Basics$abs(y)) > 0) ? ((x > 0) ? author$project$PixelEngine$Grid$Direction$Right : author$project$PixelEngine$Grid$Direction$Left) : ((y > 0) ? author$project$PixelEngine$Grid$Direction$Down : author$project$PixelEngine$Grid$Direction$Up);
+var author$project$Grid$Position$fromDirection = function (direction) {
+	switch (direction.$) {
+		case 'Up':
+			return {x: 0, y: -1};
+		case 'Down':
+			return {x: 0, y: 1};
+		case 'Left':
+			return {x: -1, y: 0};
+		default:
+			return {x: 1, y: 0};
+	}
 };
 var elm$core$Basics$always = F2(
 	function (a, _n0) {
 		return a;
+	});
+var elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
 	});
 var elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
@@ -5158,11 +5165,13 @@ var author$project$DigDigBoom$Game$attackPlayer = F3(
 				elm$core$List$head(
 					A2(
 						elm$core$List$filter,
-						elm$core$Basics$eq(
-							author$project$PixelEngine$Grid$Position$toDirection(
-								A2(author$project$PixelEngine$Grid$Position$difference, location, playerLocation))),
+						A2(
+							elm$core$Basics$composeR,
+							author$project$Grid$Position$fromDirection,
+							elm$core$Basics$eq(
+								A2(author$project$Grid$Position$coordsTo, location, playerLocation))),
 						_List_fromArray(
-							[author$project$PixelEngine$Grid$Direction$Up, author$project$PixelEngine$Grid$Direction$Down, author$project$PixelEngine$Grid$Direction$Left, author$project$PixelEngine$Grid$Direction$Right])))));
+							[author$project$Grid$Direction$Up, author$project$Grid$Direction$Down, author$project$Grid$Direction$Left, author$project$Grid$Direction$Right])))));
 	});
 var author$project$DigDigBoom$Cell$Smoke = {$: 'Smoke'};
 var author$project$DigDigBoom$Cell$Solid = function (a) {
@@ -5237,12 +5246,12 @@ var elm$core$Dict$get = F2(
 			}
 		}
 	});
-var author$project$PixelEngine$Grid$get = F2(
+var author$project$Grid$get = F2(
 	function (pos, grid) {
 		var dict = grid.a.dict;
 		return A2(
 			elm$core$Dict$get,
-			A2(author$project$PixelEngine$Grid$wrap, grid, pos),
+			A2(author$project$Grid$wrap, grid, pos),
 			dict);
 	});
 var elm$core$Dict$getMin = function (dict) {
@@ -5607,51 +5616,45 @@ var elm$core$Dict$remove = F2(
 			return x;
 		}
 	});
-var author$project$PixelEngine$Grid$remove = F2(
+var author$project$Grid$remove = F2(
 	function (pos, grid) {
 		return A2(
-			author$project$PixelEngine$Grid$mapDict,
+			author$project$Grid$mapDict,
 			elm$core$Dict$remove(
-				A2(author$project$PixelEngine$Grid$wrap, grid, pos)),
+				A2(author$project$Grid$wrap, grid, pos)),
 			grid);
 	});
-var author$project$PixelEngine$Grid$Position$add = F2(
+var author$project$Grid$Position$add = F2(
 	function (v, _n0) {
 		var x = _n0.a;
 		var y = _n0.b;
 		return _Utils_Tuple2(x + v.x, y + v.y);
 	});
-var author$project$PixelEngine$Grid$Position$fromDirection = function (direction) {
-	switch (direction.$) {
-		case 'Up':
-			return {x: 0, y: -1};
-		case 'Down':
-			return {x: 0, y: 1};
-		case 'Left':
-			return {x: -1, y: 0};
-		default:
-			return {x: 1, y: 0};
-	}
-};
-var author$project$PixelEngine$Grid$Position$move = F2(
+var author$project$Grid$Position$scaleBy = F2(
+	function (n, _n0) {
+		var x = _n0.x;
+		var y = _n0.y;
+		return {x: x * n, y: y * n};
+	});
+var author$project$Grid$Position$move = F2(
 	function (n, direction) {
-		var dir = author$project$PixelEngine$Grid$Position$fromDirection(direction);
-		return author$project$PixelEngine$Grid$Position$add(
-			{x: dir.x * n, y: dir.y * n});
+		var dir = author$project$Grid$Position$fromDirection(direction);
+		return author$project$Grid$Position$add(
+			A2(author$project$Grid$Position$scaleBy, n, dir));
 	});
 var author$project$DigDigBoom$Component$Map$move = F2(
 	function (_n0, grid) {
 		var pos = _n0.a;
 		var dir = _n0.b;
-		var _n1 = A2(author$project$PixelEngine$Grid$get, pos, grid);
+		var _n1 = A2(author$project$Grid$get, pos, grid);
 		if (_n1.$ === 'Just') {
 			var a = _n1.a;
 			return A2(
-				author$project$PixelEngine$Grid$remove,
+				author$project$Grid$remove,
 				pos,
 				A3(
-					author$project$PixelEngine$Grid$insert,
-					A3(author$project$PixelEngine$Grid$Position$move, 1, dir, pos),
+					author$project$Grid$insert,
+					A3(author$project$Grid$Position$move, 1, dir, pos),
 					a,
 					grid));
 		} else {
@@ -5662,7 +5665,7 @@ var author$project$DigDigBoom$Component$Map$posFront = F2(
 	function (n, _n0) {
 		var position = _n0.a;
 		var direction = _n0.b;
-		return A3(author$project$PixelEngine$Grid$Position$move, n, direction, position);
+		return A3(author$project$Grid$Position$move, n, direction, position);
 	});
 var elm$core$Dict$update = F3(
 	function (targetKey, alter, dictionary) {
@@ -5675,13 +5678,13 @@ var elm$core$Dict$update = F3(
 			return A2(elm$core$Dict$remove, targetKey, dictionary);
 		}
 	});
-var author$project$PixelEngine$Grid$update = F3(
+var author$project$Grid$update = F3(
 	function (pos, fun, grid) {
 		return A2(
-			author$project$PixelEngine$Grid$mapDict,
+			author$project$Grid$mapDict,
 			A2(
 				elm$core$Dict$update,
-				A2(author$project$PixelEngine$Grid$wrap, grid, pos),
+				A2(author$project$Grid$wrap, grid, pos),
 				fun),
 			grid);
 	});
@@ -5702,7 +5705,7 @@ var author$project$DigDigBoom$Game$placedBombeBehavoiur = F3(
 		return A2(
 			elm$core$Tuple$mapSecond,
 			A2(
-				author$project$PixelEngine$Grid$update,
+				author$project$Grid$update,
 				newLocation,
 				function (elem) {
 					if (elem.$ === 'Just') {
@@ -5720,6 +5723,17 @@ var author$project$DigDigBoom$Game$placedBombeBehavoiur = F3(
 				}),
 			game);
 	});
+var elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var elm$core$Basics$ge = _Utils_ge;
+var author$project$Grid$Position$toDirection = function (_n0) {
+	var x = _n0.x;
+	var y = _n0.y;
+	return (_Utils_cmp(
+		elm$core$Basics$abs(x),
+		elm$core$Basics$abs(y)) > -1) ? ((x >= 0) ? author$project$Grid$Direction$Right : author$project$Grid$Direction$Left) : ((y >= 0) ? author$project$Grid$Direction$Down : author$project$Grid$Direction$Up);
+};
 var author$project$DigDigBoom$Game$specialBehaviour = F4(
 	function (currentLocation, enemyType, _n0, game) {
 		var playerLocation = _n0.a;
@@ -5728,7 +5742,7 @@ var author$project$DigDigBoom$Game$specialBehaviour = F4(
 			return A2(
 				elm$core$Tuple$mapSecond,
 				A2(
-					author$project$PixelEngine$Grid$update,
+					author$project$Grid$update,
 					currentLocation,
 					elm$core$Basics$always(
 						elm$core$Maybe$Just(
@@ -5738,15 +5752,15 @@ var author$project$DigDigBoom$Game$specialBehaviour = F4(
 					author$project$DigDigBoom$Game$placedBombeBehavoiur(currentLocation),
 					game,
 					_List_fromArray(
-						[author$project$PixelEngine$Grid$Direction$Up, author$project$PixelEngine$Grid$Direction$Down, author$project$PixelEngine$Grid$Direction$Left, author$project$PixelEngine$Grid$Direction$Right])));
+						[author$project$Grid$Direction$Up, author$project$Grid$Direction$Down, author$project$Grid$Direction$Left, author$project$Grid$Direction$Right])));
 		} else {
 			var monster = enemyType;
-			var moveDirection = author$project$PixelEngine$Grid$Position$toDirection(
-				A2(author$project$PixelEngine$Grid$Position$difference, playerLocation, currentLocation));
+			var moveDirection = author$project$Grid$Position$toDirection(
+				A2(author$project$Grid$Position$coordsTo, playerLocation, currentLocation));
 			var actor = _Utils_Tuple2(currentLocation, moveDirection);
 			var newLocation = A2(author$project$DigDigBoom$Component$Map$posFront, 1, actor);
 			return function () {
-				var _n2 = A2(author$project$PixelEngine$Grid$get, newLocation, map);
+				var _n2 = A2(author$project$Grid$get, newLocation, map);
 				if (_n2.$ === 'Nothing') {
 					return elm$core$Tuple$mapSecond(
 						author$project$DigDigBoom$Component$Map$move(actor));
@@ -5772,7 +5786,7 @@ var author$project$DigDigBoom$Game$specialBehaviour = F4(
 									}
 								}()) < 1) ? elm$core$Tuple$mapSecond(
 								A2(
-									author$project$PixelEngine$Grid$update,
+									author$project$Grid$update,
 									newLocation,
 									elm$core$Basics$always(
 										A2(
@@ -5785,11 +5799,6 @@ var author$project$DigDigBoom$Game$specialBehaviour = F4(
 				}
 			}()(game);
 		}
-	});
-var elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
 	});
 var author$project$DigDigBoom$Game$updateEnemy = F3(
 	function (position, enemyType, playerCell) {
@@ -5808,13 +5817,13 @@ var author$project$DigDigBoom$Game$updateCell = F2(
 				return A3(author$project$DigDigBoom$Game$updateEnemy, position, enemy, playerCell);
 			case 'Effect':
 				return elm$core$Tuple$mapSecond(
-					author$project$PixelEngine$Grid$remove(position));
+					author$project$Grid$remove(position));
 			case 'Stunned':
 				var enemy = cell.a;
 				var id = cell.b;
 				return elm$core$Tuple$mapSecond(
 					A2(
-						author$project$PixelEngine$Grid$update,
+						author$project$Grid$update,
 						position,
 						elm$core$Basics$always(
 							elm$core$Maybe$Just(
@@ -5823,7 +5832,7 @@ var author$project$DigDigBoom$Game$updateCell = F2(
 				return elm$core$Basics$identity;
 		}
 	});
-var author$project$PixelEngine$Grid$toList = function (_n0) {
+var author$project$Grid$toList = function (_n0) {
 	var dict = _n0.a.dict;
 	return elm$core$Dict$toList(dict);
 };
@@ -5834,7 +5843,7 @@ var author$project$DigDigBoom$Game$updateGame = F2(
 			elm$core$List$foldl,
 			author$project$DigDigBoom$Game$updateCell(playerCell),
 			game,
-			author$project$PixelEngine$Grid$toList(map));
+			author$project$Grid$toList(map));
 	});
 var author$project$DigDigBoom$Cell$Player = function (a) {
 	return {$: 'Player', a: a};
@@ -5842,7 +5851,7 @@ var author$project$DigDigBoom$Cell$Player = function (a) {
 var author$project$DigDigBoom$Player$face = F3(
 	function (position, direction, map) {
 		return A3(
-			author$project$PixelEngine$Grid$insert,
+			author$project$Grid$insert,
 			position,
 			author$project$DigDigBoom$Cell$Player(direction),
 			map);
@@ -6288,7 +6297,7 @@ var author$project$DigDigBoom$Player$throwEnemy = F4(
 		var newLocation = A2(author$project$DigDigBoom$Component$Map$posFront, 1, playerCell);
 		return function () {
 			var _n0 = A2(
-				author$project$PixelEngine$Grid$get,
+				author$project$Grid$get,
 				A2(author$project$DigDigBoom$Component$Map$posFront, 2, playerCell),
 				currentMap);
 			_n0$2:
@@ -6310,7 +6319,7 @@ var author$project$DigDigBoom$Player$throwEnemy = F4(
 			return function (newMap) {
 				return function () {
 					var _n2 = A2(
-						author$project$PixelEngine$Grid$get,
+						author$project$Grid$get,
 						A2(author$project$DigDigBoom$Component$Map$posFront, 3, playerCell),
 						newMap);
 					_n2$2:
@@ -6341,7 +6350,7 @@ var author$project$DigDigBoom$Player$throwEnemy = F4(
 			};
 		}()(
 			A3(
-				author$project$PixelEngine$Grid$update,
+				author$project$Grid$update,
 				newLocation,
 				elm$core$Basics$always(
 					elm$core$Maybe$Just(
@@ -6386,7 +6395,7 @@ var author$project$DigDigBoom$Player$move = F2(
 		if (outOfBound) {
 			return _Utils_Tuple2(playerCell, game);
 		} else {
-			var _n1 = A2(author$project$PixelEngine$Grid$get, newLocation, currentMap);
+			var _n1 = A2(author$project$Grid$get, newLocation, currentMap);
 			if (_n1.$ === 'Nothing') {
 				var _n5 = author$project$DigDigBoom$Component$Inventory$drop(playerData.inventory);
 				var item = _n5.a;
@@ -6403,7 +6412,7 @@ var author$project$DigDigBoom$Player$move = F2(
 							if (item.$ === 'Just') {
 								var a = item.a;
 								return A2(
-									author$project$PixelEngine$Grid$insert,
+									author$project$Grid$insert,
 									location,
 									author$project$DigDigBoom$Cell$Item(a));
 							} else {
@@ -6430,7 +6439,7 @@ var author$project$DigDigBoom$Player$move = F2(
 									if (maybeDroppedItem.$ === 'Just') {
 										var droppedItem = maybeDroppedItem.a;
 										return A2(
-											author$project$PixelEngine$Grid$insert,
+											author$project$Grid$insert,
 											location,
 											author$project$DigDigBoom$Cell$Item(droppedItem));
 									} else {
@@ -6463,7 +6472,7 @@ var author$project$DigDigBoom$Player$move = F2(
 									if (item.$ === 'Just') {
 										var a = item.a;
 										return A3(
-											author$project$PixelEngine$Grid$insert,
+											author$project$Grid$insert,
 											location,
 											author$project$DigDigBoom$Cell$Item(a),
 											A2(author$project$DigDigBoom$Component$Map$move, playerCell, currentMap));
@@ -6486,7 +6495,7 @@ var author$project$DigDigBoom$Player$move = F2(
 											author$project$DigDigBoom$Player$addToInventory,
 											author$project$DigDigBoom$Cell$Material(material),
 											playerData),
-										A2(author$project$PixelEngine$Grid$remove, newLocation, currentMap));
+										A2(author$project$Grid$remove, newLocation, currentMap));
 								} else {
 									return A2(
 										elm$core$Tuple$mapSecond,
@@ -6703,10 +6712,10 @@ var author$project$DigDigBoom$Cell$generator = function () {
 		A2(elm$random$Random$int, 0, 500));
 }();
 var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
-var author$project$PixelEngine$Grid$empty = function (_n0) {
+var author$project$Grid$empty = function (_n0) {
 	var rows = _n0.rows;
 	var columns = _n0.columns;
-	return author$project$PixelEngine$Grid$Grid(
+	return author$project$Grid$Grid(
 		{columns: columns, dict: elm$core$Dict$empty, rows: rows});
 };
 var elm$random$Random$listHelp = F4(
@@ -6759,7 +6768,7 @@ var author$project$DigDigBoom$Component$Map$generator = F2(
 									var _n1 = maybeA(pos);
 									if (_n1.$ === 'Just') {
 										var a = _n1.a;
-										return A3(author$project$PixelEngine$Grid$insert, pos, a, grid);
+										return A3(author$project$Grid$insert, pos, a, grid);
 									} else {
 										return grid;
 									}
@@ -6767,7 +6776,7 @@ var author$project$DigDigBoom$Component$Map$generator = F2(
 								xy + 1);
 						}),
 					_Utils_Tuple2(
-						author$project$PixelEngine$Grid$empty(
+						author$project$Grid$empty(
 							{columns: size, rows: size}),
 						0)),
 				elm$core$Tuple$first),
@@ -6808,11 +6817,11 @@ var author$project$DigDigBoom$Main$createNewMap = function (worldSeed) {
 	var _n0 = A2(
 		elm$core$Tuple$mapFirst,
 		A2(
-			author$project$PixelEngine$Grid$update,
+			author$project$Grid$update,
 			_Utils_Tuple2(7, 7),
 			elm$core$Basics$always(
 				elm$core$Maybe$Just(
-					author$project$DigDigBoom$Cell$Player(author$project$PixelEngine$Grid$Direction$Down)))),
+					author$project$DigDigBoom$Cell$Player(author$project$Grid$Direction$Down)))),
 		A2(
 			elm$random$Random$step,
 			A2(author$project$DigDigBoom$Component$Map$generator, author$project$DigDigBoom$Main$worldSize, author$project$DigDigBoom$Cell$generator),
@@ -6827,26 +6836,289 @@ var author$project$DigDigBoom$Main$createNewMap = function (worldSeed) {
 		player: author$project$DigDigBoom$Player$init(backpackSize)
 	};
 };
-var author$project$PixelEngine$Graphics$Tile$tileset = elm$core$Basics$identity;
-var author$project$DigDigBoom$Main$tileset = author$project$PixelEngine$Graphics$Tile$tileset(
-	{source: 'tileset.png', spriteHeight: 16, spriteWidth: 16});
-var avh4$elm_color$Color$RgbaSpace = F4(
-	function (a, b, c, d) {
-		return {$: 'RgbaSpace', a: a, b: b, c: c, d: d};
+var author$project$Grid$foldl = F3(
+	function (fun, val, _n0) {
+		var dict = _n0.a.dict;
+		var rows = _n0.a.rows;
+		var columns = _n0.a.columns;
+		return A3(
+			elm$core$List$foldl,
+			F2(
+				function (x, out) {
+					return A3(
+						elm$core$List$foldl,
+						function (y) {
+							return A2(
+								fun,
+								_Utils_Tuple2(x, y),
+								A2(
+									elm$core$Dict$get,
+									_Utils_Tuple2(x, y),
+									dict));
+						},
+						out,
+						A2(elm$core$List$range, 0, rows - 1));
+				}),
+			val,
+			A2(elm$core$List$range, 0, columns - 1));
 	});
-var avh4$elm_color$Color$scaleFrom255 = function (c) {
-	return c / 255;
+var author$project$Grid$map = F2(
+	function (fun, grid) {
+		var rows = grid.a.rows;
+		var columns = grid.a.columns;
+		return A3(
+			author$project$Grid$foldl,
+			F2(
+				function (pos, elem) {
+					var _n0 = A2(fun, pos, elem);
+					if (_n0.$ === 'Just') {
+						var newElem = _n0.a;
+						return A2(author$project$Grid$insert, pos, newElem);
+					} else {
+						return elm$core$Basics$identity;
+					}
+				}),
+			author$project$Grid$empty(
+				{columns: columns, rows: rows}),
+			grid);
+	});
+var author$project$Grid$fill = F2(
+	function (fun, config) {
+		return A2(
+			author$project$Grid$map,
+			function (pos) {
+				return elm$core$Basics$always(
+					fun(pos));
+			},
+			author$project$Grid$empty(config));
+	});
+var author$project$DigDigBoom$Cell$tutorial = function (num) {
+	return A2(
+		author$project$Grid$fill,
+		function (pos) {
+			var x = pos.a;
+			var y = pos.b;
+			if ((2 <= x) && ((x <= 13) && ((7 <= y) && (y <= 8)))) {
+				switch (num) {
+					case 5:
+						_n1$6:
+						while (true) {
+							switch (pos.b) {
+								case 7:
+									switch (pos.a) {
+										case 11:
+											return elm$core$Maybe$Just(
+												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Oger, 'Oger_1'));
+										case 8:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(
+													author$project$DigDigBoom$Cell$Placed(author$project$DigDigBoom$Cell$Stone)));
+										case 6:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(
+													author$project$DigDigBoom$Cell$Material(author$project$DigDigBoom$Cell$Stone)));
+										default:
+											break _n1$6;
+									}
+								case 8:
+									switch (pos.a) {
+										case 13:
+											return elm$core$Maybe$Just(
+												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Rat, 'rat_1'));
+										case 3:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+										case 7:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+										default:
+											break _n1$6;
+									}
+								default:
+									break _n1$6;
+							}
+						}
+						return elm$core$Maybe$Nothing;
+					case 4:
+						_n2$5:
+						while (true) {
+							switch (pos.b) {
+								case 7:
+									switch (pos.a) {
+										case 9:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneBrickWall));
+										case 13:
+											return elm$core$Maybe$Just(
+												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Goblin, 'goblin_1'));
+										default:
+											break _n2$5;
+									}
+								case 8:
+									switch (pos.a) {
+										case 9:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
+										case 7:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+										case 8:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+										default:
+											break _n2$5;
+									}
+								default:
+									break _n2$5;
+							}
+						}
+						return elm$core$Maybe$Nothing;
+					case 3:
+						_n3$3:
+						while (true) {
+							switch (pos.b) {
+								case 7:
+									if (pos.a === 13) {
+										return elm$core$Maybe$Just(
+											A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Goblin, 'goblin_1'));
+									} else {
+										break _n3$3;
+									}
+								case 8:
+									switch (pos.a) {
+										case 10:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
+										case 11:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+										default:
+											break _n3$3;
+									}
+								default:
+									break _n3$3;
+							}
+						}
+						return elm$core$Maybe$Nothing;
+					case 2:
+						_n4$5:
+						while (true) {
+							switch (pos.b) {
+								case 7:
+									switch (pos.a) {
+										case 9:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
+										case 11:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(
+													author$project$DigDigBoom$Cell$Placed(author$project$DigDigBoom$Cell$Dirt)));
+										case 13:
+											return elm$core$Maybe$Just(
+												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Goblin, 'goblin_1'));
+										default:
+											break _n4$5;
+									}
+								case 8:
+									switch (pos.a) {
+										case 9:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(
+													author$project$DigDigBoom$Cell$Placed(author$project$DigDigBoom$Cell$Dirt)));
+										case 7:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+										default:
+											break _n4$5;
+									}
+								default:
+									break _n4$5;
+							}
+						}
+						return elm$core$Maybe$Nothing;
+					default:
+						_n5$3:
+						while (true) {
+							switch (pos.b) {
+								case 7:
+									switch (pos.a) {
+										case 9:
+											return elm$core$Maybe$Just(
+												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
+										case 13:
+											return elm$core$Maybe$Just(
+												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Rat, 'rat_1'));
+										default:
+											break _n5$3;
+									}
+								case 8:
+									if (pos.a === 7) {
+										return elm$core$Maybe$Just(
+											author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
+									} else {
+										break _n5$3;
+									}
+								default:
+									break _n5$3;
+							}
+						}
+						return elm$core$Maybe$Nothing;
+				}
+			} else {
+				return elm$core$Maybe$Just(
+					author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneBrickWall));
+			}
+		},
+		{columns: 16, rows: 16});
 };
-var avh4$elm_color$Color$rgb255 = F3(
-	function (r, g, b) {
-		return A4(
-			avh4$elm_color$Color$RgbaSpace,
-			avh4$elm_color$Color$scaleFrom255(r),
-			avh4$elm_color$Color$scaleFrom255(g),
-			avh4$elm_color$Color$scaleFrom255(b),
-			1.0);
+var author$project$DigDigBoom$Main$Tutorial = function (a) {
+	return {$: 'Tutorial', a: a};
+};
+var author$project$DigDigBoom$Main$tutorial = function (num) {
+	var currentMap = A3(
+		author$project$Grid$update,
+		_Utils_Tuple2(7, 7),
+		elm$core$Basics$always(
+			elm$core$Maybe$Just(
+				author$project$DigDigBoom$Cell$Player(author$project$Grid$Direction$Down))),
+		author$project$DigDigBoom$Cell$tutorial(num));
+	var backpackSize = 8;
+	return {
+		gameType: author$project$DigDigBoom$Main$Tutorial(num),
+		map: currentMap,
+		oldScreen: elm$core$Maybe$Nothing,
+		player: author$project$DigDigBoom$Player$init(backpackSize)
+	};
+};
+var author$project$PixelEngine$Tile$fromPosition = function (_n0) {
+	var left = _n0.a;
+	var top = _n0.b;
+	return {
+		customAttributes: _List_Nil,
+		info: {left: left, steps: 0, top: top},
+		uniqueId: elm$core$Maybe$Nothing
+	};
+};
+var rtfeldman$elm_css$VirtualDom$Styled$Attribute = F3(
+	function (a, b, c) {
+		return {$: 'Attribute', a: a, b: b, c: c};
 	});
-var author$project$DigDigBoom$Tileset$colorWhite = A3(avh4$elm_color$Color$rgb255, 222, 238, 214);
+var rtfeldman$elm_css$VirtualDom$Styled$unstyledAttribute = function (prop) {
+	return A3(rtfeldman$elm_css$VirtualDom$Styled$Attribute, prop, _List_Nil, '');
+};
+var rtfeldman$elm_css$Html$Styled$Attributes$fromUnstyled = rtfeldman$elm_css$VirtualDom$Styled$unstyledAttribute;
+var author$project$PixelEngine$Tile$withAttributes = F2(
+	function (attributes, t) {
+		var customAttributes = t.customAttributes;
+		return _Utils_update(
+			t,
+			{
+				customAttributes: A2(
+					elm$core$List$append,
+					customAttributes,
+					A2(elm$core$List$map, rtfeldman$elm_css$Html$Styled$Attributes$fromUnstyled, attributes))
+			});
+	});
 var elm$core$Basics$round = _Basics_round;
 var elm$core$String$concat = function (strings) {
 	return A2(elm$core$String$join, '', strings);
@@ -6897,10 +7169,365 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 };
 var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
-var author$project$PixelEngine$Graphics$Tile$backgroundColor = A2(
-	elm$core$Basics$composeR,
-	avh4$elm_color$Color$toCssString,
-	elm$html$Html$Attributes$style('background-color'));
+var author$project$PixelEngine$Tile$monochrome = function (color) {
+	return author$project$PixelEngine$Tile$withAttributes(
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$Attributes$style,
+				'background-color',
+				avh4$elm_color$Color$toCssString(color))
+			]));
+};
+var author$project$DigDigBoom$View$Tile$bombe = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(6, 6)));
+};
+var author$project$DigDigBoom$View$Tile$bone = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(8, 6)));
+};
+var avh4$elm_color$Color$RgbaSpace = F4(
+	function (a, b, c, d) {
+		return {$: 'RgbaSpace', a: a, b: b, c: c, d: d};
+	});
+var avh4$elm_color$Color$scaleFrom255 = function (c) {
+	return c / 255;
+};
+var avh4$elm_color$Color$rgb255 = F3(
+	function (r, g, b) {
+		return A4(
+			avh4$elm_color$Color$RgbaSpace,
+			avh4$elm_color$Color$scaleFrom255(r),
+			avh4$elm_color$Color$scaleFrom255(g),
+			avh4$elm_color$Color$scaleFrom255(b),
+			1.0);
+	});
+var author$project$DigDigBoom$View$Tile$colorBlue = A3(avh4$elm_color$Color$rgb255, 89, 125, 206);
+var author$project$DigDigBoom$View$Tile$colorBrown = A3(avh4$elm_color$Color$rgb255, 133, 76, 48);
+var author$project$DigDigBoom$View$Tile$colorGray = A3(avh4$elm_color$Color$rgb255, 78, 74, 78);
+var author$project$DigDigBoom$View$Tile$colorGreen = A3(avh4$elm_color$Color$rgb255, 109, 170, 44);
+var author$project$DigDigBoom$View$Tile$colorRed = A3(avh4$elm_color$Color$rgb255, 208, 70, 72);
+var author$project$DigDigBoom$View$Tile$colorWhite = A3(avh4$elm_color$Color$rgb255, 222, 238, 214);
+var author$project$DigDigBoom$View$Tile$colorYellow = A3(avh4$elm_color$Color$rgb255, 218, 212, 94);
+var author$project$DigDigBoom$View$Tile$dirt_wall = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(0, 2)));
+};
+var author$project$PixelEngine$Tile$animated = F2(
+	function (steps, t) {
+		var info = t.info;
+		return _Utils_update(
+			t,
+			{
+				info: _Utils_update(
+					info,
+					{
+						steps: (steps > 1) ? steps : 1
+					})
+			});
+	});
+var author$project$PixelEngine$Tile$movable = F2(
+	function (id, t) {
+		return _Utils_update(
+			t,
+			{
+				uniqueId: elm$core$Maybe$Just(
+					_Utils_Tuple2(id, true))
+			});
+	});
+var author$project$DigDigBoom$View$Tile$goblin = F2(
+	function (id, color) {
+		return A2(
+			author$project$PixelEngine$Tile$monochrome,
+			color,
+			A2(
+				author$project$PixelEngine$Tile$movable,
+				id,
+				A2(
+					author$project$PixelEngine$Tile$animated,
+					2,
+					author$project$PixelEngine$Tile$fromPosition(
+						_Utils_Tuple2(2, 8)))));
+	});
+var author$project$DigDigBoom$View$Tile$health_potion = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(5, 7)));
+};
+var author$project$DigDigBoom$View$Tile$oger = F2(
+	function (id, color) {
+		return A2(
+			author$project$PixelEngine$Tile$monochrome,
+			color,
+			A2(
+				author$project$PixelEngine$Tile$movable,
+				id,
+				A2(
+					author$project$PixelEngine$Tile$animated,
+					2,
+					author$project$PixelEngine$Tile$fromPosition(
+						_Utils_Tuple2(0, 8)))));
+	});
+var author$project$DigDigBoom$View$Tile$placed_bombe = F2(
+	function (id, color) {
+		return A2(
+			author$project$PixelEngine$Tile$monochrome,
+			color,
+			A2(
+				author$project$PixelEngine$Tile$movable,
+				id,
+				A2(
+					author$project$PixelEngine$Tile$animated,
+					2,
+					author$project$PixelEngine$Tile$fromPosition(
+						_Utils_Tuple2(4, 9)))));
+	});
+var author$project$DigDigBoom$View$Tile$placed_stone = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(1, 1)));
+};
+var author$project$DigDigBoom$View$Tile$player_down = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		A2(
+			author$project$PixelEngine$Tile$movable,
+			'player',
+			A2(
+				author$project$PixelEngine$Tile$animated,
+				2,
+				author$project$PixelEngine$Tile$fromPosition(
+					_Utils_Tuple2(8, 8)))));
+};
+var author$project$DigDigBoom$View$Tile$player_left = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		A2(
+			author$project$PixelEngine$Tile$movable,
+			'player',
+			A2(
+				author$project$PixelEngine$Tile$animated,
+				2,
+				author$project$PixelEngine$Tile$fromPosition(
+					_Utils_Tuple2(10, 8)))));
+};
+var author$project$DigDigBoom$View$Tile$player_right = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		A2(
+			author$project$PixelEngine$Tile$movable,
+			'player',
+			A2(
+				author$project$PixelEngine$Tile$animated,
+				2,
+				author$project$PixelEngine$Tile$fromPosition(
+					_Utils_Tuple2(10, 9)))));
+};
+var author$project$DigDigBoom$View$Tile$player_up = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		A2(
+			author$project$PixelEngine$Tile$movable,
+			'player',
+			A2(
+				author$project$PixelEngine$Tile$animated,
+				2,
+				author$project$PixelEngine$Tile$fromPosition(
+					_Utils_Tuple2(8, 9)))));
+};
+var author$project$DigDigBoom$View$Tile$rat = F2(
+	function (id, color) {
+		return A2(
+			author$project$PixelEngine$Tile$monochrome,
+			color,
+			A2(
+				author$project$PixelEngine$Tile$movable,
+				id,
+				A2(
+					author$project$PixelEngine$Tile$animated,
+					2,
+					author$project$PixelEngine$Tile$fromPosition(
+						_Utils_Tuple2(0, 9)))));
+	});
+var author$project$DigDigBoom$View$Tile$smoke = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(11, 7)));
+};
+var author$project$DigDigBoom$View$Tile$stone = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(8, 0)));
+};
+var author$project$DigDigBoom$View$Tile$stone_brick_wall = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(2, 0)));
+};
+var author$project$DigDigBoom$View$Tile$stone_wall = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(1, 0)));
+};
+var author$project$DigDigBoom$Cell$getImage = function (cell) {
+	switch (cell.$) {
+		case 'Player':
+			var a = cell.a;
+			return function () {
+				switch (a.$) {
+					case 'Down':
+						return author$project$DigDigBoom$View$Tile$player_down;
+					case 'Up':
+						return author$project$DigDigBoom$View$Tile$player_up;
+					case 'Left':
+						return author$project$DigDigBoom$View$Tile$player_left;
+					default:
+						return author$project$DigDigBoom$View$Tile$player_right;
+				}
+			}()(author$project$DigDigBoom$View$Tile$colorWhite);
+		case 'Solid':
+			switch (cell.a.$) {
+				case 'Placed':
+					if (cell.a.a.$ === 'Stone') {
+						var _n2 = cell.a.a;
+						return author$project$DigDigBoom$View$Tile$placed_stone(author$project$DigDigBoom$View$Tile$colorGray);
+					} else {
+						var _n3 = cell.a.a;
+						return author$project$DigDigBoom$View$Tile$dirt_wall(author$project$DigDigBoom$View$Tile$colorBrown);
+					}
+				case 'StoneWall':
+					var _n4 = cell.a;
+					return author$project$DigDigBoom$View$Tile$stone_wall(author$project$DigDigBoom$View$Tile$colorGray);
+				default:
+					var _n5 = cell.a;
+					return author$project$DigDigBoom$View$Tile$stone_brick_wall(author$project$DigDigBoom$View$Tile$colorGray);
+			}
+		case 'Item':
+			switch (cell.a.$) {
+				case 'Bombe':
+					var _n6 = cell.a;
+					return author$project$DigDigBoom$View$Tile$bombe(author$project$DigDigBoom$View$Tile$colorGreen);
+				case 'HealthPotion':
+					var _n7 = cell.a;
+					return author$project$DigDigBoom$View$Tile$health_potion(author$project$DigDigBoom$View$Tile$colorGreen);
+				default:
+					if (cell.a.a.$ === 'Dirt') {
+						var _n8 = cell.a.a;
+						return author$project$DigDigBoom$View$Tile$dirt_wall(author$project$DigDigBoom$View$Tile$colorBlue);
+					} else {
+						var _n9 = cell.a.a;
+						return author$project$DigDigBoom$View$Tile$stone(author$project$DigDigBoom$View$Tile$colorBlue);
+					}
+			}
+		case 'Enemy':
+			var enemy = cell.a;
+			var id = cell.b;
+			return function () {
+				switch (enemy.$) {
+					case 'PlacedBombe':
+						return author$project$DigDigBoom$View$Tile$placed_bombe(id);
+					case 'Oger':
+						return author$project$DigDigBoom$View$Tile$oger(id);
+					case 'Goblin':
+						return author$project$DigDigBoom$View$Tile$goblin(id);
+					default:
+						return author$project$DigDigBoom$View$Tile$rat(id);
+				}
+			}()(author$project$DigDigBoom$View$Tile$colorRed);
+		case 'Stunned':
+			var enemy = cell.a;
+			var id = cell.b;
+			return function () {
+				switch (enemy.$) {
+					case 'PlacedBombe':
+						return author$project$DigDigBoom$View$Tile$placed_bombe(id);
+					case 'Oger':
+						return author$project$DigDigBoom$View$Tile$oger(id);
+					case 'Goblin':
+						return author$project$DigDigBoom$View$Tile$goblin(id);
+					default:
+						return author$project$DigDigBoom$View$Tile$rat(id);
+				}
+			}()(author$project$DigDigBoom$View$Tile$colorYellow);
+		default:
+			var effect = cell.a;
+			return function () {
+				if (effect.$ === 'Smoke') {
+					return author$project$DigDigBoom$View$Tile$smoke;
+				} else {
+					return author$project$DigDigBoom$View$Tile$bone;
+				}
+			}()(author$project$DigDigBoom$View$Tile$colorWhite);
+	}
+};
+var author$project$DigDigBoom$Component$Inventory$get = function (inventory) {
+	return author$project$DigDigBoom$Component$GroupedList$toList(
+		author$project$DigDigBoom$Component$GroupedOverflowList$getList(inventory));
+};
+var author$project$DigDigBoom$Component$Inventory$ground = function (inventory) {
+	return author$project$DigDigBoom$Component$GroupedOverflowList$getOverflow(inventory);
+};
+var author$project$DigDigBoom$View$Tile$arrow_down = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(12, 9)));
+};
+var author$project$DigDigBoom$View$Tile$arrow_left = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(15, 9)));
+};
+var author$project$DigDigBoom$View$Tile$arrow_right = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(14, 9)));
+};
+var author$project$DigDigBoom$View$Tile$arrow_up = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(13, 9)));
+};
+var author$project$DigDigBoom$View$Tile$heart = function (color) {
+	return A2(
+		author$project$PixelEngine$Tile$monochrome,
+		color,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(4, 8)));
+};
 var elm$core$String$foldr = _String_foldr;
 var author$project$PixelEngine$Graphics$Data$Text$fromString = A2(
 	elm$core$String$foldr,
@@ -7104,16 +7731,7 @@ var author$project$PixelEngine$Graphics$Data$Text$fromString = A2(
 			}());
 	},
 	_List_Nil);
-var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
-	var left = _n0.a;
-	var top = _n0.b;
-	return {
-		customAttributes: _List_Nil,
-		info: {left: left, steps: 0, top: top},
-		uniqueId: elm$core$Maybe$Nothing
-	};
-};
-var author$project$PixelEngine$Graphics$Tile$fromText = function (_n0) {
+var author$project$PixelEngine$Tile$fromText = function (_n0) {
 	var x = _n0.a;
 	var y = _n0.b;
 	return A2(
@@ -7123,31 +7741,11 @@ var author$project$PixelEngine$Graphics$Tile$fromText = function (_n0) {
 			function (_n1) {
 				var x1 = _n1.a;
 				var y1 = _n1.b;
-				return author$project$PixelEngine$Graphics$Tile$tile(
+				return author$project$PixelEngine$Tile$fromPosition(
 					_Utils_Tuple2(x + x1, y + y1));
 			}));
 };
-var rtfeldman$elm_css$VirtualDom$Styled$Attribute = F3(
-	function (a, b, c) {
-		return {$: 'Attribute', a: a, b: b, c: c};
-	});
-var rtfeldman$elm_css$VirtualDom$Styled$unstyledAttribute = function (prop) {
-	return A3(rtfeldman$elm_css$VirtualDom$Styled$Attribute, prop, _List_Nil, '');
-};
-var rtfeldman$elm_css$Html$Styled$Attributes$fromUnstyled = rtfeldman$elm_css$VirtualDom$Styled$unstyledAttribute;
-var author$project$PixelEngine$Graphics$Tile$withAttributes = F2(
-	function (attributes, t) {
-		var customAttributes = t.customAttributes;
-		return _Utils_update(
-			t,
-			{
-				customAttributes: A2(
-					elm$core$List$append,
-					customAttributes,
-					A2(elm$core$List$map, rtfeldman$elm_css$Html$Styled$Attributes$fromUnstyled, attributes))
-			});
-	});
-var author$project$DigDigBoom$Tileset$text = F3(
+var author$project$DigDigBoom$View$Tile$text = F3(
 	function (string, color, _n0) {
 		var x = _n0.a;
 		var y = _n0.b;
@@ -7157,39 +7755,32 @@ var author$project$DigDigBoom$Tileset$text = F3(
 				function (i, tile) {
 					return _Utils_Tuple2(
 						_Utils_Tuple2(x + i, y),
-						A2(
-							author$project$PixelEngine$Graphics$Tile$withAttributes,
-							_List_fromArray(
-								[
-									author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-								]),
-							tile));
+						A2(author$project$PixelEngine$Tile$monochrome, color, tile));
 				}),
 			A2(
-				author$project$PixelEngine$Graphics$Tile$fromText,
+				author$project$PixelEngine$Tile$fromText,
 				_Utils_Tuple2(0, 10),
 				string));
 	});
+var author$project$PixelEngine$Tile$tileset = elm$core$Basics$identity;
+var author$project$DigDigBoom$View$Tile$tileset = author$project$PixelEngine$Tile$tileset(
+	{source: 'tileset.png', spriteHeight: 16, spriteWidth: 16});
 var author$project$PixelEngine$Graphics$Data$ColorBackground = function (a) {
 	return {$: 'ColorBackground', a: a};
 };
-var author$project$PixelEngine$Graphics$colorBackground = function (color) {
+var author$project$PixelEngine$colorBackground = function (color) {
 	return author$project$PixelEngine$Graphics$Data$ColorBackground(color);
 };
-var author$project$PixelEngine$Graphics$Data$Area$Images = function (a) {
-	return {$: 'Images', a: a};
+var author$project$PixelEngine$Graphics$Data$ImageBackground = function (a) {
+	return {$: 'ImageBackground', a: a};
 };
-var author$project$PixelEngine$Graphics$imageArea = F2(
-	function (_n0, content) {
-		var height = _n0.height;
-		var background = _n0.background;
-		return author$project$PixelEngine$Graphics$Data$Area$Images(
-			{background: background, content: content, height: height});
-	});
+var author$project$PixelEngine$imageBackground = function (image) {
+	return author$project$PixelEngine$Graphics$Data$ImageBackground(image);
+};
 var author$project$PixelEngine$Graphics$Data$Area$Tiled = function (a) {
 	return {$: 'Tiled', a: a};
 };
-var author$project$PixelEngine$Graphics$tiledArea = F2(
+var author$project$PixelEngine$tiledArea = F2(
 	function (_n0, content) {
 		var rows = _n0.rows;
 		var tileset = _n0.tileset;
@@ -7197,919 +7788,20 @@ var author$project$PixelEngine$Graphics$tiledArea = F2(
 		return author$project$PixelEngine$Graphics$Data$Area$Tiled(
 			{background: background, content: content, rows: rows, tileset: tileset});
 	});
-var author$project$PixelEngine$Graphics$Data$Element$ImageSource = function (a) {
-	return {$: 'ImageSource', a: a};
-};
-var author$project$PixelEngine$Graphics$Data$Element$SingleSource = function (a) {
-	return {$: 'SingleSource', a: a};
-};
-var author$project$PixelEngine$Graphics$Image$image = function (source) {
-	return {
-		customAttributes: _List_Nil,
-		elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
-			author$project$PixelEngine$Graphics$Data$Element$ImageSource(source)),
-		uniqueId: elm$core$Maybe$Nothing
-	};
-};
-var author$project$DigDigBoom$Main$deathScreen = function () {
-	var width = 16;
-	return _List_fromArray(
-		[
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 2,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			_List_Nil),
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 2,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			elm$core$List$concat(
-				_List_fromArray(
-					[
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'You have',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(4, 0)),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'died',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(6, 1))
-					]))),
-			A2(
-			author$project$PixelEngine$Graphics$imageArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				height: 12 * 16
-			},
-			_List_fromArray(
-				[
-					_Utils_Tuple2(
-					_Utils_Tuple2((((16 * width) / 2) | 0) - 64, (((12 * width) / 2) | 0) - 64),
-					author$project$PixelEngine$Graphics$Image$image('skull.png'))
-				])),
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 2,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			elm$core$List$concat(
-				_List_fromArray(
-					[
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'Press any',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(4, 0)),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'button',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(6, 1))
-					]))),
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 2,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			_List_Nil)
-		]);
-}();
-var author$project$DigDigBoom$Main$logo = author$project$PixelEngine$Graphics$Tile$tileset(
-	{source: 'title_image.png', spriteHeight: 128, spriteWidth: 128});
-var author$project$DigDigBoom$Tileset$arrow_down = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(12, 9)));
-};
-var author$project$DigDigBoom$Tileset$arrow_left = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(15, 9)));
-};
-var author$project$DigDigBoom$Tileset$arrow_right = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(14, 9)));
-};
-var author$project$DigDigBoom$Tileset$arrow_up = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(13, 9)));
-};
-var author$project$PixelEngine$Graphics$Data$Element$TileSource = function (a) {
-	return {$: 'TileSource', a: a};
-};
-var author$project$PixelEngine$Graphics$Image$fromTile = F2(
-	function (_n0, tileset) {
-		var info = _n0.info;
-		var uniqueId = _n0.uniqueId;
-		var customAttributes = _n0.customAttributes;
-		var _n1 = info;
-		var top = _n1.top;
-		var left = _n1.left;
-		var steps = _n1.steps;
-		return {
-			customAttributes: customAttributes,
-			elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
-				author$project$PixelEngine$Graphics$Data$Element$TileSource(
-					{left: left, steps: steps, tileset: tileset, top: top})),
-			uniqueId: uniqueId
-		};
-	});
-var author$project$PixelEngine$Graphics$Tile$animated = F2(
-	function (steps, t) {
-		var info = t.info;
-		return _Utils_update(
-			t,
-			{
-				info: _Utils_update(
-					info,
-					{
-						steps: (steps > 0) ? steps : 0
-					})
-			});
-	});
-var author$project$DigDigBoom$Main$menuScreen = function () {
-	var width = 16;
-	var tile = A2(
-		author$project$PixelEngine$Graphics$Tile$animated,
-		1,
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(0, 0)));
-	return _List_fromArray(
-		[
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 2,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			_List_Nil),
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 3,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			elm$core$List$concat(
-				_List_fromArray(
-					[
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'DIG',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(5, 0)),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'DIG',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(6, 1)),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'BOOM',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(6, 2))
-					]))),
-			A2(
-			author$project$PixelEngine$Graphics$imageArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				height: 9 * 16
-			},
-			_List_fromArray(
-				[
-					_Utils_Tuple2(
-					_Utils_Tuple2((((16 * width) / 2) | 0) - 64, 0),
-					A2(author$project$PixelEngine$Graphics$Image$fromTile, tile, author$project$DigDigBoom$Main$logo))
-				])),
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 4,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			elm$core$List$concat(
-				_List_fromArray(
-					[
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'a',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(1, 0)),
-						_List_fromArray(
-						[
-							_Utils_Tuple2(
-							_Utils_Tuple2(2, 0),
-							author$project$DigDigBoom$Tileset$arrow_left(author$project$DigDigBoom$Tileset$colorWhite)),
-							_Utils_Tuple2(
-							_Utils_Tuple2(3, 0),
-							author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-						]),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'd -Start',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(4, 0)),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'Game',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(8, 1)),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						'w',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(1, 3)),
-						_List_fromArray(
-						[
-							_Utils_Tuple2(
-							_Utils_Tuple2(2, 3),
-							author$project$DigDigBoom$Tileset$arrow_up(author$project$DigDigBoom$Tileset$colorWhite)),
-							_Utils_Tuple2(
-							_Utils_Tuple2(3, 3),
-							author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite))
-						]),
-						A3(
-						author$project$DigDigBoom$Tileset$text,
-						's -Tutorial',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(4, 3))
-					]))),
-			A2(
-			author$project$PixelEngine$Graphics$tiledArea,
-			{
-				background: author$project$PixelEngine$Graphics$colorBackground(
-					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
-				rows: 2,
-				tileset: author$project$DigDigBoom$Main$tileset
-			},
-			_List_Nil)
-		]);
-}();
-var author$project$PixelEngine$Grid$foldl = F3(
-	function (fun, val, _n0) {
-		var dict = _n0.a.dict;
-		var rows = _n0.a.rows;
-		var columns = _n0.a.columns;
-		return A3(
-			elm$core$List$foldl,
-			F2(
-				function (x, out) {
-					return A3(
-						elm$core$List$foldl,
-						function (y) {
-							return A2(
-								fun,
-								_Utils_Tuple2(x, y),
-								A2(
-									elm$core$Dict$get,
-									_Utils_Tuple2(x, y),
-									dict));
-						},
-						out,
-						A2(elm$core$List$range, 0, rows - 1));
-				}),
-			val,
-			A2(elm$core$List$range, 0, columns - 1));
-	});
-var author$project$PixelEngine$Grid$map = F2(
-	function (fun, grid) {
-		var rows = grid.a.rows;
-		var columns = grid.a.columns;
-		return A3(
-			author$project$PixelEngine$Grid$foldl,
-			F2(
-				function (pos, elem) {
-					var _n0 = A2(fun, pos, elem);
-					if (_n0.$ === 'Just') {
-						var newElem = _n0.a;
-						return A2(author$project$PixelEngine$Grid$insert, pos, newElem);
-					} else {
-						return elm$core$Basics$identity;
-					}
-				}),
-			author$project$PixelEngine$Grid$empty(
-				{columns: columns, rows: rows}),
-			grid);
-	});
-var author$project$PixelEngine$Grid$fill = F2(
-	function (fun, config) {
-		return A2(
-			author$project$PixelEngine$Grid$map,
-			function (pos) {
-				return elm$core$Basics$always(
-					fun(pos));
-			},
-			author$project$PixelEngine$Grid$empty(config));
-	});
-var author$project$DigDigBoom$Cell$tutorial = function (num) {
-	return A2(
-		author$project$PixelEngine$Grid$fill,
-		function (pos) {
-			var x = pos.a;
-			var y = pos.b;
-			if ((2 <= x) && ((x <= 13) && ((7 <= y) && (y <= 8)))) {
-				switch (num) {
-					case 5:
-						_n1$6:
-						while (true) {
-							switch (pos.b) {
-								case 7:
-									switch (pos.a) {
-										case 11:
-											return elm$core$Maybe$Just(
-												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Oger, 'Oger_1'));
-										case 8:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(
-													author$project$DigDigBoom$Cell$Placed(author$project$DigDigBoom$Cell$Stone)));
-										case 6:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(
-													author$project$DigDigBoom$Cell$Material(author$project$DigDigBoom$Cell$Stone)));
-										default:
-											break _n1$6;
-									}
-								case 8:
-									switch (pos.a) {
-										case 13:
-											return elm$core$Maybe$Just(
-												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Rat, 'rat_1'));
-										case 3:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-										case 7:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-										default:
-											break _n1$6;
-									}
-								default:
-									break _n1$6;
-							}
-						}
-						return elm$core$Maybe$Nothing;
-					case 4:
-						_n2$5:
-						while (true) {
-							switch (pos.b) {
-								case 7:
-									switch (pos.a) {
-										case 9:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneBrickWall));
-										case 13:
-											return elm$core$Maybe$Just(
-												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Goblin, 'goblin_1'));
-										default:
-											break _n2$5;
-									}
-								case 8:
-									switch (pos.a) {
-										case 9:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
-										case 7:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-										case 8:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-										default:
-											break _n2$5;
-									}
-								default:
-									break _n2$5;
-							}
-						}
-						return elm$core$Maybe$Nothing;
-					case 3:
-						_n3$3:
-						while (true) {
-							switch (pos.b) {
-								case 7:
-									if (pos.a === 13) {
-										return elm$core$Maybe$Just(
-											A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Goblin, 'goblin_1'));
-									} else {
-										break _n3$3;
-									}
-								case 8:
-									switch (pos.a) {
-										case 10:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
-										case 11:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-										default:
-											break _n3$3;
-									}
-								default:
-									break _n3$3;
-							}
-						}
-						return elm$core$Maybe$Nothing;
-					case 2:
-						_n4$5:
-						while (true) {
-							switch (pos.b) {
-								case 7:
-									switch (pos.a) {
-										case 9:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
-										case 11:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(
-													author$project$DigDigBoom$Cell$Placed(author$project$DigDigBoom$Cell$Dirt)));
-										case 13:
-											return elm$core$Maybe$Just(
-												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Goblin, 'goblin_1'));
-										default:
-											break _n4$5;
-									}
-								case 8:
-									switch (pos.a) {
-										case 9:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(
-													author$project$DigDigBoom$Cell$Placed(author$project$DigDigBoom$Cell$Dirt)));
-										case 7:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-										default:
-											break _n4$5;
-									}
-								default:
-									break _n4$5;
-							}
-						}
-						return elm$core$Maybe$Nothing;
-					default:
-						_n5$3:
-						while (true) {
-							switch (pos.b) {
-								case 7:
-									switch (pos.a) {
-										case 9:
-											return elm$core$Maybe$Just(
-												author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneWall));
-										case 13:
-											return elm$core$Maybe$Just(
-												A2(author$project$DigDigBoom$Cell$Enemy, author$project$DigDigBoom$Cell$Rat, 'rat_1'));
-										default:
-											break _n5$3;
-									}
-								case 8:
-									if (pos.a === 7) {
-										return elm$core$Maybe$Just(
-											author$project$DigDigBoom$Cell$Item(author$project$DigDigBoom$Cell$Bombe));
-									} else {
-										break _n5$3;
-									}
-								default:
-									break _n5$3;
-							}
-						}
-						return elm$core$Maybe$Nothing;
-				}
-			} else {
-				return elm$core$Maybe$Just(
-					author$project$DigDigBoom$Cell$Solid(author$project$DigDigBoom$Cell$StoneBrickWall));
-			}
-		},
-		{columns: 16, rows: 16});
-};
-var author$project$DigDigBoom$Main$Tutorial = function (a) {
-	return {$: 'Tutorial', a: a};
-};
-var author$project$DigDigBoom$Main$tutorial = function (num) {
-	var currentMap = A3(
-		author$project$PixelEngine$Grid$update,
-		_Utils_Tuple2(7, 7),
-		elm$core$Basics$always(
-			elm$core$Maybe$Just(
-				author$project$DigDigBoom$Cell$Player(author$project$PixelEngine$Grid$Direction$Down))),
-		author$project$DigDigBoom$Cell$tutorial(num));
-	var backpackSize = 8;
-	return {
-		gameType: author$project$DigDigBoom$Main$Tutorial(num),
-		map: currentMap,
-		oldScreen: elm$core$Maybe$Nothing,
-		player: author$project$DigDigBoom$Player$init(backpackSize)
-	};
-};
-var author$project$DigDigBoom$Tileset$bombe = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(6, 6)));
-};
-var author$project$DigDigBoom$Tileset$bone = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(8, 6)));
-};
-var author$project$DigDigBoom$Tileset$colorBlue = A3(avh4$elm_color$Color$rgb255, 89, 125, 206);
-var author$project$DigDigBoom$Tileset$colorBrown = A3(avh4$elm_color$Color$rgb255, 133, 76, 48);
-var author$project$DigDigBoom$Tileset$colorGray = A3(avh4$elm_color$Color$rgb255, 78, 74, 78);
-var author$project$DigDigBoom$Tileset$colorGreen = A3(avh4$elm_color$Color$rgb255, 109, 170, 44);
-var author$project$DigDigBoom$Tileset$colorRed = A3(avh4$elm_color$Color$rgb255, 208, 70, 72);
-var author$project$DigDigBoom$Tileset$colorYellow = A3(avh4$elm_color$Color$rgb255, 218, 212, 94);
-var author$project$DigDigBoom$Tileset$dirt_wall = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(0, 2)));
-};
-var author$project$PixelEngine$Graphics$Tile$movable = F2(
-	function (id, t) {
-		return _Utils_update(
-			t,
-			{
-				uniqueId: elm$core$Maybe$Just(
-					_Utils_Tuple2(id, true))
-			});
-	});
-var author$project$DigDigBoom$Tileset$goblin = F2(
-	function (id, color) {
-		return A2(
-			author$project$PixelEngine$Graphics$Tile$withAttributes,
-			_List_fromArray(
-				[
-					author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-				]),
-			A2(
-				author$project$PixelEngine$Graphics$Tile$movable,
-				id,
-				A2(
-					author$project$PixelEngine$Graphics$Tile$animated,
-					1,
-					author$project$PixelEngine$Graphics$Tile$tile(
-						_Utils_Tuple2(2, 8)))));
-	});
-var author$project$DigDigBoom$Tileset$health_potion = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(5, 7)));
-};
-var author$project$DigDigBoom$Tileset$oger = F2(
-	function (id, color) {
-		return A2(
-			author$project$PixelEngine$Graphics$Tile$withAttributes,
-			_List_fromArray(
-				[
-					author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-				]),
-			A2(
-				author$project$PixelEngine$Graphics$Tile$movable,
-				id,
-				A2(
-					author$project$PixelEngine$Graphics$Tile$animated,
-					1,
-					author$project$PixelEngine$Graphics$Tile$tile(
-						_Utils_Tuple2(0, 8)))));
-	});
-var author$project$DigDigBoom$Tileset$placed_bombe = F2(
-	function (id, color) {
-		return A2(
-			author$project$PixelEngine$Graphics$Tile$withAttributes,
-			_List_fromArray(
-				[
-					author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-				]),
-			A2(
-				author$project$PixelEngine$Graphics$Tile$movable,
-				id,
-				A2(
-					author$project$PixelEngine$Graphics$Tile$animated,
-					1,
-					author$project$PixelEngine$Graphics$Tile$tile(
-						_Utils_Tuple2(4, 9)))));
-	});
-var author$project$DigDigBoom$Tileset$placed_stone = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(1, 1)));
-};
-var author$project$DigDigBoom$Tileset$player_down = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		A2(
-			author$project$PixelEngine$Graphics$Tile$movable,
-			'player',
-			A2(
-				author$project$PixelEngine$Graphics$Tile$animated,
-				1,
-				author$project$PixelEngine$Graphics$Tile$tile(
-					_Utils_Tuple2(8, 8)))));
-};
-var author$project$DigDigBoom$Tileset$player_left = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		A2(
-			author$project$PixelEngine$Graphics$Tile$movable,
-			'player',
-			A2(
-				author$project$PixelEngine$Graphics$Tile$animated,
-				1,
-				author$project$PixelEngine$Graphics$Tile$tile(
-					_Utils_Tuple2(10, 8)))));
-};
-var author$project$DigDigBoom$Tileset$player_right = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		A2(
-			author$project$PixelEngine$Graphics$Tile$movable,
-			'player',
-			A2(
-				author$project$PixelEngine$Graphics$Tile$animated,
-				1,
-				author$project$PixelEngine$Graphics$Tile$tile(
-					_Utils_Tuple2(10, 9)))));
-};
-var author$project$DigDigBoom$Tileset$player_up = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		A2(
-			author$project$PixelEngine$Graphics$Tile$movable,
-			'player',
-			A2(
-				author$project$PixelEngine$Graphics$Tile$animated,
-				1,
-				author$project$PixelEngine$Graphics$Tile$tile(
-					_Utils_Tuple2(8, 9)))));
-};
-var author$project$DigDigBoom$Tileset$rat = F2(
-	function (id, color) {
-		return A2(
-			author$project$PixelEngine$Graphics$Tile$withAttributes,
-			_List_fromArray(
-				[
-					author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-				]),
-			A2(
-				author$project$PixelEngine$Graphics$Tile$movable,
-				id,
-				A2(
-					author$project$PixelEngine$Graphics$Tile$animated,
-					1,
-					author$project$PixelEngine$Graphics$Tile$tile(
-						_Utils_Tuple2(0, 9)))));
-	});
-var author$project$DigDigBoom$Tileset$smoke = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(11, 7)));
-};
-var author$project$DigDigBoom$Tileset$stone = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(8, 0)));
-};
-var author$project$DigDigBoom$Tileset$stone_brick_wall = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(2, 0)));
-};
-var author$project$DigDigBoom$Tileset$stone_wall = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(1, 0)));
-};
-var author$project$DigDigBoom$Cell$getImage = function (cell) {
-	switch (cell.$) {
-		case 'Player':
-			var a = cell.a;
-			return function () {
-				switch (a.$) {
-					case 'Down':
-						return author$project$DigDigBoom$Tileset$player_down;
-					case 'Up':
-						return author$project$DigDigBoom$Tileset$player_up;
-					case 'Left':
-						return author$project$DigDigBoom$Tileset$player_left;
-					default:
-						return author$project$DigDigBoom$Tileset$player_right;
-				}
-			}()(author$project$DigDigBoom$Tileset$colorWhite);
-		case 'Solid':
-			switch (cell.a.$) {
-				case 'Placed':
-					if (cell.a.a.$ === 'Stone') {
-						var _n2 = cell.a.a;
-						return author$project$DigDigBoom$Tileset$placed_stone(author$project$DigDigBoom$Tileset$colorGray);
-					} else {
-						var _n3 = cell.a.a;
-						return author$project$DigDigBoom$Tileset$dirt_wall(author$project$DigDigBoom$Tileset$colorBrown);
-					}
-				case 'StoneWall':
-					var _n4 = cell.a;
-					return author$project$DigDigBoom$Tileset$stone_wall(author$project$DigDigBoom$Tileset$colorGray);
-				default:
-					var _n5 = cell.a;
-					return author$project$DigDigBoom$Tileset$stone_brick_wall(author$project$DigDigBoom$Tileset$colorGray);
-			}
-		case 'Item':
-			switch (cell.a.$) {
-				case 'Bombe':
-					var _n6 = cell.a;
-					return author$project$DigDigBoom$Tileset$bombe(author$project$DigDigBoom$Tileset$colorGreen);
-				case 'HealthPotion':
-					var _n7 = cell.a;
-					return author$project$DigDigBoom$Tileset$health_potion(author$project$DigDigBoom$Tileset$colorGreen);
-				default:
-					if (cell.a.a.$ === 'Dirt') {
-						var _n8 = cell.a.a;
-						return author$project$DigDigBoom$Tileset$dirt_wall(author$project$DigDigBoom$Tileset$colorBlue);
-					} else {
-						var _n9 = cell.a.a;
-						return author$project$DigDigBoom$Tileset$stone(author$project$DigDigBoom$Tileset$colorBlue);
-					}
-			}
-		case 'Enemy':
-			var enemy = cell.a;
-			var id = cell.b;
-			return function () {
-				switch (enemy.$) {
-					case 'PlacedBombe':
-						return author$project$DigDigBoom$Tileset$placed_bombe(id);
-					case 'Oger':
-						return author$project$DigDigBoom$Tileset$oger(id);
-					case 'Goblin':
-						return author$project$DigDigBoom$Tileset$goblin(id);
-					default:
-						return author$project$DigDigBoom$Tileset$rat(id);
-				}
-			}()(author$project$DigDigBoom$Tileset$colorRed);
-		case 'Stunned':
-			var enemy = cell.a;
-			var id = cell.b;
-			return function () {
-				switch (enemy.$) {
-					case 'PlacedBombe':
-						return author$project$DigDigBoom$Tileset$placed_bombe(id);
-					case 'Oger':
-						return author$project$DigDigBoom$Tileset$oger(id);
-					case 'Goblin':
-						return author$project$DigDigBoom$Tileset$goblin(id);
-					default:
-						return author$project$DigDigBoom$Tileset$rat(id);
-				}
-			}()(author$project$DigDigBoom$Tileset$colorYellow);
-		default:
-			var effect = cell.a;
-			return function () {
-				if (effect.$ === 'Smoke') {
-					return author$project$DigDigBoom$Tileset$smoke;
-				} else {
-					return author$project$DigDigBoom$Tileset$bone;
-				}
-			}()(author$project$DigDigBoom$Tileset$colorWhite);
-	}
-};
-var author$project$DigDigBoom$Component$Inventory$get = function (inventory) {
-	return author$project$DigDigBoom$Component$GroupedList$toList(
-		author$project$DigDigBoom$Component$GroupedOverflowList$getList(inventory));
-};
-var author$project$DigDigBoom$Component$Inventory$ground = function (inventory) {
-	return author$project$DigDigBoom$Component$GroupedOverflowList$getOverflow(inventory);
-};
-var author$project$DigDigBoom$Tileset$heart = function (color) {
-	return A2(
-		author$project$PixelEngine$Graphics$Tile$withAttributes,
-		_List_fromArray(
-			[
-				author$project$PixelEngine$Graphics$Tile$backgroundColor(color)
-			]),
-		author$project$PixelEngine$Graphics$Tile$tile(
-			_Utils_Tuple2(4, 8)));
-};
-var author$project$PixelEngine$Graphics$Data$ImageBackground = function (a) {
-	return {$: 'ImageBackground', a: a};
-};
-var author$project$PixelEngine$Graphics$imageBackground = function (image) {
-	return author$project$PixelEngine$Graphics$Data$ImageBackground(image);
-};
-var author$project$DigDigBoom$Main$worldScreen = F4(
+var author$project$DigDigBoom$View$Screen$world = F4(
 	function (worldSeed, map, player, hints) {
 		return _List_fromArray(
 			[
 				A2(
-				author$project$PixelEngine$Graphics$tiledArea,
+				author$project$PixelEngine$tiledArea,
 				{
-					background: author$project$PixelEngine$Graphics$colorBackground(
+					background: author$project$PixelEngine$colorBackground(
 						A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
 					rows: 1,
-					tileset: author$project$DigDigBoom$Main$tileset
+					tileset: author$project$DigDigBoom$View$Tile$tileset
 				},
 				A3(
-					author$project$DigDigBoom$Tileset$text,
+					author$project$DigDigBoom$View$Tile$text,
 					'X-exit score:' + ((_Utils_eq(
 						(worldSeed / elm$core$Basics$abs(worldSeed)) | 0,
 						-1) ? '-' : ' ') + (elm$core$String$fromInt(
@@ -8121,15 +7813,15 @@ var author$project$DigDigBoom$Main$worldScreen = F4(
 							elm$core$Basics$modBy,
 							10,
 							elm$core$Basics$abs(worldSeed))))),
-					author$project$DigDigBoom$Tileset$colorWhite,
+					author$project$DigDigBoom$View$Tile$colorWhite,
 					_Utils_Tuple2(0, 0))),
 				A2(
-				author$project$PixelEngine$Graphics$tiledArea,
+				author$project$PixelEngine$tiledArea,
 				{
-					background: author$project$PixelEngine$Graphics$imageBackground(
+					background: author$project$PixelEngine$imageBackground(
 						{height: 16, source: 'groundTile.png', width: 16}),
 					rows: 16,
-					tileset: author$project$DigDigBoom$Main$tileset
+					tileset: author$project$DigDigBoom$View$Tile$tileset
 				},
 				A2(
 					elm$core$List$append,
@@ -8142,15 +7834,15 @@ var author$project$DigDigBoom$Main$worldScreen = F4(
 								pos,
 								author$project$DigDigBoom$Cell$getImage(cell));
 						},
-						author$project$PixelEngine$Grid$toList(map)),
+						author$project$Grid$toList(map)),
 					hints)),
 				A2(
-				author$project$PixelEngine$Graphics$tiledArea,
+				author$project$PixelEngine$tiledArea,
 				{
-					background: author$project$PixelEngine$Graphics$colorBackground(
+					background: author$project$PixelEngine$colorBackground(
 						A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
 					rows: 3,
-					tileset: author$project$DigDigBoom$Main$tileset
+					tileset: author$project$DigDigBoom$View$Tile$tileset
 				},
 				elm$core$List$concat(
 					_List_fromArray(
@@ -8159,45 +7851,45 @@ var author$project$DigDigBoom$Main$worldScreen = F4(
 							[
 								_Utils_Tuple2(
 								_Utils_Tuple2(4, 2),
-								author$project$DigDigBoom$Tileset$arrow_up(author$project$DigDigBoom$Tileset$colorWhite))
+								author$project$DigDigBoom$View$Tile$arrow_up(author$project$DigDigBoom$View$Tile$colorWhite))
 							]),
 							A3(
-							author$project$DigDigBoom$Tileset$text,
+							author$project$DigDigBoom$View$Tile$text,
 							'SPACE-use',
-							author$project$DigDigBoom$Tileset$colorWhite,
+							author$project$DigDigBoom$View$Tile$colorWhite,
 							_Utils_Tuple2(5, 2)),
 							_List_fromArray(
 							[
 								_Utils_Tuple2(
 								_Utils_Tuple2(0, 0),
-								author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite))
+								author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite))
 							]),
 							A3(
-							author$project$DigDigBoom$Tileset$text,
+							author$project$DigDigBoom$View$Tile$text,
 							'floor',
-							author$project$DigDigBoom$Tileset$colorWhite,
+							author$project$DigDigBoom$View$Tile$colorWhite,
 							_Utils_Tuple2(1, 0)),
 							A3(
-							author$project$DigDigBoom$Tileset$text,
+							author$project$DigDigBoom$View$Tile$text,
 							'Q',
-							author$project$DigDigBoom$Tileset$colorWhite,
+							author$project$DigDigBoom$View$Tile$colorWhite,
 							_Utils_Tuple2(2, 1)),
 							_List_fromArray(
 							[
 								_Utils_Tuple2(
 								_Utils_Tuple2(3, 1),
-								author$project$DigDigBoom$Tileset$arrow_left(author$project$DigDigBoom$Tileset$colorWhite))
+								author$project$DigDigBoom$View$Tile$arrow_left(author$project$DigDigBoom$View$Tile$colorWhite))
 							]),
 							_List_fromArray(
 							[
 								_Utils_Tuple2(
 								_Utils_Tuple2(12, 1),
-								author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
+								author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
 							]),
 							A3(
-							author$project$DigDigBoom$Tileset$text,
+							author$project$DigDigBoom$View$Tile$text,
 							'E',
-							author$project$DigDigBoom$Tileset$colorWhite,
+							author$project$DigDigBoom$View$Tile$colorWhite,
 							_Utils_Tuple2(13, 1)),
 							function () {
 							var _n1 = author$project$DigDigBoom$Component$Inventory$ground(player.inventory);
@@ -8219,7 +7911,7 @@ var author$project$DigDigBoom$Main$worldScreen = F4(
 							function (i) {
 								return _Utils_Tuple2(
 									_Utils_Tuple2(15 - i, 0),
-									author$project$DigDigBoom$Tileset$heart(author$project$DigDigBoom$Tileset$colorRed));
+									author$project$DigDigBoom$View$Tile$heart(author$project$DigDigBoom$View$Tile$colorRed));
 							},
 							A2(elm$core$List$range, 0, player.lifes - 1)),
 							A2(
@@ -8248,7 +7940,7 @@ var author$project$DigDigBoom$Main$nextLevel = function (_n0) {
 						newModel,
 						{
 							oldScreen: elm$core$Maybe$Just(
-								A4(author$project$DigDigBoom$Main$worldScreen, worldSeed, map, player, _List_Nil))
+								A4(author$project$DigDigBoom$View$Screen$world, worldSeed, map, player, _List_Nil))
 						});
 				}(
 					author$project$DigDigBoom$Main$createNewMap(worldSeed + 7))),
@@ -8262,7 +7954,7 @@ var author$project$DigDigBoom$Main$nextLevel = function (_n0) {
 						newModel,
 						{
 							oldScreen: elm$core$Maybe$Just(
-								A4(author$project$DigDigBoom$Main$worldScreen, num, map, player, _List_Nil))
+								A4(author$project$DigDigBoom$View$Screen$world, num, map, player, _List_Nil))
 						});
 				}(
 					author$project$DigDigBoom$Main$tutorial(num + 1))),
@@ -8382,7 +8074,7 @@ var author$project$DigDigBoom$Player$drop = F2(
 		var _n1 = author$project$DigDigBoom$Component$Inventory$take(playerData.inventory);
 		var maybeItem = _n1.a;
 		var inventory = _n1.b;
-		var _n2 = A2(author$project$PixelEngine$Grid$get, dir, map);
+		var _n2 = A2(author$project$Grid$get, dir, map);
 		if (_n2.$ === 'Nothing') {
 			return _Utils_Tuple2(
 				_Utils_update(
@@ -8392,7 +8084,7 @@ var author$project$DigDigBoom$Player$drop = F2(
 					if (maybeItem.$ === 'Just') {
 						var item = maybeItem.a;
 						return A3(
-							author$project$PixelEngine$Grid$insert,
+							author$project$Grid$insert,
 							dir,
 							author$project$DigDigBoom$Cell$Item(item),
 							map);
@@ -8408,17 +8100,17 @@ var author$project$DigDigBoom$Cell$PlacedBombe = {$: 'PlacedBombe'};
 var author$project$DigDigBoom$Player$placingItem = F4(
 	function (map, playerCell, cell, specialCase) {
 		var frontPos = A2(author$project$DigDigBoom$Component$Map$posFront, 1, playerCell);
-		var _n0 = A2(author$project$PixelEngine$Grid$get, frontPos, map);
+		var _n0 = A2(author$project$Grid$get, frontPos, map);
 		if (_n0.$ === 'Nothing') {
 			return elm$core$Maybe$Just(
 				elm$core$Tuple$mapSecond(
-					A2(author$project$PixelEngine$Grid$insert, frontPos, cell)));
+					A2(author$project$Grid$insert, frontPos, cell)));
 		} else {
 			switch (_n0.a.$) {
 				case 'Effect':
 					return elm$core$Maybe$Just(
 						elm$core$Tuple$mapSecond(
-							A2(author$project$PixelEngine$Grid$insert, frontPos, cell)));
+							A2(author$project$Grid$insert, frontPos, cell)));
 				case 'Solid':
 					var solidType = _n0.a.a;
 					return specialCase(solidType);
@@ -8445,7 +8137,7 @@ var author$project$DigDigBoom$Player$bombeAction = F2(
 								author$project$DigDigBoom$Cell$Material(material),
 								playerData),
 							A3(
-								author$project$PixelEngine$Grid$insert,
+								author$project$Grid$insert,
 								A2(author$project$DigDigBoom$Component$Map$posFront, 1, playerCell),
 								author$project$DigDigBoom$Cell$Solid(solid),
 								map));
@@ -8531,7 +8223,7 @@ var author$project$DigDigBoom$Player$materialAction = F3(
 						return elm$core$Tuple$mapSecond(
 							function (grid) {
 								return A3(
-									author$project$PixelEngine$Grid$insert,
+									author$project$Grid$insert,
 									A2(author$project$DigDigBoom$Component$Map$posFront, 1, playerCell),
 									author$project$DigDigBoom$Cell$Solid(newSolid),
 									grid);
@@ -8693,7 +8385,258 @@ var author$project$DigDigBoom$Player$rotateRight = function (playerData) {
 			inventory: author$project$DigDigBoom$Component$Inventory$rotateRight(inventory)
 		});
 };
-var author$project$PixelEngine$Grid$find = F2(
+var author$project$PixelEngine$Graphics$Data$Area$Images = function (a) {
+	return {$: 'Images', a: a};
+};
+var author$project$PixelEngine$imageArea = F2(
+	function (_n0, content) {
+		var height = _n0.height;
+		var background = _n0.background;
+		return author$project$PixelEngine$Graphics$Data$Area$Images(
+			{background: background, content: content, height: height});
+	});
+var author$project$PixelEngine$Graphics$Data$Element$ImageSource = function (a) {
+	return {$: 'ImageSource', a: a};
+};
+var author$project$PixelEngine$Graphics$Data$Element$SingleSource = function (a) {
+	return {$: 'SingleSource', a: a};
+};
+var author$project$PixelEngine$Image$fromSrc = function (source) {
+	return {
+		customAttributes: _List_Nil,
+		elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
+			author$project$PixelEngine$Graphics$Data$Element$ImageSource(source)),
+		uniqueId: elm$core$Maybe$Nothing
+	};
+};
+var author$project$DigDigBoom$View$Screen$death = function () {
+	var width = 16;
+	return _List_fromArray(
+		[
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 2,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			_List_Nil),
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 2,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			elm$core$List$concat(
+				_List_fromArray(
+					[
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'You have',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(4, 0)),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'died',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(6, 1))
+					]))),
+			A2(
+			author$project$PixelEngine$imageArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				height: 12 * 16
+			},
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					_Utils_Tuple2((((16 * width) / 2) | 0) - 64, (((12 * width) / 2) | 0) - 64),
+					author$project$PixelEngine$Image$fromSrc('skull.png'))
+				])),
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 2,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			elm$core$List$concat(
+				_List_fromArray(
+					[
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'Press any',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(4, 0)),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'button',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(6, 1))
+					]))),
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 2,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			_List_Nil)
+		]);
+}();
+var author$project$DigDigBoom$View$Screen$logo = author$project$PixelEngine$Tile$tileset(
+	{source: 'title_image.png', spriteHeight: 128, spriteWidth: 128});
+var author$project$PixelEngine$Graphics$Data$Element$TileSource = function (a) {
+	return {$: 'TileSource', a: a};
+};
+var author$project$PixelEngine$Image$fromTile = F2(
+	function (_n0, tileset) {
+		var info = _n0.info;
+		var uniqueId = _n0.uniqueId;
+		var customAttributes = _n0.customAttributes;
+		var _n1 = info;
+		var top = _n1.top;
+		var left = _n1.left;
+		var steps = _n1.steps;
+		return {
+			customAttributes: customAttributes,
+			elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
+				author$project$PixelEngine$Graphics$Data$Element$TileSource(
+					{left: left, steps: steps, tileset: tileset, top: top})),
+			uniqueId: uniqueId
+		};
+	});
+var author$project$DigDigBoom$View$Screen$menu = function () {
+	var width = 16;
+	var tile = A2(
+		author$project$PixelEngine$Tile$animated,
+		2,
+		author$project$PixelEngine$Tile$fromPosition(
+			_Utils_Tuple2(0, 0)));
+	return _List_fromArray(
+		[
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 2,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			_List_Nil),
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 3,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			elm$core$List$concat(
+				_List_fromArray(
+					[
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'DIG',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(5, 0)),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'DIG',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(6, 1)),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'BOOM',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(6, 2))
+					]))),
+			A2(
+			author$project$PixelEngine$imageArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				height: 9 * 16
+			},
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					_Utils_Tuple2((((16 * width) / 2) | 0) - 64, 0),
+					A2(author$project$PixelEngine$Image$fromTile, tile, author$project$DigDigBoom$View$Screen$logo))
+				])),
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 4,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			elm$core$List$concat(
+				_List_fromArray(
+					[
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'a',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(1, 0)),
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 0),
+							author$project$DigDigBoom$View$Tile$arrow_left(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 0),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'd -Start',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(4, 0)),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'Game',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(8, 1)),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'w',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(1, 3)),
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 3),
+							author$project$DigDigBoom$View$Tile$arrow_up(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 3),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						's -Tutorial',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(4, 3))
+					]))),
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$colorBackground(
+					A3(avh4$elm_color$Color$rgb255, 20, 12, 28)),
+				rows: 2,
+				tileset: author$project$DigDigBoom$View$Tile$tileset
+			},
+			_List_Nil)
+		]);
+}();
+var author$project$Grid$find = F2(
 	function (fun, _n0) {
 		var dict = _n0.a.dict;
 		var recFind = function (list) {
@@ -8727,7 +8670,7 @@ var author$project$DigDigBoom$Main$update = F2(
 			var gameType = modelContent.gameType;
 			if (_Utils_eq(
 				A2(
-					author$project$PixelEngine$Grid$find,
+					author$project$Grid$find,
 					F2(
 						function (_n1, cell) {
 							if (cell.$ === 'Enemy') {
@@ -8756,7 +8699,7 @@ var author$project$DigDigBoom$Main$update = F2(
 							}
 						},
 						A2(
-							author$project$PixelEngine$Grid$find,
+							author$project$Grid$find,
 							F2(
 								function (_n7, cell) {
 									if (cell.$ === 'Player') {
@@ -8787,22 +8730,22 @@ var author$project$DigDigBoom$Main$update = F2(
 						case 'InputUp':
 							return A2(
 								author$project$DigDigBoom$Main$updateGame,
-								updateDirection(author$project$PixelEngine$Grid$Direction$Up),
+								updateDirection(author$project$Grid$Direction$Up),
 								modelContent);
 						case 'InputLeft':
 							return A2(
 								author$project$DigDigBoom$Main$updateGame,
-								updateDirection(author$project$PixelEngine$Grid$Direction$Left),
+								updateDirection(author$project$Grid$Direction$Left),
 								modelContent);
 						case 'InputDown':
 							return A2(
 								author$project$DigDigBoom$Main$updateGame,
-								updateDirection(author$project$PixelEngine$Grid$Direction$Down),
+								updateDirection(author$project$Grid$Direction$Down),
 								modelContent);
 						case 'InputRight':
 							return A2(
 								author$project$DigDigBoom$Main$updateGame,
-								updateDirection(author$project$PixelEngine$Grid$Direction$Right),
+								updateDirection(author$project$Grid$Direction$Right),
 								modelContent);
 						case 'InputX':
 							return A2(
@@ -8814,10 +8757,8 @@ var author$project$DigDigBoom$Main$update = F2(
 								author$project$DigDigBoom$Main$updateGame,
 								elm$core$Tuple$mapFirst(author$project$DigDigBoom$Player$rotateRight),
 								modelContent);
-						case 'InputB':
-							return _Utils_Tuple2(elm$core$Maybe$Nothing, elm$core$Platform$Cmd$none);
 						default:
-							return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+							return _Utils_Tuple2(elm$core$Maybe$Nothing, elm$core$Platform$Cmd$none);
 					}
 				} else {
 					if (gameType.$ === 'Rogue') {
@@ -8828,7 +8769,7 @@ var author$project$DigDigBoom$Main$update = F2(
 									return _Utils_update(
 										newModel,
 										{
-											oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$Main$deathScreen)
+											oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$View$Screen$death)
 										});
 								}(
 									author$project$DigDigBoom$Main$createNewMap(worldSeed - 2))),
@@ -8841,7 +8782,7 @@ var author$project$DigDigBoom$Main$update = F2(
 									return _Utils_update(
 										newModel,
 										{
-											oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$Main$deathScreen)
+											oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$View$Screen$death)
 										});
 								}(
 									author$project$DigDigBoom$Main$tutorial(num))),
@@ -8859,7 +8800,7 @@ var author$project$DigDigBoom$Main$update = F2(
 								return _Utils_update(
 									newModel,
 									{
-										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$Main$menuScreen)
+										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$View$Screen$menu)
 									});
 							}(
 								author$project$DigDigBoom$Main$createNewMap(1))),
@@ -8872,7 +8813,7 @@ var author$project$DigDigBoom$Main$update = F2(
 								return _Utils_update(
 									newModel,
 									{
-										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$Main$menuScreen)
+										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$View$Screen$menu)
 									});
 							}(
 								author$project$DigDigBoom$Main$createNewMap(1))),
@@ -8885,7 +8826,7 @@ var author$project$DigDigBoom$Main$update = F2(
 								return _Utils_update(
 									newModel,
 									{
-										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$Main$menuScreen)
+										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$View$Screen$menu)
 									});
 							}(
 								author$project$DigDigBoom$Main$tutorial(1))),
@@ -8898,7 +8839,7 @@ var author$project$DigDigBoom$Main$update = F2(
 								return _Utils_update(
 									newModel,
 									{
-										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$Main$menuScreen)
+										oldScreen: elm$core$Maybe$Just(author$project$DigDigBoom$View$Screen$menu)
 									});
 							}(
 								author$project$DigDigBoom$Main$tutorial(1))),
@@ -8908,349 +8849,429 @@ var author$project$DigDigBoom$Main$update = F2(
 			}
 		}
 	});
-var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
-	return {$: 'Options', a: a};
-};
 var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
 	return {$: 'Transition', a: a};
 };
-var author$project$PixelEngine$Graphics$Data$Options$new = function (_n0) {
-	var width = _n0.width;
-	var scale = _n0.scale;
-	var transitionSpeedInSec = _n0.transitionSpeedInSec;
-	return author$project$PixelEngine$Graphics$Data$Options$Options(
-		{
-			controllerOptions: elm$core$Maybe$Nothing,
-			scale: scale,
-			transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
-				{
-					name: '',
-					transitionList: _List_fromArray(
+var author$project$PixelEngine$Options$transition = F2(
+	function (name, _n0) {
+		var start = _n0.start;
+		var keyFrames = _n0.keyFrames;
+		var end = _n0.end;
+		var transitionList = A2(
+			elm$core$List$cons,
+			_Utils_Tuple2(0, start),
+			A3(
+				elm$core$List$foldr,
+				F2(
+					function (maybeString, _n1) {
+						var list = _n1.a;
+						var i = _n1.b;
+						return _Utils_Tuple2(
+							function () {
+								if (maybeString.$ === 'Just') {
+									var string = maybeString.a;
+									return A2(
+										elm$core$List$cons,
+										_Utils_Tuple2(i, string),
+										list);
+								} else {
+									return list;
+								}
+							}(),
+							i - 1);
+					}),
+				_Utils_Tuple2(
+					_List_fromArray(
 						[
-							_Utils_Tuple2(0, '')
-						])
-				}),
-			transitionFrom: _List_Nil,
-			transitionSpeedInSec: transitionSpeedInSec,
-			width: width
-		});
-};
-var author$project$PixelEngine$Graphics$options = function (_n0) {
-	var width = _n0.width;
-	var transitionSpeedInSec = _n0.transitionSpeedInSec;
-	return author$project$PixelEngine$Graphics$Data$Options$new(
-		{scale: 1, transitionSpeedInSec: transitionSpeedInSec, width: width});
-};
-var author$project$PixelEngine$Graphics$Transition$custom = F2(
-	function (name, transitionList) {
+							_Utils_Tuple2(
+							elm$core$List$length(keyFrames) + 1,
+							end)
+						]),
+					elm$core$List$length(keyFrames)),
+				keyFrames).a);
 		return author$project$PixelEngine$Graphics$Data$Transition$Transition(
 			{name: name, transitionList: transitionList});
 	});
-var author$project$PixelEngine$Graphics$Transition$from = F3(
-	function (listOfArea, transition, _n0) {
+var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
+	return {$: 'Options', a: a};
+};
+var author$project$PixelEngine$Options$withTransitionFrom = F3(
+	function (listOfArea, t, _n0) {
 		var options = _n0.a;
 		return author$project$PixelEngine$Graphics$Data$Options$Options(
 			_Utils_update(
 				options,
-				{transition: transition, transitionFrom: listOfArea}));
+				{transition: t, transitionFrom: listOfArea}));
 	});
+var author$project$DigDigBoom$View$Transition$death = function (list) {
+	return A2(
+		author$project$PixelEngine$Options$withTransitionFrom,
+		list,
+		A2(
+			author$project$PixelEngine$Options$transition,
+			'death_transition',
+			{
+				end: 'opacity:0;filter:grayscale(70%) blur(5px);',
+				keyFrames: _List_fromArray(
+					[
+						elm$core$Maybe$Just('opacity:1;filter:grayscale(70%) blur(0px);'),
+						elm$core$Maybe$Nothing
+					]),
+				start: 'opacity:1;filter:grayscale(0%) blur(0px);'
+			}));
+};
+var author$project$DigDigBoom$View$Transition$nextLevel = function (list) {
+	return A2(
+		author$project$PixelEngine$Options$withTransitionFrom,
+		list,
+		A2(
+			author$project$PixelEngine$Options$transition,
+			'next_level',
+			{
+				end: 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;',
+				keyFrames: _List_fromArray(
+					[elm$core$Maybe$Nothing]),
+				start: 'filter:saturate(200%) contrast(100%);overflow:hidden;width:100%'
+			}));
+};
+var author$project$DigDigBoom$Main$viewRogue = F2(
+	function (_n0, worldSeed) {
+		var oldScreen = _n0.oldScreen;
+		var player = _n0.player;
+		var map = _n0.map;
+		if (oldScreen.$ === 'Just') {
+			var justOldScreen = oldScreen.a;
+			return _Utils_Tuple2(
+				author$project$DigDigBoom$View$Transition$nextLevel(justOldScreen),
+				A4(author$project$DigDigBoom$View$Screen$world, worldSeed, map, player, _List_Nil));
+		} else {
+			return (player.lifes > 0) ? _Utils_Tuple2(
+				elm$core$Basics$identity,
+				A4(author$project$DigDigBoom$View$Screen$world, worldSeed, map, player, _List_Nil)) : _Utils_Tuple2(
+				author$project$DigDigBoom$View$Transition$death(
+					A4(author$project$DigDigBoom$View$Screen$world, worldSeed, map, player, _List_Nil)),
+				author$project$DigDigBoom$View$Screen$death);
+		}
+	});
+var author$project$DigDigBoom$View$Tutorial$viewHint = function (num) {
+	switch (num) {
+		case 5:
+			return elm$core$List$concat(
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 5),
+							author$project$DigDigBoom$View$Tile$arrow_left(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 5),
+							author$project$DigDigBoom$View$Tile$arrow_left(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(4, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(5, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(6, 5)),
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(7, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(8, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(9, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(10, 5)),
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(11, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						])
+					]));
+		case 4:
+			return elm$core$List$concat(
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(4, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(5, 5)),
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(6, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(7, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(8, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(9, 5)),
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(10, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						])
+					]));
+		case 3:
+			return elm$core$List$concat(
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(4, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(5, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(6, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(7, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(8, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(9, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(10, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(11, 5))
+					]));
+		case 2:
+			return elm$core$List$concat(
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(4, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(5, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(6, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(7, 5))
+					]));
+		default:
+			return elm$core$List$concat(
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							_Utils_Tuple2(
+							_Utils_Tuple2(2, 5),
+							author$project$DigDigBoom$View$Tile$arrow_down(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(3, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(4, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite)),
+							_Utils_Tuple2(
+							_Utils_Tuple2(5, 5),
+							author$project$DigDigBoom$View$Tile$arrow_right(author$project$DigDigBoom$View$Tile$colorWhite))
+						]),
+						A3(
+						author$project$DigDigBoom$View$Tile$text,
+						'!',
+						author$project$DigDigBoom$View$Tile$colorWhite,
+						_Utils_Tuple2(6, 5))
+					]));
+	}
+};
+var author$project$DigDigBoom$View$Tutorial$view = F4(
+	function (oldScreen, player, map, num) {
+		var tutorialWorldScreen = A4(
+			author$project$DigDigBoom$View$Screen$world,
+			num,
+			map,
+			player,
+			A2(
+				elm$core$List$append,
+				author$project$DigDigBoom$View$Tutorial$viewHint(num),
+				A3(
+					author$project$DigDigBoom$View$Tile$text,
+					'hint:',
+					author$project$DigDigBoom$View$Tile$colorWhite,
+					_Utils_Tuple2(2, 4))));
+		if (oldScreen.$ === 'Just') {
+			var justOldScreen = oldScreen.a;
+			return _Utils_Tuple2(
+				author$project$DigDigBoom$View$Transition$nextLevel(justOldScreen),
+				tutorialWorldScreen);
+		} else {
+			return (player.lifes > 0) ? _Utils_Tuple2(elm$core$Basics$identity, tutorialWorldScreen) : _Utils_Tuple2(
+				author$project$DigDigBoom$View$Transition$death(tutorialWorldScreen),
+				author$project$DigDigBoom$View$Screen$death);
+		}
+	});
+var author$project$PixelEngine$Graphics$Data$Options$new = author$project$PixelEngine$Graphics$Data$Options$Options(
+	{
+		animationFPS: 1,
+		controllerOptions: elm$core$Maybe$Nothing,
+		movementSpeedInSec: 0.2,
+		scale: 1,
+		transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
+			{
+				name: '',
+				transitionList: _List_fromArray(
+					[
+						_Utils_Tuple2(0, '')
+					])
+			}),
+		transitionFrom: _List_Nil,
+		width: 512
+	});
+var author$project$PixelEngine$Options$default = author$project$PixelEngine$Graphics$Data$Options$new;
 var author$project$DigDigBoom$Main$view = function (model) {
-	var width = 16;
-	var title = 'Dig Dig Boom';
-	var options = author$project$PixelEngine$Graphics$options(
-		{transitionSpeedInSec: 0.2, width: author$project$DigDigBoom$Main$tileset.spriteWidth * width});
-	if (model.$ === 'Just') {
-		var oldScreen = model.a.oldScreen;
-		var gameType = model.a.gameType;
-		var player = model.a.player;
-		var map = model.a.map;
-		if (gameType.$ === 'Rogue') {
-			var worldSeed = gameType.a.worldSeed;
-			if (oldScreen.$ === 'Just') {
-				var justOldScreen = oldScreen.a;
-				return {
-					body: A4(author$project$DigDigBoom$Main$worldScreen, worldSeed, map, player, _List_Nil),
-					options: A3(
-						author$project$PixelEngine$Graphics$Transition$from,
-						justOldScreen,
-						A2(
-							author$project$PixelEngine$Graphics$Transition$custom,
-							'next_level',
-							_List_fromArray(
-								[
-									_Utils_Tuple2(0, 'filter:saturate(200%) contrast(100%);overflow:hidden;width:100%'),
-									_Utils_Tuple2(2, 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;')
-								])),
-						options),
-					title: title
-				};
+	var _n0 = function () {
+		if (model.$ === 'Just') {
+			var modelContent = model.a;
+			var gameType = modelContent.gameType;
+			var oldScreen = modelContent.oldScreen;
+			var player = modelContent.player;
+			var map = modelContent.map;
+			if (gameType.$ === 'Rogue') {
+				var worldSeed = gameType.a.worldSeed;
+				return A2(author$project$DigDigBoom$Main$viewRogue, modelContent, worldSeed);
 			} else {
-				return (player.lifes > 0) ? {
-					body: A4(author$project$DigDigBoom$Main$worldScreen, worldSeed, map, player, _List_Nil),
-					options: options,
-					title: title
-				} : {
-					body: author$project$DigDigBoom$Main$deathScreen,
-					options: A3(
-						author$project$PixelEngine$Graphics$Transition$from,
-						A4(author$project$DigDigBoom$Main$worldScreen, worldSeed, map, player, _List_Nil),
-						A2(
-							author$project$PixelEngine$Graphics$Transition$custom,
-							'death_transition',
-							_List_fromArray(
-								[
-									_Utils_Tuple2(0, 'opacity:1;filter:grayscale(0%) blur(0px);'),
-									_Utils_Tuple2(1, 'opacity:1;filter:grayscale(70%) blur(0px);'),
-									_Utils_Tuple2(3, 'opacity:0;filter:grayscale(70%) blur(5px);')
-								])),
-						options),
-					title: title
-				};
+				var num = gameType.a;
+				return A4(author$project$DigDigBoom$View$Tutorial$view, oldScreen, player, map, num);
 			}
 		} else {
-			var num = gameType.a;
-			var tutorialWorldScreen = A4(
-				author$project$DigDigBoom$Main$worldScreen,
-				num,
-				map,
-				player,
-				A2(
-					elm$core$List$append,
-					function () {
-						switch (num) {
-							case 5:
-								return elm$core$List$concat(
-									_List_fromArray(
-										[
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(2, 5),
-												author$project$DigDigBoom$Tileset$arrow_left(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(3, 5),
-												author$project$DigDigBoom$Tileset$arrow_left(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(4, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(5, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(6, 5)),
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(7, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(8, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(9, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(10, 5)),
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(11, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											])
-										]));
-							case 4:
-								return elm$core$List$concat(
-									_List_fromArray(
-										[
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(2, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(3, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(4, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(5, 5)),
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(6, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(7, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(8, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(9, 5)),
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(10, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											])
-										]));
-							case 3:
-								return elm$core$List$concat(
-									_List_fromArray(
-										[
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(2, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(3, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(4, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(5, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(6, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(7, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(8, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(9, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(10, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(11, 5))
-										]));
-							case 2:
-								return elm$core$List$concat(
-									_List_fromArray(
-										[
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(2, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(3, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(4, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(5, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(6, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(7, 5))
-										]));
-							default:
-								return elm$core$List$concat(
-									_List_fromArray(
-										[
-											_List_fromArray(
-											[
-												_Utils_Tuple2(
-												_Utils_Tuple2(2, 5),
-												author$project$DigDigBoom$Tileset$arrow_down(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(3, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(4, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite)),
-												_Utils_Tuple2(
-												_Utils_Tuple2(5, 5),
-												author$project$DigDigBoom$Tileset$arrow_right(author$project$DigDigBoom$Tileset$colorWhite))
-											]),
-											A3(
-											author$project$DigDigBoom$Tileset$text,
-											'!',
-											author$project$DigDigBoom$Tileset$colorWhite,
-											_Utils_Tuple2(6, 5))
-										]));
-						}
-					}(),
-					A3(
-						author$project$DigDigBoom$Tileset$text,
-						'hint:',
-						author$project$DigDigBoom$Tileset$colorWhite,
-						_Utils_Tuple2(2, 4))));
-			if (oldScreen.$ === 'Just') {
-				var justOldScreen = oldScreen.a;
-				return {
-					body: tutorialWorldScreen,
-					options: A3(
-						author$project$PixelEngine$Graphics$Transition$from,
-						justOldScreen,
-						A2(
-							author$project$PixelEngine$Graphics$Transition$custom,
-							'next_level',
-							_List_fromArray(
-								[
-									_Utils_Tuple2(0, 'filter:saturate(200%) contrast(100%);overflow:hidden;width:100%;'),
-									_Utils_Tuple2(2, 'filter:saturate(50%) contrast(150%);overflow:hidden;width:0%;')
-								])),
-						options),
-					title: title
-				};
-			} else {
-				return (player.lifes > 0) ? {body: tutorialWorldScreen, options: options, title: title} : {
-					body: author$project$DigDigBoom$Main$deathScreen,
-					options: A3(
-						author$project$PixelEngine$Graphics$Transition$from,
-						tutorialWorldScreen,
-						A2(
-							author$project$PixelEngine$Graphics$Transition$custom,
-							'death_transition',
-							_List_fromArray(
-								[
-									_Utils_Tuple2(0, 'opacity:1;filter:grayscale(0%) blur(0px);'),
-									_Utils_Tuple2(1, 'opacity:1;filter:grayscale(70%) blur(0px);'),
-									_Utils_Tuple2(3, 'opacity:0;filter:grayscale(70%) blur(5px);')
-								])),
-						options),
-					title: title
-				};
-			}
+			return _Utils_Tuple2(elm$core$Basics$identity, author$project$DigDigBoom$View$Screen$menu);
 		}
-	} else {
-		return {body: author$project$DigDigBoom$Main$menuScreen, options: options, title: title};
+	}();
+	var optionFunction = _n0.a;
+	var body = _n0.b;
+	var options = optionFunction(author$project$PixelEngine$Options$default);
+	return {
+		body: body,
+		options: elm$core$Maybe$Just(options),
+		title: 'Dig Dig Boom'
+	};
+};
+var author$project$DigDigBoom$Main$width = 16;
+var author$project$PixelEngine$InputA = {$: 'InputA'};
+var author$project$PixelEngine$InputB = {$: 'InputB'};
+var author$project$PixelEngine$InputDown = {$: 'InputDown'};
+var author$project$PixelEngine$InputLeft = {$: 'InputLeft'};
+var author$project$PixelEngine$InputRight = {$: 'InputRight'};
+var author$project$PixelEngine$InputUp = {$: 'InputUp'};
+var author$project$PixelEngine$InputX = {$: 'InputX'};
+var author$project$PixelEngine$InputY = {$: 'InputY'};
+var author$project$PixelEngine$defaultInputs = function (string) {
+	switch (string) {
+		case 'w':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputUp);
+		case 'W':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputUp);
+		case 'ArrowUp':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputUp);
+		case 's':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputDown);
+		case 'S':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputDown);
+		case 'ArrowDown':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputDown);
+		case 'd':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputRight);
+		case 'D':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputRight);
+		case 'ArrowRight':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputRight);
+		case 'a':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputLeft);
+		case 'A':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputLeft);
+		case 'ArrowLeft':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputLeft);
+		case ' ':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputA);
+		case 'Enter':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputA);
+		case 'q':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputX);
+		case 'Q':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputX);
+		case 'e':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputY);
+		case 'E':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputY);
+		case 'x':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		case 'X':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		case 'Escape':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		case 'Backspace':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		default:
+			return elm$core$Maybe$Nothing;
 	}
 };
 var author$project$PixelEngine$MsgContent = function (a) {
@@ -9516,6 +9537,7 @@ var author$project$PixelEngine$initFunction = F2(
 						])));
 		};
 	});
+var author$project$PixelEngine$DoNothing = {$: 'DoNothing'};
 var elm$browser$Browser$Events$Document = {$: 'Document'};
 var elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -9808,78 +9830,19 @@ var elm$browser$Browser$Events$on = F3(
 var elm$browser$Browser$Events$onKeyDown = A2(elm$browser$Browser$Events$on, elm$browser$Browser$Events$Document, 'keydown');
 var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$string = _Json_decodeString;
-var author$project$PixelEngine$Controls$custom = F2(
+var author$project$PixelEngine$customControls = F2(
 	function (decoder, fun) {
 		return elm$browser$Browser$Events$onKeyDown(
 			A2(
 				elm$json$Json$Decode$map,
-				fun,
+				elm$core$Maybe$andThen(fun),
 				A2(
 					elm$json$Json$Decode$map,
 					decoder,
 					A2(elm$json$Json$Decode$field, 'key', elm$json$Json$Decode$string))));
 	});
-var author$project$PixelEngine$Controls$InputA = {$: 'InputA'};
-var author$project$PixelEngine$Controls$InputB = {$: 'InputB'};
-var author$project$PixelEngine$Controls$InputDown = {$: 'InputDown'};
-var author$project$PixelEngine$Controls$InputLeft = {$: 'InputLeft'};
-var author$project$PixelEngine$Controls$InputNone = {$: 'InputNone'};
-var author$project$PixelEngine$Controls$InputRight = {$: 'InputRight'};
-var author$project$PixelEngine$Controls$InputUp = {$: 'InputUp'};
-var author$project$PixelEngine$Controls$InputX = {$: 'InputX'};
-var author$project$PixelEngine$Controls$InputY = {$: 'InputY'};
-var author$project$PixelEngine$Controls$defaultLayout = function (string) {
-	switch (string) {
-		case 'w':
-			return author$project$PixelEngine$Controls$InputUp;
-		case 'W':
-			return author$project$PixelEngine$Controls$InputUp;
-		case 'ArrowUp':
-			return author$project$PixelEngine$Controls$InputUp;
-		case 's':
-			return author$project$PixelEngine$Controls$InputDown;
-		case 'S':
-			return author$project$PixelEngine$Controls$InputDown;
-		case 'ArrowDown':
-			return author$project$PixelEngine$Controls$InputDown;
-		case 'd':
-			return author$project$PixelEngine$Controls$InputRight;
-		case 'D':
-			return author$project$PixelEngine$Controls$InputRight;
-		case 'ArrowRight':
-			return author$project$PixelEngine$Controls$InputRight;
-		case 'a':
-			return author$project$PixelEngine$Controls$InputLeft;
-		case 'A':
-			return author$project$PixelEngine$Controls$InputLeft;
-		case 'ArrowLeft':
-			return author$project$PixelEngine$Controls$InputLeft;
-		case ' ':
-			return author$project$PixelEngine$Controls$InputA;
-		case 'Enter':
-			return author$project$PixelEngine$Controls$InputA;
-		case 'q':
-			return author$project$PixelEngine$Controls$InputX;
-		case 'Q':
-			return author$project$PixelEngine$Controls$InputX;
-		case 'e':
-			return author$project$PixelEngine$Controls$InputY;
-		case 'E':
-			return author$project$PixelEngine$Controls$InputY;
-		case 'x':
-			return author$project$PixelEngine$Controls$InputB;
-		case 'X':
-			return author$project$PixelEngine$Controls$InputB;
-		case 'Escape':
-			return author$project$PixelEngine$Controls$InputB;
-		case 'Backspace':
-			return author$project$PixelEngine$Controls$InputB;
-		default:
-			return author$project$PixelEngine$Controls$InputNone;
-	}
-};
-var author$project$PixelEngine$Controls$basic = function (fun) {
-	return A2(author$project$PixelEngine$Controls$custom, author$project$PixelEngine$Controls$defaultLayout, fun);
+var author$project$PixelEngine$basicControls = function (fun) {
+	return A2(author$project$PixelEngine$customControls, author$project$PixelEngine$defaultInputs, fun);
 };
 var elm$browser$Browser$Events$Window = {$: 'Window'};
 var elm$json$Json$Decode$int = _Json_decodeInt;
@@ -9914,8 +9877,15 @@ var author$project$PixelEngine$subscriptionsFunction = F2(
 							[
 								A2(
 								elm$core$Platform$Sub$map,
-								author$project$PixelEngine$MsgContent,
-								author$project$PixelEngine$Controls$basic(controlsToMsg))
+								function (maybeMsg) {
+									if (maybeMsg.$ === 'Just') {
+										var msg = maybeMsg.a;
+										return author$project$PixelEngine$MsgContent(msg);
+									} else {
+										return author$project$PixelEngine$DoNothing;
+									}
+								},
+								author$project$PixelEngine$basicControls(controlsToMsg))
 							]);
 					} else {
 						return _List_Nil;
@@ -9948,72 +9918,34 @@ var author$project$PixelEngine$updateFunction = F3(
 	function (update, msg, model) {
 		var modelContent = model.modelContent;
 		var config = model.config;
-		if (msg.$ === 'Resize') {
-			var windowSize = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{
-						config: _Utils_update(
-							config,
-							{
-								windowSize: elm$core$Maybe$Just(windowSize)
-							})
-					}),
-				elm$core$Platform$Cmd$none);
-		} else {
-			var msgC = msg.a;
-			return A2(
-				author$project$PixelEngine$batch,
-				A2(update, msgC, modelContent),
-				model);
-		}
-	});
-var author$project$PixelEngine$Controls$supportingMobile = F2(
-	function (_n0, _n1) {
-		var windowSize = _n0.windowSize;
-		var controls = _n0.controls;
-		var options = _n1.a;
-		var convert = function (input) {
-			switch (input.$) {
-				case 'AbstractInputA':
-					return author$project$PixelEngine$Controls$InputA;
-				case 'AbstractInputB':
-					return author$project$PixelEngine$Controls$InputB;
-				case 'AbstractInputX':
-					return author$project$PixelEngine$Controls$InputX;
-				case 'AbstractInputY':
-					return author$project$PixelEngine$Controls$InputY;
-				case 'AbstractInputUp':
-					return author$project$PixelEngine$Controls$InputUp;
-				case 'AbstractInputLeft':
-					return author$project$PixelEngine$Controls$InputLeft;
-				case 'AbstractInputRight':
-					return author$project$PixelEngine$Controls$InputRight;
-				case 'AbstractInputDown':
-					return author$project$PixelEngine$Controls$InputDown;
-				default:
-					return author$project$PixelEngine$Controls$InputNone;
-			}
-		};
-		var _n2 = windowSize;
-		var width = _n2.width;
-		var height = _n2.height;
-		return author$project$PixelEngine$Graphics$Data$Options$Options(
-			_Utils_update(
-				options,
-				{
-					controllerOptions: elm$core$Maybe$Just(
+		switch (msg.$) {
+			case 'Resize':
+				var windowSize = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
 						{
-							controls: A2(elm$core$Basics$composeR, convert, controls),
-							windowSize: {height: height, width: width}
-						})
-				}));
+							config: _Utils_update(
+								config,
+								{
+									windowSize: elm$core$Maybe$Just(windowSize)
+								})
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'MsgContent':
+				var msgC = msg.a;
+				return A2(
+					author$project$PixelEngine$batch,
+					A2(update, msgC, modelContent),
+					model);
+			default:
+				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+		}
 	});
 var elm$core$List$sum = function (numbers) {
 	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
 };
-var author$project$PixelEngine$Graphics$heightOf = function (listOfArea) {
+var author$project$PixelEngine$heightOf = function (listOfArea) {
 	return elm$core$List$sum(
 		A2(
 			elm$core$List$map,
@@ -11895,6 +11827,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 		var spriteTop = _n0.b;
 		var scale = _n1.scale;
 		var steps = _n1.steps;
+		var fps = _n1.fps;
 		var spriteWidth = _n2.spriteWidth;
 		var spriteHeight = _n2.spriteHeight;
 		var source = _n2.source;
@@ -11928,7 +11861,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 								[
 									rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 									rtfeldman$elm_css$Css$right(
-									rtfeldman$elm_css$Css$px(scale * (spriteWidth * (steps + 2))))
+									rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 1)))
 								]))
 						]),
 					_List_fromArray(
@@ -11947,17 +11880,17 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 											'object-position',
 											elm$core$String$fromInt(((-1) * spriteWidth) * spriteLeft) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * spriteTop) + 'px'))),
 											rtfeldman$elm_css$Css$width(
-											rtfeldman$elm_css$Css$px(spriteWidth * (steps + 1))),
+											rtfeldman$elm_css$Css$px(spriteWidth * steps)),
 											rtfeldman$elm_css$Css$height(
 											rtfeldman$elm_css$Css$px(spriteHeight)),
 											rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 											rtfeldman$elm_css$Css$left(
-											rtfeldman$elm_css$Css$px(scale * (spriteWidth * (steps + 1)))),
+											rtfeldman$elm_css$Css$px((scale * spriteWidth) * steps)),
 											A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
 											A2(
 											rtfeldman$elm_css$Css$property,
 											'animation',
-											'pixelengine_graphics_basic ' + (elm$core$String$fromInt(steps + 1) + ('.0s steps(' + (elm$core$String$fromInt(steps + 1) + ') infinite')))),
+											'pixelengine_graphics_basic ' + (elm$core$String$fromFloat(steps / fps) + ('s steps(' + (elm$core$String$fromInt(steps) + ') infinite')))),
 											A2(rtfeldman$elm_css$Css$property, 'transform-origin', 'top left'),
 											rtfeldman$elm_css$Css$transform(
 											A2(rtfeldman$elm_css$Css$scale2, scale, scale)),
@@ -12008,6 +11941,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayStaticTile = F4(
 var author$project$PixelEngine$Graphics$View$Element$displayTile = F2(
 	function (_n0, _n1) {
 		var scale = _n0.a.scale;
+		var animationFPS = _n0.a.animationFPS;
 		var pos = _n1.a;
 		var left = _n1.b.left;
 		var top = _n1.b.top;
@@ -12022,13 +11956,13 @@ var author$project$PixelEngine$Graphics$View$Element$displayTile = F2(
 			author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile,
 			pos,
 			_Utils_Tuple2(left, top),
-			{scale: scale, steps: steps},
+			{fps: animationFPS, scale: scale, steps: steps},
 			tileset);
 	});
 var author$project$PixelEngine$Graphics$View$Element$displayMultiple = F4(
 	function (options, _n0, transitionId, attributes) {
 		var scale = options.a.scale;
-		var transitionSpeedInSec = options.a.transitionSpeedInSec;
+		var movementSpeedInSec = options.a.movementSpeedInSec;
 		var rootPosition = _n0.a;
 		var multipleSources = _n0.b;
 		return _Utils_Tuple2(
@@ -12078,7 +12012,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayMultiple = F4(
 												A2(
 												rtfeldman$elm_css$Css$property,
 												'transition',
-												'left ' + (elm$core$String$fromFloat(transitionSpeedInSec) + ('s,top ' + (elm$core$String$fromFloat(transitionSpeedInSec) + 's;'))))
+												'left ' + (elm$core$String$fromFloat(movementSpeedInSec) + ('s,top ' + (elm$core$String$fromFloat(movementSpeedInSec) + 's;'))))
 											]);
 									} else {
 										return _List_Nil;
@@ -12409,6 +12343,7 @@ var elm$core$Basics$sqrt = _Basics_sqrt;
 var rtfeldman$elm_css$Css$borderRadius = rtfeldman$elm_css$Css$prop1('border-radius');
 var rtfeldman$elm_css$Css$borderStyle = rtfeldman$elm_css$Css$prop1('border-style');
 var rtfeldman$elm_css$Css$center = rtfeldman$elm_css$Css$prop1('center');
+var rtfeldman$elm_css$Css$display = rtfeldman$elm_css$Css$prop1('display');
 var rtfeldman$elm_css$Css$fontFamily = rtfeldman$elm_css$Css$prop1('font-family');
 var rtfeldman$elm_css$Css$fontSize = rtfeldman$elm_css$Css$prop1('font-size');
 var rtfeldman$elm_css$Css$none = {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, display: rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, keyframes: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: rtfeldman$elm_css$Css$Structure$Compatible, none: rtfeldman$elm_css$Css$Structure$Compatible, outline: rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, resize: rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: rtfeldman$elm_css$Css$Structure$Compatible, textTransform: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, transform: rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
@@ -12471,39 +12406,59 @@ var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) 
 	var diameter = windowSize.height / 4;
 	var circle = F4(
 		function (_char, input, size, listOfCss) {
-			return A2(
-				rtfeldman$elm_css$Html$Styled$button,
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$Attributes$css(
-						A2(
-							elm$core$List$append,
-							listOfCss,
+			var _n1 = controls(input);
+			if (_n1.$ === 'Just') {
+				var msg = _n1.a;
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					A2(
+						elm$core$List$append,
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Attributes$css(
+								A2(
+									elm$core$List$append,
+									listOfCss,
+									_List_fromArray(
+										[
+											rtfeldman$elm_css$Css$width(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$height(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$borderRadius(
+											rtfeldman$elm_css$Css$px(size / 2)),
+											rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
+											rtfeldman$elm_css$Css$backgroundColor(
+											A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
+											rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
+											rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
+											rtfeldman$elm_css$Css$fontSize(
+											rtfeldman$elm_css$Css$px(size * 0.9)),
+											rtfeldman$elm_css$Css$opacity(
+											rtfeldman$elm_css$Css$num(0.5))
+										])))
+							]),
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Events$onClick(msg)
+							])),
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$text(_char)
+						]));
+			} else {
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$Attributes$css(
 							_List_fromArray(
 								[
-									rtfeldman$elm_css$Css$width(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$height(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$borderRadius(
-									rtfeldman$elm_css$Css$px(size / 2)),
-									rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
-									rtfeldman$elm_css$Css$backgroundColor(
-									A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
-									rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
-									rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
-									rtfeldman$elm_css$Css$fontSize(
-									rtfeldman$elm_css$Css$px(size * 0.9)),
-									rtfeldman$elm_css$Css$opacity(
-									rtfeldman$elm_css$Css$num(0.5))
-								]))),
-						rtfeldman$elm_css$Html$Styled$Events$onClick(
-						controls(input))
-					]),
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$text(_char)
-					]));
+									rtfeldman$elm_css$Css$display(rtfeldman$elm_css$Css$none)
+								]))
+						]),
+					_List_Nil);
+			}
 		});
 	return _List_fromArray(
 		[
@@ -12827,13 +12782,13 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 							]))
 					])));
 	});
-var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
-	function (scale, _n0) {
+var author$project$PixelEngine$Graphics$Data$Options$withWidth = F2(
+	function (width, _n0) {
 		var o = _n0.a;
 		return author$project$PixelEngine$Graphics$Data$Options$Options(
 			_Utils_update(
 				o,
-				{scale: scale}));
+				{width: width}));
 	});
 var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
 	return _VirtualDom_keyedNode(
@@ -13312,13 +13267,72 @@ var rtfeldman$elm_css$VirtualDom$Styled$toUnstyled = function (vdom) {
 	}
 };
 var rtfeldman$elm_css$Html$Styled$toUnstyled = rtfeldman$elm_css$VirtualDom$Styled$toUnstyled;
-var author$project$PixelEngine$Graphics$render = F3(
-	function (scale, o, listOfArea) {
+var author$project$PixelEngine$toHtml = F2(
+	function (_n0, listOfArea) {
+		var width = _n0.width;
+		var options = _n0.options;
 		return rtfeldman$elm_css$Html$Styled$toUnstyled(
 			A2(
 				author$project$PixelEngine$Graphics$Abstract$render,
-				A2(author$project$PixelEngine$Graphics$Data$Options$usingScale, scale, o),
+				A2(
+					author$project$PixelEngine$Graphics$Data$Options$withWidth,
+					width,
+					function () {
+						if (options.$ === 'Just') {
+							var o = options.a;
+							return o;
+						} else {
+							return author$project$PixelEngine$Options$default;
+						}
+					}()),
 				listOfArea));
+	});
+var author$project$PixelEngine$withMobileSupport = F2(
+	function (_n0, _n1) {
+		var windowSize = _n0.windowSize;
+		var controls = _n0.controls;
+		var options = _n1.a;
+		var convert = function (input) {
+			switch (input.$) {
+				case 'AbstractInputA':
+					return author$project$PixelEngine$InputA;
+				case 'AbstractInputB':
+					return author$project$PixelEngine$InputB;
+				case 'AbstractInputX':
+					return author$project$PixelEngine$InputX;
+				case 'AbstractInputY':
+					return author$project$PixelEngine$InputY;
+				case 'AbstractInputUp':
+					return author$project$PixelEngine$InputUp;
+				case 'AbstractInputLeft':
+					return author$project$PixelEngine$InputLeft;
+				case 'AbstractInputRight':
+					return author$project$PixelEngine$InputRight;
+				default:
+					return author$project$PixelEngine$InputDown;
+			}
+		};
+		var _n2 = windowSize;
+		var width = _n2.width;
+		var height = _n2.height;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				options,
+				{
+					controllerOptions: elm$core$Maybe$Just(
+						{
+							controls: A2(elm$core$Basics$composeR, convert, controls),
+							windowSize: {height: height, width: width}
+						})
+				}));
+	});
+var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
+	function (scale, _n0) {
+		var o = _n0.a;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				o,
+				{scale: scale}));
 	});
 var elm$core$Basics$min = F2(
 	function (x, y) {
@@ -13326,21 +13340,27 @@ var elm$core$Basics$min = F2(
 	});
 var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var elm$html$Html$map = elm$virtual_dom$VirtualDom$map;
-var author$project$PixelEngine$viewFunction = F2(
-	function (view, _n0) {
+var author$project$PixelEngine$viewFunction = F3(
+	function (view, width, _n0) {
 		var modelContent = _n0.modelContent;
 		var config = _n0.config;
 		var _n1 = config;
 		var windowSize = _n1.windowSize;
 		var controls = _n1.controls;
-		var _n2 = view(modelContent);
-		var title = _n2.title;
-		var options = _n2.options;
-		var body = _n2.body;
-		var _n3 = options;
-		var width = _n3.a.width;
-		var scale = _n3.a.scale;
-		var height = scale * author$project$PixelEngine$Graphics$heightOf(body);
+		var viewResult = view(modelContent);
+		var title = viewResult.title;
+		var body = viewResult.body;
+		var options = function () {
+			var _n2 = viewResult.options;
+			if (_n2.$ === 'Just') {
+				var o = _n2.a;
+				return o;
+			} else {
+				return author$project$PixelEngine$Options$default;
+			}
+		}();
+		var scale = options.a.scale;
+		var height = scale * author$project$PixelEngine$heightOf(body);
 		return {
 			body: _List_fromArray(
 				[
@@ -13350,33 +13370,43 @@ var author$project$PixelEngine$viewFunction = F2(
 					function () {
 						if (windowSize.$ === 'Just') {
 							var wS = windowSize.a;
-							return A3(
-								author$project$PixelEngine$Graphics$render,
-								A2(
-									elm$core$Basics$min,
-									A2(
-										elm$core$Basics$pow,
-										2,
-										elm$core$Basics$floor(
-											A2(elm$core$Basics$logBase, 2, wS.height / height))),
-									A2(
-										elm$core$Basics$pow,
-										2,
-										elm$core$Basics$floor(
-											A2(elm$core$Basics$logBase, 2, wS.width / width)))),
-								function () {
-									if (controls.$ === 'Just') {
-										var _n6 = controls.a;
-										var controlsToMsg = _n6.b;
-										return author$project$PixelEngine$Controls$supportingMobile(
-											{controls: controlsToMsg, windowSize: wS});
-									} else {
-										return elm$core$Basics$identity;
-									}
-								}()(options),
+							return A2(
+								author$project$PixelEngine$toHtml,
+								{
+									options: elm$core$Maybe$Just(
+										function () {
+											if (controls.$ === 'Just') {
+												var _n5 = controls.a;
+												var controlsToMsg = _n5.b;
+												return author$project$PixelEngine$withMobileSupport(
+													{controls: controlsToMsg, windowSize: wS});
+											} else {
+												return elm$core$Basics$identity;
+											}
+										}()(
+											A2(
+												author$project$PixelEngine$Graphics$Data$Options$usingScale,
+												A2(
+													elm$core$Basics$min,
+													A2(
+														elm$core$Basics$pow,
+														2,
+														elm$core$Basics$floor(
+															A2(elm$core$Basics$logBase, 2, wS.height / height))),
+													A2(
+														elm$core$Basics$pow,
+														2,
+														elm$core$Basics$floor(
+															A2(elm$core$Basics$logBase, 2, wS.width / width)))),
+												options))),
+									width: width
+								},
 								body);
 						} else {
-							return A3(author$project$PixelEngine$Graphics$render, 1, options, _List_Nil);
+							return A2(
+								author$project$PixelEngine$toHtml,
+								{options: viewResult.options, width: width},
+								_List_Nil);
 						}
 					}())
 				]),
@@ -13389,33 +13419,43 @@ var author$project$PixelEngine$gameMaybeWithCustomControls = function (_n0) {
 	var update = _n0.update;
 	var subscriptions = _n0.subscriptions;
 	var view = _n0.view;
+	var width = _n0.width;
 	var controls = _n0.controls;
 	return elm$browser$Browser$document(
 		{
 			init: A2(author$project$PixelEngine$initFunction, controls, init),
 			subscriptions: author$project$PixelEngine$subscriptionsFunction(subscriptions),
 			update: author$project$PixelEngine$updateFunction(update),
-			view: author$project$PixelEngine$viewFunction(view)
+			view: A2(author$project$PixelEngine$viewFunction, view, width)
 		});
 };
 var author$project$PixelEngine$game = function (_n0) {
 	var init = _n0.init;
 	var update = _n0.update;
+	var width = _n0.width;
 	var subscriptions = _n0.subscriptions;
 	var view = _n0.view;
 	var controls = _n0.controls;
 	return author$project$PixelEngine$gameMaybeWithCustomControls(
 		{
 			controls: elm$core$Maybe$Just(
-				_Utils_Tuple2(author$project$PixelEngine$Controls$defaultLayout, controls)),
+				_Utils_Tuple2(author$project$PixelEngine$defaultInputs, controls)),
 			init: init,
 			subscriptions: subscriptions,
 			update: update,
-			view: view
+			view: view,
+			width: width
 		});
 };
 var author$project$DigDigBoom$Main$main = author$project$PixelEngine$game(
-	{controls: author$project$DigDigBoom$Main$Input, init: author$project$DigDigBoom$Main$init, subscriptions: author$project$DigDigBoom$Main$subscriptions, update: author$project$DigDigBoom$Main$update, view: author$project$DigDigBoom$Main$view});
+	{
+		controls: A2(elm$core$Basics$composeR, author$project$DigDigBoom$Main$Input, elm$core$Maybe$Just),
+		init: author$project$DigDigBoom$Main$init,
+		subscriptions: author$project$DigDigBoom$Main$subscriptions,
+		update: author$project$DigDigBoom$Main$update,
+		view: author$project$DigDigBoom$Main$view,
+		width: author$project$DigDigBoom$View$Tile$tileset.spriteWidth * author$project$DigDigBoom$Main$width
+	});
 _Platform_export({'DigDigBoom':{'Main':{'init':author$project$DigDigBoom$Main$main(
 	elm$json$Json$Decode$succeed(
 		{}))(0)}}});}(this));

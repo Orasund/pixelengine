@@ -57,7 +57,7 @@ render { windowSize, controls } =
                         ]
 
                 Nothing ->
-                    Html.button [] []
+                    Html.button [ css [ Css.display <| Css.none ] ] []
     in
     [ div
         [ css
