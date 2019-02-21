@@ -64,7 +64,7 @@ So I desided to try something different and to use HTML and CSS instead of WebGL
 
 ## Upgrading
   * **To 5.0.0**
-    * please follow the changelogs.
+    * please follow the [changelogs](https://github.com/Orasund/pixelengine/blob/master/changelog-5-0-0.md).
   * **To 4.0.0**
     * `program` and `programWithCustomControls` are now renamed to `game` and `gameWithCustomControls`.
     * This package now uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest) for colors.

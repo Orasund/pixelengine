@@ -232,45 +232,42 @@ width =
     toFloat <| 5 * tileSize
 
 
-view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
-view { grid } =
-    let
-        tileset : Tileset
-        tileset =
+areas : Model -> List (Area Msg)
+areas { grid } =
+    [ PixelEngine.tiledArea
+        { rows = 5
+        , tileset =
             { source = "tileset.png"
             , spriteWidth = tileSize
             , spriteHeight = tileSize
             }
-
-        background : Background
-        background =
+        , background =
             PixelEngine.imageBackground
                 { height = 80
                 , width = 80
                 , source = "background.png"
                 }
-    in
-    { title = "Tic Tac Toe"
-    , options = Nothing
-    , body =
-        [ PixelEngine.tiledArea
-            { rows = 5
-            , tileset = tileset
-            , background = background
-            }
-            (List.concat
-                [ grid |> viewGrid
-                , [ ( ( 2, 0 ), reset ) ]
-                ]
-            )
-        ]
-    }
+        }
+        (List.concat
+            [ grid |> viewGrid
+            , [ ( ( 2, 0 ), reset ) ]
+            ]
+        )
+    ]
 
 
 
 {------------------------
-   MAIN
+   CONFIGURATION
 ------------------------}
+
+
+view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view model =
+    { title = "Tic Tac Toe"
+    , options = Nothing
+    , body = areas model
+    }
 
 
 main : PixelEngine () Model Msg

@@ -11,7 +11,7 @@ view : String -> Element msg
 view name =
     Element.column
         [ Element.width Element.fill
-        , Element.height <| Element.px <| (512 + 28)
+        , Element.height <| Element.px <| (512 + 44)
         , Element.centerY
         ]
         [ Element.html <|
