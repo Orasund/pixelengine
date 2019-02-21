@@ -3,18 +3,18 @@
 # Renamed Modules
 
 ```
-PixelEngine                     -> PixelEngine
-PixelEngine.Controls            -> PixelEngine
-PixelEngine.Graphics            -> PixelEngine
-PixelEngine.Graphics.Image      -> PixelEngine.Image
-PixelEngine.Graphics.Tile       -> PixelEngine.Tile
-PixelEngine.Graphics.Transition -> PixelEngine.Options
-PixelEngine.Graphics.Options    -> PixelEngine.Options
-PixelEngine.Location            -> Location
-PixelEngine.Grid                -> Grid
-PixelEngine.Grid.Position       -> Grid.Position
-PixelEngine.Grid.Bordered       -> Grid.Bordered
-PixelEngine.Grid.Direction      -> Grid.Direction
+PixelEngine                             -> PixelEngine
+PixelEngine.Controls                    -> PixelEngine
+PixelEngine.Graphics                    -> PixelEngine
+PixelEngine.Graphics.Image              -> PixelEngine.Image
+PixelEngine.Graphics.Tile               -> PixelEngine.Tile
+PixelEngine.Graphics.Transition         -> PixelEngine.Options
+PixelEngine.Graphics.Options            -> PixelEngine.Options
+PixelEngine.Location                    -> Location
+PixelEngine.Grid                        -> Grid
+PixelEngine.Grid.Position               -> Grid.Position
+PixelEngine.Grid.Bordered               -> Grid.Bordered
+PixelEngine.Grid.Direction              -> Grid.Direction
 ```
 
 # Renamed Functions
