@@ -242,12 +242,12 @@ subscriptions _ =
 
 width : Float
 width =
-    300
+    256
 
 
 height : Float
 height =
-    300
+    208
 
 
 areas : Model -> List ( Location, Image Msg )
@@ -330,7 +330,7 @@ areas { people, hunger, newPerson } =
                         |> Image.movable id
                         |> (case action of
                                 Walking ->
-                                    Image.withAttributes [ Image.onClick (Pray id) ]
+                                    Image.clickable (Pray id)
 
                                 _ ->
                                     identity
@@ -377,15 +377,11 @@ view maybeModel =
     in
     { title = "CultSim"
     , body =
-        [ Html.h1 [ Attributes.style "text-align" "center" ]
-            [ Html.text "Cult Simulator" ]
-        , Html.h3 [ Attributes.style "text-align" "center" ]
-            [ Html.text "Start a Cult. Pray to Cuthulu. Die." ]
-        , PixelEngine.toHtml
+        [ PixelEngine.toHtml
             { options = Just options, width = width }
             [ PixelEngine.imageArea
                 { height = height
-                , background = PixelEngine.colorBackground <| Color.rgb255 255 255 255
+                , background = PixelEngine.colorBackground <| Color.rgb255 222 238 214
                 }
                 (case maybeModel of
                     Just model ->
@@ -396,9 +392,9 @@ view maybeModel =
                 )
             ]
         , Html.p [ Attributes.style "text-align" "center" ]
-            [ Html.text "Click on people to let them pray. If your cult members stop praying, eventually Cuthulu will come out and ask for a sacrifice." ]
-        , Html.p [ Attributes.style "text-align" "center" ]
-            [ Html.text "The game is won, once you have 10 or more cult members." ]
+            [ Html.text "Click on people to let them pray. If your cult members stop praying, eventually Cuthulu will come out and ask for a sacrifice."
+            , Html.text "The game is won, once you have 10 or more cult members."
+            ]
         ]
     }
 

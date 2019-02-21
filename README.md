@@ -16,11 +16,11 @@ Advanced Tutorial, uses a **bordered Grid**.
 
 ## Games made with this Engine
 
-  * [Mini World War - Card Game](https://orasund.github.io/pixelengine/#MiniWorldWar/)([src](https://github.com/Orasund/pixelengine/tree/master/examples/MiniWorldWar)) A Risc-inspired fast card game. Its a 2-Player online game written purely in Elm.
+  * [Mini World War - Card Game](https://orasund.github.io/pixelengine/#MiniWorldWar)([src](https://github.com/Orasund/pixelengine/tree/master/examples/MiniWorldWar)) A Risc-inspired fast card game. Its a 2-Player online game written purely in Elm.
   *(Use the Mouse to play)*
   * [Dig Dig Boom - Rogue-like Game](https://orasund.github.io/pixelengine/#dig-dig-boom) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/DigDigBoom)) The project that started everything. Mainly focusing on Tilesets
-  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/#CultSim/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
-  * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/#RuinJump/) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
+  * [Cult Simulator - Idle Game](https://orasund.github.io/pixelengine/#CultSim) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/CultSim)) A not so intended usecase that tryed to figure out the edges of this library. It only uses the `MultipleImages` Type. *(Use the Mouse to play)*
+  * [Ruin Jump - Platformer Game](https://orasund.github.io/pixelengine/#RuinJump) ([src](https://github.com/Orasund/pixelengine/tree/master/examples/RuinJump)) I wanted to have a plaformer with a jumping mechanic. I also intentionally made it a bit janky. *(Use the Arrow keys as well as SPACE to play)*
 
 If you have created a game with this engine, please let me know.
 
@@ -63,6 +63,8 @@ So I desided to try something different and to use HTML and CSS instead of WebGL
   * **Particles** - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?
 
 ## Upgrading
+  * **To 5.0.0**
+    * please follow the changelogs.
   * **To 4.0.0**
     * `program` and `programWithCustomControls` are now renamed to `game` and `gameWithCustomControls`.
     * This package now uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest) for colors.

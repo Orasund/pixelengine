@@ -118,6 +118,6 @@ generate =
               }
             )
         )
-        (generatePosition 135)
+        (generatePosition 85)
         (Random.float 0 1)
         generateSkin
