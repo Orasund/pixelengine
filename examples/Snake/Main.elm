@@ -17,10 +17,34 @@ import Time
 ------------------------}
 
 
+{-|
+
+
+# Snake
+
+The snake itself has a head as well as additional squares for the body.
+A main concept of Elm is trying to define your models in such a way that it can
+not allow impossible states. For example if we had used just a `List (Int,Int)`
+for the snake, we would always need to also consider the empty list, which can
+actually never occur.
+
+-}
 type alias Snake =
     ( Position, List Position )
 
 
+{-|
+
+
+# Model
+
+We will let the player only have control of the direction, the snake looks,
+the movement will be done with a timer. The chicken is a `Maybe Position`
+because for a few frames, between it got eaten and a new one is spawned in,
+it actually does not exist. If we would have just used a `Position` it would
+have also worked, but it might cause some visual glitch.
+
+-}
 type alias Model =
     { direction : Direction
     , snake : Snake
@@ -28,6 +52,15 @@ type alias Model =
     }
 
 
+{-| Actions
+
+There are Three things that can happen in the Game:
+
+  - The player changes the direction (`Look`)
+  - A new chicken gets placed (`PlaceChicken`)
+  - The snake moves (`Move`)
+
+-}
 type Msg
     = Look Direction
     | PlaceChicken Position
@@ -61,6 +94,21 @@ width =
 ------------------------}
 
 
+{-| If you never have worked with
+[elm/random](https://package.elm-lang.org/packages/elm/random/latest/) before,
+this might look very frightening, so here are the functions in detail:
+
+  - `Random.generate` - creates a `Cmd msg` what will return a random value, the first argument is the `Msg` the second generates the value
+  - `Random.int` - represents a random integer
+  - `Random.map` - explains what will happend with that random value. In our case we will use it to take a random element out of a list.
+
+Now lets look at the remaining code. We first define a `board` as a set of the
+occupied squares. We use a `Set` because we will have a lot of looking up to do.
+Next we to exactly that: we check for every place on the board, if its occupied
+(if its in the set) and only filter those out, that are not. Finally we transform
+the List into an Array, in order to use the `Array.get` function.
+
+-}
 newChicken : List Position -> Cmd Msg
 newChicken occupiedSquares =
     let
@@ -129,6 +177,10 @@ moveSnake direction ( pos, body ) =
     )
 
 
+{-| We define the `hungryBody` as the one, that has lost in size, and then we
+just say: Unless the snake eats the chicken, it will be hungry
+(uses the `hungryBody`).
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of

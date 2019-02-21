@@ -125,6 +125,10 @@ movePlayer direction ({ player, board } as state) =
         state
 
 
+{-| if the player shoots, we want to destroy the lowest enemy on the y axis.
+Once we have found the target enemy we will remove it. We can ignore the Errors
+because we know that this can not return an error.
+-}
 shoot : State -> State
 shoot ({ player, board } as state) =
     let
@@ -152,6 +156,10 @@ shoot ({ player, board } as state) =
             state
 
 
+{-| when updating the Entity, we need to read from the old grid (`board`) and read
+into the new grid (in our case, we only return the function. the new grid will then
+apply the functin.)
+-}
 updateEntity : Grid Entity -> Position -> Maybe Entity -> Grid Entity -> Grid Entity
 updateEntity board pos maybeEntity =
     case maybeEntity of
@@ -208,14 +216,13 @@ updateEntity board pos maybeEntity =
             identity
 
 
-updateBoard : Grid Entity -> Grid Entity
-updateBoard grid =
-    grid
-        |> Grid.foldl
-            (updateEntity grid)
-            grid
+{-| the bullets should spawn randomly. This can be done by defining a Generator.
+It takes a grid and then randomly inserts bullets.
 
+First we find all possible `spawnPositions`. Next get a list of same length that
+with a bool representing whether a bullet will spawn at a give positon or not.
 
+-}
 bulletGenerator : Grid Entity -> Generator (Grid Entity)
 bulletGenerator g =
     let
@@ -262,13 +269,17 @@ checkIfGameOver player grid =
         grid
 
 
+{-| This is the way how i like to handle random events.
+-}
 updateState : ( State, Seed ) -> ( State, Seed )
 updateState ( { board, player } as state, seed ) =
     let
         boardGenerator : Generator (Grid Entity)
         boardGenerator =
-            state.board
-                |> updateBoard
+            board
+                |> Grid.foldl
+                    (updateEntity board)
+                    board
                 |> bulletGenerator
 
         stateGenerator : Generator State
@@ -288,46 +299,35 @@ updateState ( { board, player } as state, seed ) =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let
-        defaultCase : ( Model, Cmd Msg )
-        defaultCase =
-            ( model, Cmd.none )
-    in
-    case model of
+    ( case model of
         Just ( state, seed ) ->
             case msg of
                 Move direction ->
-                    ( Just ( state |> movePlayer direction, seed )
-                    , Cmd.none
-                    )
+                    Just ( state |> movePlayer direction, seed )
 
                 Tick ->
-                    ( Just (( state, seed ) |> updateState)
-                    , Cmd.none
-                    )
+                    Just (( state, seed ) |> updateState)
 
                 Shoot ->
-                    ( Just (( state |> shoot, seed ) |> updateState)
-                    , Cmd.none
-                    )
+                    Just (( state |> shoot, seed ) |> updateState)
 
                 SetSeed _ ->
-                    defaultCase
+                    model
 
         Nothing ->
             case msg of
                 SetSeed seed ->
-                    ( Just
+                    Just
                         ( { board = newBoard
                           , player = ( boardSize // 2, boardSize - 1 )
                           }
                         , seed
                         )
-                    , Cmd.none
-                    )
 
                 _ ->
-                    defaultCase
+                    model
+    , Cmd.none
+    )
 
 
 
