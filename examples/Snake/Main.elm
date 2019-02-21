@@ -17,17 +17,11 @@ import Time
 ------------------------}
 
 
-{-|
-
-
-# Snake
-
-The snake itself has a head as well as additional squares for the body.
+{-| The snake itself has a head as well as additional squares for the body.
 A main concept of Elm is trying to define your models in such a way that it can
 not allow impossible states. For example if we had used just a `List (Int,Int)`
 for the snake, we would always need to also consider the empty list, which can
 actually never occur.
-
 -}
 type alias Snake =
     ( Position, List Position )
@@ -52,7 +46,10 @@ type alias Model =
     }
 
 
-{-| Actions
+{-|
+
+
+# Actions
 
 There are Three things that can happen in the Game:
 
@@ -75,7 +72,7 @@ type Msg
 
 boardSize : Int
 boardSize =
-    4
+    6
 
 
 tileSize : Int
@@ -272,6 +269,12 @@ controls input =
 ------------------------}
 
 
+{-|
+
+
+# Tiles
+
+-}
 chickenTile : Tile Msg
 chickenTile =
     Tile.fromPosition ( 3, 0 )
@@ -299,6 +302,15 @@ snakeBodyTile =
     Tile.fromPosition ( 3, 1 )
 
 
+{-|
+
+
+# Areas
+
+The snake is composed of the head and the body, we can use the `(::)` to connect
+the two parts.
+
+-}
 viewSnake : Direction -> Snake -> List ( Position, Tile Msg )
 viewSnake direction ( ( headX, headY ), body ) =
     ( ( headX + 1, headY + 1 )

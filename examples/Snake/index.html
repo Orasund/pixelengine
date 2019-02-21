@@ -4403,6 +4403,68 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
+var author$project$PixelEngine$InputA = {$: 'InputA'};
+var author$project$PixelEngine$InputB = {$: 'InputB'};
+var author$project$PixelEngine$InputDown = {$: 'InputDown'};
+var author$project$PixelEngine$InputLeft = {$: 'InputLeft'};
+var author$project$PixelEngine$InputRight = {$: 'InputRight'};
+var author$project$PixelEngine$InputUp = {$: 'InputUp'};
+var author$project$PixelEngine$InputX = {$: 'InputX'};
+var author$project$PixelEngine$InputY = {$: 'InputY'};
+var elm$core$Maybe$Just = function (a) {
+	return {$: 'Just', a: a};
+};
+var elm$core$Maybe$Nothing = {$: 'Nothing'};
+var author$project$PixelEngine$defaultInputs = function (string) {
+	switch (string) {
+		case 'w':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputUp);
+		case 'W':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputUp);
+		case 'ArrowUp':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputUp);
+		case 's':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputDown);
+		case 'S':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputDown);
+		case 'ArrowDown':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputDown);
+		case 'd':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputRight);
+		case 'D':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputRight);
+		case 'ArrowRight':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputRight);
+		case 'a':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputLeft);
+		case 'A':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputLeft);
+		case 'ArrowLeft':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputLeft);
+		case ' ':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputA);
+		case 'Enter':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputA);
+		case 'q':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputX);
+		case 'Q':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputX);
+		case 'e':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputY);
+		case 'E':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputY);
+		case 'x':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		case 'X':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		case 'Escape':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		case 'Backspace':
+			return elm$core$Maybe$Just(author$project$PixelEngine$InputB);
+		default:
+			return elm$core$Maybe$Nothing;
+	}
+};
 var author$project$PixelEngine$MsgContent = function (a) {
 	return {$: 'MsgContent', a: a};
 };
@@ -4427,10 +4489,6 @@ var elm$core$Basics$never = function (_n0) {
 		continue never;
 	}
 };
-var elm$core$Maybe$Just = function (a) {
-	return {$: 'Just', a: a};
-};
-var elm$core$Maybe$Nothing = {$: 'Nothing'};
 var elm$core$Basics$False = {$: 'False'};
 var elm$core$Basics$True = {$: 'True'};
 var elm$core$Result$isOk = function (result) {
@@ -5229,6 +5287,7 @@ var author$project$PixelEngine$initFunction = F2(
 						])));
 		};
 	});
+var author$project$PixelEngine$DoNothing = {$: 'DoNothing'};
 var elm$browser$Browser$Events$Document = {$: 'Document'};
 var elm$browser$Browser$Events$MySub = F3(
 	function (a, b, c) {
@@ -5630,80 +5689,30 @@ var elm$browser$Browser$Events$on = F3(
 			A3(elm$browser$Browser$Events$MySub, node, name, decoder));
 	});
 var elm$browser$Browser$Events$onKeyDown = A2(elm$browser$Browser$Events$on, elm$browser$Browser$Events$Document, 'keydown');
+var elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (maybeValue.$ === 'Just') {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return elm$core$Maybe$Nothing;
+		}
+	});
 var elm$json$Json$Decode$field = _Json_decodeField;
 var elm$json$Json$Decode$string = _Json_decodeString;
-var author$project$PixelEngine$Controls$custom = F2(
+var author$project$PixelEngine$customControls = F2(
 	function (decoder, fun) {
 		return elm$browser$Browser$Events$onKeyDown(
 			A2(
 				elm$json$Json$Decode$map,
-				fun,
+				elm$core$Maybe$andThen(fun),
 				A2(
 					elm$json$Json$Decode$map,
 					decoder,
 					A2(elm$json$Json$Decode$field, 'key', elm$json$Json$Decode$string))));
 	});
-var author$project$PixelEngine$Controls$InputA = {$: 'InputA'};
-var author$project$PixelEngine$Controls$InputB = {$: 'InputB'};
-var author$project$PixelEngine$Controls$InputDown = {$: 'InputDown'};
-var author$project$PixelEngine$Controls$InputLeft = {$: 'InputLeft'};
-var author$project$PixelEngine$Controls$InputNone = {$: 'InputNone'};
-var author$project$PixelEngine$Controls$InputRight = {$: 'InputRight'};
-var author$project$PixelEngine$Controls$InputUp = {$: 'InputUp'};
-var author$project$PixelEngine$Controls$InputX = {$: 'InputX'};
-var author$project$PixelEngine$Controls$InputY = {$: 'InputY'};
-var author$project$PixelEngine$Controls$defaultLayout = function (string) {
-	switch (string) {
-		case 'w':
-			return author$project$PixelEngine$Controls$InputUp;
-		case 'W':
-			return author$project$PixelEngine$Controls$InputUp;
-		case 'ArrowUp':
-			return author$project$PixelEngine$Controls$InputUp;
-		case 's':
-			return author$project$PixelEngine$Controls$InputDown;
-		case 'S':
-			return author$project$PixelEngine$Controls$InputDown;
-		case 'ArrowDown':
-			return author$project$PixelEngine$Controls$InputDown;
-		case 'd':
-			return author$project$PixelEngine$Controls$InputRight;
-		case 'D':
-			return author$project$PixelEngine$Controls$InputRight;
-		case 'ArrowRight':
-			return author$project$PixelEngine$Controls$InputRight;
-		case 'a':
-			return author$project$PixelEngine$Controls$InputLeft;
-		case 'A':
-			return author$project$PixelEngine$Controls$InputLeft;
-		case 'ArrowLeft':
-			return author$project$PixelEngine$Controls$InputLeft;
-		case ' ':
-			return author$project$PixelEngine$Controls$InputA;
-		case 'Enter':
-			return author$project$PixelEngine$Controls$InputA;
-		case 'q':
-			return author$project$PixelEngine$Controls$InputX;
-		case 'Q':
-			return author$project$PixelEngine$Controls$InputX;
-		case 'e':
-			return author$project$PixelEngine$Controls$InputY;
-		case 'E':
-			return author$project$PixelEngine$Controls$InputY;
-		case 'x':
-			return author$project$PixelEngine$Controls$InputB;
-		case 'X':
-			return author$project$PixelEngine$Controls$InputB;
-		case 'Escape':
-			return author$project$PixelEngine$Controls$InputB;
-		case 'Backspace':
-			return author$project$PixelEngine$Controls$InputB;
-		default:
-			return author$project$PixelEngine$Controls$InputNone;
-	}
-};
-var author$project$PixelEngine$Controls$basic = function (fun) {
-	return A2(author$project$PixelEngine$Controls$custom, author$project$PixelEngine$Controls$defaultLayout, fun);
+var author$project$PixelEngine$basicControls = function (fun) {
+	return A2(author$project$PixelEngine$customControls, author$project$PixelEngine$defaultInputs, fun);
 };
 var elm$browser$Browser$Events$Window = {$: 'Window'};
 var elm$json$Json$Decode$int = _Json_decodeInt;
@@ -5747,8 +5756,15 @@ var author$project$PixelEngine$subscriptionsFunction = F2(
 							[
 								A2(
 								elm$core$Platform$Sub$map,
-								author$project$PixelEngine$MsgContent,
-								author$project$PixelEngine$Controls$basic(controlsToMsg))
+								function (maybeMsg) {
+									if (maybeMsg.$ === 'Just') {
+										var msg = maybeMsg.a;
+										return author$project$PixelEngine$MsgContent(msg);
+									} else {
+										return author$project$PixelEngine$DoNothing;
+									}
+								},
+								author$project$PixelEngine$basicControls(controlsToMsg))
 							]);
 					} else {
 						return _List_Nil;
@@ -5782,80 +5798,34 @@ var author$project$PixelEngine$updateFunction = F3(
 	function (update, msg, model) {
 		var modelContent = model.modelContent;
 		var config = model.config;
-		if (msg.$ === 'Resize') {
-			var windowSize = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{
-						config: _Utils_update(
-							config,
-							{
-								windowSize: elm$core$Maybe$Just(windowSize)
-							})
-					}),
-				elm$core$Platform$Cmd$none);
-		} else {
-			var msgC = msg.a;
-			return A2(
-				author$project$PixelEngine$batch,
-				A2(update, msgC, modelContent),
-				model);
-		}
-	});
-var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
-	return {$: 'Options', a: a};
-};
-var elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
-var author$project$PixelEngine$Controls$supportingMobile = F2(
-	function (_n0, _n1) {
-		var windowSize = _n0.windowSize;
-		var controls = _n0.controls;
-		var options = _n1.a;
-		var convert = function (input) {
-			switch (input.$) {
-				case 'AbstractInputA':
-					return author$project$PixelEngine$Controls$InputA;
-				case 'AbstractInputB':
-					return author$project$PixelEngine$Controls$InputB;
-				case 'AbstractInputX':
-					return author$project$PixelEngine$Controls$InputX;
-				case 'AbstractInputY':
-					return author$project$PixelEngine$Controls$InputY;
-				case 'AbstractInputUp':
-					return author$project$PixelEngine$Controls$InputUp;
-				case 'AbstractInputLeft':
-					return author$project$PixelEngine$Controls$InputLeft;
-				case 'AbstractInputRight':
-					return author$project$PixelEngine$Controls$InputRight;
-				case 'AbstractInputDown':
-					return author$project$PixelEngine$Controls$InputDown;
-				default:
-					return author$project$PixelEngine$Controls$InputNone;
-			}
-		};
-		var _n2 = windowSize;
-		var width = _n2.width;
-		var height = _n2.height;
-		return author$project$PixelEngine$Graphics$Data$Options$Options(
-			_Utils_update(
-				options,
-				{
-					controllerOptions: elm$core$Maybe$Just(
+		switch (msg.$) {
+			case 'Resize':
+				var windowSize = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
 						{
-							controls: A2(elm$core$Basics$composeR, convert, controls),
-							windowSize: {height: height, width: width}
-						})
-				}));
+							config: _Utils_update(
+								config,
+								{
+									windowSize: elm$core$Maybe$Just(windowSize)
+								})
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'MsgContent':
+				var msgC = msg.a;
+				return A2(
+					author$project$PixelEngine$batch,
+					A2(update, msgC, modelContent),
+					model);
+			default:
+				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
+		}
 	});
 var elm$core$List$sum = function (numbers) {
 	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
 };
-var author$project$PixelEngine$Graphics$heightOf = function (listOfArea) {
+var author$project$PixelEngine$heightOf = function (listOfArea) {
 	return elm$core$List$sum(
 		A2(
 			elm$core$List$map,
@@ -8005,7 +7975,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 								[
 									rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 									rtfeldman$elm_css$Css$right(
-									rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 2)))
+									rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 1)))
 								]))
 						]),
 					_List_fromArray(
@@ -8024,17 +7994,17 @@ var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 											'object-position',
 											elm$core$String$fromInt(((-1) * spriteWidth) * spriteLeft) + ('px ' + (elm$core$String$fromInt(((-1) * spriteHeight) * spriteTop) + 'px'))),
 											rtfeldman$elm_css$Css$width(
-											rtfeldman$elm_css$Css$px(spriteWidth * (steps + 1))),
+											rtfeldman$elm_css$Css$px(spriteWidth * steps)),
 											rtfeldman$elm_css$Css$height(
 											rtfeldman$elm_css$Css$px(spriteHeight)),
 											rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
 											rtfeldman$elm_css$Css$left(
-											rtfeldman$elm_css$Css$px((scale * spriteWidth) * (steps + 1))),
+											rtfeldman$elm_css$Css$px((scale * spriteWidth) * steps)),
 											A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated'),
 											A2(
 											rtfeldman$elm_css$Css$property,
 											'animation',
-											'pixelengine_graphics_basic ' + (elm$core$String$fromFloat((steps + 1) / fps) + ('.0s steps(' + (elm$core$String$fromInt(steps + 1) + ') infinite')))),
+											'pixelengine_graphics_basic ' + (elm$core$String$fromFloat(steps / fps) + ('s steps(' + (elm$core$String$fromInt(steps) + ') infinite')))),
 											A2(rtfeldman$elm_css$Css$property, 'transform-origin', 'top left'),
 											rtfeldman$elm_css$Css$transform(
 											A2(rtfeldman$elm_css$Css$scale2, scale, scale)),
@@ -8106,7 +8076,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayTile = F2(
 var author$project$PixelEngine$Graphics$View$Element$displayMultiple = F4(
 	function (options, _n0, transitionId, attributes) {
 		var scale = options.a.scale;
-		var transitionSpeedInSec = options.a.transitionSpeedInSec;
+		var movementSpeedInSec = options.a.movementSpeedInSec;
 		var rootPosition = _n0.a;
 		var multipleSources = _n0.b;
 		return _Utils_Tuple2(
@@ -8156,7 +8126,7 @@ var author$project$PixelEngine$Graphics$View$Element$displayMultiple = F4(
 												A2(
 												rtfeldman$elm_css$Css$property,
 												'transition',
-												'left ' + (elm$core$String$fromFloat(transitionSpeedInSec) + ('s,top ' + (elm$core$String$fromFloat(transitionSpeedInSec) + 's;'))))
+												'left ' + (elm$core$String$fromFloat(movementSpeedInSec) + ('s,top ' + (elm$core$String$fromFloat(movementSpeedInSec) + 's;'))))
 											]);
 									} else {
 										return _List_Nil;
@@ -8219,6 +8189,11 @@ var author$project$PixelEngine$Graphics$View$Element$view = F2(
 				uniqueId,
 				customAttributes);
 		}
+	});
+var elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
 	});
 var elm$core$List$partition = F2(
 	function (pred, list) {
@@ -8556,39 +8531,49 @@ var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) 
 	var diameter = windowSize.height / 4;
 	var circle = F4(
 		function (_char, input, size, listOfCss) {
-			return A2(
-				rtfeldman$elm_css$Html$Styled$button,
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$Attributes$css(
-						A2(
-							elm$core$List$append,
-							listOfCss,
-							_List_fromArray(
-								[
-									rtfeldman$elm_css$Css$width(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$height(
-									rtfeldman$elm_css$Css$px(size)),
-									rtfeldman$elm_css$Css$borderRadius(
-									rtfeldman$elm_css$Css$px(size / 2)),
-									rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
-									rtfeldman$elm_css$Css$backgroundColor(
-									A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
-									rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
-									rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
-									rtfeldman$elm_css$Css$fontSize(
-									rtfeldman$elm_css$Css$px(size * 0.9)),
-									rtfeldman$elm_css$Css$opacity(
-									rtfeldman$elm_css$Css$num(0.5))
-								]))),
-						rtfeldman$elm_css$Html$Styled$Events$onClick(
-						controls(input))
-					]),
-				_List_fromArray(
-					[
-						rtfeldman$elm_css$Html$Styled$text(_char)
-					]));
+			var _n1 = controls(input);
+			if (_n1.$ === 'Just') {
+				var msg = _n1.a;
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					A2(
+						elm$core$List$append,
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Attributes$css(
+								A2(
+									elm$core$List$append,
+									listOfCss,
+									_List_fromArray(
+										[
+											rtfeldman$elm_css$Css$width(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$height(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$borderRadius(
+											rtfeldman$elm_css$Css$px(size / 2)),
+											rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
+											rtfeldman$elm_css$Css$backgroundColor(
+											A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
+											rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
+											rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
+											rtfeldman$elm_css$Css$fontSize(
+											rtfeldman$elm_css$Css$px(size * 0.9)),
+											rtfeldman$elm_css$Css$opacity(
+											rtfeldman$elm_css$Css$num(0.5))
+										])))
+							]),
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Events$onClick(msg)
+							])),
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$text(_char)
+						]));
+			} else {
+				return A2(rtfeldman$elm_css$Html$Styled$button, _List_Nil, _List_Nil);
+			}
 		});
 	return _List_fromArray(
 		[
@@ -8912,6 +8897,38 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 							]))
 					])));
 	});
+var author$project$PixelEngine$Graphics$Data$Options$Options = function (a) {
+	return {$: 'Options', a: a};
+};
+var author$project$PixelEngine$Graphics$Data$Options$withWidth = F2(
+	function (width, _n0) {
+		var o = _n0.a;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				o,
+				{width: width}));
+	});
+var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
+	return {$: 'Transition', a: a};
+};
+var author$project$PixelEngine$Graphics$Data$Options$new = author$project$PixelEngine$Graphics$Data$Options$Options(
+	{
+		animationFPS: 1,
+		controllerOptions: elm$core$Maybe$Nothing,
+		movementSpeedInSec: 0.2,
+		scale: 1,
+		transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
+			{
+				name: '',
+				transitionList: _List_fromArray(
+					[
+						_Utils_Tuple2(0, '')
+					])
+			}),
+		transitionFrom: _List_Nil,
+		width: 512
+	});
+var author$project$PixelEngine$Options$default = author$project$PixelEngine$Graphics$Data$Options$new;
 var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
 	return _VirtualDom_keyedNode(
 		_VirtualDom_noScript(tag));
@@ -9389,10 +9406,64 @@ var rtfeldman$elm_css$VirtualDom$Styled$toUnstyled = function (vdom) {
 	}
 };
 var rtfeldman$elm_css$Html$Styled$toUnstyled = rtfeldman$elm_css$VirtualDom$Styled$toUnstyled;
-var author$project$PixelEngine$Graphics$view = F2(
-	function (o, listOfArea) {
+var author$project$PixelEngine$toHtml = F2(
+	function (_n0, listOfArea) {
+		var width = _n0.width;
+		var options = _n0.options;
 		return rtfeldman$elm_css$Html$Styled$toUnstyled(
-			A2(author$project$PixelEngine$Graphics$Abstract$render, o, listOfArea));
+			A2(
+				author$project$PixelEngine$Graphics$Abstract$render,
+				A2(
+					author$project$PixelEngine$Graphics$Data$Options$withWidth,
+					width,
+					function () {
+						if (options.$ === 'Just') {
+							var o = options.a;
+							return o;
+						} else {
+							return author$project$PixelEngine$Options$default;
+						}
+					}()),
+				listOfArea));
+	});
+var author$project$PixelEngine$withMobileSupport = F2(
+	function (_n0, _n1) {
+		var windowSize = _n0.windowSize;
+		var controls = _n0.controls;
+		var options = _n1.a;
+		var convert = function (input) {
+			switch (input.$) {
+				case 'AbstractInputA':
+					return author$project$PixelEngine$InputA;
+				case 'AbstractInputB':
+					return author$project$PixelEngine$InputB;
+				case 'AbstractInputX':
+					return author$project$PixelEngine$InputX;
+				case 'AbstractInputY':
+					return author$project$PixelEngine$InputY;
+				case 'AbstractInputUp':
+					return author$project$PixelEngine$InputUp;
+				case 'AbstractInputLeft':
+					return author$project$PixelEngine$InputLeft;
+				case 'AbstractInputRight':
+					return author$project$PixelEngine$InputRight;
+				default:
+					return author$project$PixelEngine$InputDown;
+			}
+		};
+		var _n2 = windowSize;
+		var width = _n2.width;
+		var height = _n2.height;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				options,
+				{
+					controllerOptions: elm$core$Maybe$Just(
+						{
+							controls: A2(elm$core$Basics$composeR, convert, controls),
+							windowSize: {height: height, width: width}
+						})
+				}));
 	});
 var author$project$PixelEngine$Graphics$Data$Options$usingScale = F2(
 	function (scale, _n0) {
@@ -9408,21 +9479,27 @@ var elm$core$Basics$min = F2(
 	});
 var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var elm$html$Html$map = elm$virtual_dom$VirtualDom$map;
-var author$project$PixelEngine$viewFunction = F2(
-	function (view, _n0) {
+var author$project$PixelEngine$viewFunction = F3(
+	function (view, width, _n0) {
 		var modelContent = _n0.modelContent;
 		var config = _n0.config;
 		var _n1 = config;
 		var windowSize = _n1.windowSize;
 		var controls = _n1.controls;
-		var _n2 = view(modelContent);
-		var title = _n2.title;
-		var options = _n2.options;
-		var body = _n2.body;
-		var _n3 = options;
-		var width = _n3.a.width;
-		var scale = _n3.a.scale;
-		var height = scale * author$project$PixelEngine$Graphics$heightOf(body);
+		var viewResult = view(modelContent);
+		var title = viewResult.title;
+		var body = viewResult.body;
+		var options = function () {
+			var _n2 = viewResult.options;
+			if (_n2.$ === 'Just') {
+				var o = _n2.a;
+				return o;
+			} else {
+				return author$project$PixelEngine$Options$default;
+			}
+		}();
+		var scale = options.a.scale;
+		var height = scale * author$project$PixelEngine$heightOf(body);
 		return {
 			body: _List_fromArray(
 				[
@@ -9433,35 +9510,42 @@ var author$project$PixelEngine$viewFunction = F2(
 						if (windowSize.$ === 'Just') {
 							var wS = windowSize.a;
 							return A2(
-								author$project$PixelEngine$Graphics$view,
-								function () {
-									if (controls.$ === 'Just') {
-										var _n6 = controls.a;
-										var controlsToMsg = _n6.b;
-										return author$project$PixelEngine$Controls$supportingMobile(
-											{controls: controlsToMsg, windowSize: wS});
-									} else {
-										return elm$core$Basics$identity;
-									}
-								}()(
-									A2(
-										author$project$PixelEngine$Graphics$Data$Options$usingScale,
-										A2(
-											elm$core$Basics$min,
+								author$project$PixelEngine$toHtml,
+								{
+									options: elm$core$Maybe$Just(
+										function () {
+											if (controls.$ === 'Just') {
+												var _n5 = controls.a;
+												var controlsToMsg = _n5.b;
+												return author$project$PixelEngine$withMobileSupport(
+													{controls: controlsToMsg, windowSize: wS});
+											} else {
+												return elm$core$Basics$identity;
+											}
+										}()(
 											A2(
-												elm$core$Basics$pow,
-												2,
-												elm$core$Basics$floor(
-													A2(elm$core$Basics$logBase, 2, wS.height / height))),
-											A2(
-												elm$core$Basics$pow,
-												2,
-												elm$core$Basics$floor(
-													A2(elm$core$Basics$logBase, 2, wS.width / width)))),
-										options)),
+												author$project$PixelEngine$Graphics$Data$Options$usingScale,
+												A2(
+													elm$core$Basics$min,
+													A2(
+														elm$core$Basics$pow,
+														2,
+														elm$core$Basics$floor(
+															A2(elm$core$Basics$logBase, 2, wS.height / height))),
+													A2(
+														elm$core$Basics$pow,
+														2,
+														elm$core$Basics$floor(
+															A2(elm$core$Basics$logBase, 2, wS.width / width)))),
+												options))),
+									width: width
+								},
 								body);
 						} else {
-							return A2(author$project$PixelEngine$Graphics$view, options, _List_Nil);
+							return A2(
+								author$project$PixelEngine$toHtml,
+								{options: viewResult.options, width: width},
+								_List_Nil);
 						}
 					}())
 				]),
@@ -9474,104 +9558,68 @@ var author$project$PixelEngine$gameMaybeWithCustomControls = function (_n0) {
 	var update = _n0.update;
 	var subscriptions = _n0.subscriptions;
 	var view = _n0.view;
+	var width = _n0.width;
 	var controls = _n0.controls;
 	return elm$browser$Browser$document(
 		{
 			init: A2(author$project$PixelEngine$initFunction, controls, init),
 			subscriptions: author$project$PixelEngine$subscriptionsFunction(subscriptions),
 			update: author$project$PixelEngine$updateFunction(update),
-			view: author$project$PixelEngine$viewFunction(view)
+			view: A2(author$project$PixelEngine$viewFunction, view, width)
 		});
 };
 var author$project$PixelEngine$game = function (_n0) {
 	var init = _n0.init;
 	var update = _n0.update;
+	var width = _n0.width;
 	var subscriptions = _n0.subscriptions;
 	var view = _n0.view;
 	var controls = _n0.controls;
 	return author$project$PixelEngine$gameMaybeWithCustomControls(
 		{
 			controls: elm$core$Maybe$Just(
-				_Utils_Tuple2(author$project$PixelEngine$Controls$defaultLayout, controls)),
+				_Utils_Tuple2(author$project$PixelEngine$defaultInputs, controls)),
 			init: init,
 			subscriptions: subscriptions,
 			update: update,
-			view: view
+			view: view,
+			width: width
 		});
 };
-var author$project$PixelEngine$Grid$Direction$Down = {$: 'Down'};
-var author$project$PixelEngine$Grid$Direction$Left = {$: 'Left'};
-var author$project$PixelEngine$Grid$Direction$Right = {$: 'Right'};
-var author$project$PixelEngine$Grid$Direction$Up = {$: 'Up'};
+var author$project$Grid$Direction$Down = {$: 'Down'};
+var author$project$Grid$Direction$Left = {$: 'Left'};
+var author$project$Grid$Direction$Right = {$: 'Right'};
+var author$project$Grid$Direction$Up = {$: 'Up'};
 var author$project$Snake$Look = function (a) {
 	return {$: 'Look', a: a};
 };
-var author$project$Snake$None = {$: 'None'};
 var author$project$Snake$controls = function (input) {
 	switch (input.$) {
 		case 'InputUp':
-			return author$project$Snake$Look(author$project$PixelEngine$Grid$Direction$Up);
+			return elm$core$Maybe$Just(
+				author$project$Snake$Look(author$project$Grid$Direction$Up));
 		case 'InputDown':
-			return author$project$Snake$Look(author$project$PixelEngine$Grid$Direction$Down);
+			return elm$core$Maybe$Just(
+				author$project$Snake$Look(author$project$Grid$Direction$Down));
 		case 'InputLeft':
-			return author$project$Snake$Look(author$project$PixelEngine$Grid$Direction$Left);
+			return elm$core$Maybe$Just(
+				author$project$Snake$Look(author$project$Grid$Direction$Left));
 		case 'InputRight':
-			return author$project$Snake$Look(author$project$PixelEngine$Grid$Direction$Right);
+			return elm$core$Maybe$Just(
+				author$project$Snake$Look(author$project$Grid$Direction$Right));
 		default:
-			return author$project$Snake$None;
+			return elm$core$Maybe$Nothing;
 	}
 };
-var author$project$Snake$boardSize = 4;
-var author$project$PixelEngine$Grid$Grid = function (a) {
+var author$project$Snake$boardSize = 6;
+var author$project$Grid$Grid = function (a) {
 	return {$: 'Grid', a: a};
 };
-var author$project$PixelEngine$Grid$empty = function (_n0) {
+var author$project$Grid$empty = function (_n0) {
 	var rows = _n0.rows;
 	var columns = _n0.columns;
-	return author$project$PixelEngine$Grid$Grid(
+	return author$project$Grid$Grid(
 		{columns: columns, dict: elm$core$Dict$empty, rows: rows});
-};
-var author$project$PixelEngine$Grid$mapDict = F2(
-	function (fun, _n0) {
-		var dict = _n0.a.dict;
-		var rows = _n0.a.rows;
-		var columns = _n0.a.columns;
-		return author$project$PixelEngine$Grid$Grid(
-			{
-				columns: columns,
-				dict: fun(dict),
-				rows: rows
-			});
-	});
-var author$project$PixelEngine$Grid$wrap = F2(
-	function (_n0, _n1) {
-		var rows = _n0.a.rows;
-		var columns = _n0.a.columns;
-		var x = _n1.a;
-		var y = _n1.b;
-		return _Utils_Tuple2(
-			A2(elm$core$Basics$modBy, columns, x),
-			A2(elm$core$Basics$modBy, rows, y));
-	});
-var author$project$PixelEngine$Grid$insert = F3(
-	function (pos, elem, grid) {
-		return A2(
-			author$project$PixelEngine$Grid$mapDict,
-			A2(
-				elm$core$Dict$insert,
-				A2(author$project$PixelEngine$Grid$wrap, grid, pos),
-				elem),
-			grid);
-	});
-var author$project$PixelEngine$Grid$fromList = function (config) {
-	return A2(
-		elm$core$List$foldl,
-		function (_n0) {
-			var pos = _n0.a;
-			var elem = _n0.b;
-			return A2(author$project$PixelEngine$Grid$insert, pos, elem);
-		},
-		author$project$PixelEngine$Grid$empty(config));
 };
 var elm$core$Dict$get = F2(
 	function (targetKey, dict) {
@@ -9604,7 +9652,7 @@ var elm$core$Dict$get = F2(
 			}
 		}
 	});
-var author$project$PixelEngine$Grid$foldl = F3(
+var author$project$Grid$foldl = F3(
 	function (fun, val, _n0) {
 		var dict = _n0.a.dict;
 		var rows = _n0.a.rows;
@@ -9630,29 +9678,83 @@ var author$project$PixelEngine$Grid$foldl = F3(
 			val,
 			A2(elm$core$List$range, 0, columns - 1));
 	});
-var author$project$PixelEngine$Grid$map = F2(
+var author$project$Grid$mapDict = F2(
+	function (fun, _n0) {
+		var dict = _n0.a.dict;
+		var rows = _n0.a.rows;
+		var columns = _n0.a.columns;
+		return author$project$Grid$Grid(
+			{
+				columns: columns,
+				dict: fun(dict),
+				rows: rows
+			});
+	});
+var author$project$Grid$wrap = F2(
+	function (_n0, _n1) {
+		var rows = _n0.a.rows;
+		var columns = _n0.a.columns;
+		var x = _n1.a;
+		var y = _n1.b;
+		return _Utils_Tuple2(
+			A2(elm$core$Basics$modBy, columns, x),
+			A2(elm$core$Basics$modBy, rows, y));
+	});
+var author$project$Grid$insert = F3(
+	function (pos, elem, grid) {
+		return A2(
+			author$project$Grid$mapDict,
+			A2(
+				elm$core$Dict$insert,
+				A2(author$project$Grid$wrap, grid, pos),
+				elem),
+			grid);
+	});
+var author$project$Grid$map = F2(
 	function (fun, grid) {
 		var rows = grid.a.rows;
 		var columns = grid.a.columns;
 		return A3(
-			author$project$PixelEngine$Grid$foldl,
+			author$project$Grid$foldl,
 			F2(
 				function (pos, elem) {
 					var _n0 = A2(fun, pos, elem);
 					if (_n0.$ === 'Just') {
 						var newElem = _n0.a;
-						return A2(author$project$PixelEngine$Grid$insert, pos, newElem);
+						return A2(author$project$Grid$insert, pos, newElem);
 					} else {
 						return elm$core$Basics$identity;
 					}
 				}),
-			author$project$PixelEngine$Grid$empty(
+			author$project$Grid$empty(
 				{columns: columns, rows: rows}),
 			grid);
 	});
-var author$project$PixelEngine$Grid$positions = function (_n0) {
+var author$project$Grid$positions = function (_n0) {
 	var dict = _n0.a.dict;
 	return elm$core$Dict$keys(dict);
+};
+var author$project$Grid$emptyPositions = A2(
+	elm$core$Basics$composeR,
+	author$project$Grid$map(
+		F2(
+			function (_n0, maybeMark) {
+				if (maybeMark.$ === 'Just') {
+					return elm$core$Maybe$Nothing;
+				} else {
+					return elm$core$Maybe$Just(_Utils_Tuple0);
+				}
+			})),
+	author$project$Grid$positions);
+var author$project$Grid$fromList = function (config) {
+	return A2(
+		elm$core$List$foldl,
+		function (_n0) {
+			var pos = _n0.a;
+			var elem = _n0.b;
+			return A2(author$project$Grid$insert, pos, elem);
+		},
+		author$project$Grid$empty(config));
 };
 var author$project$Snake$PlaceChicken = function (a) {
 	return {$: 'PlaceChicken', a: a};
@@ -9879,28 +9981,17 @@ var elm$random$Random$int = F2(
 			});
 	});
 var author$project$Snake$newChicken = function (occupiedSquares) {
-	var board = A2(
-		author$project$PixelEngine$Grid$fromList,
-		{columns: author$project$Snake$boardSize, rows: author$project$Snake$boardSize},
-		A2(
-			elm$core$List$map,
-			function (pos) {
-				return _Utils_Tuple2(pos, _Utils_Tuple0);
-			},
-			occupiedSquares));
 	var emptySquares = elm$core$Array$fromList(
-		author$project$PixelEngine$Grid$positions(
+		author$project$Grid$emptyPositions(
 			A2(
-				author$project$PixelEngine$Grid$map,
-				F2(
-					function (_n0, maybeMark) {
-						if (maybeMark.$ === 'Just') {
-							return elm$core$Maybe$Nothing;
-						} else {
-							return elm$core$Maybe$Just(_Utils_Tuple0);
-						}
-					}),
-				board)));
+				author$project$Grid$fromList,
+				{columns: author$project$Snake$boardSize, rows: author$project$Snake$boardSize},
+				A2(
+					elm$core$List$map,
+					function (pos) {
+						return _Utils_Tuple2(pos, _Utils_Tuple0);
+					},
+					occupiedSquares))));
 	return A2(
 		elm$random$Random$generate,
 		author$project$Snake$PlaceChicken,
@@ -9924,7 +10015,7 @@ var author$project$Snake$init = function (_n0) {
 	var head = snake.a;
 	var body = snake.b;
 	return _Utils_Tuple2(
-		{chicken: elm$core$Maybe$Nothing, direction: author$project$PixelEngine$Grid$Direction$Down, snake: snake},
+		{chicken: elm$core$Maybe$Nothing, direction: author$project$Grid$Direction$Down, snake: snake},
 		author$project$Snake$newChicken(
 			A2(elm$core$List$cons, head, body)));
 };
@@ -10104,13 +10195,13 @@ var author$project$Snake$subscriptions = function (_n0) {
 		second * 1,
 		elm$core$Basics$always(author$project$Snake$Move));
 };
-var author$project$PixelEngine$Grid$Position$add = F2(
+var author$project$Grid$Position$add = F2(
 	function (v, _n0) {
 		var x = _n0.a;
 		var y = _n0.b;
 		return _Utils_Tuple2(x + v.x, y + v.y);
 	});
-var author$project$PixelEngine$Grid$Position$fromDirection = function (direction) {
+var author$project$Grid$Position$fromDirection = function (direction) {
 	switch (direction.$) {
 		case 'Up':
 			return {x: 0, y: -1};
@@ -10143,12 +10234,12 @@ var author$project$Snake$moveSnake = F2(
 	function (direction, _n0) {
 		var pos = _n0.a;
 		var body = _n0.b;
-		var dirVec = author$project$PixelEngine$Grid$Position$fromDirection(direction);
+		var dirVec = author$project$Grid$Position$fromDirection(direction);
 		var head = A3(
 			elm$core$Tuple$mapBoth,
 			elm$core$Basics$modBy(author$project$Snake$boardSize),
 			elm$core$Basics$modBy(author$project$Snake$boardSize),
-			A2(author$project$PixelEngine$Grid$Position$add, dirVec, pos));
+			A2(author$project$Grid$Position$add, dirVec, pos));
 		return _Utils_Tuple2(
 			head,
 			A2(elm$core$List$member, head, body) ? _List_Nil : A2(elm$core$List$cons, pos, body));
@@ -10172,7 +10263,7 @@ var author$project$Snake$update = F2(
 							chicken: elm$core$Maybe$Just(pos)
 						}),
 					elm$core$Platform$Cmd$none);
-			case 'Move':
+			default:
 				var _n1 = A2(author$project$Snake$moveSnake, model.direction, model.snake);
 				var head = _n1.a;
 				var body = _n1.b;
@@ -10203,20 +10294,18 @@ var author$project$Snake$update = F2(
 				} else {
 					return defaultCase;
 				}
-			default:
-				return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 		}
 	});
 var author$project$PixelEngine$Graphics$Data$ImageBackground = function (a) {
 	return {$: 'ImageBackground', a: a};
 };
-var author$project$PixelEngine$Graphics$imageBackground = function (image) {
+var author$project$PixelEngine$imageBackground = function (image) {
 	return author$project$PixelEngine$Graphics$Data$ImageBackground(image);
 };
 var author$project$PixelEngine$Graphics$Data$Area$Tiled = function (a) {
 	return {$: 'Tiled', a: a};
 };
-var author$project$PixelEngine$Graphics$tiledArea = F2(
+var author$project$PixelEngine$tiledArea = F2(
 	function (_n0, content) {
 		var rows = _n0.rows;
 		var tileset = _n0.tileset;
@@ -10224,46 +10313,7 @@ var author$project$PixelEngine$Graphics$tiledArea = F2(
 		return author$project$PixelEngine$Graphics$Data$Area$Tiled(
 			{background: background, content: content, rows: rows, tileset: tileset});
 	});
-var author$project$PixelEngine$Graphics$Data$Transition$Transition = function (a) {
-	return {$: 'Transition', a: a};
-};
-var author$project$PixelEngine$Graphics$Data$Options$new = function (_n0) {
-	var width = _n0.width;
-	var scale = _n0.scale;
-	var transitionSpeedInSec = _n0.transitionSpeedInSec;
-	var animationFPS = _n0.animationFPS;
-	return author$project$PixelEngine$Graphics$Data$Options$Options(
-		{
-			animationFPS: animationFPS,
-			controllerOptions: elm$core$Maybe$Nothing,
-			scale: scale,
-			transition: author$project$PixelEngine$Graphics$Data$Transition$Transition(
-				{
-					name: '',
-					transitionList: _List_fromArray(
-						[
-							_Utils_Tuple2(0, '')
-						])
-				}),
-			transitionFrom: _List_Nil,
-			transitionSpeedInSec: transitionSpeedInSec,
-			width: width
-		});
-};
-var author$project$PixelEngine$Graphics$Options$fromWidth = function (width) {
-	return author$project$PixelEngine$Graphics$Data$Options$new(
-		{animationFPS: 1, scale: 1, transitionSpeedInSec: 0.2, width: width});
-};
-var author$project$PixelEngine$Graphics$Data$Options$withTransitionSpeed = F2(
-	function (transitionSpeed, _n0) {
-		var o = _n0.a;
-		return author$project$PixelEngine$Graphics$Data$Options$Options(
-			_Utils_update(
-				o,
-				{transitionSpeedInSec: transitionSpeed}));
-	});
-var author$project$PixelEngine$Graphics$Options$withTransitionSpeed = author$project$PixelEngine$Graphics$Data$Options$withTransitionSpeed;
-var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
+var author$project$PixelEngine$Tile$fromPosition = function (_n0) {
 	var left = _n0.a;
 	var top = _n0.b;
 	return {
@@ -10272,9 +10322,10 @@ var author$project$PixelEngine$Graphics$Tile$tile = function (_n0) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
-var author$project$Snake$chickenTile = author$project$PixelEngine$Graphics$Tile$tile(
+var author$project$Snake$chickenTile = author$project$PixelEngine$Tile$fromPosition(
 	_Utils_Tuple2(3, 0));
-var author$project$PixelEngine$Graphics$Tile$movable = F2(
+var author$project$Snake$tileSize = 32;
+var author$project$PixelEngine$Tile$movable = F2(
 	function (id, t) {
 		return _Utils_update(
 			t,
@@ -10283,10 +10334,10 @@ var author$project$PixelEngine$Graphics$Tile$movable = F2(
 					_Utils_Tuple2(id, true))
 			});
 	});
-var author$project$Snake$snakeBodyTile = author$project$PixelEngine$Graphics$Tile$tile(
+var author$project$Snake$snakeBodyTile = author$project$PixelEngine$Tile$fromPosition(
 	_Utils_Tuple2(3, 1));
 var author$project$Snake$snakeHeadTile = function (direction) {
-	return author$project$PixelEngine$Graphics$Tile$tile(
+	return author$project$PixelEngine$Tile$fromPosition(
 		function () {
 			switch (direction.$) {
 				case 'Down':
@@ -10311,7 +10362,7 @@ var author$project$Snake$viewSnake = F2(
 			_Utils_Tuple2(
 				_Utils_Tuple2(headX + 1, headY + 1),
 				A2(
-					author$project$PixelEngine$Graphics$Tile$movable,
+					author$project$PixelEngine$Tile$movable,
 					'head',
 					author$project$Snake$snakeHeadTile(direction))),
 			A2(
@@ -10323,57 +10374,68 @@ var author$project$Snake$viewSnake = F2(
 						return _Utils_Tuple2(
 							_Utils_Tuple2(x + 1, y + 1),
 							A2(
-								author$project$PixelEngine$Graphics$Tile$movable,
+								author$project$PixelEngine$Tile$movable,
 								elm$core$String$fromInt(i),
 								author$project$Snake$snakeBodyTile));
 					}),
 				body));
 	});
-var author$project$Snake$view = function (_n0) {
+var author$project$Snake$width = (author$project$Snake$boardSize + 2) * author$project$Snake$tileSize;
+var author$project$Snake$areas = function (_n0) {
 	var snake = _n0.snake;
 	var direction = _n0.direction;
 	var chicken = _n0.chicken;
-	var tileSize = 32;
-	var tileset = {source: 'tileset.png', spriteHeight: tileSize, spriteWidth: tileSize};
-	var width = (author$project$Snake$boardSize + 2) * tileSize;
-	var background = author$project$PixelEngine$Graphics$imageBackground(
-		{height: width, source: 'background.png', width: width});
+	return _List_fromArray(
+		[
+			A2(
+			author$project$PixelEngine$tiledArea,
+			{
+				background: author$project$PixelEngine$imageBackground(
+					{height: author$project$Snake$width, source: 'background.png', width: author$project$Snake$width}),
+				rows: author$project$Snake$boardSize + 2,
+				tileset: {source: 'tileset.png', spriteHeight: author$project$Snake$tileSize, spriteWidth: author$project$Snake$tileSize}
+			},
+			elm$core$List$concat(
+				_List_fromArray(
+					[
+						A2(author$project$Snake$viewSnake, direction, snake),
+						function () {
+						if (chicken.$ === 'Just') {
+							var _n2 = chicken.a;
+							var x = _n2.a;
+							var y = _n2.b;
+							return _List_fromArray(
+								[
+									_Utils_Tuple2(
+									_Utils_Tuple2(x + 1, y + 1),
+									author$project$Snake$chickenTile)
+								]);
+						} else {
+							return _List_Nil;
+						}
+					}()
+					])))
+		]);
+};
+var author$project$PixelEngine$Graphics$Data$Options$withMovementSpeed = F2(
+	function (movementSpeed, _n0) {
+		var o = _n0.a;
+		return author$project$PixelEngine$Graphics$Data$Options$Options(
+			_Utils_update(
+				o,
+				{movementSpeedInSec: movementSpeed}));
+	});
+var author$project$PixelEngine$Options$withMovementSpeed = author$project$PixelEngine$Graphics$Data$Options$withMovementSpeed;
+var author$project$Snake$options = A2(author$project$PixelEngine$Options$withMovementSpeed, 0.8, author$project$PixelEngine$Options$default);
+var author$project$Snake$view = function (model) {
 	return {
-		body: _List_fromArray(
-			[
-				A2(
-				author$project$PixelEngine$Graphics$tiledArea,
-				{background: background, rows: author$project$Snake$boardSize + 2, tileset: tileset},
-				elm$core$List$concat(
-					_List_fromArray(
-						[
-							A2(author$project$Snake$viewSnake, direction, snake),
-							function () {
-							if (chicken.$ === 'Just') {
-								var _n2 = chicken.a;
-								var x = _n2.a;
-								var y = _n2.b;
-								return _List_fromArray(
-									[
-										_Utils_Tuple2(
-										_Utils_Tuple2(x + 1, y + 1),
-										author$project$Snake$chickenTile)
-									]);
-							} else {
-								return _List_Nil;
-							}
-						}()
-						])))
-			]),
-		options: A2(
-			author$project$PixelEngine$Graphics$Options$withTransitionSpeed,
-			0.8,
-			author$project$PixelEngine$Graphics$Options$fromWidth(width)),
+		body: author$project$Snake$areas(model),
+		options: elm$core$Maybe$Just(author$project$Snake$options),
 		title: 'Snake'
 	};
 };
 var author$project$Snake$main = author$project$PixelEngine$game(
-	{controls: author$project$Snake$controls, init: author$project$Snake$init, subscriptions: author$project$Snake$subscriptions, update: author$project$Snake$update, view: author$project$Snake$view});
+	{controls: author$project$Snake$controls, init: author$project$Snake$init, subscriptions: author$project$Snake$subscriptions, update: author$project$Snake$update, view: author$project$Snake$view, width: author$project$Snake$width});
 _Platform_export({'Snake':{'init':author$project$Snake$main(
 	elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
 

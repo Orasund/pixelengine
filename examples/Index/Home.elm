@@ -14,33 +14,33 @@ import PixelEngine.Tile exposing (Tileset)
 
 card : String -> Element msg
 card name =
-    Card.simple <|
-        Element.column
-            [ Element.width <| Element.px 350
-            , Element.height <| Element.px 400
-            , Element.spacing 20
-            , Element.centerX
-            ]
-        <|
-            [ Element.row
-                [ Element.width <| Element.fill
-                , Element.spaceEvenly
+    Element.el [ Element.width <| Element.px 350 ] <|
+        Card.simple <|
+            Element.column
+                [ Element.height <| Element.px 400
+                , Element.spacing 20
+                , Element.centerX
                 ]
-                [ Element.text name
-                , Button.buttonLink
-                    []
-                    ("https://github.com/Orasund/pixelengine/blob/master/examples/" ++ name ++ "/Main.elm")
-                    "Source"
+            <|
+                [ Element.row
+                    [ Element.width <| Element.fill
+                    , Element.spaceEvenly
+                    ]
+                    [ Element.text name
+                    , Button.buttonLink
+                        []
+                        ("https://github.com/Orasund/pixelengine/blob/master/examples/" ++ name ++ "/Main.elm")
+                        "Source"
+                    ]
+                , Element.link []
+                    { url = "#" ++ name
+                    , label =
+                        Element.image [ Element.width <| Element.fill ]
+                            { src = "https://orasund.github.io/pixelengine/examples/" ++ name ++ "/" ++ "preview.png"
+                            , description = "Preview"
+                            }
+                    }
                 ]
-            , Element.link []
-                { url = "#" ++ name
-                , label =
-                    Element.image [ Element.width <| Element.fill ]
-                        { src = "https://orasund.github.io/pixelengine/examples/" ++ name ++ "/" ++ "preview.png"
-                        , description = "Preview"
-                        }
-                }
-            ]
 
 
 view : { examples : List String, games : List String } -> Element msg
@@ -94,14 +94,20 @@ view { examples, games } =
                         , ( ( width / 2, 32 ), Image.fromTextWithSpacing -3 "with Elm" font )
                         ]
                     ]
-        , Element.column [ Element.spacing 10, Element.centerX ]
+        , Element.column
+            [ Element.spacing 10
+            , Element.centerX
+            ]
             [ Typography.h1 [ Element.centerX ] <| Element.text "Examples"
-            , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
+            , Element.wrappedRow [ Element.centerX, Element.spacing 10, Element.width <| Element.px <| (350 * 3) + 30 ]
                 (examples |> List.map card)
             ]
-        , Element.column [ Element.spacing 10, Element.centerX ]
+        , Element.column
+            [ Element.spacing 10
+            , Element.centerX
+            ]
             [ Typography.h1 [ Element.centerX ] <| Element.text "Games"
-            , Element.wrappedRow [ Element.centerX, Element.spacing 10 ]
+            , Element.wrappedRow [ Element.centerX, Element.spacing 10, Element.width <| Element.px <| (350 * 3) + 30 ]
                 (games |> List.map card)
             ]
         ]

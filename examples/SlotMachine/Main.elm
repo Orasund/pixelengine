@@ -261,14 +261,14 @@ viewCards model =
 We want to define an offset, that will be added to every location.
 
 -}
-offset : Vector
-offset =
-    { x = 50, y = 84 }
-
-
 size : Float
 size =
-    200
+    128
+
+
+offset : Vector
+offset =
+    { x = (128 - 112) / 2 + 8, y = (128 - 48) / 2 + 8 }
 
 
 options : Options Msg

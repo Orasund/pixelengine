@@ -10,9 +10,11 @@ import Index.ExampleWithCode as ExampleWithCode
 import Index.Home as Home
 import Url exposing (Url)
 
+
 examplesWithCode : List String
 examplesWithCode =
-    [ "TicTacToe", "SlotMachine", "Snake" ]
+    [ "TicTacToe", "SlotMachine", "Snake", "SpaceInvaders" ]
+
 
 examplesWithoutCode : List String
 examplesWithoutCode =
