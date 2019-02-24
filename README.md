@@ -56,8 +56,6 @@ So I desided to try something different and to use HTML and CSS instead of WebGL
 
 ## Upcoming Features
   * **Console** - It would be great if all games written with this engine would have a common way how the interface looks like. I am mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few different GUIs and Startscreen.
-  * **GameBasics** - While writing the example games i noticed that there are a lot of nessesary types that are very specificly for games. My aim is to specify a basic set of tools that can get rid of a lot of code.
-  * **Controls Rewrite** - I made the mistake of offering a `InputNone` instead of using something like `Maybe Input`. This is totally unnessery.
   * **MultipleTiles** - Similar to `MultipleImages` but for Tiles.
   * **Modular Transitions** - For now I do not expect this will ever be done, just because its a very complex problem.
   * **Particles** - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?

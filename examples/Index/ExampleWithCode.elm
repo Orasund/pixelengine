@@ -4,7 +4,6 @@ import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Framework.Typography as Typography
 import Html
 import Html.Attributes as Attributes
 import Index.Example as Example
@@ -38,7 +37,7 @@ markdown block =
 sectionParser : Parser ParsedType
 sectionParser =
     Parser.succeed Section
-        |. Parser.token "\n\n{--"
+        |. Parser.token "\n\n\n{--"
         |. Parser.chompWhile ((==) '-')
         |= Parser.variable
             { start = always True
@@ -46,22 +45,20 @@ sectionParser =
             , reserved = Set.empty
             }
         |. Parser.chompWhile ((==) '-')
-        |. Parser.token "}\n"
+        |. Parser.token "}"
 
 
 codeParser : Parser ParsedType
 codeParser =
-    Parser.succeed ()
+    Parser.succeed Code
         |. Parser.chompWhile (\char -> char == '\n' || char == '\u{000D}' || char == '\t')
-        |. Parser.chompUntilEndOr "\n\n{-"
-        |> Parser.getChompedString
-        |> Parser.map Code
+        |= (Parser.chompUntilEndOr "\n\n\n{-" |> Parser.getChompedString)
 
 
 commentParser : Parser ParsedType
 commentParser =
     Parser.succeed Comment
-        |. Parser.token "\n\n{-|"
+        |. Parser.token "\n\n\n{-|"
         |= (Parser.chompUntil "-}" |> Parser.getChompedString)
         |. Parser.token "-}\n"
         |. Parser.chompWhile (\char -> char == '\n' || char == '\u{000D}' || char == '\t')

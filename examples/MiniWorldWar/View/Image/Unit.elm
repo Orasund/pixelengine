@@ -3,7 +3,7 @@ module MiniWorldWar.View.Image.Unit exposing (unitImage)
 import MiniWorldWar.Data.Board exposing (Unit)
 import MiniWorldWar.Data.Color as Color exposing (Color(..))
 import PixelEngine.Image as Image exposing (Image)
-import PixelEngine.Tile as Tile exposing (Tile)
+import PixelEngine.Tile as Tile
 
 
 unusedMarkerImage : Color -> Image msg

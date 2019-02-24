@@ -1,14 +1,14 @@
 module DigDigBoom.View.Tutorial exposing (view)
 
-import DigDigBoom.Cell as Cell exposing (Cell(..), EnemyType(..), ItemType(..), SolidType(..))
-import DigDigBoom.Player as Player exposing (PlayerData)
+import DigDigBoom.Cell exposing (Cell(..), EnemyType(..), ItemType(..), SolidType(..))
+import DigDigBoom.Player exposing (PlayerData)
 import DigDigBoom.View.Screen as Screen
 import DigDigBoom.View.Tile as TileView
 import DigDigBoom.View.Transition as Transition
 import Grid exposing (Grid)
 import Grid.Position exposing (Position)
 import PixelEngine exposing (Area)
-import PixelEngine.Options as Options exposing (Options)
+import PixelEngine.Options exposing (Options)
 import PixelEngine.Tile exposing (Tile)
 
 

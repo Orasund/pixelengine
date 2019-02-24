@@ -232,6 +232,12 @@ width =
     toFloat <| 5 * tileSize
 
 
+{-|
+
+
+# Areas
+
+-}
 areas : Model -> List (Area Msg)
 areas { grid } =
     [ PixelEngine.tiledArea

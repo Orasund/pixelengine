@@ -261,55 +261,57 @@ viewCards model =
 We want to define an offset, that will be added to every location.
 
 -}
-size : Float
-size =
-    128
-
-
 offset : Vector
 offset =
     { x = (128 - 112) / 2 + 8, y = (128 - 48) / 2 + 8 }
 
 
-options : Options Msg
-options =
-    Options.default
-        |> Options.withAnimationFPS 8
-
-
 {-|
 
 
-# Viewing the Model
+# Areas
 
 -}
-view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
-view model =
-    { title = "Slot Machine"
-    , options = Just options
-    , body =
-        [ PixelEngine.imageArea
-            { height = size
-            , background =
-                PixelEngine.colorBackground <|
-                    Color.rgb255 222 238 214
-            }
-            (List.concat
-                [ [ ( ( -8, -8 ) |> Location.add offset, backgroundImage )
-                  , ( ( 3 * 32, 8 ) |> Location.add offset, resetButtonImage )
-                  , ( ( 0, 35 ) |> Location.add offset, text "SLOT-MACHINE" )
-                  ]
-                , viewCards model
-                ]
-            )
-        ]
-    }
+size : Float
+size =
+    128
+
+
+areas : Model -> List (Area Msg)
+areas model =
+    [ PixelEngine.imageArea
+        { height = size
+        , background =
+            PixelEngine.colorBackground <|
+                Color.rgb255 222 238 214
+        }
+        (List.concat
+            [ [ ( ( -8, -8 ) |> Location.add offset, backgroundImage )
+              , ( ( 3 * 32, 8 ) |> Location.add offset, resetButtonImage )
+              , ( ( 0, 35 ) |> Location.add offset, text "SLOT-MACHINE" )
+              ]
+            , viewCards model
+            ]
+        )
+    ]
 
 
 
 {------------------------
-   MAIN
+   CONFIGURATION
 ------------------------}
+
+
+view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view model =
+    { title = "Slot Machine"
+    , options =
+        Just
+            (Options.default
+                |> Options.withAnimationFPS 8
+            )
+    , body = areas model
+    }
 
 
 main : PixelEngine () Model Msg

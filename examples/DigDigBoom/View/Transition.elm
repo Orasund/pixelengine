@@ -1,7 +1,7 @@
 module DigDigBoom.View.Transition exposing (death, nextLevel)
 
 import PixelEngine exposing (Area)
-import PixelEngine.Options as Options exposing (Options, Transition)
+import PixelEngine.Options as Options exposing (Options)
 
 
 nextLevel : List (Area msg) -> (Options msg -> Options msg)

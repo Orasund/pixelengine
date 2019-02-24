@@ -16318,26 +16318,28 @@ var elm$parser$Parser$Advanced$chompUntilEndOr = function (str) {
 		});
 };
 var elm$parser$Parser$chompUntilEndOr = elm$parser$Parser$Advanced$chompUntilEndOr;
+var elm$parser$Parser$Advanced$keeper = F2(
+	function (parseFunc, parseArg) {
+		return A3(elm$parser$Parser$Advanced$map2, elm$core$Basics$apL, parseFunc, parseArg);
+	});
+var elm$parser$Parser$keeper = elm$parser$Parser$Advanced$keeper;
 var author$project$Index$ExampleWithCode$codeParser = A2(
-	elm$parser$Parser$map,
-	author$project$Index$ExampleWithCode$Code,
+	elm$parser$Parser$keeper,
+	A2(
+		elm$parser$Parser$ignorer,
+		elm$parser$Parser$succeed(author$project$Index$ExampleWithCode$Code),
+		elm$parser$Parser$chompWhile(
+			function (_char) {
+				return _Utils_eq(
+					_char,
+					_Utils_chr('\n')) || (_Utils_eq(
+					_char,
+					_Utils_chr('\u000d')) || _Utils_eq(
+					_char,
+					_Utils_chr('\t')));
+			})),
 	elm$parser$Parser$getChompedString(
-		A2(
-			elm$parser$Parser$ignorer,
-			A2(
-				elm$parser$Parser$ignorer,
-				elm$parser$Parser$succeed(_Utils_Tuple0),
-				elm$parser$Parser$chompWhile(
-					function (_char) {
-						return _Utils_eq(
-							_char,
-							_Utils_chr('\n')) || (_Utils_eq(
-							_char,
-							_Utils_chr('\u000d')) || _Utils_eq(
-							_char,
-							_Utils_chr('\t')));
-					})),
-			elm$parser$Parser$chompUntilEndOr('\n\n{-'))));
+		elm$parser$Parser$chompUntilEndOr('\n\n\n{-')));
 var author$project$Index$ExampleWithCode$Comment = function (a) {
 	return {$: 'Comment', a: a};
 };
@@ -16381,11 +16383,6 @@ var elm$parser$Parser$chompUntil = function (str) {
 	return elm$parser$Parser$Advanced$chompUntil(
 		elm$parser$Parser$toToken(str));
 };
-var elm$parser$Parser$Advanced$keeper = F2(
-	function (parseFunc, parseArg) {
-		return A3(elm$parser$Parser$Advanced$map2, elm$core$Basics$apL, parseFunc, parseArg);
-	});
-var elm$parser$Parser$keeper = elm$parser$Parser$Advanced$keeper;
 var elm$parser$Parser$token = function (str) {
 	return elm$parser$Parser$Advanced$token(
 		elm$parser$Parser$toToken(str));
@@ -16395,7 +16392,7 @@ var author$project$Index$ExampleWithCode$commentParser = A2(
 	A2(
 		elm$parser$Parser$ignorer,
 		elm$parser$Parser$succeed(author$project$Index$ExampleWithCode$Comment),
-		elm$parser$Parser$token('\n\n{-|')),
+		elm$parser$Parser$token('\n\n\n{-|')),
 	A2(
 		elm$parser$Parser$ignorer,
 		A2(
@@ -16491,7 +16488,7 @@ var author$project$Index$ExampleWithCode$sectionParser = A2(
 		A2(
 			elm$parser$Parser$ignorer,
 			elm$parser$Parser$succeed(author$project$Index$ExampleWithCode$Section),
-			elm$parser$Parser$token('\n\n{--')),
+			elm$parser$Parser$token('\n\n\n{--')),
 		elm$parser$Parser$chompWhile(
 			elm$core$Basics$eq(
 				_Utils_chr('-')))),
@@ -16509,7 +16506,7 @@ var author$project$Index$ExampleWithCode$sectionParser = A2(
 			elm$parser$Parser$chompWhile(
 				elm$core$Basics$eq(
 					_Utils_chr('-')))),
-		elm$parser$Parser$token('}\n')));
+		elm$parser$Parser$token('}')));
 var author$project$Index$ExampleWithCode$multipleHelp = function (list) {
 	return elm$parser$Parser$oneOf(
 		_List_fromArray(
@@ -20586,6 +20583,17 @@ var author$project$PixelEngine$imageArea = F2(
 		return author$project$PixelEngine$Graphics$Data$Area$Images(
 			{background: background, content: content, height: height});
 	});
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputA = {$: 'AbstractInputA'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputB = {$: 'AbstractInputB'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputDown = {$: 'AbstractInputDown'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputLeft = {$: 'AbstractInputLeft'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputRight = {$: 'AbstractInputRight'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputUp = {$: 'AbstractInputUp'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputX = {$: 'AbstractInputX'};
+var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputY = {$: 'AbstractInputY'};
+var elm$core$Basics$sqrt = _Basics_sqrt;
+var rtfeldman$elm_css$Css$Structure$Compatible = {$: 'Compatible'};
+var rtfeldman$elm_css$Css$absolute = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'absolute'};
 var rtfeldman$elm_css$Css$Preprocess$AppendProperty = function (a) {
 	return {$: 'AppendProperty', a: a};
 };
@@ -20593,26 +20601,38 @@ var rtfeldman$elm_css$Css$property = F2(
 	function (key, value) {
 		return rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
 	});
+var rtfeldman$elm_css$Css$backgroundColor = function (c) {
+	return A2(rtfeldman$elm_css$Css$property, 'background-color', c.value);
+};
 var rtfeldman$elm_css$Css$prop1 = F2(
 	function (key, arg) {
 		return A2(rtfeldman$elm_css$Css$property, key, arg.value);
 	});
-var rtfeldman$elm_css$Css$backgroundImage = rtfeldman$elm_css$Css$prop1('background-image');
-var rtfeldman$elm_css$Css$backgroundRepeat = rtfeldman$elm_css$Css$prop1('background-repeat');
-var rtfeldman$elm_css$Css$prop2 = F3(
-	function (key, argA, argB) {
-		return A2(
-			rtfeldman$elm_css$Css$property,
-			key,
-			A2(
-				elm$core$String$join,
-				' ',
-				_List_fromArray(
-					[argA.value, argB.value])));
-	});
-var rtfeldman$elm_css$Css$backgroundSize2 = rtfeldman$elm_css$Css$prop2('background-size');
+var rtfeldman$elm_css$Css$borderRadius = rtfeldman$elm_css$Css$prop1('border-radius');
+var rtfeldman$elm_css$Css$borderStyle = rtfeldman$elm_css$Css$prop1('border-style');
+var rtfeldman$elm_css$Css$center = rtfeldman$elm_css$Css$prop1('center');
+var rtfeldman$elm_css$Css$display = rtfeldman$elm_css$Css$prop1('display');
+var rtfeldman$elm_css$Css$fontFamily = rtfeldman$elm_css$Css$prop1('font-family');
+var rtfeldman$elm_css$Css$fontSize = rtfeldman$elm_css$Css$prop1('font-size');
+var rtfeldman$elm_css$Css$height = rtfeldman$elm_css$Css$prop1('height');
+var rtfeldman$elm_css$Css$left = rtfeldman$elm_css$Css$prop1('left');
+var rtfeldman$elm_css$Css$none = {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, display: rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, keyframes: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: rtfeldman$elm_css$Css$Structure$Compatible, none: rtfeldman$elm_css$Css$Structure$Compatible, outline: rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, resize: rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: rtfeldman$elm_css$Css$Structure$Compatible, textTransform: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, transform: rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
+var rtfeldman$elm_css$Css$UnitlessFloat = {$: 'UnitlessFloat'};
+var rtfeldman$elm_css$Css$num = function (val) {
+	return {
+		lengthOrNumber: rtfeldman$elm_css$Css$Structure$Compatible,
+		lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible,
+		number: rtfeldman$elm_css$Css$Structure$Compatible,
+		numberOrInfinite: rtfeldman$elm_css$Css$Structure$Compatible,
+		numericValue: val,
+		unitLabel: '',
+		units: rtfeldman$elm_css$Css$UnitlessFloat,
+		value: elm$core$String$fromFloat(val)
+	};
+};
+var rtfeldman$elm_css$Css$opacity = rtfeldman$elm_css$Css$prop1('opacity');
+var rtfeldman$elm_css$Css$position = rtfeldman$elm_css$Css$prop1('position');
 var rtfeldman$elm_css$Css$PxUnits = {$: 'PxUnits'};
-var rtfeldman$elm_css$Css$Structure$Compatible = {$: 'Compatible'};
 var rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
 	function (units, unitLabel, numericValue) {
 		return {
@@ -20638,61 +20658,120 @@ var rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
 		};
 	});
 var rtfeldman$elm_css$Css$px = A2(rtfeldman$elm_css$Css$Internal$lengthConverter, rtfeldman$elm_css$Css$PxUnits, 'px');
-var rtfeldman$elm_css$Css$repeat = {backgroundRepeat: rtfeldman$elm_css$Css$Structure$Compatible, backgroundRepeatShorthand: rtfeldman$elm_css$Css$Structure$Compatible, value: 'repeat'};
-var rtfeldman$elm_css$Css$url = function (urlValue) {
-	return {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, value: 'url(' + (urlValue + ')')};
-};
-var author$project$PixelEngine$Graphics$Abstract$cssBackgroundImage = F3(
-	function (scale, image, _n0) {
-		var width = _n0.width;
-		var height = _n0.height;
-		return _List_fromArray(
-			[
-				rtfeldman$elm_css$Css$backgroundImage(
-				rtfeldman$elm_css$Css$url(image)),
-				rtfeldman$elm_css$Css$backgroundRepeat(rtfeldman$elm_css$Css$repeat),
-				A2(
-				rtfeldman$elm_css$Css$backgroundSize2,
-				rtfeldman$elm_css$Css$px(width * scale),
-				rtfeldman$elm_css$Css$px(height * scale)),
-				A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated')
-			]);
+var rtfeldman$elm_css$Css$cssFunction = F2(
+	function (funcName, args) {
+		return funcName + ('(' + (A2(elm$core$String$join, ', ', args) + ')'));
 	});
-var avh4$elm_color$Color$toCssString = function (_n0) {
-	var r = _n0.a;
-	var g = _n0.b;
-	var b = _n0.c;
-	var a = _n0.d;
-	var roundTo = function (x) {
-		return elm$core$Basics$round(x * 1000) / 1000;
-	};
-	var pct = function (x) {
-		return elm$core$Basics$round(x * 10000) / 100;
-	};
-	return elm$core$String$concat(
-		_List_fromArray(
-			[
-				'rgba(',
-				elm$core$String$fromFloat(
-				pct(r)),
-				'%,',
-				elm$core$String$fromFloat(
-				pct(g)),
-				'%,',
-				elm$core$String$fromFloat(
-				pct(b)),
-				'%,',
-				elm$core$String$fromFloat(
-				roundTo(a)),
-				')'
-			]));
+var rtfeldman$elm_css$Css$rgb = F3(
+	function (r, g, b) {
+		return {
+			alpha: 1,
+			blue: b,
+			color: rtfeldman$elm_css$Css$Structure$Compatible,
+			green: g,
+			red: r,
+			value: A2(
+				rtfeldman$elm_css$Css$cssFunction,
+				'rgb',
+				A2(
+					elm$core$List$map,
+					elm$core$String$fromInt,
+					_List_fromArray(
+						[r, g, b])))
+		};
+	});
+var rtfeldman$elm_css$Css$right = rtfeldman$elm_css$Css$prop1('right');
+var rtfeldman$elm_css$Css$sansSerif = {fontFamily: rtfeldman$elm_css$Css$Structure$Compatible, value: 'sans-serif'};
+var rtfeldman$elm_css$Css$Internal$property = F2(
+	function (key, value) {
+		return rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
+	});
+var rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
+	return {$: 'ApplyStyles', a: a};
 };
-var rtfeldman$elm_css$Css$auto = {alignItemsOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, flexBasis: rtfeldman$elm_css$Css$Structure$Compatible, intOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, justifyContentOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAutoOrCoverOrContain: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, overflow: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, tableLayout: rtfeldman$elm_css$Css$Structure$Compatible, textRendering: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, value: 'auto'};
-var rtfeldman$elm_css$Css$height = rtfeldman$elm_css$Css$prop1('height');
-var rtfeldman$elm_css$Css$margin = rtfeldman$elm_css$Css$prop1('margin');
-var rtfeldman$elm_css$Css$position = rtfeldman$elm_css$Css$prop1('position');
-var rtfeldman$elm_css$Css$relative = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'relative'};
+var rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
+	function (functionName, desiredKey, style) {
+		getOverloadedProperty:
+		while (true) {
+			switch (style.$) {
+				case 'AppendProperty':
+					var str = style.a;
+					var key = A2(
+						elm$core$Maybe$withDefault,
+						'',
+						elm$core$List$head(
+							A2(elm$core$String$split, ':', str)));
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
+				case 'ExtendSelector':
+					var selector = style.a;
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
+				case 'NestSnippet':
+					var combinator = style.a;
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
+				case 'WithPseudoElement':
+					var pseudoElement = style.a;
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
+				case 'WithMedia':
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
+				case 'WithKeyframes':
+					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
+				default:
+					if (!style.a.b) {
+						return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
+					} else {
+						if (!style.a.b.b) {
+							var _n1 = style.a;
+							var only = _n1.a;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = only;
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						} else {
+							var _n2 = style.a;
+							var first = _n2.a;
+							var rest = _n2.b;
+							var $temp$functionName = functionName,
+								$temp$desiredKey = desiredKey,
+								$temp$style = rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
+							functionName = $temp$functionName;
+							desiredKey = $temp$desiredKey;
+							style = $temp$style;
+							continue getOverloadedProperty;
+						}
+					}
+			}
+		}
+	});
+var rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
+var rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3(rtfeldman$elm_css$Css$Internal$lengthConverter, rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
+var rtfeldman$elm_css$Css$textAlign = function (fn) {
+	return A3(
+		rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
+		'textAlign',
+		'text-align',
+		fn(rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
+};
+var rtfeldman$elm_css$Css$top = rtfeldman$elm_css$Css$prop1('top');
 var rtfeldman$elm_css$Css$width = rtfeldman$elm_css$Css$prop1('width');
+var rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
+	function (a, b, c) {
+		return {$: 'Node', a: a, b: b, c: c};
+	});
+var rtfeldman$elm_css$VirtualDom$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$Node;
+var rtfeldman$elm_css$Html$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$node;
+var rtfeldman$elm_css$Html$Styled$button = rtfeldman$elm_css$Html$Styled$node('button');
+var rtfeldman$elm_css$Html$Styled$div = rtfeldman$elm_css$Html$Styled$node('div');
+var rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
+	return {$: 'Unstyled', a: a};
+};
+var rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
+	return rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
+		elm$virtual_dom$VirtualDom$text(str));
+};
+var rtfeldman$elm_css$Html$Styled$text = rtfeldman$elm_css$VirtualDom$Styled$text;
 var elm$virtual_dom$VirtualDom$property = F2(
 	function (key, value) {
 		return A2(
@@ -22343,7 +22422,320 @@ var rtfeldman$elm_css$Html$Styled$Internal$css = function (styles) {
 	return A3(rtfeldman$elm_css$VirtualDom$Styled$Attribute, classProperty, styles, classname);
 };
 var rtfeldman$elm_css$Html$Styled$Attributes$css = rtfeldman$elm_css$Html$Styled$Internal$css;
-var author$project$PixelEngine$Graphics$Abstract$cssArea = F3(
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var rtfeldman$elm_css$VirtualDom$Styled$on = F2(
+	function (eventName, handler) {
+		return A3(
+			rtfeldman$elm_css$VirtualDom$Styled$Attribute,
+			A2(elm$virtual_dom$VirtualDom$on, eventName, handler),
+			_List_Nil,
+			'');
+	});
+var rtfeldman$elm_css$Html$Styled$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			rtfeldman$elm_css$VirtualDom$Styled$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
+	return A2(
+		rtfeldman$elm_css$Html$Styled$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
+var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) {
+	var windowSize = _n0.windowSize;
+	var controls = _n0.controls;
+	var diameter = windowSize.height / 4;
+	var circle = F4(
+		function (_char, input, size, listOfCss) {
+			var _n1 = controls(input);
+			if (_n1.$ === 'Just') {
+				var msg = _n1.a;
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					A2(
+						elm$core$List$append,
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Attributes$css(
+								A2(
+									elm$core$List$append,
+									listOfCss,
+									_List_fromArray(
+										[
+											rtfeldman$elm_css$Css$width(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$height(
+											rtfeldman$elm_css$Css$px(size)),
+											rtfeldman$elm_css$Css$borderRadius(
+											rtfeldman$elm_css$Css$px(size / 2)),
+											rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
+											rtfeldman$elm_css$Css$backgroundColor(
+											A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
+											rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
+											rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
+											rtfeldman$elm_css$Css$fontSize(
+											rtfeldman$elm_css$Css$px(size * 0.9)),
+											rtfeldman$elm_css$Css$opacity(
+											rtfeldman$elm_css$Css$num(0.5))
+										])))
+							]),
+						_List_fromArray(
+							[
+								rtfeldman$elm_css$Html$Styled$Events$onClick(msg)
+							])),
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$text(_char)
+						]));
+			} else {
+				return A2(
+					rtfeldman$elm_css$Html$Styled$button,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Html$Styled$Attributes$css(
+							_List_fromArray(
+								[
+									rtfeldman$elm_css$Css$display(rtfeldman$elm_css$Css$none)
+								]))
+						]),
+					_List_Nil);
+			}
+		});
+	return _List_fromArray(
+		[
+			A2(
+			rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(0)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(0))
+						]))
+				]),
+			_List_fromArray(
+				[
+					A4(
+					circle,
+					'◀',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputLeft,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(0))
+						])),
+					A4(
+					circle,
+					'▶',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputRight,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(
+								diameter + (elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
+						])),
+					A4(
+					circle,
+					'▲',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputUp,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 1.0) - ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						])),
+					A4(
+					circle,
+					'▼',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputDown,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 2.0) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$left(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						]))
+				])),
+			A2(
+			rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					rtfeldman$elm_css$Html$Styled$Attributes$css(
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(0)),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(0))
+						]))
+				]),
+			_List_fromArray(
+				[
+					A4(
+					circle,
+					'A',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputA,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(0))
+						])),
+					A4(
+					circle,
+					'X',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputX,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(diameter * 1.5)),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(
+								diameter + (elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
+						])),
+					A4(
+					circle,
+					'Y',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputY,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 1.0) - ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						])),
+					A4(
+					circle,
+					'B',
+					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputB,
+					diameter,
+					_List_fromArray(
+						[
+							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
+							rtfeldman$elm_css$Css$top(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 2.0) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
+							rtfeldman$elm_css$Css$right(
+							rtfeldman$elm_css$Css$px(
+								(diameter * 0.5) + ((elm$core$Basics$sqrt(
+									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
+						]))
+				]))
+		]);
+};
+var rtfeldman$elm_css$Css$backgroundImage = rtfeldman$elm_css$Css$prop1('background-image');
+var rtfeldman$elm_css$Css$backgroundRepeat = rtfeldman$elm_css$Css$prop1('background-repeat');
+var rtfeldman$elm_css$Css$prop2 = F3(
+	function (key, argA, argB) {
+		return A2(
+			rtfeldman$elm_css$Css$property,
+			key,
+			A2(
+				elm$core$String$join,
+				' ',
+				_List_fromArray(
+					[argA.value, argB.value])));
+	});
+var rtfeldman$elm_css$Css$backgroundSize2 = rtfeldman$elm_css$Css$prop2('background-size');
+var rtfeldman$elm_css$Css$repeat = {backgroundRepeat: rtfeldman$elm_css$Css$Structure$Compatible, backgroundRepeatShorthand: rtfeldman$elm_css$Css$Structure$Compatible, value: 'repeat'};
+var rtfeldman$elm_css$Css$url = function (urlValue) {
+	return {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, value: 'url(' + (urlValue + ')')};
+};
+var author$project$PixelEngine$Graphics$View$Area$cssBackgroundImage = F3(
+	function (scale, image, _n0) {
+		var width = _n0.width;
+		var height = _n0.height;
+		return _List_fromArray(
+			[
+				rtfeldman$elm_css$Css$backgroundImage(
+				rtfeldman$elm_css$Css$url(image)),
+				rtfeldman$elm_css$Css$backgroundRepeat(rtfeldman$elm_css$Css$repeat),
+				A2(
+				rtfeldman$elm_css$Css$backgroundSize2,
+				rtfeldman$elm_css$Css$px(width * scale),
+				rtfeldman$elm_css$Css$px(height * scale)),
+				A2(rtfeldman$elm_css$Css$property, 'image-rendering', 'pixelated')
+			]);
+	});
+var avh4$elm_color$Color$toCssString = function (_n0) {
+	var r = _n0.a;
+	var g = _n0.b;
+	var b = _n0.c;
+	var a = _n0.d;
+	var roundTo = function (x) {
+		return elm$core$Basics$round(x * 1000) / 1000;
+	};
+	var pct = function (x) {
+		return elm$core$Basics$round(x * 10000) / 100;
+	};
+	return elm$core$String$concat(
+		_List_fromArray(
+			[
+				'rgba(',
+				elm$core$String$fromFloat(
+				pct(r)),
+				'%,',
+				elm$core$String$fromFloat(
+				pct(g)),
+				'%,',
+				elm$core$String$fromFloat(
+				pct(b)),
+				'%,',
+				elm$core$String$fromFloat(
+				roundTo(a)),
+				')'
+			]));
+};
+var rtfeldman$elm_css$Css$auto = {alignItemsOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, flexBasis: rtfeldman$elm_css$Css$Structure$Compatible, intOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, justifyContentOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAuto: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrAutoOrCoverOrContain: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, overflow: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, tableLayout: rtfeldman$elm_css$Css$Structure$Compatible, textRendering: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, value: 'auto'};
+var rtfeldman$elm_css$Css$margin = rtfeldman$elm_css$Css$prop1('margin');
+var rtfeldman$elm_css$Css$relative = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'relative'};
+var author$project$PixelEngine$Graphics$View$Area$cssArea = F3(
 	function (scale, background, _n0) {
 		var width = _n0.width;
 		var height = _n0.height;
@@ -22377,26 +22769,20 @@ var author$project$PixelEngine$Graphics$Abstract$cssArea = F3(
 						} else {
 							var imageBackground = background.a;
 							return A3(
-								author$project$PixelEngine$Graphics$Abstract$cssBackgroundImage,
+								author$project$PixelEngine$Graphics$View$Area$cssBackgroundImage,
 								scale,
 								imageBackground.source,
 								{height: imageBackground.height, width: imageBackground.width});
 						}
 					}())));
 	});
-var author$project$PixelEngine$Graphics$Abstract$pairMap = F2(
+var author$project$PixelEngine$Graphics$View$Area$pairMap = F2(
 	function (fun, _n0) {
 		var a = _n0.a;
 		var b = _n0.b;
 		return _Utils_Tuple2(
 			fun(a),
 			fun(b));
-	});
-var rtfeldman$elm_css$Css$absolute = {position: rtfeldman$elm_css$Css$Structure$Compatible, value: 'absolute'};
-var rtfeldman$elm_css$Css$left = rtfeldman$elm_css$Css$prop1('left');
-var rtfeldman$elm_css$Css$cssFunction = F2(
-	function (funcName, args) {
-		return funcName + ('(' + (A2(elm$core$String$join, ', ', args) + ')'));
 	});
 var rtfeldman$elm_css$Css$scale2 = F2(
 	function (x, y) {
@@ -22412,7 +22798,6 @@ var rtfeldman$elm_css$Css$scale2 = F2(
 						[x, y])))
 		};
 	});
-var rtfeldman$elm_css$Css$top = rtfeldman$elm_css$Css$prop1('top');
 var rtfeldman$elm_css$Css$valuesOrNone = function (list) {
 	return elm$core$List$isEmpty(list) ? {value: 'none'} : {
 		value: A2(
@@ -22435,12 +22820,6 @@ var rtfeldman$elm_css$Css$transform = function (only) {
 		_List_fromArray(
 			[only]));
 };
-var rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
-	function (a, b, c) {
-		return {$: 'Node', a: a, b: b, c: c};
-	});
-var rtfeldman$elm_css$VirtualDom$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$Node;
-var rtfeldman$elm_css$Html$Styled$node = rtfeldman$elm_css$VirtualDom$Styled$node;
 var rtfeldman$elm_css$Html$Styled$img = rtfeldman$elm_css$Html$Styled$node('img');
 var rtfeldman$elm_css$VirtualDom$Styled$property = F2(
 	function (key, value) {
@@ -22487,71 +22866,6 @@ var author$project$PixelEngine$Graphics$View$Element$displayImage = F2(
 				]),
 			_List_Nil);
 	});
-var rtfeldman$elm_css$Css$Internal$property = F2(
-	function (key, value) {
-		return rtfeldman$elm_css$Css$Preprocess$AppendProperty(key + (':' + value));
-	});
-var rtfeldman$elm_css$Css$Preprocess$ApplyStyles = function (a) {
-	return {$: 'ApplyStyles', a: a};
-};
-var rtfeldman$elm_css$Css$Internal$getOverloadedProperty = F3(
-	function (functionName, desiredKey, style) {
-		getOverloadedProperty:
-		while (true) {
-			switch (style.$) {
-				case 'AppendProperty':
-					var str = style.a;
-					var key = A2(
-						elm$core$Maybe$withDefault,
-						'',
-						elm$core$List$head(
-							A2(elm$core$String$split, ':', str)));
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, key);
-				case 'ExtendSelector':
-					var selector = style.a;
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-selector'));
-				case 'NestSnippet':
-					var combinator = style.a;
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-combinator'));
-				case 'WithPseudoElement':
-					var pseudoElement = style.a;
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-pseudo-element setter'));
-				case 'WithMedia':
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-media-query'));
-				case 'WithKeyframes':
-					return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-inapplicable-Style-for-keyframes'));
-				default:
-					if (!style.a.b) {
-						return A2(rtfeldman$elm_css$Css$Internal$property, desiredKey, 'elm-css-error-cannot-apply-' + (functionName + '-with-empty-Style'));
-					} else {
-						if (!style.a.b.b) {
-							var _n1 = style.a;
-							var only = _n1.a;
-							var $temp$functionName = functionName,
-								$temp$desiredKey = desiredKey,
-								$temp$style = only;
-							functionName = $temp$functionName;
-							desiredKey = $temp$desiredKey;
-							style = $temp$style;
-							continue getOverloadedProperty;
-						} else {
-							var _n2 = style.a;
-							var first = _n2.a;
-							var rest = _n2.b;
-							var $temp$functionName = functionName,
-								$temp$desiredKey = desiredKey,
-								$temp$style = rtfeldman$elm_css$Css$Preprocess$ApplyStyles(rest);
-							functionName = $temp$functionName;
-							desiredKey = $temp$desiredKey;
-							style = $temp$style;
-							continue getOverloadedProperty;
-						}
-					}
-			}
-		}
-	});
-var rtfeldman$elm_css$Css$Internal$IncompatibleUnits = {$: 'IncompatibleUnits'};
-var rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty = A3(rtfeldman$elm_css$Css$Internal$lengthConverter, rtfeldman$elm_css$Css$Internal$IncompatibleUnits, '', 0);
 var rtfeldman$elm_css$Css$float = function (fn) {
 	return A3(
 		rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
@@ -22561,8 +22875,6 @@ var rtfeldman$elm_css$Css$float = function (fn) {
 };
 var rtfeldman$elm_css$Css$hidden = {borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, overflow: rtfeldman$elm_css$Css$Structure$Compatible, value: 'hidden', visibility: rtfeldman$elm_css$Css$Structure$Compatible};
 var rtfeldman$elm_css$Css$overflow = rtfeldman$elm_css$Css$prop1('overflow');
-var rtfeldman$elm_css$Css$right = rtfeldman$elm_css$Css$prop1('right');
-var rtfeldman$elm_css$Html$Styled$div = rtfeldman$elm_css$Html$Styled$node('div');
 var author$project$PixelEngine$Graphics$View$Element$displayAnimatedTile = F4(
 	function (pos, _n0, _n1, _n2) {
 		var spriteLeft = _n0.a;
@@ -22842,7 +23154,7 @@ var rtfeldman$elm_css$VirtualDom$Styled$KeyedNode = F3(
 	});
 var rtfeldman$elm_css$VirtualDom$Styled$keyedNode = rtfeldman$elm_css$VirtualDom$Styled$KeyedNode;
 var rtfeldman$elm_css$Html$Styled$Keyed$node = rtfeldman$elm_css$VirtualDom$Styled$keyedNode;
-var author$project$PixelEngine$Graphics$Abstract$renderImageArea = F2(
+var author$project$PixelEngine$Graphics$View$Area$renderImageArea = F2(
 	function (options, _n0) {
 		var scale = options.a.scale;
 		var width = options.a.width;
@@ -22854,7 +23166,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderImageArea = F2(
 			_List_fromArray(
 				[
 					A3(
-					author$project$PixelEngine$Graphics$Abstract$cssArea,
+					author$project$PixelEngine$Graphics$View$Area$cssArea,
 					scale,
 					background,
 					{height: height, width: width})
@@ -22876,7 +23188,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderImageArea = F2(
 					]);
 			}(
 				A2(
-					author$project$PixelEngine$Graphics$Abstract$pairMap,
+					author$project$PixelEngine$Graphics$View$Area$pairMap,
 					elm$core$List$map(
 						author$project$PixelEngine$Graphics$View$Element$view(options)),
 					A2(
@@ -22895,7 +23207,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderImageArea = F2(
 var author$project$PixelEngine$Graphics$Data$Element$TileSource = function (a) {
 	return {$: 'TileSource', a: a};
 };
-var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
+var author$project$PixelEngine$Graphics$View$Area$renderTiledArea = F2(
 	function (options, _n0) {
 		var width = options.a.width;
 		var scale = options.a.scale;
@@ -22911,7 +23223,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
 			_List_fromArray(
 				[
 					A3(
-					author$project$PixelEngine$Graphics$Abstract$cssArea,
+					author$project$PixelEngine$Graphics$View$Area$cssArea,
 					scale,
 					background,
 					{height: tileset.spriteHeight * rows, width: width})
@@ -22933,7 +23245,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
 					]);
 			}(
 				A2(
-					author$project$PixelEngine$Graphics$Abstract$pairMap,
+					author$project$PixelEngine$Graphics$View$Area$pairMap,
 					elm$core$List$map(
 						function (_n2) {
 							var location = _n2.a;
@@ -22972,30 +23284,6 @@ var author$project$PixelEngine$Graphics$Abstract$renderTiledArea = F2(
 								elm$core$Basics$eq(elm$core$Maybe$Nothing))),
 						content))));
 	});
-var rtfeldman$elm_css$Css$backgroundColor = function (c) {
-	return A2(rtfeldman$elm_css$Css$property, 'background-color', c.value);
-};
-var rtfeldman$elm_css$Css$rgb = F3(
-	function (r, g, b) {
-		return {
-			alpha: 1,
-			blue: b,
-			color: rtfeldman$elm_css$Css$Structure$Compatible,
-			green: g,
-			red: r,
-			value: A2(
-				rtfeldman$elm_css$Css$cssFunction,
-				'rgb',
-				A2(
-					elm$core$List$map,
-					elm$core$String$fromInt,
-					_List_fromArray(
-						[r, g, b])))
-		};
-	});
-var rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
-	return {$: 'Unstyled', a: a};
-};
 var rtfeldman$elm_css$VirtualDom$Styled$unstyledNode = rtfeldman$elm_css$VirtualDom$Styled$Unstyled;
 var rtfeldman$elm_css$Css$Global$global = function (snippets) {
 	return rtfeldman$elm_css$VirtualDom$Styled$unstyledNode(
@@ -23016,7 +23304,7 @@ var rtfeldman$elm_css$Css$Global$selector = F2(
 			styles,
 			A2(rtfeldman$elm_css$Css$Structure$CustomSelector, selectorStr, _List_Nil));
 	});
-var author$project$PixelEngine$Graphics$Abstract$renderScreen = F2(
+var author$project$PixelEngine$Graphics$View$Area$view = F2(
 	function (options, listOfArea) {
 		return A2(
 			rtfeldman$elm_css$Html$Styled$div,
@@ -23040,7 +23328,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderScreen = F2(
 								list,
 								_List_fromArray(
 									[
-										A2(author$project$PixelEngine$Graphics$Abstract$renderTiledArea, options, tiledAreaContent)
+										A2(author$project$PixelEngine$Graphics$View$Area$renderTiledArea, options, tiledAreaContent)
 									]));
 						} else {
 							var imageAreaContent = area.a;
@@ -23049,7 +23337,7 @@ var author$project$PixelEngine$Graphics$Abstract$renderScreen = F2(
 								list,
 								_List_fromArray(
 									[
-										A2(author$project$PixelEngine$Graphics$Abstract$renderImageArea, options, imageAreaContent)
+										A2(author$project$PixelEngine$Graphics$View$Area$renderImageArea, options, imageAreaContent)
 									]));
 						}
 					}),
@@ -23069,297 +23357,6 @@ var author$project$PixelEngine$Graphics$Abstract$renderScreen = F2(
 					]),
 				listOfArea));
 	});
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputA = {$: 'AbstractInputA'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputB = {$: 'AbstractInputB'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputDown = {$: 'AbstractInputDown'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputLeft = {$: 'AbstractInputLeft'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputRight = {$: 'AbstractInputRight'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputUp = {$: 'AbstractInputUp'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputX = {$: 'AbstractInputX'};
-var author$project$PixelEngine$Graphics$Data$Controller$AbstractInputY = {$: 'AbstractInputY'};
-var elm$core$Basics$sqrt = _Basics_sqrt;
-var rtfeldman$elm_css$Css$borderRadius = rtfeldman$elm_css$Css$prop1('border-radius');
-var rtfeldman$elm_css$Css$borderStyle = rtfeldman$elm_css$Css$prop1('border-style');
-var rtfeldman$elm_css$Css$center = rtfeldman$elm_css$Css$prop1('center');
-var rtfeldman$elm_css$Css$display = rtfeldman$elm_css$Css$prop1('display');
-var rtfeldman$elm_css$Css$fontFamily = rtfeldman$elm_css$Css$prop1('font-family');
-var rtfeldman$elm_css$Css$fontSize = rtfeldman$elm_css$Css$prop1('font-size');
-var rtfeldman$elm_css$Css$none = {backgroundImage: rtfeldman$elm_css$Css$Structure$Compatible, blockAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, borderStyle: rtfeldman$elm_css$Css$Structure$Compatible, cursor: rtfeldman$elm_css$Css$Structure$Compatible, display: rtfeldman$elm_css$Css$Structure$Compatible, hoverCapability: rtfeldman$elm_css$Css$Structure$Compatible, inlineAxisOverflow: rtfeldman$elm_css$Css$Structure$Compatible, keyframes: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNone: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNoneOrMinMaxDimension: rtfeldman$elm_css$Css$Structure$Compatible, lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible, listStyleType: rtfeldman$elm_css$Css$Structure$Compatible, listStyleTypeOrPositionOrImage: rtfeldman$elm_css$Css$Structure$Compatible, none: rtfeldman$elm_css$Css$Structure$Compatible, outline: rtfeldman$elm_css$Css$Structure$Compatible, pointerDevice: rtfeldman$elm_css$Css$Structure$Compatible, pointerEvents: rtfeldman$elm_css$Css$Structure$Compatible, resize: rtfeldman$elm_css$Css$Structure$Compatible, scriptingSupport: rtfeldman$elm_css$Css$Structure$Compatible, textDecorationLine: rtfeldman$elm_css$Css$Structure$Compatible, textTransform: rtfeldman$elm_css$Css$Structure$Compatible, touchAction: rtfeldman$elm_css$Css$Structure$Compatible, transform: rtfeldman$elm_css$Css$Structure$Compatible, updateFrequency: rtfeldman$elm_css$Css$Structure$Compatible, value: 'none'};
-var rtfeldman$elm_css$Css$UnitlessFloat = {$: 'UnitlessFloat'};
-var rtfeldman$elm_css$Css$num = function (val) {
-	return {
-		lengthOrNumber: rtfeldman$elm_css$Css$Structure$Compatible,
-		lengthOrNumberOrAutoOrNoneOrContent: rtfeldman$elm_css$Css$Structure$Compatible,
-		number: rtfeldman$elm_css$Css$Structure$Compatible,
-		numberOrInfinite: rtfeldman$elm_css$Css$Structure$Compatible,
-		numericValue: val,
-		unitLabel: '',
-		units: rtfeldman$elm_css$Css$UnitlessFloat,
-		value: elm$core$String$fromFloat(val)
-	};
-};
-var rtfeldman$elm_css$Css$opacity = rtfeldman$elm_css$Css$prop1('opacity');
-var rtfeldman$elm_css$Css$sansSerif = {fontFamily: rtfeldman$elm_css$Css$Structure$Compatible, value: 'sans-serif'};
-var rtfeldman$elm_css$Css$textAlign = function (fn) {
-	return A3(
-		rtfeldman$elm_css$Css$Internal$getOverloadedProperty,
-		'textAlign',
-		'text-align',
-		fn(rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
-};
-var rtfeldman$elm_css$Html$Styled$button = rtfeldman$elm_css$Html$Styled$node('button');
-var rtfeldman$elm_css$VirtualDom$Styled$text = function (str) {
-	return rtfeldman$elm_css$VirtualDom$Styled$Unstyled(
-		elm$virtual_dom$VirtualDom$text(str));
-};
-var rtfeldman$elm_css$Html$Styled$text = rtfeldman$elm_css$VirtualDom$Styled$text;
-var elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var rtfeldman$elm_css$VirtualDom$Styled$on = F2(
-	function (eventName, handler) {
-		return A3(
-			rtfeldman$elm_css$VirtualDom$Styled$Attribute,
-			A2(elm$virtual_dom$VirtualDom$on, eventName, handler),
-			_List_Nil,
-			'');
-	});
-var rtfeldman$elm_css$Html$Styled$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			rtfeldman$elm_css$VirtualDom$Styled$on,
-			event,
-			elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var rtfeldman$elm_css$Html$Styled$Events$onClick = function (msg) {
-	return A2(
-		rtfeldman$elm_css$Html$Styled$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
-var author$project$PixelEngine$Graphics$Data$Controller$render = function (_n0) {
-	var windowSize = _n0.windowSize;
-	var controls = _n0.controls;
-	var diameter = windowSize.height / 4;
-	var circle = F4(
-		function (_char, input, size, listOfCss) {
-			var _n1 = controls(input);
-			if (_n1.$ === 'Just') {
-				var msg = _n1.a;
-				return A2(
-					rtfeldman$elm_css$Html$Styled$button,
-					A2(
-						elm$core$List$append,
-						_List_fromArray(
-							[
-								rtfeldman$elm_css$Html$Styled$Attributes$css(
-								A2(
-									elm$core$List$append,
-									listOfCss,
-									_List_fromArray(
-										[
-											rtfeldman$elm_css$Css$width(
-											rtfeldman$elm_css$Css$px(size)),
-											rtfeldman$elm_css$Css$height(
-											rtfeldman$elm_css$Css$px(size)),
-											rtfeldman$elm_css$Css$borderRadius(
-											rtfeldman$elm_css$Css$px(size / 2)),
-											rtfeldman$elm_css$Css$borderStyle(rtfeldman$elm_css$Css$none),
-											rtfeldman$elm_css$Css$backgroundColor(
-											A3(rtfeldman$elm_css$Css$rgb, 256, 256, 256)),
-											rtfeldman$elm_css$Css$textAlign(rtfeldman$elm_css$Css$center),
-											rtfeldman$elm_css$Css$fontFamily(rtfeldman$elm_css$Css$sansSerif),
-											rtfeldman$elm_css$Css$fontSize(
-											rtfeldman$elm_css$Css$px(size * 0.9)),
-											rtfeldman$elm_css$Css$opacity(
-											rtfeldman$elm_css$Css$num(0.5))
-										])))
-							]),
-						_List_fromArray(
-							[
-								rtfeldman$elm_css$Html$Styled$Events$onClick(msg)
-							])),
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Html$Styled$text(_char)
-						]));
-			} else {
-				return A2(
-					rtfeldman$elm_css$Html$Styled$button,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Html$Styled$Attributes$css(
-							_List_fromArray(
-								[
-									rtfeldman$elm_css$Css$display(rtfeldman$elm_css$Css$none)
-								]))
-						]),
-					_List_Nil);
-			}
-		});
-	return _List_fromArray(
-		[
-			A2(
-			rtfeldman$elm_css$Html$Styled$div,
-			_List_fromArray(
-				[
-					rtfeldman$elm_css$Html$Styled$Attributes$css(
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(0)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(0))
-						]))
-				]),
-			_List_fromArray(
-				[
-					A4(
-					circle,
-					'◀',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputLeft,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(0))
-						])),
-					A4(
-					circle,
-					'▶',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputRight,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(
-								diameter + (elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
-						])),
-					A4(
-					circle,
-					'▲',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputUp,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 1.0) - ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						])),
-					A4(
-					circle,
-					'▼',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputDown,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 2.0) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$left(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						]))
-				])),
-			A2(
-			rtfeldman$elm_css$Html$Styled$div,
-			_List_fromArray(
-				[
-					rtfeldman$elm_css$Html$Styled$Attributes$css(
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(0)),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(0))
-						]))
-				]),
-			_List_fromArray(
-				[
-					A4(
-					circle,
-					'A',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputA,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(0))
-						])),
-					A4(
-					circle,
-					'X',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputX,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(diameter * 1.5)),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(
-								diameter + (elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter)))
-						])),
-					A4(
-					circle,
-					'Y',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputY,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 1.0) - ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						])),
-					A4(
-					circle,
-					'B',
-					author$project$PixelEngine$Graphics$Data$Controller$AbstractInputB,
-					diameter,
-					_List_fromArray(
-						[
-							rtfeldman$elm_css$Css$position(rtfeldman$elm_css$Css$absolute),
-							rtfeldman$elm_css$Css$top(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 2.0) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2))),
-							rtfeldman$elm_css$Css$right(
-							rtfeldman$elm_css$Css$px(
-								(diameter * 0.5) + ((elm$core$Basics$sqrt(
-									2 * A2(elm$core$Basics$pow, diameter, 2)) - diameter) / 2)))
-						]))
-				]))
-		]);
-};
 var elm$core$List$sum = function (numbers) {
 	return A3(elm$core$List$foldl, elm$core$Basics$add, 0, numbers);
 };
@@ -23488,7 +23485,7 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 								_List_Nil,
 								_List_fromArray(
 									[
-										A2(author$project$PixelEngine$Graphics$Abstract$renderScreen, options, to)
+										A2(author$project$PixelEngine$Graphics$View$Area$view, options, to)
 									])),
 								A2(
 								rtfeldman$elm_css$Html$Styled$div,
@@ -23511,7 +23508,7 @@ var author$project$PixelEngine$Graphics$Abstract$render = F2(
 									]),
 								_List_fromArray(
 									[
-										A2(author$project$PixelEngine$Graphics$Abstract$renderScreen, options, transitionFrom)
+										A2(author$project$PixelEngine$Graphics$View$Area$view, options, transitionFrom)
 									]))
 							]))
 					])));
