@@ -21,7 +21,6 @@ normal msg =
     [ logoImage
     , ( ( tileSize * 2, tileSize * 5 )
       , Image.fromSrc "newGame.png"
-            |> Image.withAttributes
-                [ Image.onClick msg ]
+            |> Image.clickable msg
       )
     ]

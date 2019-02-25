@@ -16,7 +16,7 @@ addUnitButton : msg -> ( Float, Float ) -> List ( ( Float, Float ), Image msg )
 addUnitButton msg pos =
     [ ( pos |> relativeCoord ( 3, 0 )
       , Gui.addUnitButton
-            |> Image.withAttributes [ Image.onClick msg ]
+            |> Image.clickable msg
       )
     ]
 
@@ -25,7 +25,7 @@ swapUnitsButton : msg -> ( Float, Float ) -> List ( ( Float, Float ), Image msg 
 swapUnitsButton msg pos =
     [ ( pos |> relativeCoord ( 3, 1 )
       , Gui.swapUnitsButton
-            |> Image.withAttributes [ Image.onClick msg ]
+            |> Image.clickable msg
       )
     ]
 
@@ -34,7 +34,7 @@ removeUnitButton : msg -> ( Float, Float ) -> List ( ( Float, Float ), Image msg
 removeUnitButton msg pos =
     [ ( pos |> relativeCoord ( 3, 2 )
       , Gui.removeUnitButton
-            |> Image.withAttributes [ Image.onClick msg ]
+            |> Image.clickable msg
       )
     ]
 
@@ -43,9 +43,7 @@ cardButton : ( Int, Int ) -> msg -> ( Float, Float ) -> ( ( Float, Float ), Imag
 cardButton relPos msg pos =
     ( pos |> relativeCoord relPos
     , Gui.cardButton
-        |> Image.withAttributes
-            [ Image.onClick <| msg
-            ]
+        |> Image.clickable msg
     )
 
 
@@ -53,9 +51,7 @@ centerCardButton : ( Int, Int ) -> msg -> ( Float, Float ) -> ( ( Float, Float )
 centerCardButton relPos msg pos =
     ( pos |> relativeCoord relPos
     , Gui.centerCardButton
-        |> Image.withAttributes
-            [ Image.onClick <| msg
-            ]
+        |> Image.clickable msg
     )
 
 
@@ -84,14 +80,14 @@ locationButtons continent centerMsg dirMsg pos =
             [ pos |> centerCardButton ( 1, 1 ) centerMsg
             , pos |> cardButton ( 0, 1 ) (dirMsg Left)
             , pos |> cardButton ( 2, 1 ) (dirMsg Right)
-            , pos |> centerCardButton ( 1, 2 ) (dirMsg Down)
+            , pos |> cardButton ( 1, 2 ) (dirMsg Down)
             ]
 
         NorthAmerica ->
             [ pos |> centerCardButton ( 1, 1 ) centerMsg
             , pos |> cardButton ( 0, 1 ) (dirMsg Left)
             , pos |> cardButton ( 2, 1 ) (dirMsg Right)
-            , pos |> centerCardButton ( 1, 2 ) (dirMsg Down)
+            , pos |> cardButton ( 1, 2 ) (dirMsg Down)
             ]
 
 

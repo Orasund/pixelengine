@@ -471,11 +471,11 @@ drawModel submitMsg { game, select, playerColor, ready } =
             , case game.state of
                 Win _ ->
                     Card.exit
-                        |> Image.withAttributes [ Image.onClick <| RequestSpecific Reset ]
+                        |> Image.clickable (RequestSpecific Reset)
 
                 Draw ->
                     Card.exit
-                        |> Image.withAttributes [ Image.onClick <| RequestSpecific Reset ]
+                        |> Image.clickable (RequestSpecific Reset)
 
                 _ ->
                     if ready then
@@ -483,7 +483,7 @@ drawModel submitMsg { game, select, playerColor, ready } =
 
                     else
                         Card.submit
-                            |> Image.withAttributes [ Image.onClick submitMsg ]
+                            |> Image.clickable submitMsg
             )
           ]
         ]

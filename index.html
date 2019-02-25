@@ -13448,6 +13448,30 @@ var lucamug$style_framework$Framework$Button$buttonLink = F3(
 				url: url
 			});
 	});
+var lucamug$style_framework$Framework$Icon$fullscreen = F2(
+	function (_n0, size) {
+		return mdgriffith$elm_ui$Element$html(
+			A2(
+				elm$svg$Svg$svg,
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$Attributes$style,
+						'height',
+						elm$core$String$fromInt(size) + 'px'),
+						elm$svg$Svg$Attributes$viewBox('0 0 533 533')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$svg$Svg$path,
+						_List_fromArray(
+							[
+								elm$svg$Svg$Attributes$d('M533 0v217l-83-84-100 100-50-50L400 83 317 0h216zM233 350L133 450l84 83H0V317l83 83 100-100 50 50z')
+							]),
+						_List_Nil)
+					])));
+	});
 var lucamug$style_framework$Framework$Modifier$Muted = {$: 'Muted'};
 var mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
 var mdgriffith$elm_ui$Internal$Model$asColumn = mdgriffith$elm_ui$Internal$Model$AsColumn;
@@ -13539,6 +13563,13 @@ var author$project$Index$Example$view = function (name) {
 							[lucamug$style_framework$Framework$Modifier$Muted]),
 						'#',
 						'<| Go Back'),
+						A2(
+						mdgriffith$elm_ui$Element$link,
+						_List_Nil,
+						{
+							label: A2(lucamug$style_framework$Framework$Icon$fullscreen, lucamug$style_framework$Framework$Color$white, 16),
+							url: 'https://orasund.github.io/pixelengine/examples/' + (name + '/index.html')
+						}),
 						A3(lucamug$style_framework$Framework$Button$buttonLink, _List_Nil, 'https://github.com/Orasund/pixelengine/blob/master/examples/' + (name + '/Main.elm'), 'view on Github |>')
 					]))
 			]));
