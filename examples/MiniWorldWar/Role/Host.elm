@@ -68,7 +68,6 @@ update msg (( { game, id, time } as model, seed ) as modelAndSeed) msgMap =
             ( ( { model
                     | game =
                         game
-                            --outdated Game -we wait for a newer one
                             |> Game.addMoveBoard moveBoard
                             |> (\g -> { g | state = BothReady })
                 }

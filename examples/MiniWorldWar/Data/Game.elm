@@ -65,34 +65,25 @@ updateUnit { color, amount } =
                 Just { color = color, amount = amount }
 
 
-applyMove : Continent -> Maybe Move -> UnitBoard -> UnitBoard
-applyMove continent maybeMove board =
-    let
-        color =
-            board
-                |> Board.get continent
-                |> Maybe.map .color
-                |> Maybe.withDefault Blue
-    in
-    board
-        |> (case maybeMove of
-                Just { direction, amount } ->
-                    let
-                        targetContinent =
-                            continent |> Continent.neighbour direction
-                    in
-                    Board.update continent
-                        (updateUnit
-                            { color = color |> Color.flip
-                            , amount = amount
-                            }
-                        )
-                        >> Board.update targetContinent
-                            (updateUnit { color = color, amount = amount })
+applyMove : Continent -> Maybe Move -> Color -> UnitBoard -> UnitBoard
+applyMove continent maybeMove color =
+    case maybeMove of
+        Just { direction, amount } ->
+            let
+                targetContinent =
+                    continent |> Continent.neighbour direction
+            in
+            Board.update continent
+                (updateUnit
+                    { color = color |> Color.flip
+                    , amount = amount
+                    }
+                )
+                >> Board.update targetContinent
+                    (updateUnit { color = color, amount = amount })
 
-                Nothing ->
-                    identity
-           )
+        Nothing ->
+            identity
 
 
 addMoveBoard : MoveBoard -> Game -> Game
@@ -180,7 +171,13 @@ nextRound time ({ moveBoard } as game) =
                     Continent.list
                         |> List.foldl
                             (\continent ->
-                                applyMove continent (moveBoard |> Board.get continent)
+                                applyMove continent
+                                    (moveBoard |> Board.get continent)
+                                    (game.unitBoard
+                                        |> Board.get continent
+                                        |> Maybe.map .color
+                                        |> Maybe.withDefault Blue
+                                    )
                             )
                             game.unitBoard
                         |> applyNewUnits supplyBoard
@@ -250,7 +247,7 @@ gameStateDecoder =
                 "BlueWins" ->
                     Win Blue
 
-                "Redwins" ->
+                "RedWins" ->
                     Win Red
 
                 "Draw" ->
