@@ -6700,7 +6700,7 @@ var author$project$MiniWorldWar$Data$Game$gameStateDecoder = A2(
 				return author$project$MiniWorldWar$Data$Game$BothReady;
 			case 'BlueWins':
 				return author$project$MiniWorldWar$Data$Game$Win(author$project$MiniWorldWar$Data$Color$Blue);
-			case 'Redwins':
+			case 'RedWins':
 				return author$project$MiniWorldWar$Data$Game$Win(author$project$MiniWorldWar$Data$Color$Red);
 			case 'Draw':
 				return author$project$MiniWorldWar$Data$Game$Draw;
@@ -7849,6 +7849,31 @@ var author$project$MiniWorldWar$Data$Game$updateUnit = function (_n0) {
 		}
 	};
 };
+var author$project$MiniWorldWar$Data$Game$applyMove = F3(
+	function (continent, maybeMove, color) {
+		if (maybeMove.$ === 'Just') {
+			var direction = maybeMove.a.direction;
+			var amount = maybeMove.a.amount;
+			var targetContinent = A2(author$project$MiniWorldWar$Data$Continent$neighbour, direction, continent);
+			return A2(
+				elm$core$Basics$composeR,
+				A2(
+					author$project$MiniWorldWar$Data$Board$update,
+					continent,
+					author$project$MiniWorldWar$Data$Game$updateUnit(
+						{
+							amount: amount,
+							color: author$project$MiniWorldWar$Data$Color$flip(color)
+						})),
+				A2(
+					author$project$MiniWorldWar$Data$Board$update,
+					targetContinent,
+					author$project$MiniWorldWar$Data$Game$updateUnit(
+						{amount: amount, color: color})));
+		} else {
+			return elm$core$Basics$identity;
+		}
+	});
 var elm$core$Maybe$map = F2(
 	function (f, maybe) {
 		if (maybe.$ === 'Just') {
@@ -7858,42 +7883,6 @@ var elm$core$Maybe$map = F2(
 		} else {
 			return elm$core$Maybe$Nothing;
 		}
-	});
-var author$project$MiniWorldWar$Data$Game$applyMove = F3(
-	function (continent, maybeMove, board) {
-		var color = A2(
-			elm$core$Maybe$withDefault,
-			author$project$MiniWorldWar$Data$Color$Blue,
-			A2(
-				elm$core$Maybe$map,
-				function ($) {
-					return $.color;
-				},
-				A2(author$project$MiniWorldWar$Data$Board$get, continent, board)));
-		return function () {
-			if (maybeMove.$ === 'Just') {
-				var direction = maybeMove.a.direction;
-				var amount = maybeMove.a.amount;
-				var targetContinent = A2(author$project$MiniWorldWar$Data$Continent$neighbour, direction, continent);
-				return A2(
-					elm$core$Basics$composeR,
-					A2(
-						author$project$MiniWorldWar$Data$Board$update,
-						continent,
-						author$project$MiniWorldWar$Data$Game$updateUnit(
-							{
-								amount: amount,
-								color: author$project$MiniWorldWar$Data$Color$flip(color)
-							})),
-					A2(
-						author$project$MiniWorldWar$Data$Board$update,
-						targetContinent,
-						author$project$MiniWorldWar$Data$Game$updateUnit(
-							{amount: amount, color: color})));
-			} else {
-				return elm$core$Basics$identity;
-			}
-		}()(board);
 	});
 var author$project$MiniWorldWar$Data$Game$applyNewUnits = F2(
 	function (newUnitBoard, unitBoard) {
@@ -8097,10 +8086,19 @@ var author$project$MiniWorldWar$Data$Game$nextRound = F2(
 					A3(
 						elm$core$List$foldl,
 						function (continent) {
-							return A2(
+							return A3(
 								author$project$MiniWorldWar$Data$Game$applyMove,
 								continent,
-								A2(author$project$MiniWorldWar$Data$Board$get, continent, moveBoard));
+								A2(author$project$MiniWorldWar$Data$Board$get, continent, moveBoard),
+								A2(
+									elm$core$Maybe$withDefault,
+									author$project$MiniWorldWar$Data$Color$Blue,
+									A2(
+										elm$core$Maybe$map,
+										function ($) {
+											return $.color;
+										},
+										A2(author$project$MiniWorldWar$Data$Board$get, continent, game.unitBoard))));
 						},
 						game.unitBoard,
 						author$project$MiniWorldWar$Data$Continent$list));
