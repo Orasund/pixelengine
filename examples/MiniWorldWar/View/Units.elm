@@ -25,7 +25,7 @@ drawCenter continent config toMsg color unit =
     in
     ( ( x + tileSize / 2, y + tileSize * 1 )
     , Unit.unitImage unit config
-        |> (if color == unit.color then
+        |> (if color == unit.color && unit.amount > 1 then
                 Image.clickable (toMsg continent)
 
             else

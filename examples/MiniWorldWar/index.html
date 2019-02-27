@@ -9132,7 +9132,7 @@ var author$project$MiniWorldWar$View$Units$drawCenter = F5(
 		var y = _n0.b;
 		return _Utils_Tuple2(
 			_Utils_Tuple2(x + (author$project$MiniWorldWar$View$tileSize / 2), y + (author$project$MiniWorldWar$View$tileSize * 1)),
-			(_Utils_eq(color, unit.color) ? author$project$PixelEngine$Image$clickable(
+			((_Utils_eq(color, unit.color) && (unit.amount > 1)) ? author$project$PixelEngine$Image$clickable(
 				toMsg(continent)) : elm$core$Basics$identity)(
 				A2(author$project$MiniWorldWar$View$Image$Unit$unitImage, unit, config)));
 	});
