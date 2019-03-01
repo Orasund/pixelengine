@@ -9125,14 +9125,16 @@ var author$project$MiniWorldWar$View$Image$Unit$unitImage = F2(
 						{source: 'units.png', spriteHeight: 16, spriteWidth: 16}))
 				]));
 	});
+var elm$core$Basics$not = _Basics_not;
 var author$project$MiniWorldWar$View$Units$drawCenter = F5(
 	function (continent, config, toMsg, color, unit) {
+		var used = config.used;
 		var _n0 = author$project$MiniWorldWar$View$continentToPosition(continent);
 		var x = _n0.a;
 		var y = _n0.b;
 		return _Utils_Tuple2(
 			_Utils_Tuple2(x + (author$project$MiniWorldWar$View$tileSize / 2), y + (author$project$MiniWorldWar$View$tileSize * 1)),
-			((_Utils_eq(color, unit.color) && (unit.amount > 1)) ? author$project$PixelEngine$Image$clickable(
+			((_Utils_eq(color, unit.color) && (!used)) ? author$project$PixelEngine$Image$clickable(
 				toMsg(continent)) : elm$core$Basics$identity)(
 				A2(author$project$MiniWorldWar$View$Image$Unit$unitImage, unit, config)));
 	});
@@ -11392,7 +11394,6 @@ var rtfeldman$elm_css$Css$Preprocess$Resolve$toStructure = function (_n0) {
 		A2(elm$core$List$concatMap, rtfeldman$elm_css$Css$Preprocess$unwrapSnippet, snippets));
 	return {charset: charset, declarations: declarations, imports: imports, namespaces: namespaces};
 };
-var elm$core$Basics$not = _Basics_not;
 var elm$core$List$any = F2(
 	function (isOkay, list) {
 		any:

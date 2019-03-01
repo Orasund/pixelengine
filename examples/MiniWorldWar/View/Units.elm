@@ -18,14 +18,14 @@ drawUnit pos unit =
 
 
 drawCenter : Continent -> { used : Bool } -> (Continent -> msg) -> Color -> Unit -> ( ( Float, Float ), Image msg )
-drawCenter continent config toMsg color unit =
+drawCenter continent ({ used } as config) toMsg color unit =
     let
         ( x, y ) =
             continent |> continentToPosition
     in
     ( ( x + tileSize / 2, y + tileSize * 1 )
     , Unit.unitImage unit config
-        |> (if color == unit.color && unit.amount > 1 then
+        |> (if color == unit.color && not used then
                 Image.clickable (toMsg continent)
 
             else
