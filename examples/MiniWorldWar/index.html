@@ -6928,7 +6928,7 @@ var elm$time$Time$posixToMillis = function (_n0) {
 };
 var author$project$MiniWorldWar$Request$Client$endGame = F2(
 	function (currentId, now) {
-		var oneHour = (1000 * 60) * 60;
+		var oneMinute = 1000 * 60;
 		var response = function (result) {
 			if (result.$ === 'Ok') {
 				var dict = result.a;
@@ -6940,7 +6940,7 @@ var author$project$MiniWorldWar$Request$Client$endGame = F2(
 								function (id, _n1) {
 									var lastUpdated = _n1.lastUpdated;
 									return (!_Utils_eq(id, currentId)) && (_Utils_cmp(
-										lastUpdated + oneHour,
+										lastUpdated + oneMinute,
 										elm$time$Time$posixToMillis(now)) < 1);
 								}),
 							dict)));
@@ -9208,7 +9208,9 @@ var author$project$MiniWorldWar$View$Units$view = F6(
 									A5(
 									author$project$MiniWorldWar$View$Units$drawCenter,
 									continent,
-									{used: true},
+									{
+										used: !_Utils_eq(playerColor, color)
+									},
 									msg,
 									playerColor,
 									{amount: amount, color: color}),

@@ -102,7 +102,7 @@ view playerColor { ready } state msg maybeUnit maybeMove =
                                 [ { amount = amount, color = color }
                                     |> drawCenter
                                         continent
-                                        { used = True }
+                                        { used = playerColor /= color }
                                         msg
                                         playerColor
                                 , { amount = move.amount, color = color }

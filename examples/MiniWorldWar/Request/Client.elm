@@ -162,9 +162,9 @@ updateGameTable table =
 endGame : String -> Posix -> Cmd ClientResponse
 endGame currentId now =
     let
-        oneHour : Int
-        oneHour =
-            1000 * 60 * 60
+        oneMinute : Int
+        oneMinute =
+            1000 * 60
 
         response : Result Error RunningGameTable -> ClientResponse
         response result =
@@ -176,7 +176,7 @@ endGame currentId now =
                                 |> Dict.filter
                                     (\id { lastUpdated } ->
                                         (id /= currentId)
-                                            && (lastUpdated + oneHour <= (now |> Time.posixToMillis))
+                                            && (lastUpdated + oneMinute <= (now |> Time.posixToMillis))
                                     )
                             )
 
