@@ -66,7 +66,7 @@ httpDelete record =
 httpPut : { url : String, body : Body, expect : Expect msg } -> Cmd msg
 httpPut record =
     Http.request
-        { method = "PUT"
+        { method = "POST"--"PUT"
         , headers = []
         , url = record.url
         , body = record.body
