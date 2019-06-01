@@ -2,7 +2,14 @@ module SlotMachine exposing (main)
 
 import Color
 import Location exposing (Location, Vector)
-import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
+import PixelEngine
+    exposing
+        ( Area
+        , Background
+        , Input(..)
+        , PixelEngine
+        , gameWithNoControls
+        )
 import PixelEngine.Image as Image exposing (Image)
 import PixelEngine.Options as Options exposing (Options)
 import PixelEngine.Tile as Tile exposing (Tile, tileset)
@@ -302,7 +309,9 @@ areas model =
 ------------------------}
 
 
-view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view :
+    Model
+    -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view model =
     { title = "Slot Machine"
     , options =

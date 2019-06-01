@@ -2,7 +2,14 @@ module TicTacToe exposing (main)
 
 import Grid exposing (Grid)
 import Grid.Position exposing (Position)
-import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
+import PixelEngine
+    exposing
+        ( Area
+        , Background
+        , Input(..)
+        , PixelEngine
+        , gameWithNoControls
+        )
 import PixelEngine.Options as Options exposing (Options)
 import PixelEngine.Tile as Tile exposing (Tile, Tileset)
 
@@ -268,7 +275,9 @@ areas { grid } =
 ------------------------}
 
 
-view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view :
+    Model
+    -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view model =
     { title = "Tic Tac Toe"
     , options = Nothing

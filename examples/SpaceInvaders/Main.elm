@@ -176,7 +176,9 @@ updateEntity board pos maybeEntity =
                             (always <|
                                 Ok <|
                                     Just
-                                        { direction = direction |> Direction.flip
+                                        { direction =
+                                            direction
+                                                |> Direction.flip
                                         , entityType = entityType
                                         }
                             )
@@ -435,7 +437,9 @@ options =
         |> Options.withMovementSpeed 0.8
 
 
-view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view :
+    Model
+    -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view model =
     { title = "Space Invaders"
     , options = Just options

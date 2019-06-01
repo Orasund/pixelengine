@@ -367,7 +367,9 @@ options =
         |> Options.withMovementSpeed 0.8
 
 
-view : Model -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
+view :
+    Model
+    -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
 view model =
     { title = "Snake"
     , options = Just options
