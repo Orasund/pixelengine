@@ -381,7 +381,13 @@ view maybeModel =
             { options = Just options, width = width }
             [ PixelEngine.imageArea
                 { height = height
-                , background = PixelEngine.colorBackground <| Color.rgb255 222 238 214
+                , background =
+                    --PixelEngine.colorBackground <| Color.rgb255 222 238 214
+                    PixelEngine.imageBackground
+                        { source = "background_scaled.png"
+                        , width = width
+                        , height = height
+                        }
                 }
                 (case maybeModel of
                     Just model ->

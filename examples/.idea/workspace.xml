@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="442be014-249a-4e1d-a27c-f322d7232b56" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ElmWorkspace">
+    <elmProjects>
+      <project path="$PROJECT_DIR$/elm.json" />
+    </elmProjects>
+    <settings elmCompilerPath="C:\Users\Edzgou\Documents\GitHub\elm-playground\node_modules\.bin\elm.cmd" elmFormatPath="C:\Users\Edzgou\AppData\Roaming\npm\elm-format.cmd" elmTestPath="C:\Users\Edzgou\AppData\Roaming\npm\elm-test.cmd" isElmFormatOnSaveEnabled="true" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="elm-playground" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/Client.elm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="810">
+              <caret line="193" column="9" selection-start-line="193" selection-start-column="9" selection-end-line="193" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/Guest.elm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2516">
+              <caret line="162" column="23" selection-start-line="162" selection-start-column="23" selection-end-line="162" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/Host.elm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1649">
+              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/WaitingHost.elm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1071">
+              <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MiniWorldWar/View/Units.elm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="e#48#100#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request.elm">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="181">
+              <caret line="61" column="27" lean-forward="true" selection-start-line="61" selection-start-column="27" selection-end-line="61" selection-end-column="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Elm Module" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Entry.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Game.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/View/Header.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/State/Replaying.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/State/Prepairing.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/View/Board.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Main.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Request.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/State/Finished.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/View/Game.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/State/Ready.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Deck.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/State/Playing.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Data.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Automata/Rule.elm" />
+        <option value="$PROJECT_DIR$/src/LittleWorldPuzzler/Data/CellType.elm" />
+        <option value="$PROJECT_DIR$/libs/Jsonstore.elm" />
+        <option value="$PROJECT_DIR$/MiniWorldWar/View/Units.elm" />
+        <option value="$PROJECT_DIR$/MiniWorldWar/Request/Client.elm" />
+        <option value="$PROJECT_DIR$/MiniWorldWar/Request.elm" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-7" />
+    <option name="width" value="1263" />
+    <option name="height" value="1087" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
+      <flattenPackages Scope="false" ProjectPane="false" />
+      <compactDirectories Scope="true" />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="examples" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="elm-playground" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="examples" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="elm-playground" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="MiniWorldWar" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="examples" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="elm-playground" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="MiniWorldWar" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="Request" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="examples" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="elm-playground" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="MiniWorldWar" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="View" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="elm-playground" type="b2602c69:ProjectViewProjectNode" />
+              <item name="elm-playground" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="elm-playground" type="b2602c69:ProjectViewProjectNode" />
+              <item name="elm-playground" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="elm-playground" type="b2602c69:ProjectViewProjectNode" />
+              <item name="elm-playground" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="LittleWorldPuzzler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="elm-playground" type="b2602c69:ProjectViewProjectNode" />
+              <item name="elm-playground" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="LittleWorldPuzzler" type="462c0819:PsiDirectoryNode" />
+              <item name="Data" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551765487463" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../elm-playground" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.General" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Edzgou\Documents\GitHub\pixelEngine\examples\MiniWorldWar" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ELM_TEST_RUN_CONFIGURATION" factoryName="Elm Test configuration factory">
+      <ElmTestRunConfiguration elm-folder="C:\Users\Edzgou\Documents\GitHub\pixelEngine\examples" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="442be014-249a-4e1d-a27c-f322d7232b56" name="Default Changelist" comment="" />
+      <created>1551457523361</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1551457523361</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Version 2.1 Added TrainingMode">
+      <created>1551518602215</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1551518602215</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[🐞] Fixed Bug in MiniWorldWar">
+      <created>1551721359439</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1551721359440</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[🐞] Fixed Bug in MiniWorldWar">
+      <created>1551765490516</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1551765490516</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="0" width="1263" height="1087" extended-state="0" />
+    <layout>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6991614" visible="true" weight="0.21363258" />
+      <window_info id="Image Layers" order="1" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="Favorites" order="5" sideWeight="0.30083856" side_tool="true" weight="0.17373234" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32914045" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32914045" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.12473795" />
+      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" weight="0.32914045" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3018868" />
+      <window_info active="true" anchor="bottom" id="Messages" order="10" visible="true" weight="0.32914045" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Elm" order="4" sideWeight="0.4970484" weight="0.32917705" />
+      <window_info anchor="right" id="Maven" order="5" />
+      <window_info anchor="right" id="Theme Preview" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Structure" order="9" sideWeight="0.5029516" side_tool="true" weight="0.1113882" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.6991614" visible="true" weight="0.07171964" />
+      <window_info id="Image Layers" order="1" />
+      <window_info id="Designer" order="2" />
+      <window_info id="UI Designer" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="Favorites" order="5" sideWeight="0.30083856" side_tool="true" weight="0.17373234" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32914045" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32914045" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.11215933" />
+      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" weight="0.32914045" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3018868" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Elm" order="4" sideWeight="0.4970484" weight="0.32917705" />
+      <window_info anchor="right" id="Maven" order="5" />
+      <window_info anchor="right" id="Theme Preview" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Structure" order="9" sideWeight="0.5029516" side_tool="true" weight="0.1113882" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Version 2.1 Added TrainingMode" />
+    <MESSAGE value="[] Fixed Bug in MiniWorldWar" />
+    <MESSAGE value="[] Fixed Bug in MiniWorldWar" />
+    <option name="LAST_COMMIT_MESSAGE" value="[] Fixed Bug in MiniWorldWar" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Automata.elm" />
+    <entry file="file://$PROJECT_DIR$/elm.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Entry.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Game.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Board.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/View/Header.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/View/Board.elm" />
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Main.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/View/Deck.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/State/Prepairing.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Data.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/State/Ready.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/View/Game.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/State/Replaying.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Data/Deck.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/State/Finished.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/State/Playing.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Automata/Rule.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Request.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/Data/CellType.elm" />
+    <entry file="file://$PROJECT_DIR$/src/LittleWorldPuzzler/State.elm" />
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Role/Guest.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="26" column="14" lean-forward="true" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Role/Client.elm">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Data/Board.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="776">
+          <caret line="268" column="21" selection-start-line="268" selection-start-column="12" selection-end-line="268" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/State.elm">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/Jsonstore.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+          <folding>
+            <element signature="e#57#95#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/Host.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1649">
+          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/Guest.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2516">
+          <caret line="162" column="23" selection-start-line="162" selection-start-column="23" selection-end-line="162" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/Client.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="193" column="9" selection-start-line="193" selection-start-column="9" selection-end-line="193" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/View/Units.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#48#100#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request/WaitingHost.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1071">
+          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MiniWorldWar/Request.elm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="61" column="27" lean-forward="true" selection-start-line="61" selection-start-column="27" selection-end-line="61" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>elm-playground</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
