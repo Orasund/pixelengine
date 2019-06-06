@@ -3,9 +3,8 @@ module MiniWorldWar.Main exposing (main)
 import Action
 import Either exposing (Either(..))
 import Location exposing (Location)
-import MiniWorldWar.Data.Board as Board exposing (Unit)
 import MiniWorldWar.Data.Color exposing (Color(..))
-import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
+import MiniWorldWar.Data.Continent exposing (Continent(..))
 import MiniWorldWar.Data.Direction exposing (Direction(..))
 import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.Request as Request exposing (Response(..))
@@ -21,13 +20,12 @@ import MiniWorldWar.Role.WaitingHost as WaitingHost
 import MiniWorldWar.View as View
 import MiniWorldWar.View.Error as Error
 import MiniWorldWar.View.GameScreen as GameScreenView
-import MiniWorldWar.View.Image.Card as Card
-import MiniWorldWar.View.SelectGui as SelectGuiView
+import MiniWorldWar.View.Image.Card
 import MiniWorldWar.View.Supplys as SupplysView
 import MiniWorldWar.View.TitleScreen as TitleScreenView
-import MiniWorldWar.View.Units as UnitsView
+import MiniWorldWar.View.Units
 import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
-import PixelEngine.Image as Image exposing (Image)
+import PixelEngine.Image exposing (Image)
 import PixelEngine.Options as Options exposing (Options)
 import Time exposing (Posix)
 

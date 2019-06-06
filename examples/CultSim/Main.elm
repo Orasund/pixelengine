@@ -1,7 +1,6 @@
 module CultSim.Main exposing (main)
 
 import Browser exposing (Document, document)
-import Color
 import CultSim.Person as Person exposing (Action(..), Person)
 import Dict exposing (Dict)
 import Html

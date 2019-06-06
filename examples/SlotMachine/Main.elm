@@ -5,7 +5,6 @@ import Location exposing (Location, Vector)
 import PixelEngine
     exposing
         ( Area
-        , Background
         , Input(..)
         , PixelEngine
         , gameWithNoControls

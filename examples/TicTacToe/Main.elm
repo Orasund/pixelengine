@@ -5,13 +5,12 @@ import Grid.Position exposing (Position)
 import PixelEngine
     exposing
         ( Area
-        , Background
         , Input(..)
         , PixelEngine
         , gameWithNoControls
         )
-import PixelEngine.Options as Options exposing (Options)
-import PixelEngine.Tile as Tile exposing (Tile, Tileset)
+import PixelEngine.Options exposing (Options)
+import PixelEngine.Tile as Tile exposing (Tile)
 
 
 

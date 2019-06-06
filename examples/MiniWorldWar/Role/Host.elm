@@ -11,7 +11,11 @@ import Time exposing (Posix)
 
 
 type alias TransitionData =
-    { game : Game, seed : Seed, time : Posix, id : String }
+    { game : Game
+    , seed : Seed
+    , time : Posix
+    , id : String
+    }
 
 
 initHost : TransitionData -> ( HostModel, Cmd (Response HostMsg) )

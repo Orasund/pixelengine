@@ -1,12 +1,12 @@
 module Snake exposing (main)
 
 import Array exposing (Array)
-import Grid as Grid exposing (Grid)
+import Grid as Grid
 import Grid.Direction exposing (Direction(..))
 import Grid.Position as Position exposing (Coord, Position)
-import PixelEngine exposing (Area, Background, Input(..), PixelEngine, game)
+import PixelEngine exposing (Area, Input(..), PixelEngine, game)
 import PixelEngine.Options as Options exposing (Options)
-import PixelEngine.Tile as Tile exposing (Tile, Tileset)
+import PixelEngine.Tile as Tile exposing (Tile)
 import Random
 import Time
 

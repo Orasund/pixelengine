@@ -2,12 +2,11 @@ module MiniWorldWar.Role.Guest exposing (update)
 
 import Action
 import MiniWorldWar.Data.Color exposing (Color(..))
-import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
+import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
-import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
+import MiniWorldWar.Request.Client exposing (ClientMsg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
-import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
-import MiniWorldWar.Role exposing (ClientModel, WaitingHostModel)
+import MiniWorldWar.Request.WaitingHost exposing (WaitingHostMsg(..))
 import Random exposing (Seed)
 import Time exposing (Posix)
 

@@ -1,11 +1,11 @@
 module Spaceinvaders exposing (main)
 
-import Grid.Bordered as Grid exposing (Error, Grid)
+import Grid.Bordered as Grid exposing (Grid)
 import Grid.Direction as Direction exposing (Direction(..))
 import Grid.Position as Position exposing (Coord, Position)
-import PixelEngine exposing (Area, Background, Input(..), PixelEngine, game)
+import PixelEngine exposing (Area, Input(..), PixelEngine, game)
 import PixelEngine.Options as Options exposing (Options)
-import PixelEngine.Tile as Tile exposing (Tile, Tileset)
+import PixelEngine.Tile as Tile exposing (Tile)
 import Random exposing (Generator, Seed)
 import Time
 
@@ -138,7 +138,7 @@ shoot ({ player, board } as state) =
     case
         board
             |> Grid.filter
-                (\( x, y ) { entityType } ->
+                (\( x, _ ) { entityType } ->
                     (entityType == Invader)
                         && (x == playerX)
                 )
