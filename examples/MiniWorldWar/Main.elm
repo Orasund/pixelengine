@@ -1,5 +1,8 @@
 module MiniWorldWar.Main exposing (main)
 
+import Action
+import Either exposing (Either(..))
+import Location exposing (Location)
 import MiniWorldWar.Data.Board as Board exposing (Unit)
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
@@ -17,6 +20,7 @@ import MiniWorldWar.Role.Host as Host
 import MiniWorldWar.Role.WaitingHost as WaitingHost
 import MiniWorldWar.View as View
 import MiniWorldWar.View.Error as Error
+import MiniWorldWar.View.GameScreen as GameScreenView
 import MiniWorldWar.View.Image.Card as Card
 import MiniWorldWar.View.SelectGui as SelectGuiView
 import MiniWorldWar.View.Supplys as SupplysView
@@ -36,21 +40,12 @@ type State
     | FetchingTime
 
 
-type BoardEvent
-    = OpenSelectGui Continent
-    | AddUnit
-    | RemoveUnit
-    | SwapUnits
-    | ResetMove
-    | SetMove Direction
-
-
 type Msg
     = GuestSpecific GuestMsg
     | HostSpecific HostMsg
     | WaitingHostSpecific WaitingHostMsg
     | ClientSpecific ClientMsg
-    | BoardSpecific BoardEvent
+    | BoardSpecific GameScreenView.Msg
     | RequestSpecific (Response Never)
     | Tick Posix
     | None
@@ -103,128 +98,6 @@ init _ =
 ------------------------}
 
 
-updateBoard : BoardEvent -> ClientModel -> ClientModel
-updateBoard msg ({ game, select } as model) =
-    let
-        { unitBoard, moveBoard } =
-            game
-    in
-    case msg of
-        OpenSelectGui continent ->
-            case unitBoard |> Board.get continent of
-                Just { amount } ->
-                    { model
-                        | select =
-                            Just
-                                ( continent
-                                , { remaining = amount - 1
-                                  , selected = 1
-                                  }
-                                )
-                    }
-
-                Nothing ->
-                    model
-
-        AddUnit ->
-            case select of
-                Just ( continent, { selected, remaining } ) ->
-                    if remaining > 1 then
-                        { model
-                            | select =
-                                Just
-                                    ( continent
-                                    , { remaining = remaining - 1
-                                      , selected = selected + 1
-                                      }
-                                    )
-                        }
-
-                    else
-                        model
-
-                Nothing ->
-                    model
-
-        RemoveUnit ->
-            case select of
-                Just ( continent, { selected, remaining } ) ->
-                    if selected > 1 then
-                        { model
-                            | select =
-                                Just
-                                    ( continent
-                                    , { remaining = remaining + 1
-                                      , selected = selected - 1
-                                      }
-                                    )
-                        }
-
-                    else
-                        model
-
-                Nothing ->
-                    model
-
-        SwapUnits ->
-            case select of
-                Just ( continent, { selected, remaining } ) ->
-                    if selected > 0 then
-                        { model
-                            | select =
-                                Just
-                                    ( continent
-                                    , { remaining = selected
-                                      , selected = remaining
-                                      }
-                                    )
-                        }
-
-                    else
-                        model
-
-                Nothing ->
-                    model
-
-        ResetMove ->
-            case select of
-                Just ( continent, _ ) ->
-                    { model
-                        | game =
-                            { game
-                                | moveBoard =
-                                    moveBoard
-                                        |> Board.set continent Nothing
-                            }
-                        , select = Nothing
-                    }
-
-                Nothing ->
-                    model
-
-        SetMove direction ->
-            case select of
-                Just ( continent, { selected } ) ->
-                    { model
-                        | game =
-                            { game
-                                | moveBoard =
-                                    moveBoard
-                                        |> Board.set
-                                            continent
-                                            (Just
-                                                { amount = selected
-                                                , direction = direction
-                                                }
-                                            )
-                            }
-                        , select = Nothing
-                    }
-
-                Nothing ->
-                    model
-
-
 update : Msg -> State -> ( State, Cmd Msg )
 update msg state =
     let
@@ -258,75 +131,65 @@ update msg state =
                 |> Cmd.map RequestSpecific
             )
     in
-    case msg of
-        ClientSpecific clientMsg ->
-            case state of
-                Client model ->
-                    Client.update clientMsg model (responseToMsg ClientSpecific)
-                        |> Tuple.mapFirst Client
+    case ( msg, state ) of
+        ( ClientSpecific clientMsg, Client model ) ->
+            Client.update clientMsg model
+                |> Action.config
+                |> Action.withUpdate Client (responseToMsg ClientSpecific)
+                |> Action.apply
 
-                _ ->
-                    defaultCase
+        ( HostSpecific hostMsg, Host modelAndSeed ) ->
+            Host.update hostMsg modelAndSeed
+                |> Action.config
+                |> Action.withUpdate Host (responseToMsg HostSpecific)
+                |> Action.apply
 
-        HostSpecific hostMsg ->
-            case state of
-                Host modelAndSeed ->
-                    Host.update hostMsg modelAndSeed (responseToMsg HostSpecific)
-                        |> Tuple.mapFirst Host
+        ( WaitingHostSpecific waitingHostMsg, WaitingHost timeAndSeed ) ->
+            WaitingHost.update waitingHostMsg timeAndSeed
+                |> Action.config
+                |> Action.withUpdate WaitingHost (responseToMsg WaitingHostSpecific)
+                |> Action.withTransition Host.initHost Host (responseToMsg HostSpecific)
+                |> Action.apply
 
-                _ ->
-                    defaultCase
+        ( GuestSpecific guestMsg, Guest time ) ->
+            Guest.update guestMsg time
+                |> Action.config
+                |> Action.withUpdate Guest (responseToMsg GuestSpecific)
+                |> Action.withCustomTransition
+                    (\{ id, maybeSeed } ->
+                        case maybeSeed of
+                            Just seed ->
+                                WaitingHost.init
+                                    ( { time = time, id = id }, seed )
+                                    |> Tuple.mapBoth
+                                        WaitingHost
+                                        (Cmd.map <|
+                                            responseToMsg WaitingHostSpecific
+                                        )
 
-        WaitingHostSpecific waitingHostMsg ->
-            case state of
-                WaitingHost timeAndSeed ->
-                    WaitingHost.update
-                        waitingHostMsg
-                        timeAndSeed
-                        WaitingHost
-                        Host
-                        (responseToMsg WaitingHostSpecific)
-                        (responseToMsg HostSpecific)
+                            Nothing ->
+                                Client.init { time = time, id = id }
+                                    |> Tuple.mapBoth
+                                        Client
+                                        (Cmd.map (responseToMsg ClientSpecific))
+                    )
+                |> Action.apply
 
-                _ ->
-                    defaultCase
+        ( BoardSpecific boardMsg, Client ({ ready } as model) ) ->
+            if ready then
+                defaultCase
 
-        GuestSpecific guestMsg ->
-            case state of
-                Guest time ->
-                    Guest.update
-                        guestMsg
-                        time
-                        Guest
-                        WaitingHost
-                        Client
-                        (responseToMsg GuestSpecific)
-                        (responseToMsg WaitingHostSpecific)
-                        (responseToMsg ClientSpecific)
+            else
+                ( Client <| GameScreenView.update boardMsg model, Cmd.none )
 
-                _ ->
-                    defaultCase
+        ( BoardSpecific boardMsg, Host ( { ready } as model, seed ) ) ->
+            if ready then
+                defaultCase
 
-        BoardSpecific boardMsg ->
-            case state of
-                Client ({ ready } as model) ->
-                    if ready then
-                        defaultCase
+            else
+                ( Host <| ( GameScreenView.update boardMsg model, seed ), Cmd.none )
 
-                    else
-                        ( Client <| updateBoard boardMsg model, Cmd.none )
-
-                Host ( { ready } as model, seed ) ->
-                    if ready then
-                        defaultCase
-
-                    else
-                        ( Host <| ( updateBoard boardMsg model, seed ), Cmd.none )
-
-                _ ->
-                    defaultCase
-
-        RequestSpecific requestMsg ->
+        ( RequestSpecific requestMsg, _ ) ->
             case requestMsg of
                 DropOpenGameTable error ->
                     ( state |> Error.log error
@@ -356,7 +219,7 @@ update msg state =
                 Idle ->
                     defaultCase
 
-        Tick time ->
+        ( Tick time, _ ) ->
             case state of
                 Client clientModel ->
                     time
@@ -379,7 +242,7 @@ update msg state =
                 FetchingTime ->
                     ( Guest time, Cmd.none )
 
-        None ->
+        _ ->
             defaultCase
 
 
@@ -419,79 +282,38 @@ subscriptions state =
 ------------------------}
 
 
-drawCard : Continent -> Maybe Unit -> Maybe ( ( Float, Float ), Image msg )
-drawCard continent maybeUnit =
-    maybeUnit
-        |> Maybe.map
-            (\{ color } ->
-                ( View.continentToPosition continent
-                , Card.card continent color
-                )
-            )
-
-
-drawModel : Msg -> ClientModel -> List ( ( Float, Float ), Image Msg )
-drawModel submitMsg { game, select, playerColor, ready } =
-    List.concat
-        [ Continent.list
-            |> List.filterMap
-                (\continent ->
-                    game.unitBoard
-                        |> Board.get continent
-                        |> drawCard continent
-                )
-        , UnitsView.view
-            playerColor
-            { ready = ready }
-            game.state
-            (BoardSpecific << OpenSelectGui)
-            (\continent -> game.unitBoard |> Board.get continent)
-            (\continent -> game.moveBoard |> Board.get continent)
-        , SupplysView.view
-            game.unitBoard
-            game.supplyBoard
-            [ ( [ Europe, Asia, NorthAmerica ], ( View.tileSize * 1 - 4, -8 ) )
-            , ( [ Africa, SouthAmerica ], ( View.tileSize * 1 - 4, View.tileSize * 3 ) )
-            ]
-        , case select of
-            Nothing ->
-                []
-
-            Just ( continent, selectGui ) ->
-                SelectGuiView.view
-                    { addUnit = BoardSpecific AddUnit
-                    , swapUnits = BoardSpecific SwapUnits
-                    , removeUnit = BoardSpecific RemoveUnit
-                    , resetMove = BoardSpecific <| ResetMove
-                    , setMove = BoardSpecific << SetMove
-                    }
-                    continent
-                    selectGui
-        , [ ( ( View.tileSize * 3, View.tileSize * 4 )
-            , case game.state of
-                Win _ ->
-                    Card.exit
-                        |> Image.clickable (RequestSpecific Reset)
-
-                Draw ->
-                    Card.exit
-                        |> Image.clickable (RequestSpecific Reset)
-
-                _ ->
-                    if ready then
-                        Card.watch
-
-                    else
-                        Card.submit
-                            |> Image.clickable submitMsg
-            )
-          ]
-        ]
-
-
 size : Float
 size =
     View.tileSize * 8
+
+
+area : State -> List ( Location, Image Msg )
+area state =
+    case state of
+        Client model ->
+            GameScreenView.view
+                { msgWrapper = BoardSpecific
+                , close = RequestSpecific Reset
+                , submit = ClientSpecific Ready
+                }
+                model
+
+        Host ( model, _ ) ->
+            GameScreenView.view
+                { msgWrapper = BoardSpecific
+                , close = RequestSpecific Reset
+                , submit = HostSpecific Submit
+                }
+                model
+
+        WaitingHost _ ->
+            TitleScreenView.waiting
+
+        Guest _ ->
+            TitleScreenView.normal (GuestSpecific <| FindOpenGame)
+
+        FetchingTime ->
+            TitleScreenView.normal None
 
 
 view : State -> { title : String, options : Maybe (Options Msg), body : List (Area Msg) }
@@ -516,22 +338,8 @@ view state =
                 { height = size
                 , background = background
                 }
-                (case state of
-                    Client model ->
-                        model |> drawModel (ClientSpecific Ready)
-
-                    Host ( model, _ ) ->
-                        model |> drawModel (HostSpecific Submit)
-
-                    WaitingHost _ ->
-                        TitleScreenView.waiting
-
-                    Guest _ ->
-                        TitleScreenView.normal (GuestSpecific <| FindOpenGame)
-
-                    FetchingTime ->
-                        TitleScreenView.normal None
-                )
+              <|
+                area state
             ]
     in
     { title = "Mini World War"

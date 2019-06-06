@@ -1,11 +1,43 @@
-module MiniWorldWar.Role.Host exposing (tick, update)
+module MiniWorldWar.Role.Host exposing (TransitionData, initHost, tick, update)
 
-import MiniWorldWar.Data.Game as Game exposing (GameState(..))
+import Action
+import MiniWorldWar.Data.Color exposing (Color(..))
+import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
 import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
 import MiniWorldWar.Role exposing (HostModel)
-import Random
+import Random exposing (Seed)
 import Time exposing (Posix)
+
+
+type alias TransitionData =
+    { game : Game, seed : Seed, time : Posix, id : String }
+
+
+initHost : TransitionData -> ( HostModel, Cmd (Response HostMsg) )
+initHost { game, seed, time, id } =
+    let
+        ( newGame, newSeed ) =
+            seed
+                |> Random.step
+                    (game |> Game.nextRound time)
+    in
+    ( ( { time = time
+        , id = id
+        , game = newGame
+        , select = Nothing
+        , playerColor = Red
+        , ready = False
+        }
+      , newSeed
+      )
+    , newGame
+        |> HostRequest.submit id
+    )
+
+
+type alias Action =
+    Action.Action HostModel (Response HostMsg) Never Never
 
 
 tick : HostModel -> (Response HostMsg -> msg) -> Posix -> ( HostModel, Cmd msg )
@@ -43,8 +75,8 @@ tick ( { ready, id, game } as model, seed ) msgMap time =
         ( ( { model | time = time }, seed ), Cmd.none )
 
 
-update : HostMsg -> HostModel -> (Response HostMsg -> msg) -> ( HostModel, Cmd msg )
-update msg (( { game, id, time } as model, seed ) as modelAndSeed) msgMap =
+update : HostMsg -> HostModel -> Action
+update msg (( { game, id, time } as model, seed ) as modelAndSeed) =
     case msg of
         Submit ->
             let
@@ -54,30 +86,31 @@ update msg (( { game, id, time } as model, seed ) as modelAndSeed) msgMap =
                         , state = HostReady
                     }
             in
-            ( ( { model
-                    | ready = True
-                    , game = newGame
-                }
-              , seed
-              )
-            , HostRequest.submit id newGame
-                |> Cmd.map msgMap
-            )
+            Action.updating
+                ( ( { model
+                        | ready = True
+                        , game = newGame
+                    }
+                  , seed
+                  )
+                , HostRequest.submit id newGame
+                )
 
         UpdateMoveBoard moveBoard ->
-            ( ( { model
-                    | game =
-                        game
-                            |> Game.addMoveBoard moveBoard
-                            |> (\g -> { g | state = BothReady })
-                }
-              , seed
-              )
-            , Cmd.none
-            )
+            Action.updating
+                ( ( { model
+                        | game =
+                            game
+                                |> Game.addMoveBoard moveBoard
+                                |> (\g -> { g | state = BothReady })
+                    }
+                  , seed
+                  )
+                , Cmd.none
+                )
 
         WaitingForClient ->
-            ( modelAndSeed
-            , HostRequest.waitingForClient id game.lastUpdated
-                |> Cmd.map msgMap
-            )
+            Action.updating
+                ( modelAndSeed
+                , HostRequest.waitingForClient id game.lastUpdated
+                )

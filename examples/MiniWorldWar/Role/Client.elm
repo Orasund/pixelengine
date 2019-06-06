@@ -1,10 +1,40 @@
-module MiniWorldWar.Role.Client exposing (tick, update)
+module MiniWorldWar.Role.Client exposing (init, tick, update)
 
-import MiniWorldWar.Data.Game as Game exposing (GameState(..))
+import Action
+import MiniWorldWar.Data.Color exposing (Color(..))
+import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
 import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
 import MiniWorldWar.Role exposing (ClientModel)
 import Time exposing (Posix)
+
+
+type alias Action =
+    Action.Action ClientModel (Response ClientMsg) Never Never
+
+
+type alias Flags =
+    { time : Posix
+    , id : String
+    }
+
+
+init : Flags -> ( ClientModel, Cmd (Response ClientMsg) )
+init { time, id } =
+    let
+        game : Game
+        game =
+            time |> Time.posixToMillis |> Game.new
+    in
+    ( { game = game
+      , time = time
+      , playerColor = Blue
+      , select = Nothing
+      , ready = True
+      , id = id
+      }
+    , ClientRequest.joinGame id game
+    )
 
 
 tick : ClientModel -> (Response ClientMsg -> msg) -> Posix -> ( ClientModel, Cmd msg )
@@ -23,24 +53,25 @@ tick ({ game, id, ready } as model) msgMap time =
     )
 
 
-update : ClientMsg -> ClientModel -> (Response ClientMsg -> msg) -> ( ClientModel, Cmd msg )
-update msg ({ time, id, game } as model) msgMap =
+update : ClientMsg -> ClientModel -> Action
+update msg ({ time, id, game } as model) =
     case msg of
         WaitingForHost ->
-            ( model
-            , ClientRequest.waitingForHost id game.lastUpdated
-                |> Cmd.map msgMap
-            )
+            Action.updating
+                ( model
+                , ClientRequest.waitingForHost id game.lastUpdated
+                )
 
         UpdateGame ({ moveBoard } as newGame) ->
             case newGame.state of
                 Running ->
-                    ( { model
-                        | ready = False
-                        , game = newGame
-                      }
-                    , Cmd.none
-                    )
+                    Action.updating
+                        ( { model
+                            | ready = False
+                            , game = newGame
+                          }
+                        , Cmd.none
+                        )
 
                 HostReady ->
                     let
@@ -50,43 +81,44 @@ update msg ({ time, id, game } as model) msgMap =
                                 , state = BothReady
                             }
                     in
-                    ( { model
-                        | game =
-                            game
-                                --outdated Game -we wait for a newer one
-                                |> Game.addMoveBoard moveBoard
-                                |> (\g ->
-                                        { g
-                                            | state = BothReady
-                                            , lastUpdated = time |> Time.posixToMillis
-                                        }
-                                   )
-                      }
-                    , ClientRequest.submitMoveBoard newerGame id
-                        |> Cmd.map msgMap
-                    )
+                    Action.updating
+                        ( { model
+                            | game =
+                                game
+                                    --outdated Game -we wait for a newer one
+                                    |> Game.addMoveBoard moveBoard
+                                    |> (\g ->
+                                            { g
+                                                | state = BothReady
+                                                , lastUpdated = time |> Time.posixToMillis
+                                            }
+                                       )
+                          }
+                        , ClientRequest.submitMoveBoard newerGame id
+                        )
 
                 _ ->
-                    ( { model | game = newGame, ready = False }
-                    , ClientRequest.endGame id time
-                        |> Cmd.map msgMap
-                    )
+                    Action.updating
+                        ( { model | game = newGame, ready = False }
+                        , ClientRequest.endGame id time
+                        )
 
         EndGame ->
-            ( model
-            , ClientRequest.endGame id time
-                |> Cmd.map msgMap
-            )
+            Action.updating
+                ( model
+                , ClientRequest.endGame id time
+                )
 
         UpdateGameTable table ->
-            ( model
-            , ClientRequest.updateGameTable table
-                |> Cmd.map msgMap
-            )
+            Action.updating
+                ( model
+                , ClientRequest.updateGameTable table
+                )
 
         Ready ->
-            ( { model
-                | ready = True
-              }
-            , Cmd.none
-            )
+            Action.updating
+                ( { model
+                    | ready = True
+                  }
+                , Cmd.none
+                )

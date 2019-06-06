@@ -1,13 +1,26 @@
-module MiniWorldWar.Role.WaitingHost exposing (tick, update)
+module MiniWorldWar.Role.WaitingHost exposing (init, tick, update)
 
+import Action
 import MiniWorldWar.Data.Color exposing (Color(..))
-import MiniWorldWar.Data.Game as Game exposing (GameState(..))
+import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
 import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
 import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
 import MiniWorldWar.Role exposing (HostModel, WaitingHostModel)
+import MiniWorldWar.Role.Host as Host
 import Random exposing (Seed)
 import Time exposing (Posix)
+
+
+type alias Action =
+    Action.Action WaitingHostModel (Response WaitingHostMsg) Host.TransitionData Never
+
+
+init : WaitingHostModel -> ( WaitingHostModel, Cmd (Response WaitingHostMsg) )
+init (( { id, time }, _ ) as waitingHostModel) =
+    ( waitingHostModel
+    , WaitingHostRequest.hostGame id time
+    )
 
 
 tick : WaitingHostModel -> (Response WaitingHostMsg -> msg) -> Posix -> ( WaitingHostModel, Cmd msg )
@@ -18,40 +31,15 @@ tick ( { id }, seed ) msgMap time =
     )
 
 
-update :
-    WaitingHostMsg
-    -> ( { time : Posix, id : String }, Seed )
-    -> (WaitingHostModel -> state)
-    -> (HostModel -> state)
-    -> (Response WaitingHostMsg -> msg)
-    -> (Response HostMsg -> msg)
-    -> ( state, Cmd msg )
-update msg (( { time, id }, seed ) as waitingHostModel) waitingHostModelMap hostModelMap waitingHostMsgMap hostMsgMap =
+update : WaitingHostMsg -> ( { time : Posix, id : String }, Seed ) -> Action
+update msg (( { time, id }, seed ) as waitingHostModel) =
     case msg of
         WaitForOpponent ->
-            ( waitingHostModelMap waitingHostModel
-            , WaitingHostRequest.checkForOpponent id
-                |> Cmd.map waitingHostMsgMap
-            )
+            Action.updating
+                ( waitingHostModel
+                , WaitingHostRequest.checkForOpponent id
+                )
 
         CreateBoard game ->
-            let
-                ( newGame, newSeed ) =
-                    seed
-                        |> Random.step
-                            (game |> Game.nextRound time)
-            in
-            ( hostModelMap
-                ( { time = time
-                  , id = id
-                  , game = newGame
-                  , select = Nothing
-                  , playerColor = Red
-                  , ready = False
-                  }
-                , newSeed
-                )
-            , newGame
-                |> HostRequest.submit id
-                |> Cmd.map hostMsgMap
-            )
+            Action.transitioning
+                { game = game, seed = seed, time = time, id = id }

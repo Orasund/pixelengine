@@ -1,5 +1,6 @@
 module MiniWorldWar.Role.Guest exposing (update)
 
+import Action
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
@@ -7,76 +8,70 @@ import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
 import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
 import MiniWorldWar.Role exposing (ClientModel, WaitingHostModel)
-import Random
+import Random exposing (Seed)
 import Time exposing (Posix)
+
+
+type alias TransitionData =
+    { id : String
+    , maybeSeed : Maybe Seed
+    }
+
+
+type alias Action =
+    Action.Action Posix (Response GuestMsg) TransitionData Never
 
 
 update :
     GuestMsg
     -> Posix
-    -> (Posix -> state)
-    -> (WaitingHostModel -> state)
-    -> (ClientModel -> state)
-    -> (Response GuestMsg -> msg)
-    -> (Response WaitingHostMsg -> msg)
-    -> (Response ClientMsg -> msg)
-    -> ( state, Cmd msg )
-update msg time guestModelMap waitingHostModelMap clientModelMap guestMsgMap waitingHostMsgMap clientMsgMap =
-    let
-        game : Game
-        game =
-            time |> Time.posixToMillis |> Game.new
-    in
+    -> Action
+update msg time =
+    {- -}
     case msg of
         JoinGame id ->
-            ( clientModelMap
-                { game = game
-                , time = time
-                , id = id
-                , select = Nothing
-                , playerColor = Blue
-                , ready = True
+            Action.transitioning
+                { id = id
+                , maybeSeed = Nothing
                 }
-            , ClientRequest.joinGame id game
-                |> Cmd.map clientMsgMap
-            )
 
         JoinOpenGame id ->
-            ( guestModelMap time
-            , GuestRequest.joinOpenGame id
-                |> Cmd.map guestMsgMap
-            )
+            Action.updating
+                ( time
+                , GuestRequest.joinOpenGame id
+                )
 
         CloseGame id ->
-            ( guestModelMap time
-            , GuestRequest.closeGame id
-                |> Cmd.map guestMsgMap
-            )
+            Action.updating
+                ( time
+                , GuestRequest.closeGame id
+                )
 
         ReopenGame id ->
-            ( guestModelMap time
-            , GuestRequest.reopenGame id
-                |> Cmd.map guestMsgMap
-            )
+            Action.updating
+                ( time
+                , GuestRequest.reopenGame id
+                )
 
         FindOldGame ->
-            ( guestModelMap time
-            , GuestRequest.findOldGame time
-                |> Cmd.map guestMsgMap
-            )
+            Action.updating
+                ( time
+                , GuestRequest.findOldGame time
+                )
 
         CreateNewGame ->
-            ( guestModelMap time
-            , Random.generate
-                (guestMsgMap << Please << HostGame)
-                Random.independentSeed
-            )
+            Action.updating
+                ( time
+                , Random.generate
+                    (Please << HostGame)
+                    Random.independentSeed
+                )
 
         FindOpenGame ->
-            ( guestModelMap time
-            , GuestRequest.findOpenGame time
-                |> Cmd.map guestMsgMap
-            )
+            Action.updating
+                ( time
+                , GuestRequest.findOpenGame time
+                )
 
         HostGame seed ->
             let
@@ -87,12 +82,7 @@ update msg time guestModelMap waitingHostModelMap clientModelMap guestMsgMap wai
                         )
                         seed
             in
-            ( waitingHostModelMap
-                ( { time = time
-                  , id = id
-                  }
-                , newSeed
-                )
-            , WaitingHostRequest.hostGame id time
-                |> Cmd.map waitingHostMsgMap
-            )
+            Action.transitioning
+                { id = id
+                , maybeSeed = Just newSeed
+                }

@@ -1,6 +1,12 @@
 module DigDigBoom.Main exposing (main)
 
-import DigDigBoom.Cell as Cell exposing (Cell(..), EnemyType(..), ItemType(..), SolidType(..))
+import DigDigBoom.Cell as Cell
+    exposing
+        ( Cell(..)
+        , EnemyType(..)
+        , ItemType(..)
+        , SolidType(..)
+        )
 import DigDigBoom.Component.Map as Map exposing (Actor)
 import DigDigBoom.Game as Game
 import DigDigBoom.Player as Player exposing (PlayerData)

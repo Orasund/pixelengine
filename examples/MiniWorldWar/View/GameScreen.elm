@@ -1,4 +1,4 @@
-module MiniWorldWar.View.Board exposing (update, view)
+module MiniWorldWar.View.GameScreen exposing (Msg, update, view)
 
 import MiniWorldWar.Data.Board as Board exposing (Unit)
 import MiniWorldWar.Data.Continent as Continent exposing (Continent(..))
@@ -155,8 +155,8 @@ drawCard continent maybeUnit =
             )
 
 
-view : { msgWrapper : Msg -> msg, close : msg } -> Msg -> ClientModel -> List ( ( Float, Float ), Image msg )
-view { msgWrapper, close } submitMsg { game, select, playerColor, ready } =
+view : { msgWrapper : Msg -> msg, close : msg, submit : msg } -> ClientModel -> List ( ( Float, Float ), Image msg )
+view { msgWrapper, close, submit } { game, select, playerColor, ready } =
     List.concat
         [ Continent.list
             |> List.filterMap
@@ -208,7 +208,7 @@ view { msgWrapper, close } submitMsg { game, select, playerColor, ready } =
 
                     else
                         Card.submit
-                            |> Image.clickable submitMsg
+                            |> Image.clickable submit
             )
           ]
         ]
