@@ -20,10 +20,7 @@ import MiniWorldWar.Role.WaitingHost as WaitingHost
 import MiniWorldWar.View as View
 import MiniWorldWar.View.Error as Error
 import MiniWorldWar.View.GameScreen as GameScreenView
-import MiniWorldWar.View.Image.Card
-import MiniWorldWar.View.Supplys as SupplysView
 import MiniWorldWar.View.TitleScreen as TitleScreenView
-import MiniWorldWar.View.Units
 import PixelEngine exposing (Area, Background, Input(..), PixelEngine, gameWithNoControls)
 import PixelEngine.Image exposing (Image)
 import PixelEngine.Options as Options exposing (Options)
@@ -226,10 +223,19 @@ update msg state =
                         |> Action.apply
 
                 Guest _ ->
-                    ( Guest time, Cmd.none )
+                    Action.updating ( time, Cmd.none )
+                        |> Action.config
+                        |> Action.withUpdate Guest never
+                        |> Action.apply
 
                 FetchingTime ->
-                    ( Guest time, Cmd.none )
+                    Action.transitioning time
+                        |> Action.config
+                        |> Action.withTransition
+                            (\t -> ( t, Cmd.none ))
+                            Guest
+                            never
+                        |> Action.apply
 
         _ ->
             defaultCase

@@ -3,7 +3,7 @@ module MiniWorldWar.Role.Client exposing (init, tick, update)
 import Action
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Request exposing (Response(..), RunningGameTable)
+import MiniWorldWar.Request exposing (Response(..))
 import MiniWorldWar.Request.Client as ClientRequest exposing (Msg(..))
 import MiniWorldWar.Role exposing (ClientModel)
 import MiniWorldWar.View.GameScreen as GameScreenView

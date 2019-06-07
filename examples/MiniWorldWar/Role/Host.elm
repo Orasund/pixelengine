@@ -1,7 +1,6 @@
 module MiniWorldWar.Role.Host exposing (TransitionData, initHost, tick, update)
 
 import Action
-import MiniWorldWar.Data.Board exposing (MoveBoard)
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
