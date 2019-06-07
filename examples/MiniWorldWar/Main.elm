@@ -8,9 +8,9 @@ import MiniWorldWar.Data.Continent exposing (Continent(..))
 import MiniWorldWar.Data.Direction exposing (Direction(..))
 import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.Request as Request exposing (Response(..))
-import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
+import MiniWorldWar.Request.Client as ClientRequest exposing (Msg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
-import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
+import MiniWorldWar.Request.Host as HostRequest exposing (Msg(..))
 import MiniWorldWar.Request.WaitingHost as WaitingHostRequest exposing (WaitingHostMsg(..))
 import MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
 import MiniWorldWar.Role.Client as Client
@@ -40,10 +40,9 @@ type State
 
 type Msg
     = GuestSpecific GuestMsg
-    | HostSpecific HostMsg
+    | HostSpecific HostRequest.Msg
     | WaitingHostSpecific WaitingHostMsg
-    | ClientSpecific ClientMsg
-    | BoardSpecific GameScreenView.Msg
+    | ClientSpecific ClientRequest.Msg
     | RequestSpecific (Response Never)
     | Tick Posix
     | None
@@ -173,20 +172,6 @@ update msg state =
                     )
                 |> Action.apply
 
-        ( BoardSpecific boardMsg, Client ({ ready } as model) ) ->
-            if ready then
-                defaultCase
-
-            else
-                ( Client <| GameScreenView.update boardMsg model, Cmd.none )
-
-        ( BoardSpecific boardMsg, Host ( { ready } as model, seed ) ) ->
-            if ready then
-                defaultCase
-
-            else
-                ( Host <| ( GameScreenView.update boardMsg model, seed ), Cmd.none )
-
         ( RequestSpecific requestMsg, _ ) ->
             case requestMsg of
                 DropOpenGameTable error ->
@@ -221,18 +206,24 @@ update msg state =
             case state of
                 Client clientModel ->
                     time
-                        |> Client.tick clientModel (responseToMsg ClientSpecific)
-                        |> Tuple.mapFirst Client
+                        |> Client.tick clientModel
+                        |> Action.config
+                        |> Action.withUpdate Client (responseToMsg ClientSpecific)
+                        |> Action.apply
 
                 Host hostModel ->
                     time
-                        |> Host.tick hostModel (responseToMsg HostSpecific)
-                        |> Tuple.mapFirst Host
+                        |> Host.tick hostModel
+                        |> Action.config
+                        |> Action.withUpdate Host (responseToMsg HostSpecific)
+                        |> Action.apply
 
                 WaitingHost waitingHostModel ->
                     time
-                        |> WaitingHost.tick waitingHostModel (responseToMsg WaitingHostSpecific)
-                        |> Tuple.mapFirst WaitingHost
+                        |> WaitingHost.tick waitingHostModel
+                        |> Action.config
+                        |> Action.withUpdate WaitingHost (responseToMsg WaitingHostSpecific)
+                        |> Action.apply
 
                 Guest _ ->
                     ( Guest time, Cmd.none )
@@ -290,7 +281,7 @@ area state =
     case state of
         Client model ->
             GameScreenView.view
-                { msgWrapper = BoardSpecific
+                { msgWrapper = ClientSpecific << ClientRequest.UISpecific
                 , close = RequestSpecific Reset
                 , submit = ClientSpecific Ready
                 }
@@ -298,7 +289,7 @@ area state =
 
         Host ( model, _ ) ->
             GameScreenView.view
-                { msgWrapper = BoardSpecific
+                { msgWrapper = HostSpecific << HostRequest.UISpecific
                 , close = RequestSpecific Reset
                 , submit = HostSpecific Submit
                 }

@@ -1,3 +1,4 @@
 elm-stuff
 node_modules
 ./tests/VerifyExamples
+.idea/workspace.xml

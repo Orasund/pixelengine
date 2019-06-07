@@ -1,5 +1,5 @@
 module MiniWorldWar.Request.Host exposing
-    ( HostMsg(..)
+    ( Msg(..)
     , exit
     , submit
     , waitingForClient
@@ -11,16 +11,18 @@ import Json.Encode exposing (Value)
 import MiniWorldWar.Data.Board exposing (MoveBoard)
 import MiniWorldWar.Data.Game as Game exposing (Game)
 import MiniWorldWar.Request exposing (Response(..), httpDelete, httpPut, runningGameRoute)
+import MiniWorldWar.View.GameScreen as GameScreenView
 
 
-type HostMsg
+type Msg
     = WaitingForClient
     | UpdateMoveBoard MoveBoard
+    | UISpecific GameScreenView.Msg
     | Submit
 
 
 type alias HostResponse =
-    Response HostMsg
+    Response Msg
 
 
 exit : String -> Cmd (Response Never)

@@ -1,5 +1,5 @@
 module MiniWorldWar.Request.Client exposing
-    ( ClientMsg(..)
+    ( Msg(..)
     , endGame
     , exit
     , joinGame
@@ -21,19 +21,21 @@ import MiniWorldWar.Request as Request
         , httpPut
         , runningGameRoute
         )
+import MiniWorldWar.View.GameScreen as GameScreenView
 import Time exposing (Posix)
 
 
-type ClientMsg
+type Msg
     = UpdateGameTable RunningGameTable
     | WaitingForHost
     | UpdateGame Game
+    | UISpecific GameScreenView.Msg
     | Ready
     | EndGame
 
 
 type alias ClientResponse =
-    Response ClientMsg
+    Response Msg
 
 
 exit : String -> Cmd (Response Never)

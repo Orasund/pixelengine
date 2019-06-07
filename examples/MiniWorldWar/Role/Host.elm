@@ -1,11 +1,13 @@
 module MiniWorldWar.Role.Host exposing (TransitionData, initHost, tick, update)
 
 import Action
+import MiniWorldWar.Data.Board exposing (MoveBoard)
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
-import MiniWorldWar.Request.Host as HostRequest exposing (HostMsg(..))
+import MiniWorldWar.Request.Host as HostRequest exposing (Msg(..))
 import MiniWorldWar.Role exposing (HostModel)
+import MiniWorldWar.View.GameScreen as GameScreenView
 import Random exposing (Seed)
 import Time exposing (Posix)
 
@@ -18,7 +20,7 @@ type alias TransitionData =
     }
 
 
-initHost : TransitionData -> ( HostModel, Cmd (Response HostMsg) )
+initHost : TransitionData -> ( HostModel, Cmd (Response Msg) )
 initHost { game, seed, time, id } =
     let
         ( newGame, newSeed ) =
@@ -41,11 +43,11 @@ initHost { game, seed, time, id } =
 
 
 type alias Action =
-    Action.Action HostModel (Response HostMsg) Never Never
+    Action.Action HostModel (Response Msg) Never Never
 
 
-tick : HostModel -> (Response HostMsg -> msg) -> Posix -> ( HostModel, Cmd msg )
-tick ( { ready, id, game } as model, seed ) msgMap time =
+tick : HostModel -> Posix -> Action
+tick ( { ready, id, game } as model, seed ) time =
     let
         { lastUpdated } =
             game
@@ -58,29 +60,30 @@ tick ( { ready, id, game } as model, seed ) msgMap time =
                         seed
                             |> Random.step (game |> Game.nextRound time)
                 in
-                ( ( { model
-                        | game = newGame
-                        , time = time
-                        , ready = False
-                    }
-                  , newSeed
-                  )
-                , HostRequest.submit id newGame
-                    |> Cmd.map msgMap
-                )
+                Action.updating
+                    ( ( { model
+                            | game = newGame
+                            , time = time
+                            , ready = False
+                        }
+                      , newSeed
+                      )
+                    , HostRequest.submit id newGame
+                    )
 
             _ ->
-                ( ( { model | time = time }, seed )
-                , HostRequest.waitingForClient id lastUpdated
-                    |> Cmd.map msgMap
-                )
+                Action.updating
+                    ( ( { model | time = time }, seed )
+                    , HostRequest.waitingForClient id lastUpdated
+                    )
 
     else
-        ( ( { model | time = time }, seed ), Cmd.none )
+        Action.updating
+            ( ( { model | time = time }, seed ), Cmd.none )
 
 
-update : HostMsg -> HostModel -> Action
-update msg (( { game, id, time } as model, seed ) as modelAndSeed) =
+update : Msg -> HostModel -> Action
+update msg (( { game, id, time, ready } as model, seed ) as modelAndSeed) =
     case msg of
         Submit ->
             let
@@ -118,3 +121,12 @@ update msg (( { game, id, time } as model, seed ) as modelAndSeed) =
                 ( modelAndSeed
                 , HostRequest.waitingForClient id game.lastUpdated
                 )
+
+        UISpecific uiMsg ->
+            if ready then
+                Action.updating
+                    ( ( model, seed ), Cmd.none )
+
+            else
+                Action.updating
+                    ( ( GameScreenView.update uiMsg model, seed ), Cmd.none )

@@ -3,14 +3,15 @@ module MiniWorldWar.Role.Client exposing (init, tick, update)
 import Action
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Game as Game exposing (Game, GameState(..))
-import MiniWorldWar.Request exposing (Response(..))
-import MiniWorldWar.Request.Client as ClientRequest exposing (ClientMsg(..))
+import MiniWorldWar.Request exposing (Response(..), RunningGameTable)
+import MiniWorldWar.Request.Client as ClientRequest exposing (Msg(..))
 import MiniWorldWar.Role exposing (ClientModel)
+import MiniWorldWar.View.GameScreen as GameScreenView
 import Time exposing (Posix)
 
 
 type alias Action =
-    Action.Action ClientModel (Response ClientMsg) Never Never
+    Action.Action ClientModel (Response Msg) Never Never
 
 
 type alias Flags =
@@ -19,7 +20,7 @@ type alias Flags =
     }
 
 
-init : Flags -> ( ClientModel, Cmd (Response ClientMsg) )
+init : Flags -> ( ClientModel, Cmd (Response Msg) )
 init { time, id } =
     let
         game : Game
@@ -37,24 +38,24 @@ init { time, id } =
     )
 
 
-tick : ClientModel -> (Response ClientMsg -> msg) -> Posix -> ( ClientModel, Cmd msg )
-tick ({ game, id, ready } as model) msgMap time =
-    ( { model | time = time }
-    , let
-        { lastUpdated } =
-            game
-      in
-      if ready then
-        ClientRequest.waitingForHost id lastUpdated
-            |> Cmd.map msgMap
+tick : ClientModel -> Posix -> Action
+tick ({ game, id, ready } as model) time =
+    Action.updating
+        ( { model | time = time }
+        , let
+            { lastUpdated } =
+                game
+          in
+          if ready then
+            ClientRequest.waitingForHost id lastUpdated
 
-      else
-        Cmd.none
-    )
+          else
+            Cmd.none
+        )
 
 
-update : ClientMsg -> ClientModel -> Action
-update msg ({ time, id, game } as model) =
+update : Msg -> ClientModel -> Action
+update msg ({ time, id, game, ready } as model) =
     case msg of
         WaitingForHost ->
             Action.updating
@@ -122,3 +123,12 @@ update msg ({ time, id, game } as model) =
                   }
                 , Cmd.none
                 )
+
+        UISpecific uiMsg ->
+            if ready then
+                Action.updating
+                    ( model, Cmd.none )
+
+            else
+                Action.updating
+                    ( GameScreenView.update uiMsg model, Cmd.none )

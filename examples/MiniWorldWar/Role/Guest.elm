@@ -4,7 +4,6 @@ import Action
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.Request exposing (Response(..))
-import MiniWorldWar.Request.Client exposing (ClientMsg(..))
 import MiniWorldWar.Request.Guest as GuestRequest exposing (GuestMsg(..))
 import MiniWorldWar.Request.WaitingHost exposing (WaitingHostMsg(..))
 import Random exposing (Seed)
