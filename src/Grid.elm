@@ -8,7 +8,10 @@ module Grid exposing
     , union, intersect, diff
     )
 
-{-| A `Grid` is a dictionary that has a size constraint.
+{-| DEPRECATED!
+Got moved to its [separate package](https://package.elm-lang.org/packages/Orasund/elm-game-essentials/latest/).
+
+A `Grid` is a dictionary that has a size constraint.
 Here is an example where such a grid is used:
 [Snake Example](https://orasund.github.io/pixelengine/#Snake).
 

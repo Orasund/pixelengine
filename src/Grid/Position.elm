@@ -3,7 +3,10 @@ module Grid.Position exposing
     , Coord, fromDirection, toDirection, distance, scaleBy, length
     )
 
-{-| This module contains two ways of representing a point on a grid:
+{-| DEPRECATED!
+Got moved to its [separate package](https://package.elm-lang.org/packages/Orasund/elm-game-essentials/latest/).
+
+This module contains two ways of representing a point on a grid:
 `Position` and `Coord`. Positions are meant to be stored, and coordinates are
 meant to to calculations with.
 
@@ -56,9 +59,7 @@ move n direction =
 
 {-| Apply Coordinates to a position to get the relative position.
 
-```
-move amount direction == add ( fromDirection direction |> scaleby amount)
-```
+    move amount direction == add (fromDirection direction |> scaleby amount)
 
 -}
 add : Coord -> Position -> Position
@@ -70,9 +71,7 @@ add v ( x, y ) =
 
 {-| Scales Coordnates. Coordnates obtained by `fromDirection` have size 1.
 
-```
-fromDirection angle |> scaleBy l |> length == l
-```
+    fromDirection angle |> scaleBy l |> length == l
 
 -}
 scaleBy : Int -> Coord -> Coord
@@ -84,9 +83,7 @@ scaleBy n { x, y } =
 
 {-| Returns the difference between two positions.
 
-```
-difference p1 p2 == p1 <------- p2
-```
+    difference p1 p2 == p1 <------- p2
 
 -}
 coordsTo : Position -> Position -> Coord
@@ -106,9 +103,7 @@ length { x, y } =
 {-| Gets the distance between to points.
 (The length of the difference)
 
-```
-distance == vectorTo >> length
-```
+    distance == vectorTo >> length
 
 -}
 distance : Position -> Position -> Float

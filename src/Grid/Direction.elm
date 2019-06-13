@@ -1,6 +1,7 @@
 module Grid.Direction exposing (Direction(..), flip, rotLeft, rotRight)
 
-{-|
+{-| DEPRECATED!
+Got moved to its [separate package](https://package.elm-lang.org/packages/Orasund/elm-game-essentials/latest/).
 
 @docs Direction, flip, rotLeft, rotRight
 

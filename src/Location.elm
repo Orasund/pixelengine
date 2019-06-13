@@ -4,7 +4,10 @@ module Location exposing
     , Vector, fromAngle, distance, rotate, scaleBy, length
     )
 
-{-| This module contains two different type for repesenting a 2D Point:
+{-| DEPRECATED!
+Got moved to its [separate package](https://package.elm-lang.org/packages/Orasund/elm-game-essentials/latest/).
+
+This module contains two different type for repesenting a 2D Point:
 `Location` and `Vector`. The idea is to use `Locations` to store a Point and `Vector`
 to do caluclations. This way the compiler knows exactly what you are doing and can
 give you appropriate error messages.
@@ -31,9 +34,7 @@ give you appropriate error messages.
 
 Use the functions `degrees`,`radias`,`turns` or `pi` to obtain a Angle.
 
-```
-Angle <| degree 90
-```
+    Angle <| degree 90
 
 -}
 type Angle
@@ -42,9 +43,7 @@ type Angle
 
 {-| An Angle can be constructed from a Vector.
 
-```
-{x=0,y=0} |> Location.toAngle == 0
-```
+    { x = 0, y = 0 } |> Location.toAngle == 0
 
 -}
 toAngle : Vector -> Angle
@@ -82,9 +81,7 @@ move l angle =
 {-| simple adds a vector to a location, from geometry we know that a vector is
 actually just an angle and a length.
 
-```
-move length angle == add ( fromAngle angle |> scaleby length)
-```
+    move length angle == add (fromAngle angle |> scaleby length)
 
 -}
 add : Vector -> Location -> Location
@@ -96,9 +93,7 @@ add v ( x, y ) =
 
 {-| The difference between to locations is a vector.
 
-```
-loc1 <----- loc2
-```
+    loc1 <----- loc2
 
 the resulting vector points from the second value to the first.
 
@@ -120,9 +115,7 @@ type alias Vector =
 
 {-| construct a unit vector from an angle
 
-```
-fromAngle >> length == 1
-```
+    fromAngle >> length == 1
 
 -}
 fromAngle : Angle -> Vector
@@ -135,9 +128,7 @@ fromAngle angle =
 
 {-| Scales a Vector. Vectors obtained by `fromAngle` have size 1.
 
-```
-fromAngle angle |> scaleBy l |> length == l
-```
+    fromAngle angle |> scaleBy l |> length == l
 
 -}
 scaleBy : Float -> Vector -> Vector
@@ -172,9 +163,7 @@ length { x, y } =
 
 {-| The `Distance` between two locations is the length of the resulting vector
 
-```
-distance == vectorTo >> length
-```
+    distance == vectorTo >> length
 
 -}
 distance : Location -> Location -> Float
