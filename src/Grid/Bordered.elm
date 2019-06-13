@@ -1,5 +1,5 @@
 module Grid.Bordered exposing
-    ( Error, ignoringErrors
+    ( Error(..), ignoringErrors
     , Grid
     , fill, empty, insert, update, remove
     , isEmpty, member, get, isValid, size, dimensions
@@ -78,7 +78,7 @@ mapDict fun (Grid { dict, rows, columns }) =
 {-| Possible Errors.
 
   - `OutOfBounds` - the position is not valid
-  - `NotSucessful` - the function as a problem fullfilling the task. (Maybe the position is occupied?)
+  - `NotSuccessful` - the function as a problem fulfilling the task. (Maybe the position is occupied?)
 
 -}
 type Error
@@ -222,6 +222,7 @@ isEmpty (Grid { dict }) =
 
 
 {-| Determine if a position is empty.
+Returns an Error if the position is invalid
 -}
 member : Position -> Grid a -> Result () Bool
 member pos ((Grid { dict }) as grid) =
@@ -233,6 +234,7 @@ member pos ((Grid { dict }) as grid) =
 
 
 {-| Get the value associated with a position. If the position is empty, return Nothing.
+Returns an Error if the position is invalid
 -}
 get : Position -> Grid a -> Result () (Maybe a)
 get pos ((Grid { dict }) as grid) =
