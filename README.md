@@ -41,7 +41,7 @@ When not to use it:
 
   * The game is about speed or accuracy. (Racing games)
   * The game is physics based. (Flappy Birds)
-  * The game has a continues gameloop. (Platformers, western RPGs like Zelda)
+  * The game has a continues game loop. (Platformers, western RPGs like Zelda)
 
 ## Motivation
 I had just watched a talk about the **time-travel debugger** of Elm. So I wanted to test it out for my next project: [A little game](https://orasund.itch.io/dig-dig-boom).
@@ -52,17 +52,19 @@ The graphics engines that I could choose from where
 
 Both used a loop to draw animations and therefore did not support time travelling and besides elmo-8 couldn't even render pixel graphics properly.
 
-So I desided to try something different and to use HTML and CSS instead of WebGL. This way I could let CSS handle the animations. I knew that my little project was not a universal game engine, but for very specific games it might be just right. 
+So I decided to try something different and to use HTML and CSS instead of WebGL. This way I could let CSS handle the animations. I knew that my little project was not a universal game engine, but for very specific games it might be just right.
 
 ## Upcoming Features
-  * **Console** - It would be great if all games written with this engine would have a common way how the interface looks like. I am mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few different GUIs and Startscreen.
+  * **Console** - It would be great if all games written with this engine would have a common way how the interface looks like. I am mainly thinking of a [PICO-8-like](https://www.lexaloffle.com/pico-8.php) style, but i would like to provide a few different GUIs and start screen.
   * **MultipleTiles** - Similar to `MultipleImages` but for Tiles.
   * **Modular Transitions** - For now I do not expect this will ever be done, just because its a very complex problem.
   * **Particles** - Maybe using [BrianHicks/elm-particle](https://package.elm-lang.org/packages/BrianHicks/elm-particle/latest)?
 
 ## Upgrading
+  * **To 6.0.0**
+    * Moved `Location` and `Grid` to [Orasund/elm-game-essentials](https://package.elm-lang.org/packages/Orasund/elm-game-essentials/latest/)
   * **To 5.0.0**
-    * please follow the [changelogs](https://github.com/Orasund/pixelengine/blob/master/changelog-5-0-0.md).
+    * Please follow the [changelogs](https://github.com/Orasund/pixelengine/blob/master/changelog-5-0-0.md).
   * **To 4.0.0**
     * `program` and `programWithCustomControls` are now renamed to `game` and `gameWithCustomControls`.
     * This package now uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest) for colors.
