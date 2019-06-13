@@ -8,12 +8,7 @@
         "PixelEngine.Image",
         "PixelEngine.Tile",
         "PixelEngine.Options",
-        "PixelEngine",
-        "Location",
-        "Grid",
-        "Grid.Position",
-        "Grid.Bordered",
-        "Grid.Direction"
+        "PixelEngine"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
