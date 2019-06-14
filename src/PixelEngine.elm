@@ -1,5 +1,5 @@
 module PixelEngine exposing
-    ( Area, tiledArea, imageArea, heightOf
+    ( Area, tiledArea, imageArea, heightOf, mapArea
     , PixelEngine
     , toHtml, game, gameWithNoControls, gameWithCustomControls
     , Input(..), defaultInputs
@@ -16,10 +16,10 @@ actually draw something.
 
 # Area
 
-The main idea of this graphic engine is to arrage the content into horizontal stripes,
+The main idea of this graphic engine is to arrange the content into horizontal stripes,
 so called areas.
 
-@docs Area, tiledArea, imageArea, heightOf
+@docs Area, tiledArea, imageArea, heightOf, mapArea
 
 
 # PixelEngine
@@ -291,6 +291,13 @@ heightOf listOfArea =
         )
 
 
+{-| Maps the message of an Area
+-}
+mapArea : (a -> b) -> Area a -> Area b
+mapArea =
+    AreaData.mapArea
+
+
 {-| Every area has a background.
 -}
 type alias Background =
@@ -300,9 +307,7 @@ type alias Background =
 {-| A single color background.
 It uses [avh4/elm-color](https://package.elm-lang.org/packages/avh4/elm-color/latest).
 
-```
-colorBackground (Color.rgb255 20 12 28)
-```
+    colorBackground (Color.rgb255 20 12 28)
 
 -}
 colorBackground : Color -> Background
@@ -312,9 +317,7 @@ colorBackground color =
 
 {-| An image that gets repeated.
 
-```
-Image "groundTile.png"
-```
+    Image "groundTile.png"
 
 -}
 imageBackground : { source : String, width : Float, height : Float } -> Background
@@ -325,7 +328,7 @@ imageBackground image =
 {-| An area containing images that can be arranged freely.
 
 This is a complete contrast to the way how `tiledArea` is working.
-Usefull applications are GUIs, menus or loading screens.
+Useful applications are GUIs, menus or loading screens.
 
 Checkout [PixelEngine.Graphics.Image](PixelEngine-Graphics-Image) for more information.
 
@@ -532,7 +535,7 @@ type alias PixelEngine flag model msg =
 
 The default controls should be enough to start,
 but maybe you want to write a spelling game,
-or its nessesary that very specifc keys are used?
+or its necessary that very specific keys are used?
 
 -}
 gameWithCustomControls :
@@ -579,7 +582,7 @@ gameWithNoControls { init, width, update, subscriptions, view } =
         }
 
 
-{-| A prewired PixelEngine frame.
+{-| A pre-wired PixelEngine frame.
 
 Use it just like `document` from [elm/browser](https://package.elm-lang.org/packages/elm/browser/latest/Browser).
 
