@@ -1,5 +1,6 @@
 module PixelEngine.Tile exposing
-    ( Tile, fromPosition, fromText, movable, jumping, animated, clickable, monochrome, withAttributes
+    ( Tile, fromPosition, fromText, multipleTiles, map
+    , movable, jumping, animated, clickable, monochrome, withAttributes
     , Tileset, tileset
     )
 
@@ -9,7 +10,12 @@ Tiles are used for the `tiledArea` function from the main module.
 
 ## Tile
 
-@docs Tile, fromPosition, fromText, movable, jumping, animated, clickable, monochrome, withAttributes
+@docs Tile, fromPosition, fromText, multipleTiles, map
+
+
+## Configurate
+
+@docs movable, jumping, animated, clickable, monochrome, withAttributes
 
 
 ## Tileset
@@ -95,7 +101,7 @@ is the 3 row in the second column of the `Tileset`.
 -}
 fromPosition : ( Int, Int ) -> Tile msg
 fromPosition ( left, top ) =
-    { info = { top = top, left = left, steps = 0 }
+    { info = List.singleton { top = top, left = left, steps = 0 }
     , uniqueId = Nothing
     , customAttributes = []
     }
@@ -125,14 +131,20 @@ animated : Int -> Tile msg -> Tile msg
 animated steps ({ info } as t) =
     { t
         | info =
-            { info
-                | steps =
-                    if steps > 1 then
-                        steps
+            case info of
+                [] ->
+                    []
 
-                    else
-                        1
-            }
+                head :: tail ->
+                    { head
+                        | steps =
+                            if steps > 1 then
+                                steps
+
+                            else
+                                1
+                    }
+                        :: tail
     }
 
 
@@ -217,3 +229,38 @@ withAttributes attributes ({ customAttributes } as t) =
                 |> List.map Html.Styled.Attributes.fromUnstyled
                 |> List.append customAttributes
     }
+
+
+{-| Allows multiple Tiles on top of each other.
+
+Sub-tiles loose the ability to be movable:
+
+    multipleTiles [fromPosition (0,0) |> movable "id"]
+    --> fromPosition (0,0)
+
+Instead use
+
+    multipleTiles [fromPosition (0,0) ] |> movable "id"
+        --> fromPosition (0,0) |> movable "id"
+
+-}
+multipleTiles : List (Tile msg) -> Tile msg
+multipleTiles =
+    List.foldl
+        (\{ info, customAttributes } tile ->
+            { tile
+                | info = List.append tile.info info
+                , customAttributes = List.append tile.customAttributes customAttributes
+            }
+        )
+        { info = []
+        , customAttributes = []
+        , uniqueId = Nothing
+        }
+
+
+{-| Maps the message of a Tile
+-}
+map : (a -> b) -> Tile a -> Tile b
+map =
+    TileData.mapTile

@@ -1,4 +1,7 @@
-module PixelEngine.Image exposing (Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes)
+module PixelEngine.Image exposing
+    ( Image, fromSrc, fromTile, fromText, fromTextWithSpacing, map
+    , movable, jumping, multipleImages, clickable, monochrome, withAttributes
+    )
 
 {-| This module contains functions for creating images.
 These Images can then be used for the `imageArea` function from the <PixelEngine>
@@ -6,7 +9,12 @@ These Images can then be used for the `imageArea` function from the <PixelEngine
 
 ## Image
 
-@docs Image, fromSrc, movable, jumping, fromTile, fromText, fromTextWithSpacing, multipleImages, clickable, monochrome, withAttributes
+@docs Image, fromSrc, fromTile, fromText, fromTextWithSpacing, map
+
+
+## Configurate
+
+@docs movable, jumping, multipleImages, clickable, monochrome, withAttributes
 
 -}
 
@@ -86,21 +94,21 @@ jumping ({ uniqueId } as t) =
 {-| `Tiles` are essentially also images,
 therefore this constructor transforms a `Tile` and a `Tileset` into an `Image`.
 
-    fromTile (tile ( 0, 0 ))
-        (tileset
+    fromTile (Tile.fromPosition ( 0, 0 ))
+        (Tile.tileset
             { source = "tiles.png"
-            , width = 80
-            , height = 80
+            , spriteWidth = 80
+            , spriteHeight = 80
             }
         )
-        == image "tiles.png"
+    = fromSrc "tiles.png"
 
 **Note:**
 `fromTile` displays only the `width` and `height` of the image, that where given.
 This means setting `width` and `height` to `0` would not display the image at all.
 
-    fromTile (tile ( 0, 0 ) |> movable "uniqueId")
-        == fromTile (tile ( 0, 0 ))
+    fromTile (Tile.fromPosition ( 0, 0 ) |> Tile.movable "uniqueId") tileset
+        == fromTile (Tile.fromPosition ( 0, 0 )) tileset
         |> movable "uniqueId"
 
 **Note:**
@@ -109,21 +117,24 @@ If you want to animate an `Image` use this function instead.
 -}
 fromTile : Tile msg -> Tileset -> Image msg
 fromTile { info, uniqueId, customAttributes } tileset =
-    let
-        { top, left, steps } =
-            info
-    in
-    { elementType =
-        ElementData.SingleSource <|
-            ElementData.TileSource
-                { left = left
-                , top = top
-                , steps = steps
-                , tileset = tileset
-                }
-    , customAttributes = customAttributes
-    , uniqueId = uniqueId
-    }
+    info
+        |> List.map
+            (\{ top, left, steps } ->
+                ( ( 0, 0 )
+                , { elementType =
+                        ElementData.SingleSource <|
+                            ElementData.TileSource
+                                { left = left
+                                , top = top
+                                , steps = steps
+                                , tileset = tileset
+                                }
+                  , customAttributes = customAttributes
+                  , uniqueId = uniqueId
+                  }
+                )
+            )
+        |> multipleImages
 
 
 {-| Created an Image from a text-string and the Tileset of the font.
@@ -211,23 +222,22 @@ withAttributes attributes ({ customAttributes } as i) =
 
 
 {-| It is possible to compose an `Image` from a set of other images.
-The two `Floats` are realtive coordinates.
+The two `Floats` are relative coordinates.
 
-    ((100,100),image "img.png")
-    =
-    ((20,50), multipleimages [((80,50),image "img.png")])
+    ( ( 100, 100 ), fromSrc "img.png" )
+        == ( ( 20, 50 ), multipleImages [ ( ( 80, 50 ), fromSrc "img.png" ) ] )
 
 Sub-images loose the ability to be movable:
 
-    multipleimages [((x,y),image "img.png" |> movable "id")]
-    =
-    multipleimages [((x,y),image "img.png")]
+    multipleImages [((4,2),fromSrc "img.png" |> movable "id")]
+    --> multipleImages [((4,2),fromSrc "img.png")]
 
 Instead use the following:
 
-    image "img.png" |> movable "id"
-    =
-    multipleimages [((0,0),image "img.png")] |> movable "id"
+    fromSrc "img.png"
+        |> movable "id"
+        == multipleImages [ ( ( 0, 0 ), fromSrc "img.png" ) ]
+        |> movable "id"
 
 -}
 multipleImages : List ( ( Float, Float ), Image msg ) -> Image msg
@@ -242,8 +252,17 @@ multipleImages list =
                             ElementData.SingleSource singleSource ->
                                 (::) ( { left = left, top = top }, singleSource )
 
-                            ElementData.MultipleSources _ ->
-                                identity
+                            ElementData.MultipleSources multipleSource ->
+                                multipleSource
+                                    |> List.map
+                                        (\( pos, singleSource ) ->
+                                            ( { left = left + pos.left
+                                              , top = top + pos.top
+                                              }
+                                            , singleSource
+                                            )
+                                        )
+                                    |> List.append
                     )
                     []
     in
@@ -252,3 +271,10 @@ multipleImages list =
     , customAttributes = []
     , uniqueId = Nothing
     }
+
+
+{-| Maps the message of an Image
+-}
+map : (a -> b) -> Image a -> Image b
+map =
+    AreaData.mapContentElement

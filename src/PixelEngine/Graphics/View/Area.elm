@@ -75,28 +75,28 @@ renderTiledArea ((Options { width, scale }) as options) { rows, background, cont
         (content
             |> List.partition (Tuple.second >> .uniqueId >> (==) Nothing)
             |> pairMap
-                (List.map
+                (List.concatMap
                     (\( location, { info, uniqueId, customAttributes } ) ->
-                        let
-                            { top, left, steps } =
-                                info
-                        in
-                        ElementView.displayMultiple options
-                            ( { left = toFloat <| spriteWidth * (location |> Tuple.first)
-                              , top = toFloat <| spriteHeight * (location |> Tuple.second)
-                              }
-                            , [ ( { top = 0, left = 0 }
-                                , TileSource
-                                    { left = left
-                                    , top = top
-                                    , steps = steps
-                                    , tileset = tileset
-                                    }
+                        info
+                            |> List.map
+                                (\{ top, left, steps } ->
+                                    ElementView.displayMultiple options
+                                        ( { left = toFloat <| spriteWidth * (location |> Tuple.first)
+                                          , top = toFloat <| spriteHeight * (location |> Tuple.second)
+                                          }
+                                        , [ ( { top = 0, left = 0 }
+                                            , TileSource
+                                                { left = left
+                                                , top = top
+                                                , steps = steps
+                                                , tileset = tileset
+                                                }
+                                            )
+                                          ]
+                                        )
+                                        uniqueId
+                                        customAttributes
                                 )
-                              ]
-                            )
-                            uniqueId
-                            customAttributes
                     )
                 )
             |> (\( noTransition, transition ) ->
