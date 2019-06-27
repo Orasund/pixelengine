@@ -4874,7 +4874,7 @@ var elm$core$Set$toList = function (_n0) {
 var author$project$Index$examplesWithCode = _List_fromArray(
 	['TicTacToe', 'SlotMachine', 'Snake', 'SpaceInvaders']);
 var author$project$Index$examplesWithoutCode = _List_fromArray(
-	['DigDigBoom', 'MiniWorldWar', 'RuinJump', 'CultSim']);
+	['AsteroidMiner', 'DigDigBoom', 'MiniWorldWar', 'RuinJump', 'CultSim']);
 var elm$core$Basics$apR = F2(
 	function (x, f) {
 		return f(x);
@@ -13448,30 +13448,6 @@ var lucamug$style_framework$Framework$Button$buttonLink = F3(
 				url: url
 			});
 	});
-var lucamug$style_framework$Framework$Icon$fullscreen = F2(
-	function (_n0, size) {
-		return mdgriffith$elm_ui$Element$html(
-			A2(
-				elm$svg$Svg$svg,
-				_List_fromArray(
-					[
-						A2(
-						elm$html$Html$Attributes$style,
-						'height',
-						elm$core$String$fromInt(size) + 'px'),
-						elm$svg$Svg$Attributes$viewBox('0 0 533 533')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						elm$svg$Svg$path,
-						_List_fromArray(
-							[
-								elm$svg$Svg$Attributes$d('M533 0v217l-83-84-100 100-50-50L400 83 317 0h216zM233 350L133 450l84 83H0V317l83 83 100-100 50 50z')
-							]),
-						_List_Nil)
-					])));
-	});
 var lucamug$style_framework$Framework$Modifier$Muted = {$: 'Muted'};
 var mdgriffith$elm_ui$Internal$Model$AsColumn = {$: 'AsColumn'};
 var mdgriffith$elm_ui$Internal$Model$asColumn = mdgriffith$elm_ui$Internal$Model$AsColumn;
@@ -13563,13 +13539,6 @@ var author$project$Index$Example$view = function (name) {
 							[lucamug$style_framework$Framework$Modifier$Muted]),
 						'#',
 						'<| Go Back'),
-						A2(
-						mdgriffith$elm_ui$Element$link,
-						_List_Nil,
-						{
-							label: A2(lucamug$style_framework$Framework$Icon$fullscreen, lucamug$style_framework$Framework$Color$white, 16),
-							url: 'https://orasund.github.io/pixelengine/examples/' + (name + '/index.html')
-						}),
 						A3(lucamug$style_framework$Framework$Button$buttonLink, _List_Nil, 'https://github.com/Orasund/pixelengine/blob/master/examples/' + (name + '/Main.elm'), 'view on Github |>')
 					]))
 			]));
@@ -23277,30 +23246,34 @@ var author$project$PixelEngine$Graphics$View$Area$renderTiledArea = F2(
 			}(
 				A2(
 					author$project$PixelEngine$Graphics$View$Area$pairMap,
-					elm$core$List$map(
+					elm$core$List$concatMap(
 						function (_n2) {
 							var location = _n2.a;
 							var info = _n2.b.info;
 							var uniqueId = _n2.b.uniqueId;
 							var customAttributes = _n2.b.customAttributes;
-							var _n3 = info;
-							var top = _n3.top;
-							var left = _n3.left;
-							var steps = _n3.steps;
-							return A4(
-								author$project$PixelEngine$Graphics$View$Element$displayMultiple,
-								options,
-								_Utils_Tuple2(
-									{left: spriteWidth * location.a, top: spriteHeight * location.b},
-									_List_fromArray(
-										[
-											_Utils_Tuple2(
-											{left: 0, top: 0},
-											author$project$PixelEngine$Graphics$Data$Element$TileSource(
-												{left: left, steps: steps, tileset: tileset, top: top}))
-										])),
-								uniqueId,
-								customAttributes);
+							return A2(
+								elm$core$List$map,
+								function (_n3) {
+									var top = _n3.top;
+									var left = _n3.left;
+									var steps = _n3.steps;
+									return A4(
+										author$project$PixelEngine$Graphics$View$Element$displayMultiple,
+										options,
+										_Utils_Tuple2(
+											{left: spriteWidth * location.a, top: spriteHeight * location.b},
+											_List_fromArray(
+												[
+													_Utils_Tuple2(
+													{left: 0, top: 0},
+													author$project$PixelEngine$Graphics$Data$Element$TileSource(
+														{left: left, steps: steps, tileset: tileset, top: top}))
+												])),
+										uniqueId,
+										customAttributes);
+								},
+								info);
 						}),
 					A2(
 						elm$core$List$partition,
@@ -24083,23 +24056,6 @@ var author$project$PixelEngine$Image$fromSrc = function (source) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
-var author$project$PixelEngine$Image$fromTile = F2(
-	function (_n0, tileset) {
-		var info = _n0.info;
-		var uniqueId = _n0.uniqueId;
-		var customAttributes = _n0.customAttributes;
-		var _n1 = info;
-		var top = _n1.top;
-		var left = _n1.left;
-		var steps = _n1.steps;
-		return {
-			customAttributes: customAttributes,
-			elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
-				author$project$PixelEngine$Graphics$Data$Element$TileSource(
-					{left: left, steps: steps, tileset: tileset, top: top})),
-			uniqueId: uniqueId
-		};
-	});
 var author$project$PixelEngine$Graphics$Data$Element$MultipleSources = function (a) {
 	return {$: 'MultipleSources', a: a};
 };
@@ -24119,7 +24075,18 @@ var author$project$PixelEngine$Image$multipleImages = function (list) {
 						{left: left, top: top},
 						singleSource));
 			} else {
-				return elm$core$Basics$identity;
+				var multipleSource = _n2.a;
+				return elm$core$List$append(
+					A2(
+						elm$core$List$map,
+						function (_n3) {
+							var pos = _n3.a;
+							var singleSource = _n3.b;
+							return _Utils_Tuple2(
+								{left: left + pos.left, top: top + pos.top},
+								singleSource);
+						},
+						multipleSource));
 			}
 		},
 		_List_Nil,
@@ -24130,6 +24097,30 @@ var author$project$PixelEngine$Image$multipleImages = function (list) {
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };
+var author$project$PixelEngine$Image$fromTile = F2(
+	function (_n0, tileset) {
+		var info = _n0.info;
+		var uniqueId = _n0.uniqueId;
+		var customAttributes = _n0.customAttributes;
+		return author$project$PixelEngine$Image$multipleImages(
+			A2(
+				elm$core$List$map,
+				function (_n1) {
+					var top = _n1.top;
+					var left = _n1.left;
+					var steps = _n1.steps;
+					return _Utils_Tuple2(
+						_Utils_Tuple2(0, 0),
+						{
+							customAttributes: customAttributes,
+							elementType: author$project$PixelEngine$Graphics$Data$Element$SingleSource(
+								author$project$PixelEngine$Graphics$Data$Element$TileSource(
+									{left: left, steps: steps, tileset: tileset, top: top})),
+							uniqueId: uniqueId
+						});
+				},
+				info));
+	});
 var author$project$PixelEngine$Graphics$Data$Text$fromString = A2(
 	elm$core$String$foldr,
 	function (_char) {
@@ -24337,7 +24328,8 @@ var author$project$PixelEngine$Tile$fromPosition = function (_n0) {
 	var top = _n0.b;
 	return {
 		customAttributes: _List_Nil,
-		info: {left: left, steps: 0, top: top},
+		info: elm$core$List$singleton(
+			{left: left, steps: 0, top: top}),
 		uniqueId: elm$core$Maybe$Nothing
 	};
 };

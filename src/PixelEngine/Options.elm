@@ -22,7 +22,8 @@ To get started, copy the following example:
                 [ ( 0, "opacity:1;filter:grayscale(0%) blur(0px);" )
                 , ( 1, "opacity:1;filter:grayscale(70%) blur(0px);" )
                 , ( 3, "opacity:0;filter:grayscale(70%) blur(5px);" )
-            ])
+                ]
+            )
 
 
 ## Main Function

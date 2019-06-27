@@ -18,7 +18,7 @@ examplesWithCode =
 
 examplesWithoutCode : List String
 examplesWithoutCode =
-    [ "DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
+    [ "AsteroidMiner","DigDigBoom", "MiniWorldWar", "RuinJump", "CultSim" ]
 
 
 type alias ExampleModel =
