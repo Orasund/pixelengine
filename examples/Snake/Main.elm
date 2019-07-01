@@ -282,19 +282,22 @@ chickenTile =
 
 snakeHeadTile : Direction -> Tile Msg
 snakeHeadTile direction =
-    Tile.fromPosition <|
-        case direction of
-            Down ->
-                ( 1, 0 )
+    Tile.multipleTiles
+        [ snakeBodyTile
+        , Tile.fromPosition <|
+            case direction of
+                Down ->
+                    ( 1, 0 )
 
-            Up ->
-                ( 2, 0 )
+                Up ->
+                    ( 2, 0 )
 
-            Left ->
-                ( 1, 1 )
+                Left ->
+                    ( 1, 1 )
 
-            Right ->
-                ( 2, 1 )
+                Right ->
+                    ( 2, 1 )
+        ]
 
 
 snakeBodyTile : Tile Msg

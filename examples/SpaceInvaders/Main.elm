@@ -202,7 +202,7 @@ updateEntity board pos maybeEntity =
                                 Just _ ->
                                     changeDirection
 
-                        Err () ->
+                        Err _ ->
                             changeDirection
 
                 Bullet ->
@@ -210,7 +210,7 @@ updateEntity board pos maybeEntity =
                         Ok _ ->
                             move
 
-                        Err () ->
+                        Err _ ->
                             Grid.ignoringErrors
                                 (Grid.remove pos)
 
