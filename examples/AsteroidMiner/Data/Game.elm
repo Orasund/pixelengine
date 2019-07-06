@@ -1,4 +1,4 @@
-module AsteroidMiner.Data.Game exposing (Game, emptySquare, getBuildingType, getGroundType, isBuildingType, isGroundType, isValid, newBuilding, solveConflict, takeInventoryOfMap, updateBuilding)
+module AsteroidMiner.Data.Game exposing (Game, emptySquare, getBuildingType, getGroundType, isBuildingType, isGroundType, isValid, newBuilding, solveConflict, updateBuilding)
 
 import AsteroidMiner.Building as Building exposing (BuildingType(..), Volume(..))
 import AsteroidMiner.Building.ColoredConveyorBelt as ColoredConveyorBelt
@@ -25,29 +25,6 @@ type alias Game =
     , bag : Maybe Item
     , debts : Int
     }
-
-
-takeInventoryOfMap : Int -> Map -> Int
-takeInventoryOfMap debts =
-    Grid.values
-        >> List.foldl
-            (\square ->
-                case square of
-                    ( BuildingSquare { sort, value }, Just _ ) ->
-                        case sort of
-                            Container Empty ->
-                                identity
-
-                            Container _ ->
-                                (+) (1 + value)
-
-                            _ ->
-                                identity
-
-                    _ ->
-                        identity
-            )
-            -debts
 
 
 solveConflict : BuildingType -> Neighborhood -> Item -> { item : Item, value : Int } -> Bool

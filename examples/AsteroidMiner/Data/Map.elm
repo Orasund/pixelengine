@@ -1,12 +1,13 @@
-module AsteroidMiner.Data.Map exposing (Command, GroundType(..), Map, Neighborhood, Square, SquareType, init)
+module AsteroidMiner.Data.Map exposing (Command, GroundType(..), Map, Neighborhood, Square, SquareType, init, update)
 
-import AsteroidMiner.Building exposing (BuildingType)
+import AsteroidMiner.Building exposing (BuildingType(..), Volume(..))
 import AsteroidMiner.Data exposing (size)
 import AsteroidMiner.Data.Item exposing (Item)
 import AsteroidMiner.Lib.Command as Command
 import AsteroidMiner.Lib.Map as Map exposing (SquareType(..))
 import AsteroidMiner.Lib.Neighborhood as Neighborhood
 import Grid.Bordered as Grid
+import Grid.Position as Position exposing (Position)
 
 
 type GroundType
@@ -58,3 +59,37 @@ init =
         { rows = size
         , columns = size
         }
+
+
+update : { empty : GroundType, update : Position -> Command, canStore : Position -> BuildingType -> Item -> { value : Int, item : Item } -> Bool } -> Map -> ( Map, Int )
+update fun map =
+    map
+        |> Grid.foldl
+            (\pos maybeSquare ( m, inv ) ->
+                case maybeSquare of
+                    Just (( BuildingSquare { sort, value }, maybeItem ) as square) ->
+                        ( m |> Map.apply (fun.update pos) pos square { empty = fun.empty, lookUp = map, canStore = fun.canStore }
+                        , inv
+                            |> (case maybeItem of
+                                    Just _ ->
+                                        case sort of
+                                            Container Empty ->
+                                                identity
+
+                                            Container _ ->
+                                                (+) (1 + value)
+
+                                            _ ->
+                                                identity
+
+                                    _ ->
+                                        identity
+                               )
+                        )
+
+                    _ ->
+                        ( m
+                        , inv
+                        )
+            )
+            ( map, 0 )

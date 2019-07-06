@@ -6,9 +6,9 @@ import AsteroidMiner.Data exposing (floorCosts, fps, size, spriteSize)
 import AsteroidMiner.Data.Comet as Comet exposing (Comet)
 import AsteroidMiner.Data.Game as Game exposing (Game)
 import AsteroidMiner.Data.Item as Item exposing (Item(..))
-import AsteroidMiner.Data.Map as Game exposing (GroundType(..), Map, Square)
+import AsteroidMiner.Data.Map as Map exposing (GroundType(..), Map, Square)
 import AsteroidMiner.Lib.Command as Command exposing (idle)
-import AsteroidMiner.Lib.Map as Map exposing (SquareType(..))
+import AsteroidMiner.Lib.Map exposing (SquareType(..))
 import AsteroidMiner.Lib.Neighborhood as Neighborhood
 import AsteroidMiner.View as View exposing (ToolSelection(..))
 import AsteroidMiner.View.GUI as GUI
@@ -99,8 +99,7 @@ timePassed ({ game, seed, winCondition } as model) =
         ( ( comet, map ), newSeed ) =
             Random.step (game.comet |> Comet.update game.map) seed
 
-        newMap : Map
-        newMap =
+        ( newMap, inventory ) =
             map
                 |> Map.update
                     { empty = Dirt
@@ -133,10 +132,7 @@ timePassed ({ game, seed, winCondition } as model) =
                                 _ ->
                                     always <| always <| always <| False
                     }
-
-        inventory : Int
-        inventory =
-            newMap |> Game.takeInventoryOfMap game.debts
+                |> Tuple.mapSecond ((+) -game.debts)
 
         status : Status
         status =

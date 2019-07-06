@@ -1,4 +1,4 @@
-module AsteroidMiner.Lib.Map exposing (Map, Square, SquareType(..), update)
+module AsteroidMiner.Lib.Map exposing (Map, Square, SquareType(..),apply)
 
 import AsteroidMiner.Building exposing (Building)
 import AsteroidMiner.Data exposing (maxValue)
@@ -188,16 +188,3 @@ apply command pos ( squareType, maybeItem ) ({ empty } as config) =
                     }
 
 
-update : { empty : b, update : Position -> Command a c, canStore : Position -> a -> c -> { value : Int, item : c } -> Bool } -> Map a b c -> Map a b c
-update fun map =
-    map
-        |> Grid.foldl
-            (\pos maybeSquare ->
-                case maybeSquare of
-                    Just (( BuildingSquare _, _ ) as square) ->
-                        apply (fun.update pos) pos square { empty = fun.empty, lookUp = map, canStore = fun.canStore }
-
-                    _ ->
-                        identity
-            )
-            map
