@@ -2,6 +2,7 @@ module MiniWorldWar.Main exposing (main)
 
 import Action
 import Either exposing (Either(..))
+import Http exposing (Error)
 import Location exposing (Location)
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Continent exposing (Continent(..))
@@ -71,6 +72,22 @@ responseToMsg fun response =
 
         DropRunningGameTable error ->
             RequestSpecific <| DropRunningGameTable error
+
+
+logError : Maybe Error -> State -> State
+logError maybeError state =
+    case state of
+        Client clientModel ->
+            Client { clientModel | error = maybeError }
+
+        Host ( hostModel, s ) ->
+            Host ( { hostModel | error = maybeError }, s )
+
+        WaitingHost ( waitingHostModel, s ) ->
+            WaitingHost ( { waitingHostModel | error = maybeError }, s )
+
+        _ ->
+            state
 
 
 
@@ -154,7 +171,9 @@ update msg state =
                         case maybeSeed of
                             Just seed ->
                                 WaitingHost.init
-                                    ( { time = time, id = id }, seed )
+                                    ( { time = time, id = id, error = Nothing }
+                                    , seed
+                                    )
                                     |> Tuple.mapBoth
                                         WaitingHost
                                         (Cmd.map <|
@@ -172,12 +191,12 @@ update msg state =
         ( RequestSpecific requestMsg, _ ) ->
             case requestMsg of
                 DropOpenGameTable error ->
-                    ( state |> Error.log error
+                    ( state |> logError (Just error)
                     , Request.dropOpenGameTable |> Cmd.map RequestSpecific
                     )
 
                 DropRunningGameTable error ->
-                    ( state |> Error.log error
+                    ( state |> logError (Just error)
                     , Request.dropRunningGameTable |> Cmd.map RequestSpecific
                     )
 
@@ -185,13 +204,13 @@ update msg state =
                     exitCase
 
                 ExitWithError error ->
-                    exitCase |> Error.log error
+                    exitCase |> Tuple.mapFirst (logError <| Just error)
 
                 Reset ->
                     resetCase
 
                 ResetWithError error ->
-                    resetCase |> Error.log error
+                    resetCase |> Tuple.mapFirst (logError <| Just error)
 
                 Please _ ->
                     defaultCase
@@ -277,11 +296,6 @@ subscriptions state =
 ------------------------}
 
 
-size : Float
-size =
-    View.tileSize * 8
-
-
 area : State -> List ( Location, Image Msg )
 area state =
     case state of
@@ -317,8 +331,8 @@ view state =
         background : Background
         background =
             PixelEngine.imageBackground
-                { height = size
-                , width = size
+                { height = View.size
+                , width = View.size
                 , source = "background.png"
                 }
 
@@ -330,7 +344,7 @@ view state =
         areas : List (Area Msg)
         areas =
             [ PixelEngine.imageArea
-                { height = size
+                { height = View.size
                 , background = background
                 }
               <|
@@ -357,5 +371,5 @@ main =
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , width = size
+        , width = View.size
         }

@@ -33,6 +33,7 @@ init { time, id } =
       , select = Nothing
       , ready = True
       , id = id
+      , error = Nothing
       }
     , ClientRequest.joinGame id game
     )

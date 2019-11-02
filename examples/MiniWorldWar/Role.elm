@@ -1,5 +1,6 @@
 module MiniWorldWar.Role exposing (ClientModel, HostModel, WaitingHostModel)
 
+import Http exposing (Error(..))
 import MiniWorldWar.Data.Color exposing (Color(..))
 import MiniWorldWar.Data.Continent exposing (Continent(..))
 import MiniWorldWar.Data.Game exposing (Game, GameState(..))
@@ -15,6 +16,7 @@ type alias HostModel =
 type alias WaitingHostModel =
     ( { time : Posix
       , id : String
+      , error : Maybe Error
       }
     , Seed
     )
@@ -33,4 +35,5 @@ type alias ClientModel =
             )
     , ready : Bool
     , id : String
+    , error : Maybe Error
     }

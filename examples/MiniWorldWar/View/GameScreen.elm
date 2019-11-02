@@ -6,6 +6,7 @@ import MiniWorldWar.Data.Direction exposing (Direction)
 import MiniWorldWar.Data.Game exposing (GameState(..))
 import MiniWorldWar.Role exposing (ClientModel)
 import MiniWorldWar.View as View
+import MiniWorldWar.View.Error as Error
 import MiniWorldWar.View.Image.Card as Card
 import MiniWorldWar.View.SelectGui as SelectGuiView
 import MiniWorldWar.View.Supplys as SupplysView
@@ -156,7 +157,7 @@ drawCard continent maybeUnit =
 
 
 view : { msgWrapper : Msg -> msg, close : msg, submit : msg } -> ClientModel -> List ( ( Float, Float ), Image msg )
-view { msgWrapper, close, submit } { game, select, playerColor, ready } =
+view { msgWrapper, close, submit } { game, select, playerColor, ready, error } =
     List.concat
         [ Continent.list
             |> List.filterMap
@@ -211,4 +212,5 @@ view { msgWrapper, close, submit } { game, select, playerColor, ready } =
                             |> Image.clickable submit
             )
           ]
+        , error |> Maybe.map Error.view |> Maybe.withDefault []
         ]

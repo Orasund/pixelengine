@@ -25,12 +25,14 @@ init (( { id, time }, _ ) as waitingHostModel) =
 tick : WaitingHostModel -> Posix -> Action.Action WaitingHostModel (Response WaitingHostMsg) Never Never
 tick ( { id }, seed ) time =
     Action.updating
-        ( ( { id = id, time = time }, seed )
+        ( ( { id = id, time = time, error = Nothing }
+          , seed
+          )
         , WaitingHostRequest.checkForOpponent id
         )
 
 
-update : WaitingHostMsg -> ( { time : Posix, id : String }, Seed ) -> Action
+update : WaitingHostMsg ->  WaitingHostModel -> Action
 update msg (( { time, id }, seed ) as waitingHostModel) =
     case msg of
         WaitForOpponent ->

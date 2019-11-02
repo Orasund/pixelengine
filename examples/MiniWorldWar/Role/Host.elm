@@ -33,6 +33,7 @@ initHost { game, seed, time, id } =
         , select = Nothing
         , playerColor = Red
         , ready = False
+        , error = Nothing
         }
       , newSeed
       )
